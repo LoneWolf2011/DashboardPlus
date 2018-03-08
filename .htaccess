@@ -1,5 +1,5 @@
 ## PHP ini overrides
-php_value auto_prepend_file "C:/xampp/htdocs/MdbOTAP/Mdb/Src/Config/common.php"
+php_value auto_prepend_file "C:/xampp/htdocs/Mdb/Src/Config/common.php"
 php_value max_execution_time 600
 php_value post_max_size 1024M 
 php_value upload_max_filesize 1024M 
