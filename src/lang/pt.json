@@ -1,0 +1,267 @@
+{
+	"layout":{
+		"topnav":{
+			"logout":"Sair"
+		}
+	},
+	"connection":{
+		"conn": "Conectado",
+		"diss": "Não conectado",
+		"back": "Conectado ao backup",
+		"nopath": "Geen pathstatus",		
+		"oos": "Fora de serviço até",
+		"main_err": "Falha na placa-mãe",
+		"batt_err": "Falha da bateria",
+		"230_err": "Falha de 230v",
+		"multi_err": "Questões múltiplas"		
+	},
+	"installscreen":{
+		"welcome": "Bem-vindo ao DB +",
+		"text": "Esta é a sua primeira vez.",
+		"subtext": "Aproveite o tempo para preencher os detalhes abaixo.",
+		"login": "Instalar",
+		"phpversion": {
+			"err":"Versão PHP muito baixa",
+			"msg":"A versão 7.0.0 é um requisito mínimo."
+		},
+		"admin":{
+			"txt": "Configuração de administrador",
+			"email": "Digite o email do administrador",
+			"pass": "Digite a senha do administrador",
+			"local": "Insira a localização",
+			"lang": "Selecione o idioma padrão"
+		},
+		"scs":{
+			"txt": "Conexão SCS",	
+			"user": "Nome de usuário",	
+			"pass": "Senha"
+		},
+		"rms":{
+			"txt": "Conexão RMS"		
+		}		
+	},
+	"loginscreen":{
+		"welcome": "Bem-vindo ao DB +",
+		"text": "Uma experiência aprimorada para gerenciamento de RMS e SCS.",
+		"subtext": "Faça o login. Para vê-lo em ação.",		
+		"login": "Entrar",
+		"request": "Pedido",
+		"forget": "Esqueceu a senha?"	
+	},
+	"loginmsg":{
+		"failed":"Falha na autenticação.",
+		"blocked":"Conta bloqueada",
+		"success":"Bem sucedido",	
+		"lck": "por 2 horas.",
+		"id": "Verifique suas iniciais ou senha.",
+		"dev": "Verifique suas iniciais ou senha.",
+		"blk": "Verifique suas iniciais ou senha.",
+		"uknw": "Verifique suas iniciais ou senha.",
+		"tok":{
+			"suc": "repor pedido de token.",
+			"err": "Verifique suas iniciais ou senha.",
+			"inv": "Verifique suas iniciais ou senha.",
+			"uknw": "Verifique suas iniciais ou senha.",
+			"exp": "Verifique suas iniciais ou senha."
+		},
+		"res":{
+			"suc": "Verifique suas iniciais ou senha.",
+			"err": "Verifique suas iniciais ou senha."
+		}	
+	},
+	"home":{
+		"events":{
+			"h5":"Eventos",
+			"day":{
+				"label":"24h",
+				"small_label":"Desde um dia"
+			},
+			"week":{
+				"label":"Semanalmente",
+				"small_label":"Desde uma semana"
+			},
+			"month":{
+				"label":"Mensalmente",
+				"small_label":"Desde um mês"
+			}				
+		},	
+		"filters": "Filtros",
+		"actions": {
+			"selectdefault": "Padrão",
+			"text": "Ações",
+			"mapzoom": "Definir o nível de zoom do mapa:",
+			"clusterzoom": "Nível de zoom do cluster:",
+			"clustersize": "Tamanho do cluster:",
+			"mapcontrols": "Controles de mapa:",
+			"buttons": {
+				"clear": "Claro",
+				"refresh": "Atualize",
+				"center": "Centro"
+			}	
+		},
+		"locations": {
+			"active":{
+				"label":"Locais ativos",
+				"table": {
+					"th1": "Conexão",
+					"th2": "ID",
+					"th3": "Localização",
+					"th4": "Visto pela última vez"
+				}				
+			},
+			"problem": {
+				"label":"Locais com problemas",
+				"table": {
+					"th1": "Conexão",
+					"th2": "ID",
+					"th3": "Localização",
+					"th4": "Visto pela última vez"
+				}				
+			},			
+			"notactive": {
+				"label":"Locais fora de linha",
+				"table": {
+					"th1": "Conexão",
+					"th2": "ID",
+					"th3": "Localização",
+					"th4": "Visto pela última vez"
+				}				
+			},
+			"device": {
+				"label":"230v / Battery Falha",
+				"table": {
+					"th1": "Conexão",
+					"th2": "ID",
+					"th3": "Localização",
+					"th4": "Visto pela última vez"
+				}				
+			}			
+
+		}
+	},
+	"location":{
+		"connection": "Conexão",
+		"status": "Status",
+		"address": "Endereço",
+		"zipcode": "Código postal",
+		"city": "Cidade",
+		"first": "Primeiro sinal",
+		"last": "Último sinal",
+		"path": "Estado do caminho",
+		"mac": "Endereço MAC",
+		"udid": "UDID não",
+		"serie": "Série não",
+		"sim": "Sim cartão não",
+		"serviceid": "ID do serviço não",
+		"lijn": "Denominação de linha",
+		"components":{
+			"txt":"Componentes de localização",
+			"values":"Valores de localização"
+		},
+		"values":{
+			"table": {
+				"txt":"Valores de localização",
+				"th1": "Nome",
+				"th2": "Valor"
+			}				
+		},
+		"components":{
+			"table": {
+				"txt":"Componentes de localização",
+				"th1": "Componente",
+				"th2": "Quantidade",
+				"th3": "Serial#",
+				"th4": "Data de instalação",
+				"th5": "Data de validade"
+			}				
+		},		
+		"events":{
+			"week":"Semana",
+			"label":"Eventos desta semana",
+			"count":"Total de eventos"
+		},
+		"tab":{
+			"location":"Localização",
+			"update":"Atualizado em",
+			"tab1":{
+				"text":"Status da conexão",
+				"h3":"Estado do caminho",
+				"path_conn":"Conexão",
+				"path_name":"Trajeto",
+				"power":"230 volt",
+				"battery":"Bateria"
+			},
+			"tab2":{
+				"text":"Atraso de enquete",
+				"h3":"Contagem de atraso de pesquisa"
+			},
+			"tab3":{
+				"text":"Nível de atraso da pesquisa",
+				"h3":"Status do componente"
+			}			
+		}	
+	},
+	"admin":{
+		"h1":"Bem-vindo administrador",
+		"small":"Por favor espere"
+	},
+	"user":{
+		"h1":"Bem-vindo ao Painel de Controle",
+		"subtxt":"Uma experiência aprimorada para gerenciamento de RMS e SCS.",
+		"small":"Por favor espere"
+	},	
+	"tickets":{
+		"label":"Bilhete",
+		"state":{
+			"pending":"Pendente",
+			"closed":"Fechadas"
+		},
+		"create":{
+			"label":"Criar bilhete",
+			"placeholder":"Preencha...",
+			"dropdown":"Selecione...",
+			"txt_scs":"SCS número",
+			"txt_service":"Serviço",
+			"txt_location":"Localização",
+			"txt_address":"Endereço",
+			"txt_zipcode":"Código postal",
+			"txt_city":"Cidade",
+			"txt_for":"Para",
+			"txt_storing":"Defeituoso",
+			"txt_action":"Açao",
+			"txt_cp":"Pessoa de contato",
+			"txt_cptel":"Telefone de contato",
+			"txt_comment":"Comentário extra"
+		},
+		"update":{
+			"label":"Criar bilhete",
+			"placeholder":"Preencha...",		
+			"submitted_by":"Enviado por",		
+			"checked_by":"Verificado por",	
+			"status":"Estado",	
+			"updates":"Atualizações",	
+			"ticket_for":"Bilhete para",
+			"create":{
+				"label":"Atualizar bilhete",
+				"external":"Número do bilhete externo",
+				"up_comm":"Atualizar comentário",
+				"up_status":"Atualizar o status"
+			}
+		},
+		"table": {
+			"th1": "Bilhete#",
+			"th2": "ID de localização",
+			"th3": "Serviço",
+			"th4": "Última atualização",
+			"th5": "SLA",
+			"th6": "Estado"
+		},
+		"buttons":{
+			"send":"Enviar",
+			"update":"Atualizar"
+		}
+	},
+	"footer":{
+		"copyright": "Direito autoral"
+	} 	
+}
