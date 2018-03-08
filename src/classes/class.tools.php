@@ -180,18 +180,29 @@
 
 		public function getSignalLoad(){
 			$conn_scs = $this->db_conn;
-
-			$now 		= date('Ymd', strtotime('tomorrow')).'000000';			
-			$past 		= date('YmdHis', strtotime('-24 hours'));
-
-			$past_week_no = date('W', strtotime('past week'));
-			$now_week_no = date('W');
+			
 			$year = date('Y');
 			
-			$table_past = 'signals_'.$year.'_'.$past_week_no;
-			$table_now = 'signals_'.$year.'_'.$now_week_no;
+			// Get weeknumber from today
+			$now 			= date('YmdHis', strtotime('tomorrow'));
+			$now_week_no 	= date('W');
+			$table_now 		= 'signals_'.$year.'_'.$now_week_no;
 			
-			$rms_res = $conn_scs->query("(SELECT PreProcessor_Signal_DateTime AS signalDate, COUNT(*) AS signal
+			// Get weeknumber from past 24 hours
+			$past 			= date('YmdHis', strtotime('-24 hours'));
+			$past_week_no 	= date('W', strtotime('past week'));
+			$table_past 	= 'signals_'.$year.'_'.$past_week_no;
+			
+			// Check if both dates are in the same week and specify query
+			if($past_week_no == $now_week_no){
+				$query = "SELECT PreProcessor_Signal_DateTime AS signalDate, COUNT(*) AS signal
+										FROM scs_fep.".$table_now."
+										WHERE PreProcessor_Signal_DateTime 
+										BETWEEN '".$past."' AND '".$now."' 
+										GROUP BY MID(PreProcessor_Signal_DateTime, 5, 6) 
+										ORDER BY PreProcessor_Signal_DateTime";
+			} else {
+				$query = "(SELECT PreProcessor_Signal_DateTime AS signalDate, COUNT(*) AS signal
 										FROM scs_fep.".$table_past."
 										WHERE PreProcessor_Signal_DateTime 
 										BETWEEN '".$past."' AND '".$now."' 
@@ -203,12 +214,15 @@
 										WHERE PreProcessor_Signal_DateTime 
 										BETWEEN '".$past."' AND '".$now."' 
 										GROUP BY MID(PreProcessor_Signal_DateTime, 5, 6) 
-										ORDER BY PreProcessor_Signal_DateTime)");
+										ORDER BY PreProcessor_Signal_DateTime)";
+			}
+			
+			$res = $conn_scs->query($query);
 				
 				$signal = array('signal');
 				$hours 	= array('x');
 				
-				while ($row = $conn_scs->fetch($rms_res)) {			
+				while ($row = $conn_scs->fetch($res)) {			
 					$signal[]	= $row['signal'];				
 					$hours[]	= date('d-m H:i', strtotime($row['signalDate']));													
 				};			
@@ -216,7 +230,9 @@
 				$response_array = array(
 					'status'	=> 1,
 					'signal'	=> $signal,
-					'hours'		=> $hours
+					'hours'		=> $hours,
+					'avg_last'	=> $this->getSignalLoadWeeklyAvg($past_week_no),
+					'avg_now'	=> $this->getSignalLoadWeeklyAvg($now_week_no)
 				);
 				
 			// Return JSON array
@@ -224,6 +240,235 @@
 				
 		}
 		
-
+		public function getPendingEvents(){
+			$conn_scs = $this->db_conn;
+			
+			$year = date('Y');
+			
+			// Get weeknumber from today
+			$now 			= date('YmdHis', strtotime('tomorrow'));
+			$now_week_no 	= date('W');
+			$table_now 		= 'signals_'.$year.'_'.$now_week_no;
+			
+			$query = "SELECT
+					`Account_Nmbr`,
+					`Account_Name`,
+					`Account_Group`,
+					`Alarm_Priority`,
+					`Alarm_Priority_Original`,
+					`Event_Code`,
+					`Event_Zone`,
+					`Event_Description`,
+					`Event_Operator`,
+					`Event_Operator_First`,
+					`Event_Reaction_Time`
+					FROM `scs`.`scs_pending_events`
+					ORDER BY `Alarm_Priority` DESC, `DateTime` DESC";
+			
+			$res = $conn_scs->query($query);
+			
+			$rows = '<thead>
+						<th>Account nr</th>
+						<th>Account naam</th>
+						<th>Acount group</th>
+						<th>Zone</th>
+						<th>Tekst</th>
+						<th>In behandeling</th>
+						<th>First</th>
+						<th>Reaction time</th>
+					</thead>';
+					
+			while ($row = $conn_scs->fetch($res)) {	
+				if($row['Alarm_Priority'] == '91'){
+					$class = 'bg-warning';
+				} else {
+					$class = '';
+				}
+				
+				$rows	.= '<tr class="'.$class.'" >
+				<td>'.$row['Account_Nmbr'].'</td>
+				<td>'.$row['Account_Name'].'</td>
+				<td>'.$row['Account_Group'].'</td>
+				<td>'.$row['Event_Code'].' '.$row['Event_Zone'].'</td>
+				<td>'.$row['Event_Description'].'</td>
+				<td>'.$row['Event_Operator'].'</td>
+				<td>'.$row['Event_Operator_First'].'</td>
+				<td>'.$row['Event_Reaction_Time'].' sec</td>
+				</tr>';																
+			};			
+			
+			$response_array = array(
+				'status'	=> 1,
+				'rows'		=> $rows
+			);
+				
+			// Return JSON array
+			jsonArr($response_array);				
+		}
 		
+		public function getLocationSignalCount(){
+			$conn_scs = $this->db_conn;
+			
+			$year = date('Y');
+			
+			// Get weeknumber from today
+			$now 			= date('YmdHis', strtotime('tomorrow'));
+			$now_week_no 	= date('W');
+			$table_now 		= 'signals_'.$year.'_'.$now_week_no;
+			
+			$query = "SELECT COUNT(*) AS signal ,PreProcessor_Account_Nmbr
+					FROM scs_fep.".$table_now."
+					WHERE LEFT(PreProcessor_Account_Nmbr, 6) IN (
+					'010013',
+					'010018',
+					'020205',
+					'010500',
+					'010109',
+					'010009',
+					'010114',
+					'010014',
+					'010125',
+					'010025',
+					'010022',
+					'600100',
+					'800100',
+					'020000',
+					'010400',
+					'010278',
+					'010276',
+					'010274',
+					'010099',
+					'010098',
+					'010273',
+					'010100',
+					'010300'
+					)
+					GROUP BY PreProcessor_Account_Nmbr 
+					ORDER BY signal DESC
+					LIMIT 15";
+			
+			$res = $conn_scs->query($query);
+			
+			$rows = '<thead>
+						<th>Account nr</th>
+						<th>Dienst</th>
+						<th>Signalen</th>
+					</thead>';
+					
+			while ($row = $conn_scs->fetch($res)) {			
+				$rows	.= '<tr><td>'.$row['PreProcessor_Account_Nmbr'].'</td><td>'.$this->getLocationService($row['PreProcessor_Account_Nmbr']).'</td><td>'.$row['signal'].'</td></tr>';																
+			};			
+			
+			$response_array = array(
+				'status'	=> 1,
+				'rows'		=> $rows
+			);
+				
+			// Return JSON array
+			jsonArr($response_array);			
+		}
+
+		protected function getLocationService($account_nr){
+			if(substr($account_nr, 0, 6) == "010013"){
+				$regio = "VRAA";
+				$dienst = "Brand";
+			} elseif(substr($account_nr, 0, 6) == "010018"){
+				$regio = "ZHZ";    
+				$dienst = "Brand";				
+			} elseif(substr($account_nr, 0, 6) == "020205"){
+				$regio = "NHN";
+				$dienst = "Brand";				
+			} elseif(substr($account_nr, 0, 6) == "010500") {
+				$regio = "VRH";    
+				$dienst = "Brand";					
+			} elseif(substr($account_nr, 0, 6) == "010109"){
+				$regio = "VRU_ASB";     
+				$dienst = "Brand";					
+			} elseif(substr($account_nr, 0, 6) == "010009"){
+				$regio = "VRU_KPN";   
+				$dienst = "Brand";					
+			} elseif(substr($account_nr, 0, 6) == "010114"){
+				$regio = "VRGV_ASB";   
+				$dienst = "Brand";					
+			} elseif(substr($account_nr, 0, 6) == "010014"){
+				$regio = "VRGV_KPN"; 
+				$dienst = "Brand";					
+			} elseif(substr($account_nr, 0, 6) == "010125"){
+				$regio = "VRF_ASB"; 
+				$dienst = "Brand";					
+			} elseif(substr($account_nr, 0, 6) == "010025"){
+				$regio = "VRF_KPN";
+				$dienst = "Brand";	
+			} elseif(substr($account_nr, 0, 6) == "010022") {
+				$regio = "EHV";    
+				$dienst = "Brand";	
+			} elseif(substr($account_nr, 0, 6) == "600100") {
+				$regio = "";    
+				$dienst = "Brand";						
+			} elseif(substr($account_nr, 0, 6) == "800100"){
+				$regio = "";
+				$dienst = "DIGI";	
+			} elseif(substr($account_nr, 0, 6) == "020000"){
+				$regio = "";
+				$dienst = "RAC";					
+			} elseif(substr($account_nr, 0, 6) == "010400"){
+				$regio = "";
+				$dienst = "ING";		
+			} elseif(substr($account_nr, 0, 6) == "010278"){
+				$regio = "";
+				$dienst = "IPC_ADT";
+			} elseif(substr($account_nr, 0, 6) == "010276"){
+				$regio = "";
+				$dienst = "IPC_SMC";
+			} elseif(substr($account_nr, 0, 6) == "010274"){
+				$regio = "";
+				$dienst = "IPC";				
+			} elseif(substr($account_nr, 0, 6) == "010099"){
+				$regio = "";
+				$dienst = "PAC";						
+			} elseif(substr($account_nr, 0, 6) == "010098"){
+				$regio = "";					
+				$dienst = "VERIFIRE";	
+			} elseif(substr($account_nr, 0, 6) == "010273"){
+				$regio = "";					
+				$dienst = "S&E";
+			} elseif(substr($account_nr, 0, 6) == "010100"){
+				$regio = "";					
+				$dienst = "MIST";
+			} elseif(substr($account_nr, 0, 6) == "010300"){
+				$regio = "";					
+				$dienst = "BNOT";				
+			} else {
+				$regio = "";
+				$dienst = "";					
+			}
+			return $dienst;
+		}
+
+		protected function getSignalLoadWeeklyAvg($week_nr){
+			$conn_scs = $this->db_conn;
+			
+			$year = date('Y');
+			
+			// Get weeknumber from today
+			$table_now 		= 'signals_'.$year.'_'.$week_nr;	
+			
+			$query = "SELECT PreProcessor_Signal_DateTime AS signalDate, COUNT(*) AS signal
+									FROM scs_fep.".$table_now."
+									WHERE PreProcessor_Signal_DateTime 
+									GROUP BY MID(PreProcessor_Signal_DateTime, 5, 6) 
+									ORDER BY PreProcessor_Signal_DateTime";			
+			$res = $conn_scs->query($query);
+			$i = 0;
+			while ($row = $conn_scs->fetch($res)) {			
+				$i += $row['signal'];												
+			};
+			
+			$row_cnt = $res->num_rows;
+			
+			$avg = $i / $row_cnt;
+			
+			return round($avg);
+		}
+
 	}

@@ -15,6 +15,16 @@
 
 		if($_GET['get'] == 'signalload'){
 			$obj->getSignalLoad();
-		}			
+		}
+		
+		if($_GET['get'] == 'locationsignalcount'){
+			$obj->getLocationSignalCount();
+		}
+
+		if($_GET['get'] == 'events'){
+			if(isset($_GET['pending'])){
+				$obj->getPendingEvents();
+			}
+		}		
 	}
 	

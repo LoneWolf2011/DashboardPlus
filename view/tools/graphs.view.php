@@ -1,15 +1,26 @@
     <div class="wrapper wrapper-content animated fadeInRight">
         <div class="row">
-            <div class="col-lg-6">
+            <div class="col-lg-4">
 				<h2>Reactietijd prio 1 <small> gemiddeld: <span id="avg_pie1"></span></small></h2>
 				<div id="piechart1"></div>
             </div>
 
-            <div class="col-lg-6">
+            <div class="col-lg-4">
 				<h2>Reactietijd prio 2 <small> gemiddeld: <span id="avg_pie2"></span></small></h2>
 				<div id="piechart2"></div>	
+            </div>
+            <div class="col-lg-4">
+				<h2>Top 10 meeste signalen deze week </h2>
+				<table class="table no-margins" id="signal_table" style="color: white;"></table>
             </div>			
         </div>
+        <div class="row">
+            <div class="col-lg-12">
+				<h2>Signaal belasting<small>  <span></span></small></h2>
+				<div id="sign_chart"></div>
+            </div>
+		
+        </div>		
     </div>
 	
 	<input type="text" hidden id="url_query" value="<?= $_SERVER['QUERY_STRING']; ?>" />	
@@ -32,16 +43,19 @@
 	<script>
 	$(document).ready(function () {	
 		var url_str = $('#url_string').val();
-		var refresh = 5000;
+		// 1 hour
+		var refresh = 3600000;
 		var interval;
 		
 		getOperatorThresholds(url_str, 1);
 		getOperatorThresholds(url_str, 2);
+		getSignalLoad(url_str);
+		getLocationSignalCount(url_str);
 		
 		interval = setInterval( function () {
-			getOperatorThresholds(url_str);
+			getOperatorThresholds(url_str, 1);
 			getOperatorThresholds(url_str, 2);
-
+			getSignalLoad(url_str);
 		}, refresh );	
 		
 		
@@ -58,7 +72,7 @@
 			columns: []
 		},
 		size: {
-			height:800
+			height:500
 		},		
 		type: 'pie'	
 	});
@@ -68,11 +82,34 @@
 			columns: []
 		},
 		size: {
-			height:800
+			height:500
 		},		
 		type: 'pie'	
 	});	
-
+	var compchart = c3.generate({
+		bindto: '#sign_chart',
+		data: {
+			x: 'x',
+			xFormat: '%H:%M',
+			columns: []
+		},
+		type: 'spline',
+		size: {
+			height:500
+		},		
+		axis: {
+			x: {
+				type: 'category'
+			}
+		},
+		
+		color: {
+			pattern: ["#1ab394",  "#d3d3d3", "#1C84C6", "#bababa", "#79d2c0","#1ab394"]
+		},		
+		zoom: {
+			enabled: true
+		}			
+	});	
 
 	function popupWindow(url, title, w, h) {
 		// Create reference to new window
@@ -88,8 +125,50 @@
 		//console.log(newWindow.location.href);
 		return newWindow;
 	}
-	
 
+	
+	function getLocationSignalCount(url){
+		$.ajax({
+			type: 'GET',
+			url: url+"?get=locationsignalcount",
+			success: function(data) {
+				if(data.status != 0){
+					$('#signal_table').html(data.rows);		
+				} else {
+					$('#signal_table').html('');	
+				}						
+			}
+		});		
+	}
+	
+	function getSignalLoad(url){
+		$.ajax({
+			type: 'GET',
+			url: url+"?get=signalload",
+			success: function(data) {
+				if(data.status != 0){
+					compchart.load({
+						columns: [
+							data.hours,
+							data.signal
+						],
+						type: 'area-spline'						
+					});
+					compchart.ygrids([
+						{value: data.avg_last, class: data.avg_last > data.avg_now ? 'gridorange': '', text: 'Gemiddelde vorige week ' + data.avg_last},
+						{value: data.avg_now, class: data.avg_now > data.avg_last ? 'gridorange': 'gridgreen', text: 'Gemiddelde deze week ' + data.avg_now}
+					]);					
+					compchart.data.names({
+						signal: 'Signaal belasting afgelopen 24h'
+					});					
+				} else {
+					compchart.destroy();	
+				}
+				$('#spinner2').css('display','none');
+						
+			}
+		});		
+	}	
 	
 	function getOperatorThresholds(url, prio){
 		$.ajax({
@@ -107,9 +186,9 @@
 								data.red
 							],					
 							colors: {
-								green: '#1ab394',
-								orange: '#f8ac59',
-								red: '#ed5565'
+								green: 'rgba(26, 179, 148, 0.28)',
+								orange: 'rgb(248, 172, 89, 0.28)',
+								red: 'rgba(237, 85, 101, 0.28)'
 							},						
 							type: 'pie'						
 						});
@@ -129,9 +208,9 @@
 								data.red
 							],					
 							colors: {
-								green: '#1ab394',
-								orange: '#f8ac59',
-								red: '#ed5565'
+								green: 'rgba(26, 179, 148, 0.28)',
+								orange: 'rgb(248, 172, 89, 0.28)',
+								red: 'rgba(237, 85, 101, 0.28)'
 							},						
 							type: 'pie'						
 						});

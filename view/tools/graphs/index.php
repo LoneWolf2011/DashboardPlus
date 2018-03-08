@@ -41,10 +41,23 @@
 		.c3-legend-item {
 			font-size:20px;
 			fill: white;
-		}	
+		}
+		.c3-chart-arc path {
+			stroke: #666;
+		}
+		.c3-ygrid-line.gridgreen line {
+			stroke: green;
+		}			
+		.c3-ygrid-line.gridorange line {
+			stroke: orange;
+		}
+		.c3-ygrid-line.gridred line {
+			stroke: red;
+		}			
 		h2 {
 			color: white;
 		}
+		
 	</style>
 </head>
 
