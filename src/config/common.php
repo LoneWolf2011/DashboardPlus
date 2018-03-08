@@ -45,7 +45,7 @@
 	define('APP_LANG', getSetting($db, 'APP_LANG'));
 	define('APP_LAT', (int)getSetting($db, 'APP_LAT'));
 	define('APP_LNG', (int)getSetting($db, 'APP_LNG'));
-	define('APP_DEBUG', $env['APP']['DEBUG']);
+	define('APP_DEBUG', (int)$env['APP']['DEBUG']);
 	define('APP_INITIALIZE', (int)getSetting($db, 'APP_INITIALIZE'));
 	
 	// Define SCS conn
@@ -76,19 +76,19 @@
 	require ROOT_PATH."/Mdb/Src/file_package.php";
 	
 	// Function files
-	require ROOT_PATH.ROOT_FILE['functions'];
-	require ROOT_PATH.ROOT_FILE['error_handler'];	
-	require ROOT_PATH.ROOT_FILE['ssp_class'];	
-	
+	foreach(ROOT_FILE['FUNC'] as $func){
+		require ROOT_PATH.$func;
+	}		
+
 	// Libs
-	require ROOT_PATH.ROOT_FILE['phpmailer'];	
+	foreach(ROOT_FILE['LIBS'] as $libs){
+		require ROOT_PATH.$libs;
+	}	
 	
 	// Class files
-	require ROOT_PATH.ROOT_FILE['safemysql'];
-	require ROOT_PATH.ROOT_FILE['google'];
-	require ROOT_PATH.ROOT_FILE['login'];
-	require ROOT_PATH.ROOT_FILE['location'];
-	require ROOT_PATH.ROOT_FILE['home'];
+	foreach(ROOT_FILE['CLASS'] as $class){
+		require ROOT_PATH.$class;
+	}
 	
 	// Define function to get settings
 	function getSetting($db_conn, $setting_name){

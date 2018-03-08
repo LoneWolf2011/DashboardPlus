@@ -21,6 +21,7 @@
 				<?php if(htmlentities($_SESSION['user']['user_role'], ENT_QUOTES, 'UTF-8') == 1){ ?>
                 <li><a href="<?= URL_ROOT.'view/settings/';?>"><i class="fa fa-gear"></i> <span class="nav-label">Settings</span></a></li>
 				<?php }; ?>
+				
             </ul>
 
         </div>

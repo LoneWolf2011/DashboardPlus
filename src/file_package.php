@@ -16,25 +16,33 @@ define('ROOT_FILE', array(
 	'menu_side' 		=> '/Mdb/View/Layout/sidenav.layout.php',
 	'menu_top' 			=> '/Mdb/View/Layout/topnav.layout.php',
 	'menu_footer' 		=> '/Mdb/View/Layout/footer.layout.php',
-	
-	// Libs
-	'phpmailer' 		=> '/Mdb/Src/libs/PHPmailer/class.phpmailer.php',
-	'tcpdf' 			=> '/Mdb/Src/libs/TCPDF/tcpdf.php',
-			
+		
 	// Src
 	'common' 			=> '/Mdb/Src/Config/common.php',
-	'error_handler' 	=> '/Mdb/Src/Config/error_handler.php',
-	'functions' 		=> '/Mdb/Src/functions.php',
 	'modal' 			=> '/Mdb/Src/Templates/modal.tpl.php',
+
+	// Libs
+	'LIBS'			=> array (	
+		'phpmailer' 		=> '/Mdb/Src/libs/PHPmailer/class.phpmailer.php',
+		'tcpdf' 			=> '/Mdb/Src/libs/TCPDF/tcpdf.php',
+	),
+	
+	// Helper functions
+	'FUNC'			=> array (
+		'error_handler' 	=> '/Mdb/Src/Config/error_handler.php',
+		'functions' 		=> '/Mdb/Src/functions.php',
+	),
 	 
 	// Classes
-	'safemysql' 		=> '/Mdb/Src/Classes/class.safemysql.php',
-	'ssp_class' 		=> '/Mdb/Src/Classes/class.datatable.ssp.php',
-	'google' 			=> '/Mdb/Src/Classes/class.googleHelper.php',
-	'login' 			=> '/Mdb/Src/Classes/class.login.php',
-	'location' 			=> '/Mdb/Src/Classes/class.location.php',
-	'home' 				=> '/Mdb/Src/Classes/class.home.php',
-		
+	'CLASS'			=> array (
+		'safemysql' 		=> '/Mdb/Src/Classes/class.safemysql.php',
+		'ssp_class' 		=> '/Mdb/Src/Classes/class.datatable.ssp.php',
+		'google' 			=> '/Mdb/Src/Classes/class.googleHelper.php',
+		'login' 			=> '/Mdb/Src/Classes/class.login.php',
+		'location' 			=> '/Mdb/Src/Classes/class.location.php',
+		'home' 				=> '/Mdb/Src/Classes/class.home.php',
+		'tools' 			=> '/Mdb/Src/Classes/class.tools.php',	
+	)		
 ));
 
 define('ROOT_CSS', array(
