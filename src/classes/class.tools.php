@@ -224,7 +224,7 @@
 				
 				while ($row = $conn_scs->fetch($res)) {			
 					$signal[]	= $row['signal'];				
-					$hours[]	= date('d-m H:i', strtotime($row['signalDate']));													
+					$hours[]	= date('H:i', strtotime($row['signalDate']));													
 				};			
 				
 				$response_array = array(
@@ -240,7 +240,7 @@
 				
 		}
 		
-		public function getPendingEvents(){
+		public function getPendingEvents($event_type = ''){
 			$conn_scs = $this->db_conn;
 			
 			$year = date('Y');
@@ -249,13 +249,23 @@
 			$now 			= date('YmdHis', strtotime('tomorrow'));
 			$now_week_no 	= date('W');
 			$table_now 		= 'signals_'.$year.'_'.$now_week_no;
+
 			
+			
+			if($event_type == 'TASK'){
+				$where = "WHERE Event_Type IN ('TASK')";
+			} else {
+				$where = "WHERE Event_Type NOT IN ('TRTS')";
+			}
+		
 			$query = "SELECT
 					`Account_Nmbr`,
+					`DateTime`,
 					`Account_Name`,
 					`Account_Group`,
 					`Alarm_Priority`,
 					`Alarm_Priority_Original`,
+					`Alarm_Description`,
 					`Event_Code`,
 					`Event_Zone`,
 					`Event_Description`,
@@ -263,43 +273,111 @@
 					`Event_Operator_First`,
 					`Event_Reaction_Time`
 					FROM `scs`.`scs_pending_events`
-					ORDER BY `Alarm_Priority` DESC, `DateTime` DESC";
+					".$where."
+					ORDER BY `Alarm_Priority` ASC, `DateTime` ASC";
 			
 			$res = $conn_scs->query($query);
 			
+			$count = $conn_scs->getAll("SELECT
+					COUNT(Event_Zone) as aantal,
+					Event_Zone
+					FROM `scs`.`scs_pending_events`
+					GROUP BY Event_Zone");
+			$count_arr = array();
+			foreach($count as $event){
+				$count_arr[$event['Event_Zone']] = $event['aantal'];
+			}
+						
 			$rows = '<thead>
+						<th>#</th>
+						<th>Datum tijd</th>
 						<th>Account nr</th>
 						<th>Account naam</th>
-						<th>Acount group</th>
+						<th>Acount groep</th>
 						<th>Zone</th>
-						<th>Tekst</th>
-						<th>In behandeling</th>
-						<th>First</th>
-						<th>Reaction time</th>
+						<th>Beschrijving</th>
+						<th>In gebruik</th>
+						<th>Eerste</th>
+						<th>Reactie tijd</th>
+						<th class="hidden"></th>
 					</thead>';
 					
 			while ($row = $conn_scs->fetch($res)) {	
-				if($row['Alarm_Priority'] == '91'){
+				if($row['Alarm_Priority'] == '1'){
+					$class = 'bg-danger';
+					if($row['Event_Operator'] == null){
+						$audio_source = URL_ROOT. 'src/libs/scs_sounds/P1.wav';	
+					} else {
+						$audio_source = '';
+					}
+				} elseif($row['Alarm_Priority'] == '2'){
+					$class = 'bg-danger';
+					if($row['Event_Operator'] == null){
+						$audio_source = URL_ROOT. 'src/libs/scs_sounds/P2.wav';	
+					} else {
+						$audio_source = '';
+					}
+				} elseif($row['Alarm_Priority'] == '3'){
+					$class = 'bg-danger';
+					if($row['Event_Operator'] == null){
+						$audio_source = URL_ROOT. 'src/libs/scs_sounds/P3.wav';	
+					} else {
+						$audio_source = '';
+					}
+				} elseif($row['Alarm_Priority'] == '4'){
 					$class = 'bg-warning';
+					if($row['Event_Operator'] == null){
+						$audio_source = URL_ROOT. 'src/libs/scs_sounds/P4.wav';	
+					} else {
+						$audio_source = '';
+					}
+				} elseif($row['Alarm_Priority'] == '5'){
+					$class = 'bg-yellow';
+					if($row['Event_Operator'] == null){
+						$audio_source = URL_ROOT. 'src/libs/scs_sounds/P5.wav';	
+					} else {
+						$audio_source = '';
+					}				
+				} elseif($row['Alarm_Priority'] == '7'){
+					$class = 'bg-primary';
+					$audio_source = '';
+				} elseif($row['Alarm_Priority'] == '8'){
+					$class = 'bg-dark-green';
+					$audio_source = '';
+				} elseif($row['Alarm_Priority'] == '9'){
+					$class = 'bg-white';	
+					$audio_source = '';					
+				} elseif($row['Alarm_Priority'] == '91'){
+					$class = 'bg-gray';	
+					$audio_source = '';					
 				} else {
 					$class = '';
+					$audio_source = '';
 				}
 				
-				$rows	.= '<tr class="'.$class.'" >
-				<td>'.$row['Account_Nmbr'].'</td>
-				<td>'.$row['Account_Name'].'</td>
-				<td>'.$row['Account_Group'].'</td>
-				<td>'.$row['Event_Code'].' '.$row['Event_Zone'].'</td>
-				<td>'.$row['Event_Description'].'</td>
-				<td>'.$row['Event_Operator'].'</td>
-				<td>'.$row['Event_Operator_First'].'</td>
-				<td>'.$row['Event_Reaction_Time'].' sec</td>
-				</tr>';																
+				$reaction_time = $row['Event_Reaction_Time'] == '-1' ? '' : $row['Event_Reaction_Time'].' sec';
+
+					$rows	.= '<tr class="'.$class.'" >
+					<td>'.$row['Alarm_Priority'].'</td>
+					<td>'.date('d-m-Y H:i:s', strtotime($row['DateTime'])).'</td>
+					<td>'.$row['Account_Nmbr'].'</td>
+					<td>'.$row['Account_Name'].'</td>
+					<td>'.$row['Account_Group'].'</td>
+					<td>'.$row['Event_Code'].' '.$row['Event_Zone'].'</td>
+					<td>'.$row['Event_Description'].'</td>
+					<td>'.$row['Event_Operator'].'</td>
+					<td>'.$row['Event_Operator_First'].'</td>
+					<td>'.$reaction_time.'</td>
+					<td class="hidden"><audio controls autoplay loop>
+							<source src="'.$audio_source. '" type="audio/wav" >
+						</audio></td>
+					</tr>';	
+				
 			};			
 			
 			$response_array = array(
 				'status'	=> 1,
-				'rows'		=> $rows
+				'rows'		=> $rows				
 			);
 				
 			// Return JSON array

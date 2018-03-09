@@ -1,4 +1,4 @@
-    <div class="wrapper wrapper-content animated fadeInRight">
+    <div class="wrapper animated fadeInRight">
         <div class="row">
             <div class="col-lg-4">
 				<h2>Reactietijd prio 1 <small> gemiddeld: <span id="avg_pie1"></span></small></h2>

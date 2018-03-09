@@ -25,6 +25,10 @@
 			if(isset($_GET['pending'])){
 				$obj->getPendingEvents();
 			}
+			if(isset($_GET['tasks'])){
+				$obj->getPendingEvents('TASK');
+			}			
+			
 		}		
 	}
 	

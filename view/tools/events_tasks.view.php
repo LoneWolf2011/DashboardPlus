@@ -1,13 +1,12 @@
     <div class="wrapper animated fadeInRight">
         <div class="row">
             <div class="col-lg-12">
-				<h2>Meldingenscherm<small>  <span id="p_events_count"></span></small></h2>
+				<h2>Actieve taken<small>  <span></span></small></h2>
 				<table class="table" id="p_events" style="color: white;"></table>
             </div>
 		
         </div>		
     </div>
-	
 	
 	<input type="text" hidden id="url_query" value="<?= $_SERVER['QUERY_STRING']; ?>" />	
 	<input type="text" hidden id="mac_adres"  />	
@@ -24,7 +23,7 @@
 	$(document).ready(function () {	
 		var url_str = $('#url_string').val();
 		// 1 hour
-		var refresh = 1000;
+		var refresh = 5000;
 		var interval;
 		
 		getPendingEvents(url_str);
@@ -39,14 +38,12 @@
 	function getPendingEvents(url){
 		$.ajax({
 			type: 'GET',
-			url: url+"?get=events&pending",
+			url: url+"?get=events&tasks",
 			success: function(data) {
 				if(data.status != 0){
 					$('#p_events').html(data.rows);		
-					$('#p_events_count').html(data.count);		
 				} else {
 					$('#p_events').html('');	
-					$('#p_events_count').html('');	
 				}						
 			}
 		});		
