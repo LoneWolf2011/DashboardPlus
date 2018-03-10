@@ -2,6 +2,8 @@
 	
 	class Tools {
 		protected $succesMessage;
+		protected $setAudio = false;
+		protected $alarmThreshold = 2;
 		
 		function __construct($db_conn) {
 			$this->db_conn 	= $db_conn;
@@ -29,10 +31,10 @@
 									ORDER BY DATETIME DESC LIMIT 100) 
 									LIMIT 100) AS First_Action");
 				
-				$green = array('green');
+				$green 	= array('green');
 				$orange = array('orange');
-				$red = array('red');
-				$avg = array();
+				$red 	= array('red');
+				$avg 	= array();
 				while ($row = $conn_scs->fetch($rms_res)) {			
 					$green[]		= $row['green'];				
 					$orange[]		= $row['orange'];				
@@ -250,8 +252,6 @@
 			$now_week_no 	= date('W');
 			$table_now 		= 'signals_'.$year.'_'.$now_week_no;
 
-			
-			
 			if($event_type == 'TASK'){
 				$where = "WHERE Event_Type IN ('TASK')";
 			} else {
@@ -277,17 +277,7 @@
 					ORDER BY `Alarm_Priority` ASC, `DateTime` ASC";
 			
 			$res = $conn_scs->query($query);
-			
-			$count = $conn_scs->getAll("SELECT
-					COUNT(Event_Zone) as aantal,
-					Event_Zone
-					FROM `scs`.`scs_pending_events`
-					GROUP BY Event_Zone");
-			$count_arr = array();
-			foreach($count as $event){
-				$count_arr[$event['Event_Zone']] = $event['aantal'];
-			}
-						
+				
 			$rows = '<thead>
 						<th>#</th>
 						<th>Datum tijd</th>
@@ -302,62 +292,18 @@
 						<th class="hidden"></th>
 					</thead>';
 					
+			$count = $this->getAlarmDescriptionCount();
+			
+			$test ='';			
 			while ($row = $conn_scs->fetch($res)) {	
-				if($row['Alarm_Priority'] == '1'){
-					$class = 'bg-danger';
-					if($row['Event_Operator'] == null){
-						$audio_source = URL_ROOT. 'src/libs/scs_sounds/P1.wav';	
-					} else {
-						$audio_source = '';
-					}
-				} elseif($row['Alarm_Priority'] == '2'){
-					$class = 'bg-danger';
-					if($row['Event_Operator'] == null){
-						$audio_source = URL_ROOT. 'src/libs/scs_sounds/P2.wav';	
-					} else {
-						$audio_source = '';
-					}
-				} elseif($row['Alarm_Priority'] == '3'){
-					$class = 'bg-danger';
-					if($row['Event_Operator'] == null){
-						$audio_source = URL_ROOT. 'src/libs/scs_sounds/P3.wav';	
-					} else {
-						$audio_source = '';
-					}
-				} elseif($row['Alarm_Priority'] == '4'){
-					$class = 'bg-warning';
-					if($row['Event_Operator'] == null){
-						$audio_source = URL_ROOT. 'src/libs/scs_sounds/P4.wav';	
-					} else {
-						$audio_source = '';
-					}
-				} elseif($row['Alarm_Priority'] == '5'){
-					$class = 'bg-yellow';
-					if($row['Event_Operator'] == null){
-						$audio_source = URL_ROOT. 'src/libs/scs_sounds/P5.wav';	
-					} else {
-						$audio_source = '';
-					}				
-				} elseif($row['Alarm_Priority'] == '7'){
-					$class = 'bg-primary';
-					$audio_source = '';
-				} elseif($row['Alarm_Priority'] == '8'){
-					$class = 'bg-dark-green';
-					$audio_source = '';
-				} elseif($row['Alarm_Priority'] == '9'){
-					$class = 'bg-white';	
-					$audio_source = '';					
-				} elseif($row['Alarm_Priority'] == '91'){
-					$class = 'bg-gray';	
-					$audio_source = '';					
-				} else {
-					$class = '';
-					$audio_source = '';
-				}
-				
 				$reaction_time = $row['Event_Reaction_Time'] == '-1' ? '' : $row['Event_Reaction_Time'].' sec';
-
-					$rows	.= '<tr class="'.$class.'" >
+					
+				$arr = $this->setPriority($row['Alarm_Priority'],$row['Event_Operator']);
+					
+				if($row['Account_Group'] == @$count[$row['Account_Group']]['group_name'] && @$count[$row['Account_Group']][$row['Alarm_Description']] >= $this->alarmThreshold){
+					$rows .= '';
+				} else {
+					$rows .= '<tr class="'.$arr['class'].'" >
 					<td>'.$row['Alarm_Priority'].'</td>
 					<td>'.date('d-m-Y H:i:s', strtotime($row['DateTime'])).'</td>
 					<td>'.$row['Account_Nmbr'].'</td>
@@ -369,9 +315,10 @@
 					<td>'.$row['Event_Operator_First'].'</td>
 					<td>'.$reaction_time.'</td>
 					<td class="hidden"><audio controls autoplay loop>
-							<source src="'.$audio_source. '" type="audio/wav" >
+							<source src="'.$arr['audio']. '" type="audio/wav" >
 						</audio></td>
-					</tr>';	
+					</tr>';						
+				}
 				
 			};			
 			
@@ -382,6 +329,60 @@
 				
 			// Return JSON array
 			jsonArr($response_array);				
+		}
+
+		public function getGoupedPendingEvents(){
+			$count = $this->getAlarmDescriptionCount();	
+			
+			$blocks = '';
+			$event_class ='';
+			$test = array();
+			
+			foreach($count as $group_name => $val){
+				$event_text = '';
+				foreach($val as $val_arr => $event_count){
+					if($val_arr != 'group_name'){
+						
+							if($event_count > 10){
+								$event_class = 'red-bg';
+							} elseif($event_count >= $this->alarmThreshold) {
+								$event_class = 'yellow-bg';
+							} else {
+								$event_class = 'blue-bg';
+							}
+							
+							if($event_count >= $this->alarmThreshold){
+								$event_text =  $val_arr.' '.$event_count.'<br>';
+								$blocks .= '<div class="col-lg-2">
+									<div class="widget '.$event_class.' p-lg text-center">
+										<div class="m-b-md">
+											<i class="fa fa-warning fa-4x"></i>
+											<h1 class="m-xs">'.$group_name.'</h1>
+											<h3 class="font-bold no-margins">
+												'.$event_text.'
+											</h3>
+											<small></small>
+										</div>
+									</div>
+								</div>';					
+							}
+
+					}
+
+				}
+			
+			}
+			
+			
+			//var_dump($test);
+			$response_array = array(
+				'status'	=> 1,
+				'blocks'	=> $blocks				
+			);
+				
+			// Return JSON array
+			jsonArr($response_array);	
+			
 		}
 		
 		public function getLocationSignalCount(){
@@ -446,6 +447,33 @@
 			jsonArr($response_array);			
 		}
 
+		protected function getAlarmDescriptionCount(){
+			$conn_scs = $this->db_conn;
+			$count = $conn_scs->query("SELECT Account_Group, GROUP_CONCAT(Alarm_Description SEPARATOR ';') AS acc FROM `scs`.`scs_pending_events` GROUP BY Account_Group");
+				
+			$count_arr = array();
+
+			while ($row_count = $conn_scs->fetch($count)) {	
+				if($row_count['Account_Group'] != ''){
+					$str = $row_count['acc'];
+					
+					$arr = explode(';', $str);
+					
+					$counts = array_count_values($arr);
+						$bb = array();
+						
+						foreach($arr as $a){
+							$bb['group_name'] = $row_count['Account_Group']; 
+							$bb[$a] = $counts[$a]; 
+						}
+					$count_arr[$row_count['Account_Group']] = $bb;					
+				}
+
+			}
+
+			return $count_arr;
+		}
+		
 		protected function getLocationService($account_nr){
 			if(substr($account_nr, 0, 6) == "010013"){
 				$regio = "VRAA";
@@ -549,4 +577,65 @@
 			return round($avg);
 		}
 
+		protected function setPriority($prio_nr, $event_operator){
+			if($prio_nr == '1'){
+				$class = 'bg-danger';
+				if($event_operator == null){
+					$audio_source = URL_ROOT. 'src/libs/scs_sounds/P1.wav';	
+				} else {
+					$audio_source = '';
+				}
+			} elseif($prio_nr == '2'){
+				$class = 'bg-danger';
+				if($event_operator == null){
+					$audio_source = URL_ROOT. 'src/libs/scs_sounds/P2.wav';	
+				} else {
+					$audio_source = '';
+				}
+			} elseif($prio_nr == '3'){
+				$class = 'bg-danger';
+				if($event_operator == null){
+					$audio_source = URL_ROOT. 'src/libs/scs_sounds/P3.wav';	
+				} else {
+					$audio_source = '';
+				}
+			} elseif($prio_nr == '4'){
+				$class = 'bg-warning';
+				if($event_operator == null){
+					$audio_source = URL_ROOT. 'src/libs/scs_sounds/P4.wav';	
+				} else {
+					$audio_source = '';
+				}
+			} elseif($prio_nr == '5'){
+				$class = 'bg-yellow';
+				if($event_operator == null){
+					$audio_source = URL_ROOT. 'src/libs/scs_sounds/P5.wav';	
+				} else {
+					$audio_source = '';
+				}				
+			} elseif($prio_nr == '7'){
+				$class = 'bg-primary';
+				$audio_source = '';
+			} elseif($prio_nr == '8'){
+				$class = 'bg-dark-green';
+				$audio_source = '';
+			} elseif($prio_nr == '9'){
+				$class = 'bg-white';	
+				$audio_source = '';					
+			} elseif($prio_nr == '91'){
+				$class = 'bg-gray';	
+				$audio_source = '';					
+			} else {
+				$class = '';
+				$audio_source = '';
+			}
+			if($this->setAudio == false){
+				$audio_source = '';
+			}
+			return $arr = array(
+				'class' => $class,
+				'audio' => $audio_source
+			);
+		}
+		
 	}

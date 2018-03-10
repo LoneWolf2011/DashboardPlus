@@ -306,4 +306,19 @@ function WinMove() {
         .disableSelection();
 }
 
+// External popupwindow
+function popupWindow(url, title, w, h) {
+	// Create reference to new window
+	var newWindow = window.open(url, title, 'titlebar=no, toolbar=no, location=no, directories=no, status=no, menubar=no, resizable=yes, copyhistory=no, width=' + w + ', height=' + h + ', top=' + top + ', left=' + left);
+	// Position secondary screen
+	var left = 2100;
+	var top = 100;
+	
+	if(newWindow.location.href === 'about:blank')
+	{
+		newWindow.location.href = url
+	}
+	//console.log(newWindow.location.href);
+	return newWindow;
+}
 

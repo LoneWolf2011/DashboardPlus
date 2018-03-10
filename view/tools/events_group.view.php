@@ -1,10 +1,7 @@
     <div class="wrapper animated fadeInRight">
-        <div class="row">
-            <div class="col-lg-12">
-				<h2>Actieve taken<small>  <span></span></small></h2>
-				<table class="table" id="p_events" style="color: white;"></table>
-            </div>
-		
+		<h2>Gebundelde meldingen<small>  <span></span></small></h2>
+        <div class="row" id="p_grouped">
+						
         </div>		
     </div>
 	
@@ -22,28 +19,28 @@
 	<script>
 	$(document).ready(function () {	
 		var url_str = $('#url_string').val();
-		// 1 hour
-		var refresh = 5000;
+		// 1 sec
+		var refresh = 1000;
 		var interval;
 		
-		getPendingEvents(url_str);
+		getGoupedEvents(url_str);
 		
 		interval = setInterval( function () {
-			getPendingEvents(url_str);
+			getGoupedEvents(url_str);
 		}, refresh );	
 		
 
 	});	
 	
-	function getPendingEvents(url){
+	function getGoupedEvents(url){
 		$.ajax({
 			type: 'GET',
-			url: url+"?get=events&tasks",
+			url: url+"?get=events&grouped",
 			success: function(data) {
 				if(data.status != 0){
-					$('#p_events').html(data.rows);		
+					$('#p_grouped').html(data.blocks);		
 				} else {
-					$('#p_events').html('');	
+					$('#p_grouped').html('');	
 				}						
 			}
 		});		

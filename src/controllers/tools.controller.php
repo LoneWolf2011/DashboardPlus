@@ -25,9 +25,12 @@
 			if(isset($_GET['pending'])){
 				$obj->getPendingEvents();
 			}
-			if(isset($_GET['tasks'])){
-				$obj->getPendingEvents('TASK');
+			if(isset($_GET['grouped'])){
+				$obj->getGoupedPendingEvents();
 			}			
+			//if(isset($_GET['tasks'])){
+			//	$obj->getPendingEvents('TASK');
+			//}			
 			
 		}		
 	}

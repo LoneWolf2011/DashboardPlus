@@ -17,7 +17,7 @@
 					</div>
 					<div class="ibox-content">
 						<button class="btn btn-primary" onclick="popupWindow('/mdb/view/tools/events/', 'events', 1980, 1080 ); return false;" >Open pending events</button>
-						<button class="btn btn-primary" onclick="popupWindow('/mdb/view/tools/events_tasks/', 'events_tasks', 1980, 1080 ); return false;" >Open pending tasks</button>
+						<button class="btn btn-primary" onclick="popupWindow('/mdb/view/tools/events_group/', 'events_group', 1980, 1080 ); return false;" >Open grouped events</button>
 					</div>
 				</div>
             </div>			
@@ -35,19 +35,6 @@
 	?>	
 
 	<script>
-	function popupWindow(url, title, w, h) {
-		// Create reference to new window
-		var newWindow = window.open(url, title, 'titlebar=no, toolbar=no, location=no, directories=no, status=no, menubar=no, resizable=yes, copyhistory=no, width=' + w + ', height=' + h + ', top=' + top + ', left=' + left);
-		// Position secondary screen
-		var left = 2100;
-		var top = 100;
-		
-		if(newWindow.location.href === 'about:blank')
-		{
-			newWindow.location.href = url
-		}
-		//console.log(newWindow.location.href);
-		return newWindow;
-	}
+
 
 	</script>

@@ -62,7 +62,7 @@ define('ROOT_JS', array(
 	'/Mdb/js/bootstrap.min.js',
 	'/Mdb/js/plugins/metisMenu/jquery.metisMenu.js',
 	'/Mdb/js/plugins/slimscroll/jquery.slimscroll.min.js',
-	'/Mdb/js/inspinia.js',
+	'/Mdb/js/main.js',
 	'/Mdb/js/plugins/pace/pace.min.js',
 	'/Mdb/js/plugins/markerclusterer/src/markerclusterer.js',
 	'/Mdb/js/plugins/i18next/i18next.min.js',
