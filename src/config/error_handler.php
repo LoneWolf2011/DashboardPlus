@@ -17,7 +17,7 @@
 	
 	// Modify parse errors uit php.ini dmv APP_DEBUG
 	// indien APP_DEBUG = TRUE worden de errors in de applicatie weergegeven
-	ini_set("display_errors", (APP_DEBUG === 'true') ? 'on' : 'off');
+	ini_set("display_errors", (APP_DEBUG === 1) ? 'on' : 'off');
 	define('ERROR_LOG_FILE', ROOT_PATH.'/Mdb/Src/Logs/Errors/'.date("Y-m-d").'_error.log');
 	
 	/**
@@ -151,7 +151,7 @@
 			} 
 		} 
 	
-		if ($isError && APP_DEBUG === 'false'){ 
+		if ($isError && APP_DEBUG !== 1){ 
 			// Indien er een ajax call wordt uitgevoerd
 			if(isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest') { 
 				$return = array(); 
