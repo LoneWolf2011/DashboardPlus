@@ -234,12 +234,21 @@ ul.msg_list li a .name{
  }
  .c3-ygrid-line.gridgreen line {
  	stroke: green;
- }			
+ }
+ .c3-ygrid-line.gridgreen text {
+ 	fill: green;
+ }	 
  .c3-ygrid-line.gridorange line {
  	stroke: orange;
  }
+ .c3-ygrid-line.gridorange text {
+	fill: orange;
+ }
  .c3-ygrid-line.gridred line {
  	stroke: red;
+ } 
+ .c3-ygrid-line.gridred text {
+ 	fill: red;
  }  
  
  h2 {

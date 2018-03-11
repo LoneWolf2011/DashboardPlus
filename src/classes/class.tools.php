@@ -3,8 +3,10 @@
 	class Tools {
 		protected $succesMessage;
 		protected $enableAudio = false;
-		protected $enableAlarmThreshold = false;
+		protected $enableAlarmThreshold = true;
 		protected $alarmThreshold = 2;
+		protected $alarmThresholdWarning = 2;
+		protected $alarmThresholdDanger = 3;
 		
 		function __construct($db_conn) {
 			$this->db_conn 	= $db_conn;
@@ -224,15 +226,28 @@
 				
 				$signal = array('signal');
 				$hours 	= array('x');
-				
+				$t = array();
 				while ($row = $conn_scs->fetch($res)) {			
 					$signal[]	= $row['signal'];				
+					$t[]		= $row['signal'];				
 					$hours[]	= date('H:i', strtotime($row['signalDate']));													
 				};			
+				
+				$hour = array(1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25);
+				$trendarray = $this->trendLineAnalyse($hour, $t );
+				
+				$trend = array('trend');
+				foreach ( $hour as $item ) {
+					$number = ( $trendarray['slope'] * $item ) + $trendarray['intercept'];
+					$number = ( $number <= 0 )? 0 : $number;
+					$trend[] = round($number);
+				}
+
 				
 				$response_array = array(
 					'status'	=> 1,
 					'signal'	=> $signal,
+					'trend'		=> $trend,
 					'hours'		=> $hours,
 					'avg_last'	=> $this->getSignalLoadWeeklyAvg($past_week_no),
 					'avg_now'	=> $this->getSignalLoadWeeklyAvg($now_week_no)
@@ -344,25 +359,30 @@
 					foreach($val as $val_arr => $event_count){
 						if($val_arr != 'group_name'){
 							
-								if($event_count > 10){
+								if($event_count > $this->alarmThresholdDanger){
 									$event_class = 'red-bg';
-								} elseif($event_count >= $this->alarmThreshold) {
+									$event_icon = 'fa fa-minus-circle';
+								} elseif($event_count > $this->alarmThresholdWarning){
 									$event_class = 'yellow-bg';
+									$event_icon = 'fa fa-warning';
+								} elseif($event_count >= $this->alarmThreshold) {
+									$event_class = 'blue-bg';
+									$event_icon = 'fa fa-info-circle';
 								} else {
 									$event_class = 'blue-bg';
 								}
 								
 								if($event_count >= $this->alarmThreshold){
-									$event_text =  $val_arr.' '.$event_count.'<br>';
+									$event_text =  $val_arr.' '.$event_count;
 									$blocks .= '<div class="col-lg-2">
 										<div class="widget '.$event_class.' p-lg text-center">
 											<div class="m-b-md">
-												<i class="fa fa-warning fa-4x"></i>
-												<h1 class="m-xs">'.$group_name.'</h1>
+												<i class="'.$event_icon.' fa-4x"></i>
+												<h1 class="m-xs">'.$event_count.'</h1>
 												<h3 class="font-bold no-margins">
-													'.$event_text.'
+													'.$group_name.'
 												</h3>
-												<small></small>
+												<small>'.$event_text.'</small>
 											</div>
 										</div>
 									</div>';					
@@ -639,6 +659,32 @@
 				'class' => $class,
 				'audio' => $audio_source
 			);
+		}
+
+		protected function trendLineAnalyse( $x, $y ){
+
+			$n     = count($x);     // number of items in the array
+			$x_sum = array_sum($x); // sum of all X values
+			$y_sum = array_sum($y); // sum of all Y values
+			
+			$xx_sum = 0;
+			$xy_sum = 0;
+			
+			for($i = 0; $i < $n; $i++) {
+				$xy_sum += ( $x[$i]*$y[$i] );
+				$xx_sum += ( $x[$i]*$x[$i] );
+			}
+			
+			// Slope
+			$slope = ( ( $n * $xy_sum ) - ( $x_sum * $y_sum ) ) / ( ( $n * $xx_sum ) - ( $x_sum * $x_sum ) );
+			
+			// calculate intercept
+			$intercept = ( $y_sum - ( $slope * $x_sum ) ) / $n;
+			
+			return array( 
+				'slope'     => $slope,
+				'intercept' => $intercept,
+			);				
 		}
 		
 	}

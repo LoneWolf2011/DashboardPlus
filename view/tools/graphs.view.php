@@ -16,7 +16,7 @@
         </div>
         <div class="row">
             <div class="col-lg-12">
-				<h2>Signaal belasting<small>  <span></span></small></h2>
+				<h2>Signaal belasting 24h<small>  <span></span></small></h2>
 				<div id="sign_chart"></div>
             </div>
 		
@@ -93,6 +93,9 @@
 			xFormat: '%H:%M',
 			columns: []
 		},
+    point: {
+        show: false
+    },		
 		type: 'spline',
 		size: {
 			height:500
@@ -104,7 +107,7 @@
 		},
 		
 		color: {
-			pattern: ["#1ab394",  "#d3d3d3", "#1C84C6", "#bababa", "#79d2c0","#1ab394"]
+			pattern: ["#1ab394", "#1C84C6",  "#d3d3d3", "#1C84C6", "#bababa", "#79d2c0","#1ab394"]
 		},		
 		zoom: {
 			enabled: true
@@ -150,16 +153,21 @@
 					compchart.load({
 						columns: [
 							data.hours,
-							data.signal
+							data.signal,
+							data.trend
 						],
-						type: 'area-spline'						
+						type: 'area-spline',
+						types: {
+							trend: 'line'
+						}					
 					});
 					compchart.ygrids([
-						{value: data.avg_last, class: data.avg_last > data.avg_now ? 'gridorange': '', text: 'Gemiddelde vorige week ' + data.avg_last},
+						{value: data.avg_last, class: data.avg_last > data.avg_now ? 'gridorange': '', text: 'Gemiddelde vorige week ' + data.avg_last, position: 'start'},
 						{value: data.avg_now, class: data.avg_now > data.avg_last ? 'gridorange': 'gridgreen', text: 'Gemiddelde deze week ' + data.avg_now}
 					]);					
 					compchart.data.names({
-						signal: 'Signaal belasting afgelopen 24h'
+						signal: 'Signaal belasting',
+						trend: 'Trend'
 					});					
 				} else {
 					compchart.destroy();	
