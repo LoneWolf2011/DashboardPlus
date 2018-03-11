@@ -26,7 +26,7 @@
 				$obj->getPendingEvents();
 			}
 			if(isset($_GET['grouped'])){
-				$obj->getGoupedPendingEvents();
+				$obj->getPendingEventsGouped();
 			}			
 			//if(isset($_GET['tasks'])){
 			//	$obj->getPendingEvents('TASK');

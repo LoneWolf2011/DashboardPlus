@@ -2,7 +2,8 @@
 	
 	class Tools {
 		protected $succesMessage;
-		protected $setAudio = false;
+		protected $enableAudio = false;
+		protected $enableAlarmThreshold = false;
 		protected $alarmThreshold = 2;
 		
 		function __construct($db_conn) {
@@ -292,20 +293,22 @@
 						<th class="hidden"></th>
 					</thead>';
 					
-			$count = $this->getAlarmDescriptionCount();
-			
-			$test ='';			
+			$count_arr = $this->getAlarmDescriptionCount();
+					
 			while ($row = $conn_scs->fetch($res)) {	
 				$reaction_time = $row['Event_Reaction_Time'] == '-1' ? '' : $row['Event_Reaction_Time'].' sec';
 					
-				$arr = $this->setPriority($row['Alarm_Priority'],$row['Event_Operator']);
-					
-				if($row['Account_Group'] == @$count[$row['Account_Group']]['group_name'] && @$count[$row['Account_Group']][$row['Alarm_Description']] >= $this->alarmThreshold){
+				$org_arr = $this->setPriority($row['Alarm_Priority_Original']);
+				$org_prio = ($row['Alarm_Priority'] != $row['Alarm_Priority_Original']) ? '<span class="badge '.$org_arr['class'].'">'.$row['Alarm_Priority_Original'].'</span>' : '';
+				
+				$prio_arr = $this->setPriority($row['Alarm_Priority'],$row['Event_Operator']);
+				
+				if($this->enableAlarmThreshold == true && $row['Account_Group'] == @$count_arr[$row['Account_Group']]['group_name'] && @$count_arr[$row['Account_Group']][$row['Alarm_Description']] >= $this->alarmThreshold){
 					$rows .= '';
 				} else {
-					$rows .= '<tr class="'.$arr['class'].'" >
-					<td>'.$row['Alarm_Priority'].'</td>
-					<td>'.date('d-m-Y H:i:s', strtotime($row['DateTime'])).'</td>
+					$rows .= '<tr class="'.$prio_arr['class'].'" >
+					<td>'.$row['Alarm_Priority'].' '.$org_prio.'</td>
+					<td>'.date('d-m-y H:i:s', strtotime($row['DateTime'])).'</td>
 					<td>'.$row['Account_Nmbr'].'</td>
 					<td>'.$row['Account_Name'].'</td>
 					<td>'.$row['Account_Group'].'</td>
@@ -315,7 +318,7 @@
 					<td>'.$row['Event_Operator_First'].'</td>
 					<td>'.$reaction_time.'</td>
 					<td class="hidden"><audio controls autoplay loop>
-							<source src="'.$arr['audio']. '" type="audio/wav" >
+							<source src="'.$prio_arr['audio']. '" type="audio/wav" >
 						</audio></td>
 					</tr>';						
 				}
@@ -331,54 +334,54 @@
 			jsonArr($response_array);				
 		}
 
-		public function getGoupedPendingEvents(){
-			$count = $this->getAlarmDescriptionCount();	
-			
-			$blocks = '';
-			$event_class ='';
-			$test = array();
-			
-			foreach($count as $group_name => $val){
-				$event_text = '';
-				foreach($val as $val_arr => $event_count){
-					if($val_arr != 'group_name'){
-						
-							if($event_count > 10){
-								$event_class = 'red-bg';
-							} elseif($event_count >= $this->alarmThreshold) {
-								$event_class = 'yellow-bg';
-							} else {
-								$event_class = 'blue-bg';
-							}
+		public function getPendingEventsGouped(){
+			if($this->enableAlarmThreshold == true){
+				$count = $this->getAlarmDescriptionCount();	
+				
+				$blocks = '';
+				foreach($count as $group_name => $val){
+					$event_text = '';
+					foreach($val as $val_arr => $event_count){
+						if($val_arr != 'group_name'){
 							
-							if($event_count >= $this->alarmThreshold){
-								$event_text =  $val_arr.' '.$event_count.'<br>';
-								$blocks .= '<div class="col-lg-2">
-									<div class="widget '.$event_class.' p-lg text-center">
-										<div class="m-b-md">
-											<i class="fa fa-warning fa-4x"></i>
-											<h1 class="m-xs">'.$group_name.'</h1>
-											<h3 class="font-bold no-margins">
-												'.$event_text.'
-											</h3>
-											<small></small>
+								if($event_count > 10){
+									$event_class = 'red-bg';
+								} elseif($event_count >= $this->alarmThreshold) {
+									$event_class = 'yellow-bg';
+								} else {
+									$event_class = 'blue-bg';
+								}
+								
+								if($event_count >= $this->alarmThreshold){
+									$event_text =  $val_arr.' '.$event_count.'<br>';
+									$blocks .= '<div class="col-lg-2">
+										<div class="widget '.$event_class.' p-lg text-center">
+											<div class="m-b-md">
+												<i class="fa fa-warning fa-4x"></i>
+												<h1 class="m-xs">'.$group_name.'</h1>
+												<h3 class="font-bold no-margins">
+													'.$event_text.'
+												</h3>
+												<small></small>
+											</div>
 										</div>
-									</div>
-								</div>';					
-							}
-
+									</div>';					
+								}
+	
+						}
+	
 					}
-
+				
 				}
-			
+				//var_dump($test);
+				$response_array = array(
+					'status'	=> 1,
+					'blocks'	=> $blocks				
+				);				
+			} else {
+				$response_array['status'] = 0;
 			}
 			
-			
-			//var_dump($test);
-			$response_array = array(
-				'status'	=> 1,
-				'blocks'	=> $blocks				
-			);
 				
 			// Return JSON array
 			jsonArr($response_array);	
@@ -577,7 +580,7 @@
 			return round($avg);
 		}
 
-		protected function setPriority($prio_nr, $event_operator){
+		protected function setPriority($prio_nr, $event_operator = null){
 			if($prio_nr == '1'){
 				$class = 'bg-danger';
 				if($event_operator == null){
@@ -629,7 +632,7 @@
 				$class = '';
 				$audio_source = '';
 			}
-			if($this->setAudio == false){
+			if($this->enableAudio == false){
 				$audio_source = '';
 			}
 			return $arr = array(
