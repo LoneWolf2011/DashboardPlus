@@ -132,7 +132,7 @@
 	$arr_js 	= ROOT_JS;
 
 	//$user_db 		= new SafeMySQL();
-	//$user_ini		= @htmlentities($_SESSION['user']['user_id'], ENT_QUOTES, 'UTF-8');	
+	//$user_ini		= @htmlentities($_SESSION['db_user']['user_id'], ENT_QUOTES, 'UTF-8');	
 	//$user_cols  	= $user_db->getRow("SELECT * FROM app_users WHERE user_status = 'Active' AND user_id =  ?i",$user_ini);	
 	
 	// Get url and set view relative to view folder

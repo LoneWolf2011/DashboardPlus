@@ -3,7 +3,7 @@
 <?php
 
     // At the top of the page we check to see whether the user is logged in or not 
-    if(empty($_SESSION['user'])) 
+    if(empty($_SESSION['db_user'])) 
     { 
         // If they are not, we redirect them to the login page. 
         header("Location: ../../"); 
@@ -14,7 +14,7 @@
     } 
 
 	//Update Lastaccess kolom in users database
-	$id 		= $_SESSION['user']['user_id'];
+	$id 		= $_SESSION['db_user']['user_id'];
 	$conn = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
 
 	if ($conn->connect_error) {
@@ -29,7 +29,7 @@
 	}
 
 	//Redirect naar juiste index pagina op basis van Userrole	
-	$user_role 		= $_SESSION['user']['user_role'];
+	$user_role 		= $_SESSION['db_user']['user_role'];
 	
 	if(APP_INITIALIZE === 0){
 		header("Location: ".URL_ROOT."view/install.php"); 

@@ -7,6 +7,7 @@
 					</div>
 					<div class="ibox-content">
 						<button class="btn btn-primary" onclick="popupWindow('/mdb/view/tools/graphs/', 'graphs', 1980, 1080 ); return false;" >Open responds tijden</button>								
+						<button class="btn btn-primary" onclick="popupWindow('/mdb/view/tools/port/', 'port', 1980, 1080 ); return false;" >Open port monitor</button>								
 					</div>
 				</div>
             </div>		

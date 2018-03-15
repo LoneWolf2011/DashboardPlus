@@ -1,6 +1,6 @@
 <?php
     // Create CSRF token
-    $_SESSION['token'] =  bin2hex(random_bytes(32));  
+    $_SESSION['db_token'] =  bin2hex(random_bytes(32));  
 	
     if(APP_INITIALIZE === 0) 
     { 
@@ -8,7 +8,7 @@
     }    
 	
     // At the top of the page we check to see whether the user is logged in or not 
-    if(!empty($_SESSION['user'])) 
+    if(!empty($_SESSION['db_user'])) 
     { 
 		header("Location: Src/Login/redirect.php"); 
     } 
@@ -133,7 +133,7 @@
 
                 <a class="link" id="password"><small data-i18n="[html]loginscreen.forget">Forgot password?</small></a>
 				
-				<input type="hidden" name="csrf" value="<?= htmlspecialchars($_SESSION['token'], ENT_QUOTES, 'UTF-8');?>">
+				<input type="hidden" name="csrf" value="<?= htmlspecialchars($_SESSION['db_token'], ENT_QUOTES, 'UTF-8');?>">
             </form>
 		
 			<div id="show_form" style="display: none;">
@@ -144,7 +144,7 @@
 					<button type="submit" name="request" value="request" class="btn btn-primary block full-width m-b" data-i18n="[html]loginscreen.request">Request </button>
 
 					<a class="link" id="password" data-i18n="[html]loginscreen.login">Login</a>
-					<input type="hidden" name="csrf" value="<?= htmlspecialchars($_SESSION['token'], ENT_QUOTES, 'UTF-8');?>">
+					<input type="hidden" name="csrf" value="<?= htmlspecialchars($_SESSION['db_token'], ENT_QUOTES, 'UTF-8');?>">
 				</form>
 			</div>	
 

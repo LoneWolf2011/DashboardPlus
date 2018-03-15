@@ -1,6 +1,6 @@
 <?php
     // Check om te zien of de user ingelogged is of niet
-    if(empty($_SESSION['user'])) 
+    if(empty($_SESSION['db_user'])) 
     { 
         // Indien dit niet het geval is, redirect naar inlog pagina. 
         header("Location: ".URL_ROOT); 

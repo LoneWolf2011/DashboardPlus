@@ -14,7 +14,7 @@
 		public function processInstall($post_val){
 			$conn 	= $this->db_conn;
 			
-			if(hash_equals($post_val['csrf'],$_SESSION['token']))
+			if(hash_equals($post_val['csrf'],$_SESSION['db_token']))
 			{
 				$env = parse_ini_file($this->env_file, true);
 				$a = (empty($env['SCS_DB']['HOST'])) ? @$post_val['scs_host'] : $env['SCS_DB']['HOST'];

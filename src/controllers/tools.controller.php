@@ -28,10 +28,19 @@
 			if(isset($_GET['grouped'])){
 				$obj->getPendingEventsGouped();
 			}			
-			//if(isset($_GET['tasks'])){
-			//	$obj->getPendingEvents('TASK');
-			//}			
+			if(isset($_GET['tasks'])){
+				$obj->getPendingEvents('TASK');
+			}			
 			
+		}
+
+		if($_GET['get'] == 'port'){
+			if(isset($_GET['feps'])){
+				$obj->getPortMonitor();
+			}		
+			if(isset($_GET['aoip'])){
+				$obj->getPortMonitorAoip('AOIP gateway');
+			}
 		}		
 	}
 	

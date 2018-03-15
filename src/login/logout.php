@@ -1,7 +1,7 @@
 <!--Made by: Roelof Jan van Golen | RGO | 2016-->
 <?php
 
-	if (isset($_GET['csrf']) && hash_equals($_GET['csrf'],$_SESSION['token'])) 
+	if (isset($_GET['csrf']) && hash_equals($_GET['csrf'],$_SESSION['db_token'])) 
 	{
 		// Verwijderd de cookie(s) aan de client side
 		if(isset($_COOKIE['modal'])){
@@ -15,11 +15,11 @@
 		// session variables and without destroying the session.
 		
 		// Log to file
-		$msg = "Logout success. User: ".$_SESSION['user']['user_email'];
+		$msg = "Logout success. User: ".$_SESSION['db_user']['user_email'];
 		logToFile(__FILE__,0,$msg);
 				
-		unset($_SESSION['user']);
-		unset($_SESSION['token']);
+		unset($_SESSION['db_user']);
+		unset($_SESSION['db_token']);
 	
 		// Otherwise, we unset all of the session variables.
 		$_SESSION = array();
@@ -43,7 +43,7 @@
 		die("Redirecting to: ".URL_ROOT);
 	} else {
 		// Log to file
-		$msg = "CSRF token invalid during logout for user: ". $_SESSION['user']['user_email'];
+		$msg = "CSRF token invalid during logout for user: ". $_SESSION['db_user']['user_email'];
 		logToFile(__FILE__,0,$msg);
 		header("Location: ".URL_ROOT);
 		die("Redirecting to: ".URL_ROOT);		

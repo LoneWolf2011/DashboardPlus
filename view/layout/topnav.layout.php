@@ -10,10 +10,10 @@
                 </div>
                 <ul class="nav navbar-top-links navbar-right">
 					<li>
-						<a href="<?= URL_ROOT.'view/user/';?>"><i class="fa fa-user"></i> <?= htmlspecialchars($_SESSION['user']['user_email'], ENT_QUOTES, 'UTF-8');?></a>
+						<a href="<?= URL_ROOT.'view/user/';?>"><i class="fa fa-user"></i> <?= htmlspecialchars($_SESSION['db_user']['user_email'], ENT_QUOTES, 'UTF-8');?></a>
 					</li>
                     <li>
-                        <a href="/Mdb/Src/Login/logout.php?csrf=<?= $_SESSION['token'];?>">
+                        <a href="/Mdb/Src/Login/logout.php?csrf=<?= $_SESSION['db_token'];?>">
                             <i class="fa fa-sign-out"></i> <span data-i18n="[html]layout.topnav.logout"> Log out </span>
                         </a>
                     </li>

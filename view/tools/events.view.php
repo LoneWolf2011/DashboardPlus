@@ -1,14 +1,15 @@
     <div class="wrapper animated fadeInRight">
         <div class="row">
             <div class="col-lg-12">
-				<h2>Meldingenscherm<small>  <span id="p_events_count"></span></small></h2>
+				<h2>Meldingenscherm <small>  <i id="p_sound"></i> </small></h2>
 				<table class="table" id="p_events" style="color: white;"></table>
             </div>
 		
         </div>		
     </div>
 	
-	
+	<audio autoplay loop  src="" type="audio/wav" id="p_audio"></audio>
+						
 	<input type="text" hidden id="url_query" value="<?= $_SERVER['QUERY_STRING']; ?>" />	
 	<input type="text" hidden id="mac_adres"  />	
 	<input type="text" hidden id="url_string" value="<?= URL_ROOT.'Src/controllers/tools.controller.php';?>" />	
@@ -40,10 +41,17 @@
 		$.ajax({
 			type: 'GET',
 			url: url+"?get=events&pending",
+			async: false,
 			success: function(data) {
 				if(data.status != 0){
 					$('#p_events').html(data.rows);		
-					$('#p_events_count').html(data.count);		
+					$('#p_sound').removeClass();		
+					$('#p_sound').addClass(data.sound);		
+					$('#p_audio').attr('src',data.audio);
+					if(data.audio != ''){
+						$('#p_audio').trigger('play');						
+					}
+	
 				} else {
 					$('#p_events').html('');	
 					$('#p_events_count').html('');	

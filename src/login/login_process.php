@@ -3,7 +3,7 @@
     $submitted_email 	= ''; 
 	$email 					= strtolower($_POST['email']);    
 	
-    if(!empty($_POST['login']) && hash_equals($_POST['csrf'],$_SESSION['token'])) 
+    if(!empty($_POST['login']) && hash_equals($_POST['csrf'],$_SESSION['db_token'])) 
     { 
         // This query retreives the user's information from the database using 
         // their email. 
@@ -83,10 +83,10 @@
             unset($row['user_password']); 
             unset($row['user_status']); 
              
-            $_SESSION['user'] = $row; 
+            $_SESSION['db_user'] = $row; 
 			
 			// Log to file
-			$msg = "Login success. User: ".$_SESSION['user']['user_email'];
+			$msg = "Login success. User: ".$_SESSION['db_user']['user_email'];
 			logToFile(__FILE__,0,$msg);
 			
 			// Verwijder alle login attempts van de user.
@@ -123,7 +123,7 @@
 	}
      
     // At the top of the page we check to see whether the user is logged in or not 
-    if(!empty($_SESSION['user'])) 
+    if(!empty($_SESSION['db_user'])) 
     { 
         header("Location: redirect.php"); 
     } 

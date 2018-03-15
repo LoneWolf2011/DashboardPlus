@@ -156,6 +156,11 @@ ul.msg_list li a .name{
   color: #fff; }
 
 /**  --------------BOOTSTRAP------------  **/
+.bg-border-gray {
+  /*background: #9e9e9e !important;*/
+  border: 2px solid #9e9e9e !important;
+  color: #fff; } 
+
 .bg-dark-green {
   background: #007E33 !important;
   border: 1px solid #007E33 !important;
@@ -251,6 +256,10 @@ ul.msg_list li a .name{
  	fill: red;
  }  
  
+ #chart .c3-circles-Trend {
+ 	display: none;
+ } 
+ 
  h2 {
  	font-family: inherit;
  	font-weight: 500;
@@ -258,3 +267,7 @@ ul.msg_list li a .name{
  	line-height: 1.1;
  	color: white;
  }
+ 
+ .sparkline canvas {
+	width: 100%;
+}

@@ -237,7 +237,7 @@
 		$db_conn = new SafeMySQL(array('db' => 'mdb_beheer_log'));	
 		$pdo = new PDO("mysql:host=".DB_HOST.";dbname=mdb_beheer_log;charset=utf8", DB_USER, DB_PASS); 	
 
-		$user = (isset($_SESSION['user']['user_email'])) ? htmlentities($_SESSION['user']['user_email'], ENT_QUOTES, 'UTF-8') : '---';
+		$user = (isset($_SESSION['db_user']['user_email'])) ? htmlentities($_SESSION['db_user']['user_email'], ENT_QUOTES, 'UTF-8') : '---';
 		$env  = APP_ENV;		
 		$year = date("Y");
 		$date = date("Y-m-d");

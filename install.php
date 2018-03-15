@@ -5,7 +5,7 @@
     }   
 	
     // At the top of the page we check to see whether the user is logged in or not 
-    if(!empty($_SESSION['user'])) 
+    if(!empty($_SESSION['db_user'])) 
     { 
 		header("Location: Src/Login/redirect.php"); 
     } 
@@ -106,7 +106,7 @@
                 </div>		
 				<?php }; ?>
                 <button type="submit" class="btn btn-primary block full-width m-b" name="install" value="Install" data-i18n="[html]installscreen.login">Install</button>
-				<input type="hidden" name="csrf" value="<?= htmlspecialchars($_SESSION['token'], ENT_QUOTES, 'UTF-8');?>">
+				<input type="hidden" name="csrf" value="<?= htmlspecialchars($_SESSION['db_token'], ENT_QUOTES, 'UTF-8');?>">
             </form>
 				<?php }; ?>
 			<div class="text-center">

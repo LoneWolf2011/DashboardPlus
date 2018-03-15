@@ -5,7 +5,7 @@
 	$clean_ini 		= preg_replace("/[^a-zA-Z]/", "", $_POST['email'] );
 	$cleaned_ini 	= strtoupper($clean_ini); 
 	
-    if(!empty($_POST['recover']) && hash_equals($_POST['csrf'],$_SESSION['token'])) 
+    if(!empty($_POST['recover']) && hash_equals($_POST['csrf'],$_SESSION['db_token'])) 
     { 
 		// Date_time is UNIX timestamp
         $query = " 
