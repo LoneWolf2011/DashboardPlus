@@ -33,7 +33,11 @@
 			echo '<link href="'.$css.'" rel="stylesheet">';
 		}
 	?>
-
+	<style>
+	#chart .c3-circles-Trend {
+  display: none;
+}
+</style>
 </head>
 
 <body class="mini-navbar" id="i18container" style="background-color: #282828;" >

@@ -3,10 +3,10 @@
 	class Tools {
 		protected $succesMessage;
 		protected $defaults = array(
-			'host'      => '',
-			'user'      => 'PreProcessor',
-			'pass'      => 'ikhouvanjou',
-			'db'        => 'scs_stat'
+			'host'	=>	'',
+			'user'	=>	'PreProcessor',
+			'pass'	=>	'ikhouvanjou',
+			'db'  	=>	'scs_stat'
 		);
 		protected $enableAudio = true;
 		protected $enableAlarmThreshold = true;
@@ -26,7 +26,7 @@
 			$year 			= date('Y');
 
 			$now_week_no 	= date('W');
-			$past_week_no 	= date('W', strtotime('last week'));
+			$past_week_no 	= date('W', strtotime('-24 hours'));
 			
 			$rms_res = $conn_scs->query("SELECT AVG(`Event_First_Action`) AS average, 
 									COUNT(IF(`Event_First_Action` <= '60' ,1,NULL)) AS green, 
@@ -193,55 +193,153 @@
 				
 		}
 
-		public function getSignalLoad(){
-			$conn_scs = $this->db_conn;
+		public function getSignalLoadEvents($primair_conn = array()){
+			$table_now 		= 'events'.date('Y').'_'.date('W');		
 			
-			$year = date('Y');
+			$this->defaults = array(
+				'user'	=>	'scsClient',
+				'pass'	=>	'ikhouvanjou',
+				'db'  	=>	$table_now
+			);
+			$opt_prim = array_merge($this->defaults,$primair_conn);
+			try {
+				$conn_scs 			= (!empty($primair_conn)) ? new SafeMySQL($opt_prim) : null;
+				$connected 	= true;
+			} catch (Exception $e) {
+				$connected 	= false;
+			}			
 			
-			// Get weeknumber from today
-			$now 			= date('YmdHis', strtotime('tomorrow'));
-			$now_week_no 	= date('W');
-			$table_now 		= 'signals_'.$year.'_'.$now_week_no;
+			if($connected){
+				$past_24 = date('YmdH'.'0000', strtotime('-24 hours'));
+				$now_24 = date('YmdH'.'0000', strtotime('+1 hour'));
+				
+				$period = new DatePeriod(
+					new DateTime($past_24),
+					new DateInterval('PT1H'),
+					new DateTime($now_24)
+				);
+				
+				$q = '';
+				$signal_str = '';
+				$i= 1;
+				foreach($period as $date){
+					$minus_1_hour = date('YmdH', strtotime('-1 hour', strtotime($date->format('YmdHis'))));
+					$q .= "SUM(IFNULL((`DateTime` > '".$minus_1_hour."0000' AND `DateTime` <= '".$date->format('YmdHis')."'),0)) AS h".$i.",";
+					$signal_str .= '$row["h'.$i.'"]';
+					$i++;
+				}
 			
-			// Get weeknumber from past 24 hours
-			$past 			= date('YmdHis', strtotime('-24 hours'));
-			$past_week_no 	= date('W', strtotime('last week'));
-			$table_past 	= 'signals_'.$year.'_'.$past_week_no;
-			
-			// Check if both dates are in the same week and specify query
-			if($past_week_no == $now_week_no){
-				$query = "SELECT PreProcessor_Signal_DateTime AS signalDate, COUNT(*) AS signal
-										FROM scs_fep.".$table_now."
-										WHERE PreProcessor_Signal_DateTime 
-										BETWEEN '".$past."' AND '".$now."' 
-										GROUP BY MID(PreProcessor_Signal_DateTime, 5, 6) 
-										ORDER BY PreProcessor_Signal_DateTime";
+				try {			
+					$query = "SELECT
+									".$q."
+									Event_Type
+									FROM `".$table_now."`.`event_received`  
+									WHERE `DateTime` > '".date('YmdH'.'0000', strtotime('-25 hours'))."' AND `DateTime` < '".$now_24."'
+									GROUP BY  Event_Type
+									ORDER BY h1 DESC
+									LIMIT 5;";
+							
+					$res = $conn_scs->query($query);
+					
+					$signal = array();
+					$hours 	= array('x');
+					$groups = array();
+					
+					for($i= 0;$i<25;$i++){
+						$plus_1_hour = strtotime($past_24) + 60*60*$i;
+						$hours[] = date('H:i', $plus_1_hour);
+					}
+
+					while ($row = $conn_scs->fetch($res)) {	
+						$signal[] = array($row['Event_Type'], $row['h1'],$row['h2'],$row['h3'],$row['h4'],$row['h5'],$row['h6'],$row['h7'],$row['h8'],$row['h9'],$row['h10'],$row['h11'],$row['h12'],$row['h13'],$row['h14'],$row['h15'],$row['h16'],$row['h17'],$row['h18'],$row['h19'],$row['h20'],$row['h21'],$row['h22'],$row['h23'],$row['h24'],$row['h25']);
+						$groups[] = $row['Event_Type'];
+					};			
+					array_pop($hours);
+					
+				}  catch (Exception $e) {
+					return $response_array['status'] = 0;
+				}
+				$signal[] = $hours;
+				
+				$response_array = array(
+					'status'	=> 1,
+					'signal'	=> $signal,
+					'groups'	=> $groups
+				);
 			} else {
-				$query = "(SELECT PreProcessor_Signal_DateTime AS signalDate, COUNT(*) AS signal
-										FROM scs_fep.".$table_past."
-										WHERE PreProcessor_Signal_DateTime 
-										BETWEEN '".$past."' AND '".$now."' 
-										GROUP BY MID(PreProcessor_Signal_DateTime, 5, 6) 
-										ORDER BY PreProcessor_Signal_DateTime) 
-										UNION 
-										(SELECT PreProcessor_Signal_DateTime AS signalDate, COUNT(*) AS signal
-										FROM scs_fep.".$table_now." 
-										WHERE PreProcessor_Signal_DateTime 
-										BETWEEN '".$past."' AND '".$now."' 
-										GROUP BY MID(PreProcessor_Signal_DateTime, 5, 6) 
-										ORDER BY PreProcessor_Signal_DateTime)";
+				$response_array['status'] = 0;
 			}
 			
-			$res = $conn_scs->query($query);
+			jsonArr($response_array);			
 				
-				$signal = array('signal');
-				$hours 	= array('x');
-				$t = array();
-				while ($row = $conn_scs->fetch($res)) {			
-					$signal[]	= $row['signal'];				
-					$t[]		= $row['signal'];				
-					$hours[]	= date('H:i', strtotime($row['signalDate']));													
-				};			
+		}		
+		
+		public function getSignalLoad($primair_conn = array()){
+			//if($conn_scs != null){
+			//	$conn_scs = $this->db_conn;	
+			//}
+			$opt_prim = array_merge($this->defaults,$primair_conn);
+			try {
+				$conn_scs 			= (!empty($primair_conn)) ? new SafeMySQL($opt_prim) : null;
+				$connected 	= true;
+			} catch (Exception $e) {
+				$connected 	= false;
+			}			
+			
+			if($connected){
+				$year = date('Y');
+				
+				// Get weeknumber from today
+				$now 			= date('YmdHis', strtotime('+1 hour'));
+				$now_week_no 	= date('W');
+				$table_now 		= 'signals_'.$year.'_'.$now_week_no;
+				
+				// Get weeknumber from past 24 hours
+				$past 			= date('YmdHis', strtotime('-24 hours'));
+				$past_week_no 	= date('W', strtotime('-24 hours'));
+				$table_past 	= 'signals_'.$year.'_'.$past_week_no;
+				
+				// Check if both dates are in the same week and specify query
+				try {			
+					if($past_week_no == $now_week_no){
+						$query = "SELECT PreProcessor_Signal_DateTime AS signalDate, COUNT(*) AS signal
+												FROM scs_fep.".$table_now."
+												WHERE PreProcessor_Signal_DateTime 
+												BETWEEN '".$past."' AND '".$now."' 
+												GROUP BY MID(PreProcessor_Signal_DateTime, 5, 6) 
+												ORDER BY PreProcessor_Signal_DateTime";
+					} else {
+						$query = "(SELECT PreProcessor_Signal_DateTime AS signalDate, COUNT(*) AS signal
+												FROM scs_fep.".$table_past."
+												WHERE PreProcessor_Signal_DateTime 
+												BETWEEN '".$past."' AND '".$now."' 
+												GROUP BY MID(PreProcessor_Signal_DateTime, 5, 6) 
+												ORDER BY PreProcessor_Signal_DateTime) 
+												UNION 
+												(SELECT PreProcessor_Signal_DateTime AS signalDate, COUNT(*) AS signal
+												FROM scs_fep.".$table_now." 
+												WHERE PreProcessor_Signal_DateTime 
+												BETWEEN '".$past."' AND '".$now."' 
+												GROUP BY MID(PreProcessor_Signal_DateTime, 5, 6) 
+												ORDER BY PreProcessor_Signal_DateTime)";
+					}
+		
+					$res = $conn_scs->query($query);
+					
+					$signal = array('signal');
+					$hours 	= array('x');
+					$t = array();
+					while ($row = $conn_scs->fetch($res)) {	
+						
+						$signal[]	= $row['signal'];				
+						$t[]		= $row['signal'];				
+						$hours[]	= date('H:i', strtotime($row['signalDate']));													
+					};			
+					array_pop($signal);
+					array_pop($hours);
+				}  catch (Exception $e) {
+					return $response_array['status'] = 0;
+				}
 				
 				$c_hours = count($hours) -1;
 				$hour = array();
@@ -265,12 +363,14 @@
 					'signal'	=> $signal,
 					'trend'		=> $trend,
 					'hours'		=> $hours,
-					'avg_last'	=> $this->getSignalLoadWeeklyAvg($past_week_no),
+					'avg_last'	=> $this->getSignalLoadWeeklyAvg(date('W', strtotime('last week'))),
 					'avg_now'	=> $this->getSignalLoadWeeklyAvg($now_week_no)
 				);
-				
-			// Return JSON array
-			jsonArr($response_array);				
+			} else {
+				$response_array['status'] = 0;
+			}
+			// Return response_array
+			return $response_array;				
 				
 		}
 		
@@ -441,7 +541,7 @@
 			
 		}
 		
-		public function getLocationSignalCount(){
+		public function getLocationSignalCount($limit_count){
 			$conn_scs = $this->db_conn;
 			
 			$year = date('Y');
@@ -472,7 +572,6 @@
 					'010278',
 					'010276',
 					'010274',
-					'010099',
 					'010098',
 					'010273',
 					'010100',
@@ -480,7 +579,7 @@
 					)
 					GROUP BY PreProcessor_Account_Nmbr 
 					ORDER BY signal DESC
-					LIMIT 15";
+					LIMIT ".$limit_count;
 			
 			$res = $conn_scs->query($query);
 			
@@ -511,29 +610,45 @@
 			$blocks_asb ='';
 			$blocks_kpn ='';
 			$blocks_gw = '';
-			//$blocks_asb .= $this->getPortMonitorBlock('BW Haaglanden',array('host'=>'10.53.64.72'));
+			
 			
 			//$blocks_asb .= $this->getPortMonitorBlock('BW ASB (EHV)',array('host'=>'10.53.183.101'), array('host'=>'10.53.183.105'));
 			//$blocks_asb .= $this->getPortMonitorBlock('BW ASB (VRF)',array('host'=>'10.53.254.241','user'=>'root','pass'=>'asbbv'));
-			
+			//
 			//$blocks_kpn .= $this->getPortMonitorBlock('BW KPN (EHV)',array('host'=>'10.53.183.21'), array('host'=>'10.53.183.22'));
+			//
+			//$blocks_gw .= $this->getPortMonitorBlock('Beheercentrum FEP',SCS_DB_CONN, array('host'=>'172.16.8.11','user'=>'scsClient'));
 			
-			$blocks_gw .= $this->getPortMonitorBlock('Beheercentrum FEP',SCS_DB_CONN, array('host'=>'172.16.8.11','user'=>'scsClient'));			
+			$blocks_asb .= $this->getPortMonitorBlock('BW ASB (EHV)',array('host'=>'10.53.183.101'));
+			//$blocks_asb .= $this->getPortMonitorBlock('BW ASB (VRF)',array('host'=>'10.53.254.241','user'=>'root','pass'=>'asbbv'));
+			//$blocks_asb .= $this->getPortMonitorBlock('BW ASB (VR GV)',array('host'=>'10.53.254.209'));
+			//$blocks_asb .= $this->getPortMonitorBlock('BW ASB (VRU)',array('host'=>'10.53.254.50'));
+			
+			$blocks_asb .= $this->getPortMonitorBlock('BW KPN (EHV)',array('host'=>'10.53.183.21'), array(), array('host'=>'10.53.183.9','user'=>'root','pass'=>'asbbv','db'=>'scs_fep'));
+			$blocks_asb .= $this->getPortMonitorBlock('BW HRH',array('host'=>'10.53.64.92'));
+			//$blocks_asb .= $this->getPortMonitorBlock('BW NHN',array('host'=>'192.168.100.197'));
+			//$blocks_kpn .= $this->getPortMonitorBlock('BW KPN VF (25))',array('host'=>'10.53.254.225'));
+			//$blocks_kpn .= $this->getPortMonitorBlock('BW KPN VGV (14)',array('host'=>'10.53.254.193'));
+			//$blocks_kpn .= $this->getPortMonitorBlock('BW KPN VRAA (13)',array('host'=>'10.53.231.130'));			
+			//$blocks_kpn .= $this->getPortMonitorBlock('BW KPN ZHZ (18)',array('host'=>'10.53.183.130'));
+			
+			$blocks_gw .= $this->getPortMonitorBlock('Beheercentrum FEP',SCS_DB_CONN);				
 			$blocks_gw .= $this->getPortMonitorAoip('AOIP gateway',array('host'=>'192.168.100.60','user'=>'PreProcessorWEB','pass'=>'asb','db'=>'scs_fep'));
 			
 			$response_array = array(
 				'status'			=> 1,
 				'block_asb'			=> $blocks_asb,
 				'block_kpn'			=> $blocks_kpn,
-				'blocks_gw'			=> $blocks_gw
+				'block_gw'			=> $blocks_gw
 			);
 				
 			// Return JSON array
 			jsonArr($response_array);				
 		}
 
-		protected function getPortMonitorAoip($monitor_name, $primair_conn = array()){			
-			$opt_prim = array_merge($this->defaults,$primair_conn);			
+		public function getPortMonitorAoip($monitor_name, $primair_conn = array()){			
+			$opt_prim = array_merge($this->defaults,$primair_conn);	
+			
 			try {
 				$conn_scs 	= new SafeMySQL($opt_prim);
 				$connected 	= true;
@@ -555,34 +670,40 @@
 						
 				$port_err = array();
 				while ($row_err = $conn_scs->fetch($res_err, 2)) {
-					$port_err[] = $row_err[0].' - '.$row_err[1];
+					$port_err[] = '<small style="color:white;">'.$row_err[0].'</small> - '.$row_err[1];
 				}
 			} else {
 				$port_err = array('Geen verbinding met SQL');
 			}
 			
-			$class = (count($port_err) != 0) ? 'red-bg': 'bg-border-gray';
+			$class = (count($port_err) != 0) ? 'red-bg': 'text-white';
 			
-			$block = '<div class="col-md-3">
-				<div class="widget '.$class.' p-sm text-center">
-					<div class="m-b-md">
-						<h1 class="m-xs">'.$monitor_name.'</h1>';
+			$block = '<div class="col-md-4">';
+			$block .= '<div class="widget '.$class.' p-sm text-center">';
+			$block .= '<div class="m-b-md">';
+			$block .= '<h1 class="m-xs">'.$monitor_name.'</h1>';
 			
 			if(count($port_err) != 0){
 				$block .= '<h1 class="m-xs"><i class="fa fa-warning"></i></h1><h2 >'.implode('<br>',$port_err).'</h2>';
 			} else {
-				$block .= '<h3 class="font-bold">Port status</h3>
-						<div class="p_status">'.implode(',', $port_stat).'</div>';	
+				$block .= '<h5 class="font-bold">Poort status</h5><div class="p_status">'.implode(',', $port_stat).'</div>';	
+				$signal = $this->getSignalLoad($primair_conn);
+				if($signal['status'] == 1){
+					$signal_s = array_slice($signal['signal'], 1);
+					//$signal_s = array_shift($signal['signal']);
+					$block .= '<h5 class="font-bold">Signaalbelasting (24h)</h5>';
+					$block .= '<table width="100%"><tr><td rowspan="2"><div class="sparkline m-b-sm">'.implode(',',$signal_s).'</div></td><td><span class="label label-warning pull-right">High '.max($signal_s).'</span></td></tr><tr><td><span class="label label-primary pull-right">Low '.min($signal_s).'</span></td></tr></table>';
+				}				
 			}
-			
-			$block .= '</div>
-				</div>
-			</div>';	
+						
+			$block .= '</div>';
+			$block .= '</div>';
+			$block .= '</div>';	
 			
 			return $block;
 		}
 		
-		protected function getPortMonitorBlock($monitor_name, $primair_conn = array(), $backup_conn = array()){
+		public function getPortMonitorBlock($monitor_name, $primair_conn = array(), $backup_conn = array(), $signal_conn = array()){
 			
 			$opt_prim = array_merge($this->defaults,$primair_conn);
 			$opt_back = array_merge($this->defaults,$backup_conn);
@@ -611,9 +732,9 @@
 							
 					$port_err = array();
 					while ($row_err = $conn_scs->fetch($res_err)) {
-						$port_err[] = 'Port '.$row_err['SCS_Stat_Port'].' - '.$row_err['SCS_Stat_Port_Name'];
+						$port_err[] = '<small style="color:white;">Poort: '.$row_err['SCS_Stat_Port'].'</small> - '.$row_err['SCS_Stat_Port_Name'];
 					}
-					$block_primair = '<h3 class="font-bold">Poort status primair</h3><div class="p_status">'.implode(',', $port_stat).'</div>';				
+					$block_primair = '<h5 class="font-bold">Poort status primair</h5><div class="p_status">'.implode(',', $port_stat).'</div>';				
 				}
 				$port_stat_b = array();
 				
@@ -622,16 +743,16 @@
 					while ($row_b = $conn_scs_backup->fetch($res_b)) {	
 						$port_stat_b[] = $this->setPortState($row_b['SCS_Stat_Port_State']);
 					}
-					$block_backup = '<h3 class="font-bold no-margins">Poort status backup</h3><div class="p_status" >'.implode(',', $port_stat_b).'</div>';
+					$block_backup = '<h5 class="font-bold no-margins">Poort status backup</h5><div class="p_status" >'.implode(',', $port_stat_b).'</div>';
 				}
 				$port_stat_b = array_pad($port_stat_b, 24, 0);
 			} else {
 				$port_err = array('Geen verbinding met SQL');
 			}
 			
-			$class = (count($port_err) != 0) ? 'red-bg': 'bg-border-gray';
+			$class = (count($port_err) != 0) ? 'red-bg': 'text-white';
 			
-			$block = '<div class="col-md-3">';
+			$block = '<div class="col-md-4">';
 			$block .= '<div class="widget '.$class.' p-sm text-center">';
 			$block .= '<div class="m-b-md">';
 			$block .= '<h1 class="m-xs">'.$monitor_name.'</h1>';
@@ -639,8 +760,15 @@
 			if(count($port_err) != 0){
 				$block .= '<h1><i class="fa fa-warning"></i></h1><h2 class="font-bold">'.implode('<br>',$port_err).'</h2>';
 			} else {
-				$block .= $block_primair;	
+				$block .= $block_primair;
 				$block .= $block_backup;
+				$sign_conn = (empty($signal_conn)) ? $primair_conn : $signal_conn;
+				$signal = $this->getSignalLoad($sign_conn);
+				if($signal['status'] == 1){
+					$signal_s = array_slice($signal['signal'], 1);
+					$block .= '<h5 class="font-bold">Signaalbelasting (24h)</h5>';
+					$block .= '<table width="100%"><tr><td rowspan="2"><div class="sparkline m-b-sm">'.implode(',',$signal_s).'</div></td><td><span class="label label-warning pull-right">High '.max($signal_s).'</span></td></tr><tr><td><span class="label label-primary pull-right">Low '.min($signal_s).'</span></td></tr></table>';
+				}				
 			}
 			
 			$block .= '</div>';
@@ -667,7 +795,7 @@
 				case 4: // No signal
 					$int = 3;
 					break;
-				case 5: // AOIP gateway
+				case 5: // AOIP gateway active
 					$int = 1;
 					break;					
 				default:

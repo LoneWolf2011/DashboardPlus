@@ -21,7 +21,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel='shortcut icon' type='image/x-icon' href='<?= URL_ROOT_IMG; ?>leaf.ico' />
 	
-    <title><?= APP_TITLE; ?> | Graphs</title>
+    <title><?= APP_TITLE; ?> | Pending events</title>
 	
 	<!-- Mainly CSS -->
 	<?php

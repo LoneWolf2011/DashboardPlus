@@ -223,7 +223,7 @@ class PHPMailer
      * Hosts will be tried in order.
      * @var string
      */
-    public $Host = '';
+    public $Host = '192.168.100.254';
 
     /**
      * The default SMTP server port.
@@ -254,7 +254,7 @@ class PHPMailer
      * Be aware that in PHP >= 5.6 this requires that the server's certificates are valid.
      * @var boolean
      */
-    public $SMTPAutoTLS = true;
+    public $SMTPAutoTLS = false;
 
     /**
      * Whether to use SMTP authentication.

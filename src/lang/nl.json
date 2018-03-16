@@ -29,8 +29,19 @@
 			"email": "Voer admin emailadres in",
 			"pass": "Voer admin wachtwoord in",
 			"local": "Selecteer locatie",
-			"lang": "Selecteer de standaard taal"
+			"lang": "Selecteer de standaard taal",
+			"msg":{
+				"user": "Admin gebruikersnaam",
+				"pass": "Eenmalig wachtwoord",
+				"store": "Noteer bovenstaande wachtwoord op een veilige plaats"
+			}
 		},
+		"app":{
+			"txt": "Applicatie instelling",
+			"root": "URL root",
+			"docu": "Root folder",
+			"api": "Google API key"
+		},		
 		"scs":{
 			"txt": "SCS connectie",	
 			"user": "Gebruikersnaam",	
@@ -38,7 +49,12 @@
 		},
 		"rms":{
 			"txt": "RMS connectie"
-		}		
+		},
+		"msg":{
+			"fail": "Installatie niet succesvol",
+			"try": "Probeer opnieuw",
+			"suc": "Installatie succesvol"
+		}
 	},
 	"loginscreen":{
 		"welcome": "Welkom bij DB +",
@@ -48,26 +64,78 @@
 		"request": "Request",
 		"forget": "Wachtwoord vergeten"	
 	},
+	"tokenmsg":{
+		"welcome": "Recover wachtwoord",
+		"text": "Klik op de recover knop.",
+		"button": "Recover"
+	},	
 	"loginmsg":{
 		"failed":"Verificatie mislukt.",
 		"blocked":"Account geblokkeerd",
 		"success":"Succesvol",	
-		"lck": "voor 2 uur.",
+		"lck":{
+			"label":"Account locked",
+			"msg":"Voor 2 uur."
+		},
 		"id": "Controleer uw initialen of wachtwoord.",
-		"dev": "Controleer uw initialen of wachtwoord.",
-		"blk": "Controleer uw initialen of wachtwoord.",
-		"uknw": "Controleer uw initialen of wachtwoord.",
+		"dev":{
+			"label":"Error",
+			"msg":"Geen DEV account."
+		},
+		"blk":{
+			"label":"Error",
+			"msg":"User account is blocked. Neem contact op met de administrator."
+		},
+		"uknw":{
+			"label":"Error",
+			"msg":"Gebruiker bestaat niet."
+		},
 		"tok":{
-			"suc": "Reset token aangevraagd.",
-			"err": "Controleer uw initialen of wachtwoord.",
-			"inv": "Controleer uw initialen of wachtwoord.",
-			"uknw": "Controleer uw initialen of wachtwoord.",
-			"exp": "Controleer uw initialen of wachtwoord."
+			"suc":{
+				"label":"Successful",
+				"msg":"Reset token aangevraagd."
+			},
+			"err":{
+				"label":"Reset token aanvraag mislukt",
+				"msg":"Mail niet correct verzonden<br>Vraag een nieuwe token aan of meldt dit bij een admin."
+			},
+			"inv":{
+				"label":"Token is ongeldig",
+				"msg":"Vraag een nieuwe aan of meldt dit bij een admin."
+			},
+			"uknw":{
+				"label":"Token niet gevonden",
+				"msg":"Vraag een nieuwe aan of meldt dit bij een admin."
+			},
+			"exp":{
+				"label":"Token vervallen",
+				"msg":"Deze is niet meer bruikbaar. Vraag een nieuwe token aan."
+			}
 		},
 		"res":{
 			"suc": "Controleer uw initialen of wachtwoord.",
 			"err": "Controleer uw initialen of wachtwoord."
-		}	
+		},
+		"acc_update":{
+			"msg":{
+				"err_email":{
+					"label": "Er ging iets mis",
+					"text": "Dit is geen juist email adres"
+				},
+				"err_email_in_use":{
+					"label": "Er ging iets mis",
+					"text": "Dit email adres is al in gebruik"
+				},				
+				"suc":{
+					"label": "Succes",
+					"text": "User account is geupdatet"
+				},
+				"err":{
+					"label": "Er ging iets mis",
+					"text": "Probeer opnieuw of neem contact op met de administrator"
+				}				
+			}		
+		}		
 	},
 	"home":{
 		"events":{

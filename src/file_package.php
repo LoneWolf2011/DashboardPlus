@@ -23,7 +23,7 @@ define('ROOT_FILE', array(
 
 	// Libs
 	'LIBS'			=> array (	
-		'phpmailer' 		=> '/Mdb/Src/libs/PHPmailer/class.phpmailer.php',
+		'phpmailer' 		=> '/Mdb/Src/libs/PHPMailer/PHPMailerAutoload.php',
 		'tcpdf' 			=> '/Mdb/Src/libs/TCPDF/tcpdf.php',
 	),
 	
@@ -75,4 +75,5 @@ define('ROOT_JS', array(
 	'/Mdb/js/plugins/echarts/map/js/world.js',
 	'/Mdb/js/plugins/peity/jquery.peity.min.js',
 	'/Mdb/js/plugins/sweetalert/sweetalert.min.js',
+	'/Mdb/js/plugins/zxcvbn/zxcvbn.js',
 ));

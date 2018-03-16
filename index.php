@@ -10,7 +10,7 @@
     // At the top of the page we check to see whether the user is logged in or not 
     if(!empty($_SESSION['db_user'])) 
     { 
-		header("Location: Src/Login/redirect.php"); 
+		header("Location: ".URL_ROOT); 
     } 
 
     // Everything below this point in the file is secured by the login system 
@@ -76,23 +76,23 @@
 			} elseif(isset($_GET['tok'])){
 				if($_GET['tok'] == "suc"){
 					$search = '<div class="alert alert-success" >
-									<font color="green"><b data-i18n="[html]loginmsg.success">Successful</b></font><br><span data-i18n="[html]loginmsg.tok.suc"> Reset token requested.</span>
+									<font color="green"><b data-i18n="[html]loginmsg.tok.suc.label">Successful</b></font><br><span data-i18n="[html]loginmsg.tok.suc.msg"> Reset token requested.</span>
 								</div>';		
 				} elseif($_GET['tok'] == "err") {
-					$search = '<div class="alert alert-danger" data-i18n="[html]loginmsg.tok.err">
-									<font color="red"><b>Reset token aanvraag mislukt</b></font><br> Mail niet correct verzonden<br>Vraag een nieuwe token aan of meldt dit bij een admin.
+					$search = '<div class="alert alert-danger">
+									<font color="red"><b data-i18n="[html]loginmsg.tok.err.label">Reset token aanvraag mislukt</b></font><br><span data-i18n="[html]loginmsg.tok.err.msg"></span>
 								</div>';	
 				} elseif($_GET['tok'] == "inv") {
-					$search = '<div class="alert alert-danger" data-i18n="[html]loginmsg.tok.inv">
-									<font color="red"><b>Token is ongeldig</b></font><br> Vraag een nieuwe aan of meldt dit bij een admin.
+					$search = '<div class="alert alert-danger" >
+									<font color="red"><b data-i18n="[html]loginmsg.tok.inv.label">Reset token aanvraag mislukt</b></font><br><span data-i18n="[html]loginmsg.tok.inv.msg"></span>
 								</div>';		
 				} elseif($_GET['tok'] == "uknw") {
-					$search = '<div class="alert alert-danger" data-i18n="[html]loginmsg.tok.uknw">
-									<font color="red"><b>Token niet gevonden</b></font><br> Vraag een nieuwe aan of meldt dit bij een admin.
+					$search = '<div class="alert alert-danger" >
+									<font color="red"><b data-i18n="[html]loginmsg.tok.uknw.label">Reset token aanvraag mislukt</b></font><br><span data-i18n="[html]loginmsg.tok.uknw.msg"></span>
 								</div>';
 				} elseif($_GET['tok'] == "exp") {
-					$search = '<div class="alert alert-danger" data-i18n="[html]loginmsg.tok.exp">
-									<font color="red"><b>Token vervallen</b></font><br> en niet meer bruikbaar. Vraag een nieuwe token aan
+					$search = '<div class="alert alert-danger" >
+									<font color="red"><b data-i18n="[html]loginmsg.tok.exp.label">Reset token aanvraag mislukt</b></font><br><span data-i18n="[html]loginmsg.tok.exp.msg"></span>
 								</div>';								
 				} else {
 					$search = "";
@@ -117,7 +117,7 @@
 		
 		?>			
 			
-            <form class="m-t" id="signinForm" action="Src/Login/login_process.php" method="post">
+            <form class="m-t" id="signinForm" action="Src/controllers/login.controller.php?login" method="post">
                 <div class="form-group">
                     <input type="email" class="form-control" placeholder="Email" name="email" required="" value="<?php 
 				if(isset($_GET['id'])){ 
@@ -137,7 +137,7 @@
             </form>
 		
 			<div id="show_form" style="display: none;">
-				<form class="login-form" action="Src/Login/gen_token.php" method="post">
+				<form class="login-form" action="Src/controllers/login.controller.php?gentoken" method="post">
 					<div class="form-group">
 						<input type="email" class="form-control" placeholder="Email" name="email" required="">
 					</div>			

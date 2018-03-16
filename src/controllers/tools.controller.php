@@ -14,11 +14,14 @@
 		}
 
 		if($_GET['get'] == 'signalload'){
-			$obj->getSignalLoad();
+			if(isset($_GET['events'])){
+				$obj->getSignalLoadEvents(array('host'=>'172.16.8.11'));
+			}		
+			jsonArr($obj->getSignalLoad(SCS_DB_CONN));
 		}
 		
 		if($_GET['get'] == 'locationsignalcount'){
-			$obj->getLocationSignalCount();
+			$obj->getLocationSignalCount(15);
 		}
 
 		if($_GET['get'] == 'events'){
