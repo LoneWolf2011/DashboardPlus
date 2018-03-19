@@ -42,6 +42,8 @@ define('ROOT_FILE', array(
 		'location' 			=> '/Mdb/Src/Classes/class.location.php',
 		'home' 				=> '/Mdb/Src/Classes/class.home.php',
 		'tools' 			=> '/Mdb/Src/Classes/class.tools.php',	
+		'ticket' 			=> '/Mdb/Src/Classes/class.ticket.php',	
+		'user' 				=> '/Mdb/Src/Classes/class.user.php',	
 	)		
 ));
 
@@ -55,6 +57,7 @@ define('ROOT_CSS', array(
 	'/Mdb/css/plugins/formvalidation/dist/css/formValidation.min.css',
 	'/Mdb/css/plugins/c3/c3.min.css',
 	'/Mdb/css/plugins/sweetalert/sweetalert.css',
+	'/Mdb/css/plugins/datepicker/datepicker3.css',
 ));
 
 define('ROOT_JS', array(
@@ -76,4 +79,7 @@ define('ROOT_JS', array(
 	'/Mdb/js/plugins/peity/jquery.peity.min.js',
 	'/Mdb/js/plugins/sweetalert/sweetalert.min.js',
 	'/Mdb/js/plugins/zxcvbn/zxcvbn.js',
+	'/Mdb/js/plugins/autocomplete/dist/jquery.autocomplete.min.js',
+	'/Mdb/js/plugins/datepicker/bootstrap-datepicker.js',
+	'/Mdb/js/plugins/datepicker/locales/bootstrap-datepicker.nl.js',
 ));

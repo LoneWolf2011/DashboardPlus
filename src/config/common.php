@@ -48,6 +48,10 @@
 	define('APP_DEBUG', (int)$env['APP']['DEBUG']);
 	define('APP_INITIALIZE', (int)getSetting($db, 'APP_INITIALIZE'));
 	
+	// Define SMTP settings
+	define('SMTP_HOST', $env['SMPT']['SMTP_HOST']);
+	define('SMTP_PORT', (int)$env['SMPT']['SMTP_PORT']);
+	
 	// Define SCS conn
 	define('SCS_DB_HOST', $env['SCS_DB']['HOST']);
 	define('SCS_DB_USER', $env['SCS_DB']['USER']);

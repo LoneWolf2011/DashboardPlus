@@ -211,7 +211,7 @@
 			// Ajax om de data te posten naar de db
 			$.ajax({
 				type: "POST",
-				url: "/mdb/Src/controllers/login.controller.php?update",
+				url: "/mdb/Src/controllers/user.controller.php?update",
 				data: $('form[name="form_update_acc"]').serialize(),
 				success: function(data){
 					$('#myModal').modal('hide');

@@ -4,10 +4,6 @@
 	
 	$obj = new Login($db_conn);
 	
-	if(isset($_GET['update'])){
-		$obj->updateUserAccount($db, $_POST);
-	}
-
 	if(isset($_GET['login'])){
 		$obj->processLogin($db, $_POST);
 	}

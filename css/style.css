@@ -1086,6 +1086,18 @@ button.dim:active:before {
   padding-right: 6px;
   text-shadow: none;
 }
+.badge-xl {
+  display: inline-block;
+  padding: .25em .4em;
+  font-size: 75%;
+  font-weight: 700;
+  line-height: 1;
+  color: #fff;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: baseline;
+  border-radius: .25rem;		
+}
 .label-primary,
 .badge-primary {
   background-color: #1ab394;
@@ -8551,3 +8563,26 @@ body.md-skin {
     margin: 0;
   }
 }
+
+/* ***** autocomplete ***** */
+.autocomplete-suggestions {
+  border: 1px solid #e4e4e4;
+  background: #F4F4F4;
+  cursor: default;
+  overflow: auto; }
+
+.autocomplete-suggestion {
+  padding: 2px 5px;
+  font-size: 1.2em;
+  white-space: nowrap;
+  overflow: hidden; }
+
+.autocomplete-selected {
+  background: #f0f0f0; }
+
+.autocomplete-suggestions strong {
+  font-weight: normal;
+  color: #3399ff;
+  font-weight: bolder; }
+
+/* ***** /autocomplete *****/

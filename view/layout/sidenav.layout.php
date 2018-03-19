@@ -19,6 +19,7 @@
                 <li><a href="<?= URL_ROOT.'view/tools/';?>"><i class="fa fa-wrench"></i> <span class="nav-label">Tools</span></a></li>
 				
 				<?php if(htmlentities($_SESSION['db_user']['user_role'], ENT_QUOTES, 'UTF-8') == 1){ ?>
+                <li><a href="<?= URL_ROOT.'view/user/';?>"><i class="fa fa-users"></i> <span class="nav-label">Users</span></a></li>
                 <li><a href="<?= URL_ROOT.'view/settings/';?>"><i class="fa fa-gear"></i> <span class="nav-label">Settings</span></a></li>
 				<?php }; ?>
 				

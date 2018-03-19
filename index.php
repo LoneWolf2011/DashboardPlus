@@ -42,7 +42,8 @@
     <div class="middle-box text-center loginscreen animated fadeInDown ">
         <div class="wrapper wrapper-content">
             <div>
-                <h1 class="logo-name">DB+</h1>
+                <!--<h1 class="logo-name">DB+</h1>-->
+                <h1 class="logo-name"><img src="<?= URL_ROOT_IMG.'DB+.png';?>" width="70%"></img></h1>
             </div>
 				<h3 data-i18n="[html]loginscreen.welcome">Welcome to DB+</h3>
 				<p data-i18n="[html]loginscreen.text">An improved experience for managing RMS and SCS.</p>
@@ -59,7 +60,7 @@
 								</div>';			
 			} elseif(isset($_GET['blc'])){
 					$search = '<div class="alert alert-danger" >
-									<font color="red"><b data-i18n="[html]loginmsg.failed">Login failed</b></font><br><span data-i18n="[html]loginmsg.id"> User account is block. Contact your admins.</span>
+									<font color="red"><b data-i18n="[html]loginmsg.failed">Login failed</b></font><br><span data-i18n="[html]loginmsg.blc"> User account is block. Contact your admins.</span>
 								</div>';			
 			} elseif(isset($_GET['id'])){
 					$search = '<div class="alert alert-danger" >

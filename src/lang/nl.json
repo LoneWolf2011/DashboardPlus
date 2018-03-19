@@ -82,7 +82,7 @@
 			"label":"Error",
 			"msg":"Geen DEV account."
 		},
-		"blk":{
+		"blc":{
 			"label":"Error",
 			"msg":"User account is blocked. Neem contact op met de administrator."
 		},
@@ -249,7 +249,7 @@
 		},
 		"tab":{
 			"location":"Locatie",
-			"update":"Geupdatet",
+			"update":"Laatst geupdatet",
 			"tab1":{
 				"text":"Connectie status",
 				"h3":"Pad status",

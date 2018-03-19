@@ -212,6 +212,9 @@
 				$e = (empty($env['SCS_DB']['HOST'])) ? @$post_val['scs_host'] : $env['SCS_DB']['HOST'];
 				$f = (empty($env['SCS_DB']['USER'])) ? @$post_val['scs_user'] : $env['SCS_DB']['USER'];
 				$g = (empty($env['SCS_DB']['PASS'])) ? @$post_val['scs_pass'] : $env['SCS_DB']['PASS'];
+				
+				//$h = (empty($env['SMTP']['SMTP_HOST'])) ? @$post_val['scs_pass'] : $env['SCS_DB']['PASS'];
+				//$i = (empty($env['SCS_DB']['PASS'])) ? @$post_val['scs_pass'] : $env['SCS_DB']['PASS'];
 				//$d = (empty($env['RMS_DB']['HOST'])) ? @$post_val['rms_host'] : $env['RMS_DB']['HOST'];
 				//$e = (empty($env['RMS_DB']['USER'])) ? @$post_val['rms_user'] : $env['RMS_DB']['USER'];
 				//$f = (empty($env['RMS_DB']['PASS'])) ? @$post_val['rms_pass'] : $env['RMS_DB']['PASS'];
@@ -224,6 +227,9 @@
 				$text .= 'ENV = '.$env['APP']['ENV'].PHP_EOL;
 				$text .= 'GOOGLE_API = '.$d.PHP_EOL;
 				$text .= 'DEBUG = false'.PHP_EOL;
+				$text .= '[SMTP]'.PHP_EOL;
+				$text .= 'SMTP_HOST = '.$h.PHP_EOL;
+				$text .= 'SMTP_PORT = '.$i.PHP_EOL;
 				$text .= '[LOCAL_DB]'.PHP_EOL;
 				$text .= 'HOST = '.$env['LOCAL_DB']['HOST'].PHP_EOL;
 				$text .= 'USER = '.$env['LOCAL_DB']['USER'].PHP_EOL;
@@ -405,6 +411,8 @@
 		
 					$mail = new PHPmailer();
 					$mail -> isSMTP();
+					$mail -> Host = SMTP_HOST;
+					$mail -> Port = SMTP_PORT;
 					$mail -> AddAddress($row['user_email']);	
 					$mail -> SetFrom(APP_EMAIL);
 					$mail -> Subject = "DB+ wachtwoord token (1/2)";
@@ -576,174 +584,6 @@
 			}			
 		}
 		
-		public function updateUserAccount($conn,$post_val){
-			$lang = $this->locale;
-			
-			$email_post		= $post_val['email'];
-			$password_post 	= $post_val['password'];
-			$new_user	 	= 0;
-			
-			// Make sure the user entered a valid E-Mail address 
-			if(!filter_var($email_post, FILTER_VALIDATE_EMAIL)) 
-			{ 
-				$response_array['label'] 	= $lang['loginmsg']['acc_update']['msg']['err_email']['label'];
-				$response_array['text'] 	= $lang['loginmsg']['acc_update']['msg']['err_email']['text'];
-				$response_array['type'] 	= 'error';
-				
-				// Return JSON array
-				jsonArr($response_array);			
-				//die("Invalid E-Mail Address"); 
-			} 
-			
-			// If the user is changing their E-Mail address, we need to make sure that 
-			// the new value does not conflict with a value that is already in the system. 
-			// If the user is not changing their E-Mail address this check is not needed. 
-			if($email_post != $_SESSION['db_user']['user_email']) 
-			{ 
-				// Define our SQL query 
-				$query = " 
-					SELECT 
-						1 
-					FROM app_users 
-					WHERE 
-						user_email = :email 
-				"; 
-				
-				// Define our query parameter values 
-				$query_params = array( 
-					':email' => $email_post 
-				); 
-				
-				try 
-				{ 
-					// Execute the query 
-					$stmt = $conn->prepare($query); 
-					$result = $stmt->execute($query_params); 
-				} 
-				catch(PDOException $ex) 
-				{ 
-					// Note: On a production website, you should not output $ex->getMessage(). 
-					// It may provide an attacker with helpful information about your code.  
-					$msg = 'Regel: ' . $ex->getLine().' Bestand: ' . $ex->getFile().' Error: ' . $ex->getMessage();
-					logToFile(__FILE__,1,$msg);
-					
-					$response_array['label'] 	= $lang['loginmsg']['acc_update']['msg']['err']['label'];
-					$response_array['text'] 	= $lang['loginmsg']['acc_update']['msg']['err']['text'];
-					$response_array['type'] 	= 'error';
-					
-					// Return JSON array
-					jsonArr($response_array);				
-					die($msg); 
-				} 
-				
-				// Retrieve results (if any) 
-				$row = $stmt->fetch(); 
-				if($row) 
-				{ 
-					$response_array['label'] 	= $lang['loginmsg']['acc_update']['msg']['err_email_in_use']['label'];
-					$response_array['text'] 	= $lang['loginmsg']['acc_update']['msg']['err_email_in_use']['text'];
-					$response_array['type'] 	= 'error';
-					// Return JSON array
-					jsonArr($response_array);				
-
-				} 
-			} 
-			
-			// If the user entered a new password, we need to hash it and generate a fresh salt 
-			// for good measure. 
-			if(!empty($password_post)) 
-			{ 
-				$password = password_hash($password_post, PASSWORD_DEFAULT); 
-			} 
-			else 
-			{ 
-				// If the user did not enter a new password we will not update their old one. 
-				$password = null; 
-				//$salt = null; 
-			} 
-			
-			// Initial query parameter values 
-			$query_params = array( 
-				':email' 	=> $email_post, 
-				':user_id' 	=> $_SESSION['db_user']['user_id'], 
-				':new_user' => $new_user, 
-			); 
-			
-			// If the user is changing their password, then we need parameter values 
-			// for the new password hash and salt too. 
-			if($password !== null) 
-			{ 
-				$query_params[':password'] = $password; 
-				//$query_params[':salt'] = $salt; 
-			} 
-			
-			// Note how this is only first half of the necessary update query.  We will dynamically 
-			// construct the rest of it depending on whether or not the user is changing 
-			// their password. 
-			$query = " 
-				UPDATE app_users 
-				SET 
-					user_email = :email, 
-					user_new = :new_user 
-			"; 
-			
-			// If the user is changing their password, then we extend the SQL query 
-			// to include the password and salt columns and parameter tokens too. 
-			if($password !== null) 
-			{ 
-				$query .= " 
-					, user_password = :password 
-				"; 
-			} 
-			
-			// Finally we finish the update query by specifying that we only wish 
-			// to update the one record with for the current user. 
-			$query .= " 
-				WHERE 
-					user_id = :user_id 
-			"; 
-			
-			try 
-			{ 
-				// Execute the query 
-				$stmt = $conn->prepare($query); 
-				$result = $stmt->execute($query_params); 
-				$ini = htmlentities($_SESSION['db_user']['user_email'], ENT_QUOTES, 'UTF-8');
-				$msg = "Password van user: ".$ini. " gewijzigd";
-				logToFile(__FILE__,0,$msg);	
-				
-				$this->succesMessage = $lang['loginmsg']['acc_update']['msg']['suc']['label'];
-				$this->msg = $lang['loginmsg']['acc_update']['msg']['suc']['text'];
-			} 
-			catch(PDOException $ex) 
-			{ 
-				// Note: On a production website, you should not output $ex->getMessage(). 
-				// It may provide an attacker with helpful information about your code.  
-				$ini = htmlentities($_SESSION['db_user']['user_email'], ENT_QUOTES, 'UTF-8');
-				$msg = 'Regel: ' . $ex->getLine().' Bestand: ' . $ex->getFile().' Error: ' . $ex->getMessage();
-				logToFile(__FILE__,1,$msg);
-				
-				$response_array['label'] 	= $lang['loginmsg']['acc_update']['msg']['err']['label'];
-				$response_array['text'] 	= $lang['loginmsg']['acc_update']['msg']['err']['text'];
-				$response_array['type'] 	= 'error';
-			
-				// Return JSON array
-				jsonArr($response_array);
-			} 
-			
-			// Now that the user's E-Mail address has changed, the data stored in the $_SESSION 
-			// array is stale; we need to update it so that it is accurate.
-			$_SESSION['db_user']['user_email'] 	= $email_post; 
-			$_SESSION['db_user']['user_new'] 	= $new_user; 
-			
-			$response_array['label'] 	= $this->succesMessage;
-			$response_array['text'] 	= $this->msg;
-			$response_array['type'] 	= 'success';
-		
-			// Return JSON array
-			jsonArr($response_array);			
-		}
-
 		protected function redirectLogin(){
 			$conn 	= $this->db_conn;
 			// At the top of the page we check to see whether the user is logged in or not 
