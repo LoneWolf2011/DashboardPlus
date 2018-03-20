@@ -211,7 +211,7 @@
 		
 		$count 	= $stmt->rowCount(); 
 		// If there have been more than 5 failed logins 
-		if ($count > 5) {	
+		if ($count >= 5) {	
 			return true;
 		} else {
 			return false;

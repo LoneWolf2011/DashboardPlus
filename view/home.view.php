@@ -206,7 +206,8 @@
 								</div>
 							</div>
 						</div>		
-						<script async defer src="google.js?key=<?= GOOGLE_API;?>"></script>
+						<script async defer src="https://maps.googleapis.com/maps/api/js?key=<?= GOOGLE_API;?>"></script>
+						<!--<script async defer src="Z:\google.js?sensor=false&key=<?= GOOGLE_API;?>"></script>-->
 
 						<div class="google-map" id="map" style="height:600px;"></div>
 					</div>
@@ -446,10 +447,21 @@
 			ajaxObj.get(); //Start the get cycle.
 		}, 1000);		
 	}
-	
+			// OPEN STREET MAP
+           var mapTypeIds = [];
+            for(var type in google.maps.MapTypeId) {
+                mapTypeIds.push(google.maps.MapTypeId[type]);
+            }
+            mapTypeIds.push("OSM");	
+			
 	map = new google.maps.Map(document.getElementById('map'), {
 			center: center,
 			zoom: 8, 
+				// OPEN STREET MAP
+                mapTypeId: "OSM",
+                mapTypeControlOptions: {
+                    mapTypeIds: mapTypeIds
+                },			
 			// Style for Google Maps
 			//styles: [{"stylers":[{"hue":"#18a689"},{"visibility":"on"},{"invert_lightness":true},{"saturation":40},{"lightness":10}]}]
 			styles: [{
@@ -684,7 +696,18 @@
 				]
 			}]
         });
-	
+
+		
+            map.mapTypes.set("OSM", new google.maps.ImageMapType({
+                getTileUrl: function(coord, zoom) {
+                    // See above example if you need smooth wrapping at 180th meridian
+                    return "http://tile.openstreetmap.org/" + zoom + "/" + coord.x + "/" + coord.y + ".png";
+                },
+                tileSize: new google.maps.Size(256, 256),
+                name: "OpenStreetMap",
+                maxZoom: 18
+            }));
+		
 	var infowindow = new google.maps.InfoWindow();
 	//When true, markers for all unreported locs will be removed. 
 	// if false; removal must be specified in json data: scsnr: { remove: true }

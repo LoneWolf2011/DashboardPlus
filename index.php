@@ -52,27 +52,27 @@
 		<?php 
 			if(isset($_GET['lck'])){
 					$search = '<div class="alert alert-danger" >
-									<font color="red"><b data-i18n="[html]loginmsg.blocked">Account locked</b></font><br><span data-i18n="[html]loginmsg.lck"> for 2 hours.</span>
+									<font color="red"><b data-i18n="[html]loginmsg.lck.label">Account locked</b></font><br><span data-i18n="[html]loginmsg.lck.msg"> for 2 hours.</span>
 								</div>';		
 			} elseif(isset($_GET['dev'])){
 					$search = '<div class="alert alert-warning" >
-									<font color="orange"><b data-i18n="[html]loginmsg.failed">Login failed</b></font><br><span data-i18n="[html]loginmsg.lck"> Geen DEV account.<br> Indien je toegang nodig hebt meldt dit bij de admins.</span>
+									<font color="orange"><b data-i18n="[html]loginmsg.dev.label">Login failed</b></font><br><span data-i18n="[html]loginmsg.dev.msg"> Geen DEV account.<br> Indien je toegang nodig hebt meldt dit bij de admins.</span>
 								</div>';			
 			} elseif(isset($_GET['blc'])){
 					$search = '<div class="alert alert-danger" >
-									<font color="red"><b data-i18n="[html]loginmsg.failed">Login failed</b></font><br><span data-i18n="[html]loginmsg.blc"> User account is block. Contact your admins.</span>
+									<font color="red"><b data-i18n="[html]loginmsg.blc.label">Login failed</b></font><br><span data-i18n="[html]loginmsg.blc.msg"> User account is block. Contact your admins.</span>
 								</div>';			
 			} elseif(isset($_GET['id'])){
 					$search = '<div class="alert alert-danger" >
-									<font color="red"><b data-i18n="[html]loginmsg.failed">Login failed</b></font><br><span data-i18n="[html]loginmsg.id"> Check your initials or password.</span>
+									<font color="red"><b data-i18n="[html]loginmsg.id.label">Login failed</b></font><br><span data-i18n="[html]loginmsg.id.msg"> Check your initials or password.</span>
 								</div>';
 			} elseif(isset($_GET['err'])){
-					$search = '<div class="alert alert-danger" data-i18n="[html]loginmsg.err">
-									<font color="red"><b>Logged out</b></font><br> due to inactivity
+					$search = '<div class="alert alert-danger" >
+									<font color="red"><b data-i18n="[html]loginmsg.err.label"><br></font><span data-i18n="[html]loginmsg.err.msg">  due to inactivity.</span>
 								</div>';
 			} elseif(isset($_GET['uknw'])){
-					$search = '<div class="alert alert-danger" data-i18n="[html]loginmsg.uknw">
-									<font color="red"><b>Error</b></font><br> User: '. $_GET['uknw'].' does not exist.
+					$search = '<div class="alert alert-danger" >
+									<font color="red"><b data-i18n="[html]loginmsg.uknw.label"><br></font><br><span data-i18n="[html]loginmsg.uknw.msg"> User: '. $_GET['uknw'].' does not exist.</span> .
 								</div>';
 			} elseif(isset($_GET['tok'])){
 				if($_GET['tok'] == "suc"){

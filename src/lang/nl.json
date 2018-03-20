@@ -70,13 +70,14 @@
 		"button": "Recover"
 	},	
 	"loginmsg":{
-		"failed":"Verificatie mislukt.",
-		"success":"Succesvol",	
 		"lck":{
 			"label":"Account geblokkeerd",
 			"msg":"Voor 2 uur."
 		},
-		"id": "Controleer uw initialen of wachtwoord.",
+		"id":{
+			"label":"Verificatie mislukt",
+			"msg":"Controleer uw initialen of wachtwoord."
+		},
 		"dev":{
 			"label":"Error",
 			"msg":"Geen DEV account."
