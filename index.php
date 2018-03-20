@@ -45,7 +45,7 @@
                 <!--<h1 class="logo-name">DB+</h1>-->
                 <h1 class="logo-name"><img src="<?= URL_ROOT_IMG.'DB+.png';?>" width="70%"></img></h1>
             </div>
-				<h3 data-i18n="[html]loginscreen.welcome">Welcome to DB+</h3>
+				<h3 ><span data-i18n="[html]loginscreen.welcome">Welcome to</span> <?= APP_NAME;?> </h3>
 				<p data-i18n="[html]loginscreen.text">An improved experience for managing RMS and SCS.</p>
 				<p data-i18n="[html]loginscreen.subtext">Login in. To see it in action.</p>
 
@@ -149,7 +149,7 @@
 				</form>
 			</div>	
 
-            <p class="m-t"> <small><?= date("D d-m-Y"). "<font color='#0092D0'> | </font>". date("H:i:s")."<font color='#0092D0'> | </font> ".APP_ENV." " . appVersionCode(APP_ENV); ?></small> </p>
+            <p class="m-t"> <small><?= date("D d-m-Y"). "<font color='#0092D0'> | </font>". date("H:i:s")."<font color='#0092D0'> | </font> ".APP_ENV." " . APP_VER; ?></small> </p>
 			
         </div>
     </div>

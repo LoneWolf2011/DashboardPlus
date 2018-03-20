@@ -14,8 +14,8 @@ ErrorDocument 500 /Mdb/View/Errors/page_500.php
 
 ## 
 <Files .htaccess>
-order allow,deny
-deny from all
+	order allow,deny
+	deny from all
 </Files>
 
 ## Geen directory listing. Indien index.php
@@ -29,7 +29,7 @@ DirectoryIndex index.php /Mdb/View/
 	Satisfy all
 </Files>
 
-<Files env.ini>
+<Files ~ "\.ini$">
     Order allow,deny
     Deny from all
  </Files>

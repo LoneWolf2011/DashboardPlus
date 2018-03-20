@@ -71,10 +71,10 @@
 													<table class="table table-hover datatable">
 														<thead>
 															<tr>
-																<th data-i18n="[html]home.locations.active.table.th1">Conexão</th>
+																<th data-i18n="[html]home.locations.active.table.th1">Connection</th>
 																<th data-i18n="[html]home.locations.active.table.th2">ID</th>
-																<th data-i18n="[html]home.locations.active.table.th3">Localização</th>
-																<th data-i18n="[html]home.locations.active.table.th4">Visto pela última vez</th>
+																<th data-i18n="[html]home.locations.active.table.th3">Location</th>
+																<th data-i18n="[html]home.locations.active.table.th4">Last seen</th>
 															</tr>
 														</thead>
 														<tbody><!--JSON RES--></tbody>
@@ -206,8 +206,8 @@
 								</div>
 							</div>
 						</div>		
-						<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=<?= GOOGLE_API;?>"></script>
-						
+						<script async defer src="google.js?key=<?= GOOGLE_API;?>"></script>
+
 						<div class="google-map" id="map" style="height:600px;"></div>
 					</div>
 					

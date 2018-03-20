@@ -8,11 +8,11 @@
 			'pass'	=>	'ikhouvanjou',
 			'db'  	=>	'scs_stat'
 		);
-		protected $enableAudio = true;
-		protected $enableAlarmThreshold = true;
-		protected $alarmThreshold = 5;
-		protected $alarmThresholdWarning = 10;
-		protected $alarmThresholdDanger = 20;
+		protected $enableAudio = ENABLE_AUDIO;
+		protected $enableAlarmThreshold = ENABLE_GROUPED_EVENTS;
+		protected $alarmThreshold = GROUPED_EVENTS;
+		protected $alarmThresholdWarning = GROUPED_EVENTS_WARNING;
+		protected $alarmThresholdDanger = GROUPED_EVENTS_DANGER;
 		
 		function __construct($db_conn) {
 			$this->db_conn 	= $db_conn;
@@ -255,16 +255,19 @@
 						$groups[] = $row['Event_Type'];
 					};			
 					array_pop($hours);
+					$signal[] = $hours;
 					
 				}  catch (Exception $e) {
 					return $response_array['status'] = 0;
 				}
-				$signal[] = $hours;
+				
 				
 				$response_array = array(
 					'status'	=> 1,
 					'signal'	=> $signal,
-					'groups'	=> $groups
+					'groups'	=> $groups,
+					'q'	=> $query
+					
 				);
 			} else {
 				$response_array['status'] = 0;

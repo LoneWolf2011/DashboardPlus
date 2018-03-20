@@ -42,15 +42,23 @@
 	define('APP_TITLE', getSetting($db, 'APP_TITLE'));
 	define('APP_EMAIL', getSetting($db, 'APP_EMAIL'));
 	define('APP_ENV', $env['APP']['ENV']);
+	define('APP_VER', $env['APP']['VER']);
 	define('APP_LANG', getSetting($db, 'APP_LANG'));
 	define('APP_LAT', (int)getSetting($db, 'APP_LAT'));
 	define('APP_LNG', (int)getSetting($db, 'APP_LNG'));
 	define('APP_DEBUG', (int)$env['APP']['DEBUG']);
 	define('APP_INITIALIZE', (int)getSetting($db, 'APP_INITIALIZE'));
 	
+	// Define events threshold
+	define('ENABLE_AUDIO', $env['EVENTS']['ENABLE_AUDIO']);
+	define('ENABLE_GROUPED_EVENTS', $env['EVENTS']['ENABLE_GROUPED_EVENTS']);
+	define('GROUPED_EVENTS', $env['EVENTS']['GROUPED_EVENTS']);
+	define('GROUPED_EVENTS_WARNING', $env['EVENTS']['GROUPED_EVENTS_WARNING']);
+	define('GROUPED_EVENTS_DANGER', $env['EVENTS']['GROUPED_EVENTS_DANGER']);
+	
 	// Define SMTP settings
-	define('SMTP_HOST', $env['SMPT']['SMTP_HOST']);
-	define('SMTP_PORT', (int)$env['SMPT']['SMTP_PORT']);
+	define('SMTP_HOST', $env['SMTP']['SMTP_HOST']);
+	define('SMTP_PORT', (int)$env['SMTP']['SMTP_PORT']);
 	
 	// Define SCS conn
 	define('SCS_DB_HOST', $env['SCS_DB']['HOST']);

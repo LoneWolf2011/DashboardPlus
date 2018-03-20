@@ -226,7 +226,13 @@
 				$text .= 'ROOT_PATH = '.$c.PHP_EOL;
 				$text .= 'ENV = '.$env['APP']['ENV'].PHP_EOL;
 				$text .= 'GOOGLE_API = '.$d.PHP_EOL;
-				$text .= 'DEBUG = false'.PHP_EOL;
+				$text .= 'DEBUG = false'.PHP_EOL;				
+				$text .= '[EVENTS]'.PHP_EOL;
+				$text .= 'ENABLE_AUDIO = true'.PHP_EOL;
+				$text .= 'ENABLE_GROUPED_EVENTS = true'.PHP_EOL;
+				$text .= 'GROUPED_EVENTS = 5'.PHP_EOL;
+				$text .= 'GROUPED_EVENTS_WARNING = 10'.PHP_EOL;
+				$text .= 'GROUPED_EVENTS_DANGER = 20'.PHP_EOL;
 				$text .= '[SMTP]'.PHP_EOL;
 				$text .= 'SMTP_HOST = '.$h.PHP_EOL;
 				$text .= 'SMTP_PORT = '.$i.PHP_EOL;
@@ -398,17 +404,12 @@
 					// Enkel voor testing
 					//die(header("Location: ../token.php?rec=".$token."&id=".$row['Initialen']));
 					
-					$message = '<body>';
-					$message .= '<table border="0" style=" border-color: #fff; width: 500px;" cellpadding="5">';		
-					$message .= "<th colspan='2' style='border-bottom: 1px solid #9CD4F6;'><img src='".URL_ROOT_IMG."' alt='ASB security' style='float: left;'/></th>"; 		
-					$message .= "<tr><td colspan='2'>Beste " .$row['user_name']." ".$row['user_last_name'].",</td></tr>";
-					$message .= "<tr><td colspan='2'>Open de onderstaande link om je wachtwoord te resetten.</td></tr>";
-					$message .= "<tr><td colspan='2'>Heb jij geen aanvraag gedaan. Klik dan niet op de link! De link vervalt automatisch na 10 minuten.</td></tr>";			
-					$message .= "<tr><td colspan='2'><a class='link' href='".URL_ROOT."token.php?rec=".$token."&id=".$row['user_email']."'>Recover token</a></td></tr>";
-		
-					$message .= "</table>";
-					$message .= "</body>";
-		
+					// Note: use the key names specified in the email template as array key
+					$email_template = array(
+						'user_name' 	=> $row['user_name']." ".$row['user_last_name'],
+						'recover_link' 	=> '<a class="link" href="'.URL_ROOT.'token.php?rec='.$token.'&id='.$row['user_email'].'">Recover token</a>'
+					);
+									
 					$mail = new PHPmailer();
 					$mail -> isSMTP();
 					$mail -> Host = SMTP_HOST;
@@ -416,7 +417,7 @@
 					$mail -> AddAddress($row['user_email']);	
 					$mail -> SetFrom(APP_EMAIL);
 					$mail -> Subject = "DB+ wachtwoord token (1/2)";
-					$mail -> MsgHTML($message);
+					$mail -> MsgHTML(setEmailTemplate($email_template, 'email.gen_token.php'));
 					$mail -> WordWrap = 80;
 					
 					if($mail->Send()) {	
@@ -507,6 +508,7 @@
 					// Generate random password
 					$gen_password = genPassSeed(2);
 					$hash = password_hash($gen_password, PASSWORD_DEFAULT);
+					$new = 1;
 					
 					$query_user = " 
 						SELECT 
@@ -530,7 +532,7 @@
 					$new_user = 1;
 					
 					$conn->query("DELETE FROM app_users_tokens WHERE user_email = '$cleaned_ini'");
-					$conn->query("UPDATE app_users SET user_password = '$hash' WHERE user_id = '". $row['user_id']."'");
+					$conn->query("UPDATE app_users SET user_password = '$hash', user_new = '$new' WHERE user_id = '". $row['user_id']."'");
 					
 					// Log to file
 					$msg = "Token valid. Nieuw wachtwoord voor user ". $cleaned_ini." verstuurd";
@@ -545,25 +547,21 @@
 					
 					// Enkel voor testing
 					//die(header("Location: ../token.php?rec=".$token."&id=".$row['Initialen']));
-					
-					$message = '<body>';
-					$message .= '<table border="0" style=" border-color: #fff; width: 500px;" cellpadding="5">';		
-					$message .= "<th colspan='2' style='border-bottom: 1px solid #9CD4F6;'><img src='".URL_ROOT_IMG."ASB.png' alt='ASB security' style='float: left;'/></th>"; 				
-					$message .= "<tr><td colspan='2'>Beste " .$row['user_name']." ".$row['user_last_name'].",</td></tr>";
-					$message .= "<tr><td colspan='2'> </td></tr>";
-					$message .= "<tr><td colspan='2'>De authenticatie token is geverifeerd. <br></td></tr>"; 
-					$message .= "<tr><td colspan='2'>Login met jouw gebruikersnaam en het onderstaande wachtwoord op <a class='link' href='".URL_ROOT."?ini=".$cleaned_ini."'>DB+</a></td></tr>";
-					$message .= "<th style='border-bottom: 1px solid #9CD4F6; background: #eee;' colspan='3' align='left'>User</th>";		
-					$message .= "<tr><td><strong>Nieuw wachtwoord</strong> </td><td>" .$gen_password. "</td></tr>";				
-					$message .= "</table>";
-					$message .= "</body>";
-		
+
+					$email_template = array(
+						'user_name' 	=> $row['user_name']." ".$row['user_last_name'],
+						'link' 			=> '<a class="link" href="'.URL_ROOT.'?ini='.$cleaned_ini.'">DB+</a>',
+						'gen_password' 	=> $gen_password,
+					);
+										
 					$mail = new PHPmailer();
 					$mail -> isSMTP();
+					$mail -> Host = SMTP_HOST;
+					$mail -> Port = SMTP_PORT;
 					$mail -> AddAddress($row['user_email']);	
 					$mail -> SetFrom(APP_EMAIL);
 					$mail -> Subject = "DB+ nieuw wachtwoord (2/2)";
-					$mail -> MsgHTML($message);
+					$mail -> MsgHTML(setEmailTemplate($email_template, 'email.password_reset.php'));
 					$mail -> WordWrap = 80;
 					
 					if($mail->Send()) {	

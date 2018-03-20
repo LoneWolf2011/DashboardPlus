@@ -57,7 +57,7 @@
 		}
 	},
 	"loginscreen":{
-		"welcome": "Welkom bij",
+		"welcome": "Welkom bij DB +",
 		"text": "Een verbeterde ervaring voor het beheer van RMS en SCS.",
 		"subtext": "Log alstublieft in om het in actie te zien.",
 		"login": "Log in",
@@ -71,9 +71,10 @@
 	},	
 	"loginmsg":{
 		"failed":"Verificatie mislukt.",
+		"blocked":"Account geblokkeerd",
 		"success":"Succesvol",	
 		"lck":{
-			"label":"Account geblokkeerd",
+			"label":"Account locked",
 			"msg":"Voor 2 uur."
 		},
 		"id": "Controleer uw initialen of wachtwoord.",
@@ -91,7 +92,7 @@
 		},
 		"tok":{
 			"suc":{
-				"label":"Succesvol",
+				"label":"Successful",
 				"msg":"Reset token aangevraagd."
 			},
 			"err":{

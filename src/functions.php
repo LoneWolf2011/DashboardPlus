@@ -10,6 +10,7 @@
 
 	Function index:
 ==========================================================================================================
+		setEmailTemplate
 		getCategory
 		getOutOfService
 		getPathStatus
@@ -18,6 +19,15 @@
 		appVersionCode
 		logToFile
 ========================================================================================================== */
+
+	function setEmailTemplate($arr_val, $template_name){
+		$template = file_get_contents(URL_ROOT.'view/email_temp/'.$template_name);
+		
+		foreach($arr_val as $key => $value){
+			$template = str_replace('{{'.$key.'}}', $value, $template);
+		}
+		return $template;
+	}
 
 	function getCategory($scsnr){
 		$oms = substr($scsnr,0,6);

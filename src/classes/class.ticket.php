@@ -17,7 +17,7 @@
 		function __construct($db_conn) {
 			$this->db_conn 	= $db_conn;
 			$this->locale 	= json_decode(file_get_contents(URL_ROOT.'Src/lang/'.APP_LANG.'.json'), true);
-			$this->wb_link 	= URL_ROOT."view/ticket/ticket_view/?";
+			$this->wb_link 	= URL_ROOT."view/ticket/ticket_view/?id=";
 			$this->user_email 		= htmlentities($_SESSION['db_user']['user_email'], ENT_QUOTES, 'UTF-8');
 			// create new TCPDF document
 			//$this->pdf 				= new MYPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);			
@@ -155,7 +155,11 @@
 		public function ticketCreateNew($post_val){	
 			$conn 	= $this->db_conn;
 			// Indien werkbon voor KPN zet de status op Open
-			$status = ($post_val['extern'] == 'KPN') ? "Open" : "Aangevraagd";
+			$status = ($post_val['extern'] == 'KPN') ? "Open" : "Open";
+			
+			if($post_val['totaal_uitval'] == 1){
+				$status = 'Totaal uitval';
+			}
 			
 			// Key moeten hetzelfde zijn als de kolom namen uit de database.
 			$query_data = array( 
@@ -179,6 +183,10 @@
 				'ticket_filename' 			=>	"WB_". $post_val['extern']. "_". $post_val['dienst'] . "_". $post_val['OMS'] . "_"  . date("dmy.Hi") . ".txt",
 				'ticket_comment' 			=>	ucfirst($post_val['comment'])
 			); 
+
+			if($post_val['totaal_uitval'] == 1){
+				$query_data['ticket_total_failure'] = 1;
+			}
 			
 			//if($post_val['extern'] == 'KPN' || $post_val['extern'] == 'ACCI') {
 			//	$query_data['ticket_customer_serviceid']		= $post_val['serviceid'];
@@ -234,9 +242,9 @@
 					'db' => "ticket_id", 			
 					'dt' => 'DT_RowClass',
 					'formatter' => function($d,$row){
-						if($row[7] == "Gesloten"){
+						if($row[10] == "Gesloten"){
 							$tr_row 		= "alert-box success";
-						} elseif($row[7] == "Totaal uitval"){
+						} elseif($row[10] == "Totaal uitval"){
 							$tr_row 		= "alert-box danger";
 						} elseif($row[7] == "Geannuleerd"){
 							$tr_row 		= "alert-box danger";
@@ -260,7 +268,7 @@
 					'db' => "ticket_nr", 			
 					'dt' => 0,
 					'formatter' => function($d,$row){
-						return "<a class='text-navy' href='".URL_ROOT."view/ticket/ticket_view/?id=".$d."' >" .$d." </a>";
+						return "<a class='text-navy' href='".$this->wb_link.$d."' >" .$d." </a>";
 					}
 				),
 				array ('db' => "ticket_customer_scsnr", 			'dt' => 1),

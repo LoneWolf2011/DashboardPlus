@@ -57,7 +57,8 @@
         <div class="modal-content animated bounceInRight">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                    <i class="fa fa-laptop modal-icon"></i>
+                    <!--<i class="fa fa-laptop modal-icon"></i>-->
+					<img src="<?= URL_ROOT_IMG.'DB+.png';?>" width="20%"/>
                     <h4 class="modal-title">Welkom bij DB+</h4>
 					<?php 	if(htmlentities($_SESSION['db_user']['user_new'], ENT_QUOTES, 'UTF-8') == 1) { ?>
 						<p class="font-bold">Dit is de eerste keer dat u inlogd.</p>

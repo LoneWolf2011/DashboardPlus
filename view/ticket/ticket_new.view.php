@@ -151,7 +151,10 @@
 									<div id="div_send_button" style="display:block"> 
 										<button class="btn btn-primary" name="save_button" value="Verzenden" id="send"><i class='fa fa-envelope fa-fw'></i> <span data-i18n="[html]tickets.buttons.send">Send</span></button>
 									</div>	
-										
+								<div id="div_send_totaaluitval" style="display:none"> 
+									<input type="text" id="totaal_uitval" name="totaal_uitval"/>
+									<button type="submit" class="btn btn-warning" name="save_button" value="Verzenden"><i class='fa fa-envelope fa-fw'></i> Verzenden</button>
+								</div>											
 								</div>
 							</div>
 	
@@ -171,7 +174,39 @@
 	?>	
 	
     <script>
-    $(document).ready(function() {
+	function Storing(val){
+		var div_send_totaaluitval 	= document.getElementById('div_send_totaaluitval'),
+			div_send_button			= document.getElementById('div_send_button'),
+			searchclear	 			= document.getElementById('searchclear');
+		
+		if(val=='Totale uitval')
+			$('#totaal_uitval').val(1),
+			div_send_totaaluitval.style.display='block',
+			div_send_button.style.display='none',
+			$('#header').removeClass('modal-header-info'),
+			$('#header').addClass('modal-header-warning');
+		else if (val=='anders')
+			document.getElementById('storing_wijzigen').innerHTML = '<input id="searchinput" type="type" name="storing" class="form-control" placeholder="Vul in...">',
+			searchclear.style.display='block',	
+			div_send_totaaluitval.style.display='none',	
+			div_send_button.style.display='block',			
+			$('#header').removeClass('modal-header-warning'),
+			$('#header').addClass('modal-header-info');
+		else 
+			div_send_totaaluitval.style.display='none',	
+			div_send_button.style.display='block',
+			$('#header').removeClass('modal-header-warning'),
+			$('#header').addClass('modal-header-info');
+	} 
+	$(document).ready(function() {
+	
+		$("#searchclear").click(function(){ 
+			var clear	= document.getElementById('searchclear');
+		
+			document.getElementById('storing_wijzigen').innerHTML = '<select name="storing" class="form-control" onchange="Storing(this.value)" ><option value="">Selecteer...</option>	<option value="Geen lijnsync">Geen lijnsync</option><option value="GPRS uitval">GPRS uitval</option>	<option value="RAM uitval">RAM uitval</option>	<option value="ACCU uitval">ACCU uitval</option>	<option value="Voeding uitval">Voeding uitval</option>	<option value="Router uitval">Router uitval</option>	<option value="NVR comm uitval">NVR comm uitval</option>	<option value="Totale uitval">Totale uitval</option><option value="anders">Anders</option>	</select></div>',
+			clear.style.display='none';
+		});
+	
 		var lang_code = $('html').attr('lang').toLowerCase()+'_'+$('html').attr('lang').toUpperCase();
 		var button;
 		$('button[name="save_button"]').click(function() {
@@ -398,6 +433,6 @@
 			});
 		};
 	}); 
-		
+	
 	});
 	</script>	

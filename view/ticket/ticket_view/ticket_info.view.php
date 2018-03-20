@@ -46,7 +46,7 @@
 			$tijd_text 			= "Aangevraagd";
 			$color 				= 'label-info';
 		} elseif($row['ticket_status'] == "Geannuleerd") {
-			$tijd_text 			= "Geannuleerd reden: ".$row['wb_sub_status'];
+			$tijd_text 			= "Geannuleerd reden: ".$row['ticket_sub_status'];
 			$color 				= 'label-danger';			
 		} elseif($row['ticket_status'] == "Totaal uitval" && $row['ticket_total_failure'] == 1) {
 			$tijd_text 			= "Totaal uitval";

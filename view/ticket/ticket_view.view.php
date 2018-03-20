@@ -83,16 +83,16 @@
 							<select class="form-control selectpicker"  name="status_update" >
 								<option value="<?=  $row['ticket_status'];?>"> <?=  $row['ticket_status'];?> </option>
 								<option data-i18n="[html]tickets.create.dropdown">  </option>
-								<optgroup label="Werkbon opties..."></option>
+								<optgroup label="Ticket opties..."></option>
 								<option value="Open">Open</option>
 								<option value="On hold">On hold</option>
 								<option value="Opnieuw geopend">Opnieuw openen</option>
 								<option value="Opnieuw verzonden">Opnieuw verzenden</option>									
-								<optgroup label="Werkbon acties..."></option>				
-								<option value="Geannuleerd">Werkbon annuleren</option>									
+								<optgroup label="Ticket acties..."></option>				
+								<option value="Geannuleerd">Ticket annuleren</option>									
 								<!--<option value="Escaleren">Werkbon escaleren</option>-->									
-								<option value="Doorzetten">Werkbon doorsturen</option>	
-								<option value="Gesloten">Werkbon sluiten</option>				
+								<option value="Doorzetten">Ticket doorsturen</option>	
+								<option value="Gesloten">Ticket sluiten</option>				
 							</select>
 						</div>
 						
@@ -112,8 +112,8 @@
 									<option value="<?=  $row['ticket_sub_status'];?>"> <?=  $row['ticket_sub_status'];?> </option>
 									<optgroup label="Eterne partijen..."></option>
 									<option value="Storing hersteld">Storing hersteld</option>
-									<option value="Werkbon onnodig">Werkbon onnodig</option>			
-									<option value="Werkbon foutief">Werkbon foutief</option>			
+									<option value="Ticket onnodig">Ticket onnodig</option>			
+									<option value="Ticket foutief">Ticket foutief</option>			
 								</select>
 							</div>
 						</div>			
@@ -388,7 +388,7 @@
 		});		
 	
 		$('.chat-discussion').slimScroll({
-			height: '300px',
+			height: '500px',
 			railOpacity: 0.4,
 			wheelStep: 10
 		});	
