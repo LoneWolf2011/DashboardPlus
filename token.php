@@ -41,9 +41,9 @@
 
     <div class="middle-box text-center loginscreen animated fadeInDown ">
         <div class="wrapper wrapper-content">
-            <div>
-                <h1 class="logo-name">DB+</h1>
-            </div>
+		
+                <!--<h1 class="logo-name">DB+</h1>-->
+                <h1 class="logo-name"><img src="<?= URL_ROOT_IMG.'DB+.png';?>" width="70%"></img></h1>
 				<h3 data-i18n="[html]tokenmsg.welcome">Welcome to DB+</h3>
 				<p data-i18n="[html]tokenmsg.text">An improved experience for managing RMS and SCS.</p>
 

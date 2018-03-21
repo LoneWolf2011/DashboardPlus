@@ -206,7 +206,7 @@
 								</div>
 							</div>
 						</div>		
-						<script async defer src="https://maps.googleapis.com/maps/api/js?key=<?= GOOGLE_API;?>"></script>
+						<script async defer src="https://maps.googleapis.com/maps/api/js?sensor=false&key=<?= GOOGLE_API;?>"></script>
 						<!--<script async defer src="Z:\google.js?sensor=false&key=<?= GOOGLE_API;?>"></script>-->
 
 						<div class="google-map" id="map" style="height:600px;"></div>

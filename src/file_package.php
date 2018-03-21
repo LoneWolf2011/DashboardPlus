@@ -24,6 +24,7 @@ define('ROOT_FILE', array(
 	// Libs
 	'LIBS'			=> array (	
 		'phpmailer' 		=> '/Mdb/Src/libs/PHPMailer/PHPMailerAutoload.php',
+		'purifier' 			=> '/Mdb/Src/libs/HTMLpurifier/HTMLPurifier.auto.php',
 		'tcpdf' 			=> '/Mdb/Src/libs/TCPDF/tcpdf.php',
 	),
 	
@@ -36,6 +37,7 @@ define('ROOT_FILE', array(
 	// Classes
 	'CLASS'			=> array (
 		'safemysql' 		=> '/Mdb/Src/Classes/class.safemysql.php',
+		'csrf' 				=> '/Mdb/Src/Classes/class.csrf.php',
 		'ssp_class' 		=> '/Mdb/Src/Classes/class.datatable.ssp.php',
 		'google' 			=> '/Mdb/Src/Classes/class.googleHelper.php',
 		'login' 			=> '/Mdb/Src/Classes/class.login.php',

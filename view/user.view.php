@@ -85,7 +85,9 @@
 											</select>
 										</div>							
 									</div>
-									<input type="text" class="form-control hidden"  name="user_id" value="<?= @$row['user_id'];?>" >										
+									<input type="text" class="form-control hidden"  name="user_id" value="<?= @$row['user_id'];?>" >
+									<input type="hidden" name="csrf" value="<?= htmlspecialchars($_SESSION['db_token'], ENT_QUOTES, 'UTF-8');?>">
+									
 									<div class="col-md-12">
 										<div class="form-group">
 											<button class="btn btn-success" name="save_button" ><i class='fa fa-save fa-fw'></i> <span>Update</span></button>	
@@ -136,8 +138,10 @@
 												<option value="1">Admin</option>
 											</select>
 										</div>							
-									</div>							
-	
+									</div>	
+									
+									<input type="hidden" name="csrf" value="<?= htmlspecialchars($_SESSION['db_token'], ENT_QUOTES, 'UTF-8');?>">
+									
 									<div class="col-md-12">
 										<div class="form-group">
 											<button class="btn btn-primary" name="save_button" ><i class='fa fa-save fa-fw'></i> <span>Create</span></button>	
@@ -169,6 +173,7 @@
 		$('#datatable').on('click', '#delete', function(){
 			var id =$(this).attr('value');
 			var user_email =$(this).attr('rel');
+			var csrf_token =$('input[name="csrf"]').attr('value');
 			
 			swal({
 				html:true,
@@ -183,7 +188,7 @@
 				$.ajax({
                     type: "post",
                     url: "/mdb/Src/controllers/user.controller.php?delete",
-                    data: "user_id="+id,
+                    data: { user_id : id, csrf : csrf_token },
                     success: function(data){
 						swal({
 							html:true, 

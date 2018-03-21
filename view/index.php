@@ -101,6 +101,9 @@
 						<div class="form-group">
 							<label class="control-label col-md-12 col-sm-12 col-xs-12" style="font-size: 12px;">(Vul je huidige wachtwoord in om de wijziging van email door te voeren)</label>
 						</div>
+						
+						<input type="hidden" name="csrf" value="<?= htmlspecialchars($_SESSION['db_token'], ENT_QUOTES, 'UTF-8');?>">
+
 						<div class="form-group" style="float: right;">
 							<button type="button" class="btn btn-primary" data-dismiss="modal">Sluiten</button>
 							<button type="submit" class="btn btn-success" name="update_account" value="Update Account" >Update</button>

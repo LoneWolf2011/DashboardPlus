@@ -50,7 +50,11 @@
 				<p data-i18n="[html]loginscreen.subtext">Login in. To see it in action.</p>
 
 		<?php 
-			if(isset($_GET['lck'])){
+			if(isset($_GET['fail'])){
+					$search = '<div class="alert alert-danger" >
+									<font color="red"><b data-i18n="[html]error_msg.die.label">Account locked</b></font><br><span data-i18n="[html]error_msg.die.msg"> for 2 hours.</span>
+								</div>';					
+			} elseif(isset($_GET['lck'])){
 					$search = '<div class="alert alert-danger" >
 									<font color="red"><b data-i18n="[html]loginmsg.lck.label">Account locked</b></font><br><span data-i18n="[html]loginmsg.lck.msg"> for 2 hours.</span>
 								</div>';		

@@ -4,16 +4,19 @@
 		protected $succesMessage;
 		protected $env_file = ROOT_PATH.'/Mdb/env.ini';
 		protected $msg;
+		protected $purifier = null;
 		
 		function __construct($db_conn) {
-			$this->db_conn 	= $db_conn;
-			$this->locale 	= json_decode(file_get_contents(URL_ROOT.'Src/lang/'.APP_LANG.'.json'), true);
+			$this->db_conn 		= $db_conn;
+			$this->locale 		= json_decode(file_get_contents(URL_ROOT.'Src/lang/'.APP_LANG.'.json'), true);
+			$this->auth_user 	= @htmlentities($_SESSION['db_user']['user_email'], ENT_QUOTES, 'UTF-8');
+			$this->purifier 	= new HTMLPurifier(HTMLPurifier_Config::createDefault());
 		}	
 
 		public function processLogin($conn,$post_val){
 		
 			$submitted_email 	= ''; 
-			$email 				= strtolower($post_val['email']);    
+			$cleaned_email 		= strtolower($this->purifier->purify($post_val['email']));    
 			
 			if(!empty($post_val['login']) && hash_equals($post_val['csrf'],$_SESSION['db_token'])) 
 			{ 
@@ -30,7 +33,7 @@
 				
 				// The parameter values 
 				$query_params = array( 
-					':user_email' => $email
+					':user_email' => $cleaned_email
 				); 
 				
 				try 
@@ -44,8 +47,7 @@
 		
 					$msg = 'Regel: ' . $ex->getLine().' Bestand: ' . $ex->getFile().' Error: ' . $ex->getMessage();
 					logToFile(__FILE__,1,$msg);
-					
-					die("Error logged to file!"); 
+					die(header("Location: ../../?fail")); 
 				} 
 				
 				$login_ok = false; 
@@ -60,7 +62,7 @@
 						logToFile(__FILE__,1,$msg);				
 						// Indien true, account geblokeerd.
 						// TO DO: Stuur email met password reset of laat admins login attempts verwijderen.
-						die(header("Location: ../../?lck&id=".$email));
+						die(header("Location: ../../?lck&id=".$cleaned_email));
 					} else { 		
 						// Indien account status Blocked is log de inlog poging en stop het script.
 						$check_status = $row['user_status'];
@@ -69,17 +71,17 @@
 						
 						if($check_status === "Blocked"){
 							// Log to file
-							$msg = "Login attempt. Blocked user: ".$email;
+							$msg = "Login attempt. Blocked user: ".$cleaned_email;
 							logToFile(__FILE__,2,$msg);
 							
-							die(header("Location: ../../?blc&id=".$email));
+							die(header("Location: ../../?blc&id=".$cleaned_email));
 						// Check of APP_ENV op OTAP staat en of user DEV role heeft.
 						} elseif(APP_ENV == "OTAP" && $check_dev == FALSE) {	
 							// Log to file
-							$msg = "Login attempt. Non DEV user: ".$email;
+							$msg = "Login attempt. Non DEV user: ".$cleaned_email;
 							logToFile(__FILE__,2,$msg);
 							
-							die(header("Location: ../../?dev&id=".$email));				
+							die(header("Location: ../../?dev&id=".$cleaned_email));				
 						} else {
 							if(password_verify($post_val['password'], $row['user_password'])){ 
 								// Indien de passwords overeen komen zet $login_ok naar TRUE 
@@ -103,14 +105,15 @@
 					
 					// Verwijder alle login attempts van de user.
 					$id = $row['user_id'];
-					$conn->query("DELETE FROM app_users_login_attempts WHERE user_id = $id");			
+					$this->db_conn->query("DELETE FROM app_users_login_attempts WHERE user_id =?i",$id);			
 					
 					// Redirect the user to the private members-only page. 
-					die($this->redirectLogin());//header("Location: ../login/redirect.php"));
+					die($this->redirectLogin());
+					//header("Location: ../login/redirect.php"));
 				} else { 
 					
 					// Log to file
-					$msg = "Login failed. User: ".$email;
+					$msg = "Login failed. User: ".$cleaned_email;
 					logToFile(__FILE__,2,$msg);
 		
 					// Save login attempt in database
@@ -120,18 +123,24 @@
 					$now = time();
 					$date_time_now = date("Y-m-d H:i:s");
 					$id = $row['user_id'];
-					$conn->query("INSERT INTO app_users_login_attempts(user_id, ip_adres, ip_port, time, date_time)
-					VALUES ('$id', '$ip_adres', '$ip_port', '$now', '$date_time_now')");
 					
-					die(header("Location: ../../?id=".$email));  
+					$query_arr = array(
+						'user_id' => $id,
+						'ip_adres' => $ip_adres,
+						'ip_port' => $ip_port,
+						'time' => $now,
+						'date_time' => $date_time_now
+					);
+					$this->db_conn->query("INSERT INTO app_users_login_attempts SET ?u", $query_arr);
+					
+					die(header("Location: ../../?id=".$cleaned_email));  
 		
 				} 
 			} else {
 				// Log to file
-				$msg = "CSRF token invalid during logout for user: ". $post_val['email'];
+				$msg = "CSRF token invalid during logout for user: ". $cleaned_email;
 				logToFile(__FILE__,0,$msg);
-				header("Location: ".URL_ROOT);
-				die("Redirecting to: ".URL_ROOT);			
+				die(header("Location: ../../?fail"));			
 			}
 			
 			// At the top of the page we check to see whether the user is logged in or not 
@@ -139,11 +148,7 @@
 			{ 
 				//header("Location: ../login/redirect.php"); 
 				$this->redirectLogin();
-			} 
-			
-			// Everything below this point in the file is secured by the login system 
-
-			
+			}
 		}
 
 		public function processLogOut($csrf){
@@ -161,7 +166,7 @@
 				// session variables and without destroying the session.
 				
 				// Log to file
-				$msg = "Logout success. User: ".$_SESSION['db_user']['user_email'];
+				$msg = "Logout success. User: ".$this->auth_user;
 				logToFile(__FILE__,0,$msg);
 						
 				unset($_SESSION['db_user']);
@@ -185,14 +190,12 @@
 				
 				//$session->destroy($id);
 				// Whether we destroy the session or not, we redirect them to the login page
-				header("Location: ".URL_ROOT);
-				die("Redirecting to: ".URL_ROOT);
+				die(header("Location: ".URL_ROOT));
 			} else {
 				// Log to file
-				$msg = "CSRF token invalid during logout for user: ". $_SESSION['db_user']['user_email'];
+				$msg = "CSRF token invalid during logout for user: ". $this->auth_user;
 				logToFile(__FILE__,0,$msg);
-				header("Location: ".URL_ROOT);
-				die("Redirecting to: ".URL_ROOT);		
+				die(header("Location: ../../?fail"));		
 			}			
 		}
 		
@@ -298,15 +301,14 @@
 				// Log to file
 				$msg = "CSRF token invalid during install for user: ". $_POST['admin_email'];
 				logToFile(__FILE__,0,$msg);
-				header("Location: ".URL_ROOT."install.php");
-				die("Redirecting to: ".URL_ROOT);			
+				die(header("Location: ../../?fail"));			
 			}
 
 		}
 
 		public function processGenToken($conn,$post_val){
 			
-			$cleaned_ini 	= $_POST['email']; 
+			$cleaned_email 	= strtolower($this->purifier->purify($post_val['email'])); 
 			
 			if(!empty($_POST['request']) && hash_equals($_POST['csrf'],$_SESSION['db_token']))
 			{
@@ -324,7 +326,7 @@
 				"; 
 				
 				$query_params = array( 
-					':user_email' => $cleaned_ini 
+					':user_email' => $cleaned_email 
 				); 
 				
 				try 
@@ -336,7 +338,7 @@
 				{ 
 					$msg = 'Regel: ' . $ex->getLine().' Bestand: ' . $ex->getFile().' Error: ' . $ex->getMessage();
 					logToFile(__FILE__,1,$msg);
-					die($msg); 
+					die(header("Location: ../../?fail")); 
 				} 
 		
 				$user_auth = false; 
@@ -345,7 +347,7 @@
 				if($row){ 
 					$user_auth = true; 
 				} else {
-					die(header("Location: ../../?uknw=".$cleaned_ini));			
+					die(header("Location: ../../?uknw=".$cleaned_email));			
 				}
 				
 				if($user_auth) {  
@@ -378,7 +380,7 @@
 					"; 
 					
 					$query_params = array( 
-						':user_email' 	=> $cleaned_ini, 
+						':user_email' 	=> $cleaned_email, 
 						':date_time' 	=> time(),
 						':date_request' => date("Y-m-d H:i:s"), 
 						':token_hash' 	=> $token_hash,
@@ -391,7 +393,7 @@
 						$result = $stmt->execute($query_params);
 						
 						// Log to file
-						$msg = "Token request voor user ". $cleaned_ini." aangevraagd";
+						$msg = "Token request voor user ". $cleaned_email." aangevraagd";
 						logToFile(__FILE__,0,$msg);			
 					} 
 					catch(PDOException $ex) 
@@ -416,7 +418,7 @@
 					$mail -> Port = SMTP_PORT;
 					$mail -> AddAddress($row['user_email']);	
 					$mail -> SetFrom(APP_EMAIL);
-					$mail -> Subject = "DB+ wachtwoord token (1/2)";
+					$mail -> Subject = APP_TITLE ." wachtwoord token (1/2)";
 					$mail -> MsgHTML(setEmailTemplate($email_template, 'email.gen_token.php'));
 					$mail -> WordWrap = 80;
 					
@@ -427,19 +429,18 @@
 					}			
 					
 				} else {
-					die(header("Location: ../../?uknw=".$cleaned_ini));			
+					die(header("Location: ../../?uknw=".$cleaned_email));			
 				}
 			} else {
 				// Log to file
-				$msg = "CSRF token invalid during token generate for user: ". $_POST['email'];
+				$msg = "CSRF token invalid during token generate for user: ". $cleaned_email;
 				logToFile(__FILE__,0,$msg);
-				header("Location: ".URL_ROOT);
-				die("Redirecting to: ".URL_ROOT);			
+				die(header("Location: ../../?fail"));		
 			}			
 		}
 
 		public function processPassReset($conn,$post_val){
-			$cleaned_ini 	= $_POST['email']; 
+			$cleaned_email 	= strtolower($this->purifier->purify($post_val['email']));
 			
 			if(!empty($_POST['recover']) && hash_equals($_POST['csrf'],$_SESSION['db_token'])) 
 			{ 
@@ -455,7 +456,7 @@
 					LIMIT 1"; 
 				
 				$query_params = array( 
-					':user_email' => $cleaned_ini 
+					':user_email' => $cleaned_email 
 				); 
 				
 				try 
@@ -467,7 +468,7 @@
 				{ 
 					$msg = 'Regel: ' . $ex->getLine().' Bestand: ' . $ex->getFile().' Error: ' . $ex->getMessage();
 					logToFile(__FILE__,1,$msg);
-					die($msg); 
+					die(header("Location: ../../?fail")); 
 				} 
 		
 				$token_auth = FALSE; 
@@ -482,10 +483,10 @@
 					// dan is de token vervallen.
 					if ($_SERVER["REQUEST_TIME"] - $row['user_date_time'] > $delta) {
 						// Log to file
-						$msg = "Token vervallen voor user ". $cleaned_ini;
+						$msg = "Token vervallen voor user ". $cleaned_email;
 						logToFile(__FILE__,0,$msg);	
 						// Indien token vervallen is verwijder uit database
-						$conn->query("DELETE FROM app_users_tokens WHERE user_email = '$cleaned_ini'");
+						$this->db_conn->query("DELETE FROM app_users_tokens WHERE user_email = ?s ",$cleaned_email);
 						die(header("Location: ../../?tok=exp"));	
 					} else {
 						// Anders hash de token
@@ -494,7 +495,7 @@
 							$check_token_hash = hash('sha256', $check_token_hash . $row['user_token_salt']); 
 						} 			
 						// Komt de gehashde token overeen met de hash in de database dan is auth ok
-						if($check_token_hash === $row['user_token_hash']){
+						if(hash_equals($check_token_hash, $row['user_token_hash'])){
 							$token_auth = TRUE; 
 						}
 					}
@@ -508,7 +509,6 @@
 					// Generate random password
 					$gen_password = genPassSeed(2);
 					$hash = password_hash($gen_password, PASSWORD_DEFAULT);
-					$new = 1;
 					
 					$query_user = " 
 						SELECT 
@@ -531,18 +531,18 @@
 					
 					$new_user = 1;
 					
-					$conn->query("DELETE FROM app_users_tokens WHERE user_email = '$cleaned_ini'");
-					$conn->query("UPDATE app_users SET user_password = '$hash', user_new = '$new' WHERE user_id = '". $row['user_id']."'");
+					$this->db_conn->query("DELETE FROM app_users_tokens WHERE user_email = ?s", $cleaned_email);
+					$this->db_conn->query("UPDATE app_users SET user_password = ?s, user_new = ?i WHERE user_id = ?i",$hash, $new_user,$row['user_id']);
 					
 					// Log to file
-					$msg = "Token valid. Nieuw wachtwoord voor user ". $cleaned_ini." verstuurd";
+					$msg = "Token valid. Nieuw wachtwoord voor user ". $cleaned_email." verstuurd";
 					logToFile(__FILE__,0,$msg);			
 				} 
 				catch(PDOException $ex) 
 				{ 
 					$msg = 'Regel: ' . $ex->getLine().' Bestand: ' . $ex->getFile().' Error: ' . $ex->getMessage();
 					logToFile(__FILE__,1,$msg);
-					die("Error logged to file!"); 
+					die(header("Location: ../../?fail")); 
 				} 
 					
 					// Enkel voor testing
@@ -550,7 +550,7 @@
 
 					$email_template = array(
 						'user_name' 	=> $row['user_name']." ".$row['user_last_name'],
-						'link' 			=> '<a class="link" href="'.URL_ROOT.'?ini='.$cleaned_ini.'">DB+</a>',
+						'link' 			=> '<a class="link" href="'.URL_ROOT.'?ini='.$cleaned_email.'">DB+</a>',
 						'gen_password' 	=> $gen_password,
 					);
 										
@@ -560,12 +560,12 @@
 					$mail -> Port = SMTP_PORT;
 					$mail -> AddAddress($row['user_email']);	
 					$mail -> SetFrom(APP_EMAIL);
-					$mail -> Subject = "DB+ nieuw wachtwoord (2/2)";
+					$mail -> Subject = APP_TITLE." nieuw wachtwoord (2/2)";
 					$mail -> MsgHTML(setEmailTemplate($email_template, 'email.password_reset.php'));
 					$mail -> WordWrap = 80;
 					
 					if($mail->Send()) {	
-						die(header("Location: ../../?res=suc&ini=".$cleaned_ini));
+						die(header("Location: ../../?res=suc&ini=".$cleaned_email));
 					} else {                     
 						die(header("Location: ../../?res=err"));
 					}	
@@ -575,10 +575,9 @@
 				}
 			} else {
 				// Log to file
-				$msg = "CSRF token invalid during password reset for user: ". $_POST['email'];
+				$msg = "CSRF token invalid during password reset for user: ". $cleaned_email;
 				logToFile(__FILE__,0,$msg);
-				header("Location: ".URL_ROOT);
-				die("Redirecting to: ".URL_ROOT);			
+				die(header("Location: ../../?fail"));			
 			}			
 		}
 		
@@ -592,7 +591,7 @@
 				
 				// Remember that this die statement is absolutely critical.  Without it, 
 				// people can view your members-only content without logging in. 
-				die("Redirecting to login.php"); 
+				die(header("Location: ".URL_ROOT)); 
 			} 
 		
 			//Update Lastaccess kolom in users database
@@ -631,7 +630,7 @@
 				'user_name' 		=>	'Root',
 				'user_last_name' 	=>	'Admin',
 				'user_password' 	=>	$hash,		
-				'user_email' 		=>	$post_val['admin_email'],			
+				'user_email' 		=>	strtolower($post_val['admin_email']),			
 				'user_last_access' 	=>	date('Y-m-d H:i:s'),		
 				'user_role' 		=>	1,		
 			); 	

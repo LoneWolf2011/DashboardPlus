@@ -140,6 +140,7 @@
 						<input type="text" hidden name="ID" value="<?=  $row['ticket_id']; ?>">
 						<input type="text" hidden name="wb_id" value="<?=  $row['ticket_nr']; ?>">
 						<input type="text" hidden name="totaal_uitval" value="<?=  $row['ticket_total_failure'];?>"/>
+						<input type="hidden" name="csrf" value="<?= htmlspecialchars($_SESSION['db_token'], ENT_QUOTES, 'UTF-8');?>">	
 						
 							<button class="btn btn-primary" name="save_button" value="Opslaan" id="send"><i class='fa fa-save fa-fw'></i> <span data-i18n="[html]tickets.buttons.update">Update</span></button>
 							<button class="btn btn-success hidden" name="save_button" value="VerzendenOpnieuw" id="btn_send_opnieuw"  ><i class="fa fa-envelope"></i> Opnieuw verzenden</button>

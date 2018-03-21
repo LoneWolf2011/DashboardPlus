@@ -39,7 +39,8 @@
     <div class="middle-box loginscreen animated fadeInDown ">
         <div class="wrapper wrapper-content">
             <div class="text-center">
-                <h1 class="logo-name">DB+</h1>      
+                <!--<h1 class="logo-name">DB+</h1>-->
+                <h1 class="logo-name"><img src="<?= URL_ROOT_IMG.'DB+.png';?>" width="70%"></img></h1>      
 				<h3 data-i18n="[html]installscreen.welcome">Welcome to DB+</h3>
 				<p data-i18n="[html]installscreen.text">This is your first time.</p>
 				<p data-i18n="[html]installscreen.subtext">Please take the time to fill in the below details.</p>

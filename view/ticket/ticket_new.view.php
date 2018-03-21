@@ -1,31 +1,3 @@
- <?php
-		$db_conn = new SafeMySQL(SCS_DB_CONN);
- 			$result = $db_conn->query("SELECT
-					scs_account_address.SCS_Account_Nmbr,
-					scs_account_address.SCS_Account_Address_Name,
-					scs_account_address.SCS_Account_Address_Address,
-					scs_account_address.SCS_Account_Address_Zip,
-					scs_account_address.SCS_Account_Address_City,
-					scs_account_status.SCS_Account_Stat_Connection_Path,
-					scs_account_status.SCS_Account_Stat_Active_DateTime,
-					scs_account_status.SCS_Account_Stat_Last_Signal,
-					scs_account_info.SCS_Account_CallerID_1,
-					scs_account_info.SCS_Account_Receiver_1,
-					scs_account_info.SCS_Account_Surveilance_Code,
-					scs_account_info.SCS_Account_All_Okay_Word,
-					scs_account_info.SCS_Account_serial,
-					scs_account_info.SCS_account_SIM_card
-				FROM scs_account_address
-				INNER JOIN scs_account_status ON scs_account_address.SCS_Account_Nmbr = scs_account_status.SCS_Account_Nmbr
-				LEFT JOIN scs_account_info ON scs_account_status.SCS_Account_Nmbr = scs_account_info.SCS_Account_Nmbr
-				WHERE scs_account_address.SCS_Account_Address_Type = 2
-				AND scs_account_status.SCS_Account_Stat_Active = 1
-				AND scs_account_address.SCS_Account_Nmbr LIKE '%0101001051%'");
-			
-			while ($line = $db_conn->fetch($result)) {			
-				$row = $line;
-			};
-	?>
 
     <div class="wrapper wrapper-content animated fadeInRight">
 		<div class="row">
@@ -143,7 +115,9 @@
 									<textarea name="comment" class="resizable_textarea form-control"  data-i18n="[placeholder]tickets.create.placeholder"></textarea>
 								</div>								
 							</div>
-									
+							
+							<input type="hidden" name="csrf" value="<?= htmlspecialchars($_SESSION['db_token'], ENT_QUOTES, 'UTF-8');?>">
+							
 							<div class="col-md-12">
 								<div class="ln_solid"></div>
 								<div class="form-group">

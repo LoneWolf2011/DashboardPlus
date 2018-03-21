@@ -95,8 +95,8 @@
 	// Libs
 	foreach(ROOT_FILE['LIBS'] as $libs){
 		require ROOT_PATH.$libs;
-	}	
-	
+	}
+
 	// Class files
 	foreach(ROOT_FILE['CLASS'] as $class){
 		require ROOT_PATH.$class;

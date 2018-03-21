@@ -1,0 +1,69 @@
+USE SSL ENQRYPTION!!!!!!!!!!!!!!!!!!!!!
+
+* APACHE 2.2.0 to 2.2.21 flaw in default 400 error
+Sol: Custom error pages
+
+* SSL compression
+Sol: disable SSL compression.
+
+* expose_php = on in php.ini
+Sol: expose_php=Off
+
+* Web Server Uses Plain-Text Form Based Authentication
+Sol: Ensure that data sent via HTML login forms is encrypted before being sent from the client to the host.
+
+* HTTP TRACE / TRACK Methods Enabled
+Sol: Disable these methods in your web server's configuration file.
+
+* Listing of Scripts in the scripts Directory
+Sol: Set a more restrictive rule on your server to prevent directory listing of the scripts directory
+
+* SSL Certificate - Subject Common Name Does Not Match Server FQDN
+Sol: Please install a server certificate whose Subject commonName or subjectAltName matches the server FQDN.
+
+* Web Directories Listable Vulnerability
+Sol: Disable directory browsing or listing for all directories.
+
+* Web Server HTTP Trace/Track Method Support Cross-Site Tracing Vulnerability
+Sol: Apache: Recent Apache versions have a Rewrite module that allows HTTP requests to be rewritten or handled in a specific way. Compile the
+Apache server with the mod_rewrite module. You might need to uncomment the 'AddModule' and 'LoadModule' directives in the httpd.conf
+configuration file. Add the following lines for each virtualhost in your configuration file (Please note that, by default, Rewrite configurations are not
+inherited. This means that you need to have Rewrite directives for each virtual host in which you wish to use it):
+
+<IfModule mod_rewrite.c>
+RewriteEngine on
+RewriteCond %{REQUEST_METHOD} ^TRACE
+RewriteRule .* - [F]
+</IfModule>
+
+With this configuration, Apache catches all TRACE requests, and replies with a page reporting the request as forbidden. None of the original
+request's contents are echoed back.
+
+A slightly tighter fix is to use:
+
+<IfModule mod_rewrite.c>
+RewriteEngine on
+RewriteCond %{REQUEST_METHOD} !^(GET|POST|HEAD)$
+RewriteRule .* - [F]
+</IfModule>
+
+Please note that RewriteEngine can be processor intensive and may impact the web server performance. The trace method can also be controlled
+Scan Results page 11
+by use of the TraceEnable directive.
+In the httpd.conf add or modify:
+
+TraceEnable Off
+
+* Session-Fixation Social Engineered Session Hijacking
+Sol: The PHP package itself provides a "php.ini" based global configuration option called "session.use_only_cookies" (introduced in PHP Version 4.3.0).
+This is disabled by default for backward compatibility. When enabled, this allows PHP session IDs to be set only via HTTP cookies. This makes 
+GET/POST based hijack attacks possible only when there is significant activity by an unsuspecting user.
+
+* CRSF Forgery
+Sol: Add CRSF token to forms
+
+* XSS attacks
+Sol: Make use of XSS library
+
+* SQL injections
+Sol: Make use of prepared statements

@@ -15,6 +15,16 @@
 		"230_err": "230v uitval",
 		"multi_err": "Meerdere uitvallen"
 	},
+	"error_msg":{
+		"die":{
+			"label":"Er ging iets goed mis",
+			"msg":"Check de log files!"		
+		},
+		"csrf":{
+			"label":"CSRF token is niet geldig",
+			"msg":"Controleer de browser URL en refresh de pagina!"
+		}		
+	},
 	"installscreen":{
 		"welcome": "Welkom bij DB +",
 		"text": "Dit is je eerste keer.",
@@ -115,26 +125,6 @@
 		"res":{
 			"suc": "Controleer uw initialen of wachtwoord.",
 			"err": "Controleer uw initialen of wachtwoord."
-		},
-		"acc_update":{
-			"msg":{
-				"err_email":{
-					"label": "Er ging iets mis",
-					"text": "Dit is geen juist email adres"
-				},
-				"err_email_in_use":{
-					"label": "Er ging iets mis",
-					"text": "Dit email adres is al in gebruik"
-				},				
-				"suc":{
-					"label": "Succes",
-					"text": "User account is geupdatet"
-				},
-				"err":{
-					"label": "Er ging iets mis",
-					"text": "Probeer opnieuw of neem contact op met de administrator"
-				}				
-			}		
 		}		
 	},
 	"home":{
@@ -273,6 +263,26 @@
 		"small":"Even geduld aub"
 	},
 	"user":{
+		"acc_update":{
+			"msg":{
+				"err_email":{
+					"label": "Er ging iets mis",
+					"text": "Dit is geen juist email adres"
+				},
+				"err_email_in_use":{
+					"label": "Er ging iets mis",
+					"text": "Dit email adres is al in gebruik"
+				},				
+				"suc":{
+					"label": "Succes",
+					"text": "User account is geupdatet"
+				},
+				"err":{
+					"label": "Er ging iets mis",
+					"text": "Probeer opnieuw of neem contact op met de administrator"
+				}				
+			}		
+		},	
 		"h1":"Welkom bij het configuratiescherm",
 		"subtxt":"Een verbeterde ervaring voor het beheer van RMS en SCS.",
 		"small":"Even geduld aub"

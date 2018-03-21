@@ -2,30 +2,22 @@
 	
 	class Ticket {
 		protected $db_conn;
-		protected $db_conn_scs;
-		protected $user_enail;
-		protected $email_from;
-		protected $email_ss_to;		
-		protected $email_plan_to;
-		protected $email_plan_cc;
-		protected $link;
 		protected $pdf;
-		//protected $mailer;
 		protected $succesMessage;
-		protected $env = APP_ENV;
 		
 		function __construct($db_conn) {
-			$this->db_conn 	= $db_conn;
-			$this->locale 	= json_decode(file_get_contents(URL_ROOT.'Src/lang/'.APP_LANG.'.json'), true);
-			$this->wb_link 	= URL_ROOT."view/ticket/ticket_view/?id=";
-			$this->user_email 		= htmlentities($_SESSION['db_user']['user_email'], ENT_QUOTES, 'UTF-8');
+			$this->db_conn 		= $db_conn;
+			$this->locale 		= json_decode(file_get_contents(URL_ROOT.'Src/lang/'.APP_LANG.'.json'), true);
+			$this->wb_link 		= URL_ROOT."view/ticket/ticket_view/?id=";
+			$this->auth_user 	= htmlentities($_SESSION['db_user']['user_email'], ENT_QUOTES, 'UTF-8');
 			// create new TCPDF document
 			//$this->pdf 				= new MYPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);			
 			//$this->mailer 			= new PHPmailer();					
 		}
 
 		public function ticketSaveUpdate($post_val){
-						
+			$lang = $this->locale;
+				
 			$conn 	= $this->db_conn;
 			$row_wb = $this->getTicketRow($conn, $post_val['ID']);
 			
@@ -33,10 +25,10 @@
 			// Roep status text functie aan; regelt de sub-labels in het user commentaar
 			$status_text = $this->setStatusText($post_val,$row_wb);	
 			
-
+	
 				//Indien status geloten is worden de initialen van de sessie meegestuurd  
 				if($post_val['status_update'] == "Gesloten") {
-					$gesloten_door	= $this->user_email;
+					$gesloten_door	= $this->auth_user;
 					$gesloten		= 1;
 					$date_gesloten 	= date("Y-m-d H:i:s");	
 				} else {
@@ -48,7 +40,7 @@
 				$update_txt_query = array(
 					'ticket_nr' 				=> $row_wb['ticket_nr'],
 					'ticket_update_text_label' 	=> $status_text,
-					'ticket_update_by' 			=> $this->user_email,
+					'ticket_update_by' 			=> $this->auth_user,
 					'ticket_update_date' 		=> date("Y-m-d H:i:s"),
 					'ticket_update_text' 		=> strip_tags(ucfirst($post_val['extra_comment_update']))			
 				);	
@@ -58,7 +50,7 @@
 				// Key moeten hetzelfde zijn als de kolom namen uit de database.
 				$query_data = array( 
 					'ticket_changed_date' 		=>  date("Y-m-d H:i:s"), 
-					'ticket_changed_by' 		=>	$this->user_email,
+					'ticket_changed_by' 		=>	$this->auth_user,
 					'ticket_closed_date' 		=>	$date_gesloten,
 					'ticket_closed_by' 			=>	$gesloten_door,
 					'ticket_closed' 			=>	$gesloten,
@@ -127,9 +119,9 @@
 						// TO DO: Indien er toch opgeslagen wordt geef error weer.
 						die();
 					}
-
-				}
 	
+				}
+		
 				
 			if($post_val['status_update'] == "Geannuleerd"){
 				// Send mail naar aanvrager
@@ -144,15 +136,15 @@
 			$response_array['type'] 	= $msg_type;				
 			$response_array['title'] 	= $msg_title;				
 			$response_array['body'] 	= $this->succesMessage;
-						
-			// Log to file functie
 			logToFile(__FILE__,$err_lvl,$msg);
-			
+	
 			// Return JSON array
 			jsonArr($response_array);			
 		}
 		
-		public function ticketCreateNew($post_val){	
+		public function ticketCreateNew($post_val){
+			$lang = $this->locale;
+			
 			$conn 	= $this->db_conn;
 			// Indien werkbon voor KPN zet de status op Open
 			$status = ($post_val['extern'] == 'KPN') ? "Open" : "Open";
@@ -165,7 +157,7 @@
 			$query_data = array( 
 				'ticket_customer_scs' 		=>  substr(($post_val['OMS']), -6), 
 				'ticket_customer_scsnr' 	=>	$post_val['OMS'],
-				'ticket_created_by' 		=>	$this->user_email,
+				'ticket_created_by' 		=>	$this->auth_user,
 				'ticket_extern' 			=>	$post_val['extern'],
 				'ticket_service' 			=>	ucfirst($post_val['dienst']),
 				'ticket_customer_region'	=>	$post_val['regio'],
@@ -183,7 +175,7 @@
 				'ticket_filename' 			=>	"WB_". $post_val['extern']. "_". $post_val['dienst'] . "_". $post_val['OMS'] . "_"  . date("dmy.Hi") . ".txt",
 				'ticket_comment' 			=>	ucfirst($post_val['comment'])
 			); 
-
+	
 			if($post_val['totaal_uitval'] == 1){
 				$query_data['ticket_total_failure'] = 1;
 			}
@@ -205,7 +197,7 @@
 			$wb_id		= "ASB-WB".$last_id;
 			
 			// Opslaan van het referentie nummer in de database
-			$conn->query("UPDATE app_customer_tickets SET ticket_nr = '".$wb_id."' WHERE ticket_id = '".$last_id."'");
+			$conn->query("UPDATE app_customer_tickets SET ticket_nr = ?s  WHERE ticket_id = ?i ",$wb_id,$last_id);
 			// Create txt file	
 			//$filename 	= $this->createTxtFile($post_val, $wb_id);
 			
@@ -228,9 +220,10 @@
 				//$response_array['href'] 	= URL_ROOT.'RMC/Werkbon/';
 			}
 			
-			logToFile(__FILE__,$err_lvl,$msg);	
+			logToFile(__FILE__,$err_lvl,$msg);
+
 			// Return JSON array
-			jsonArr($response_array);		
+			jsonArr($response_array);	
 		}
 			
 		public function getTable(){
@@ -445,6 +438,6 @@
 		}		
 	
 		protected function getTicketRow($db_conn, $post_id){
-			return $db_conn->getRow("SELECT * FROM app_customer_tickets WHERE ticket_id = ?s",$post_id);
+			return $db_conn->getRow("SELECT * FROM app_customer_tickets WHERE ticket_id = ?i",$post_id);
 		}
 	}

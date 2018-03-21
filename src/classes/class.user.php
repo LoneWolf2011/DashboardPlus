@@ -6,12 +6,15 @@
 		protected $msg;
 		
 		function __construct($db_conn) {
-			$this->db_conn 	= $db_conn;
-			$this->locale 	= json_decode(file_get_contents(URL_ROOT.'Src/lang/'.APP_LANG.'.json'), true);
+			$this->db_conn 		= $db_conn;
+			$this->locale 		= json_decode(file_get_contents(URL_ROOT.'Src/lang/'.APP_LANG.'.json'), true);
+			$this->auth_user 	= htmlentities($_SESSION['db_user']['user_email'], ENT_QUOTES, 'UTF-8');
 		}
 
 		public function newUser($post_val){
+			$lang = $this->locale;		
 			$conn 	= $this->db_conn;
+			
 			$check_email = $conn->getOne('SELECT user_email FROM app_users WHERE user_email = ?s',$post_val['user_email']);
 			if($check_email){
 				$response_array['type'] 	= 'warning';				
@@ -31,10 +34,10 @@
 				'user_password' 	=>	$hash,
 				'user_role' 		=>	$post_val['user_role']
 			); 
-
+	
 			if($conn->query("INSERT INTO app_users SET ?u", $query_data)) {
 				// Log to file
-				$msg = "Nieuwe user ".$post_val['user_email'] ." aangemaakt door ".htmlentities($_SESSION['db_user']['user_email'], ENT_QUOTES, 'UTF-8');
+				$msg = "Nieuwe user ".$post_val['user_email'] ." aangemaakt door ".$this->auth_user;
 				$err_lvl =0;
 				
 				$response_array['type'] 	= 'success';				
@@ -47,15 +50,19 @@
 				$response_array['type'] 	= 'error';	
 				$response_array['title'] 	= 'ERROR';	
 				$response_array['body'] 	= 'User niet aangemaakt';	
-
+	
 			}
 			
 			logToFile(__FILE__,$err_lvl,$msg);	
+			
+		
 			// Return JSON array
 			jsonArr($response_array);			
 		}
 		
 		public function updateUser($post_val){
+			$lang = $this->locale;
+			
 			$conn 	= $this->db_conn;
 					
 			$query_data = array( 
@@ -66,10 +73,10 @@
 				'user_role' 		=>	$post_val['user_role']
 			); 
 			
-	
+		
 			if($conn->query("UPDATE app_users SET ?u WHERE user_id = ?i", $query_data, $post_val['user_id'])) {
 				// Log to file
-				$msg = "User ".$post_val['user_email'] ." geupdatet door ".htmlentities($_SESSION['db_user']['user_email'], ENT_QUOTES, 'UTF-8');
+				$msg = "User ".$post_val['user_email'] ." geupdatet door ".$this->auth_user;
 				$err_lvl =0;
 				
 				$response_array['type'] 	= 'success';				
@@ -82,22 +89,25 @@
 				$response_array['type'] 	= 'error';	
 				$response_array['title'] 	= 'ERROR';	
 				$response_array['body'] 	= 'User niet geupdatet, probeer opnieuw';	
-
+	
 			}
 			
 			logToFile(__FILE__,$err_lvl,$msg);	
+
 			// Return JSON array
-			jsonArr($response_array);			
+			jsonArr($response_array);		
 		}
 
 		public function deleteuser($post_val){
+			$lang = $this->locale;
+			
 			$conn 	= $this->db_conn;
 			$user_email = $conn->getOne("SELECT user_email FROM app_users WHERE user_id = ?i", $post_val['user_id']);
 			
 				
 			if($conn->query("DELETE FROM app_users WHERE user_id = ?i", $post_val['user_id'])) {
 				// Log to file
-				$msg = "User ".$user_email ." verwijderd door ".htmlentities($_SESSION['db_user']['user_email'], ENT_QUOTES, 'UTF-8');
+				$msg = "User ".$user_email ." verwijderd door ".$this->auth_user;
 				$err_lvl =0;
 				
 				$response_array['type'] 	= 'success';				
@@ -113,6 +123,7 @@
 			}
 			
 			logToFile(__FILE__,$err_lvl,$msg);	
+
 			// Return JSON array
 			jsonArr($response_array);			
 		}
@@ -127,8 +138,8 @@
 			// Make sure the user entered a valid E-Mail address 
 			if(!filter_var($email_post, FILTER_VALIDATE_EMAIL)) 
 			{ 
-				$response_array['label'] 	= $lang['loginmsg']['acc_update']['msg']['err_email']['label'];
-				$response_array['text'] 	= $lang['loginmsg']['acc_update']['msg']['err_email']['text'];
+				$response_array['label'] 	= $lang['user']['acc_update']['msg']['err_email']['label'];
+				$response_array['text'] 	= $lang['user']['acc_update']['msg']['err_email']['text'];
 				$response_array['type'] 	= 'error';
 				
 				// Return JSON array
@@ -139,7 +150,7 @@
 			// If the user is changing their E-Mail address, we need to make sure that 
 			// the new value does not conflict with a value that is already in the system. 
 			// If the user is not changing their E-Mail address this check is not needed. 
-			if($email_post != $_SESSION['db_user']['user_email']) 
+			if($email_post != $this->auth_user) 
 			{ 
 				// Define our SQL query 
 				$query = " 
@@ -168,25 +179,25 @@
 					$msg = 'Regel: ' . $ex->getLine().' Bestand: ' . $ex->getFile().' Error: ' . $ex->getMessage();
 					logToFile(__FILE__,1,$msg);
 					
-					$response_array['label'] 	= $lang['loginmsg']['acc_update']['msg']['err']['label'];
-					$response_array['text'] 	= $lang['loginmsg']['acc_update']['msg']['err']['text'];
+					$response_array['label'] 	= $lang['user']['acc_update']['msg']['err']['label'];
+					$response_array['text'] 	= $lang['user']['acc_update']['msg']['err']['text'];
 					$response_array['type'] 	= 'error';
 					
 					// Return JSON array
 					jsonArr($response_array);				
-					die($msg); 
+					die(); 
 				} 
 				
 				// Retrieve results (if any) 
 				$row = $stmt->fetch(); 
 				if($row) 
 				{ 
-					$response_array['label'] 	= $lang['loginmsg']['acc_update']['msg']['err_email_in_use']['label'];
-					$response_array['text'] 	= $lang['loginmsg']['acc_update']['msg']['err_email_in_use']['text'];
+					$response_array['label'] 	= $lang['user']['acc_update']['msg']['err_email_in_use']['label'];
+					$response_array['text'] 	= $lang['user']['acc_update']['msg']['err_email_in_use']['text'];
 					$response_array['type'] 	= 'error';
 					// Return JSON array
 					jsonArr($response_array);				
-
+	
 				} 
 			} 
 			
@@ -249,23 +260,22 @@
 				// Execute the query 
 				$stmt = $conn->prepare($query); 
 				$result = $stmt->execute($query_params); 
-				$ini = htmlentities($_SESSION['db_user']['user_email'], ENT_QUOTES, 'UTF-8');
-				$msg = "Password van user: ".$ini. " gewijzigd";
+
+				$msg = "Password van user: ".$this->auth_user. " gewijzigd";
 				logToFile(__FILE__,0,$msg);	
 				
-				$this->succesMessage = $lang['loginmsg']['acc_update']['msg']['suc']['label'];
-				$this->msg = $lang['loginmsg']['acc_update']['msg']['suc']['text'];
+				$this->succesMessage = $lang['user']['acc_update']['msg']['suc']['label'];
+				$this->msg = $lang['user']['acc_update']['msg']['suc']['text'];
 			} 
 			catch(PDOException $ex) 
 			{ 
 				// Note: On a production website, you should not output $ex->getMessage(). 
 				// It may provide an attacker with helpful information about your code.  
-				$ini = htmlentities($_SESSION['db_user']['user_email'], ENT_QUOTES, 'UTF-8');
 				$msg = 'Regel: ' . $ex->getLine().' Bestand: ' . $ex->getFile().' Error: ' . $ex->getMessage();
 				logToFile(__FILE__,1,$msg);
 				
-				$response_array['label'] 	= $lang['loginmsg']['acc_update']['msg']['err']['label'];
-				$response_array['text'] 	= $lang['loginmsg']['acc_update']['msg']['err']['text'];
+				$response_array['label'] 	= $lang['user']['acc_update']['msg']['err']['label'];
+				$response_array['text'] 	= $lang['user']['acc_update']['msg']['err']['text'];
 				$response_array['type'] 	= 'error';
 			
 				// Return JSON array
@@ -280,7 +290,7 @@
 			$response_array['label'] 	= $this->succesMessage;
 			$response_array['text'] 	= $this->msg;
 			$response_array['type'] 	= 'success';
-		
+
 			// Return JSON array
 			jsonArr($response_array);			
 		}
@@ -341,7 +351,7 @@
 					}
 				),
 				array (
-					'db' => "user_last_name", 			
+					'db' => "user_last_name",
 					'dt' => 5,
 					'formatter' => function($d,$row){
 						$edit = "<a class='label label-success' href='".URL_ROOT."view/user/?id=".$row[0]."' >Edit</a>";

@@ -2,7 +2,7 @@
 		
 	$db_conn = new SafeMySQL();
 	
-	$obj = new Login($db_conn);
+	$obj 	= new Login($db_conn);
 	
 	if(isset($_GET['login'])){
 		$obj->processLogin($db, $_POST);
