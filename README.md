@@ -6,5 +6,5 @@
  ```php
  $content = file_get_contents($_SERVER["DOCUMENT_ROOT"].'/mdb/env.ini')
  ```
- change **/mdb/** to match your root folder name.
- HINT: if your root folder is htdocs or html, remove **/mdb/**
+- change **/mdb/** to match your root folder name.
+- **HINT:** if your root folder is htdocs or html, remove **/mdb/**
