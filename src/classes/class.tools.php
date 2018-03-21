@@ -16,7 +16,7 @@
 		
 		function __construct($db_conn) {
 			$this->db_conn 	= $db_conn;
-			$this->locale 	= json_decode(file_get_contents(URL_ROOT.'Src/lang/'.APP_LANG.'.json'), true);
+			$this->locale 	= json_decode(file_get_contents(URL_ROOT.'/Src/lang/'.APP_LANG.'.json'), true);
 		}
 		
 		public function getThreshold($post_val){
@@ -947,35 +947,35 @@
 			if($prio_nr == '1'){
 				$class = 'bg-danger';
 				if($event_operator == null){
-					$audio_source = URL_ROOT. 'src/libs/scs_sounds/P1.wav';	
+					$audio_source = URL_ROOT. '/src/libs/scs_sounds/P1.wav';	
 				} else {
 					$audio_source = '';
 				}
 			} elseif($prio_nr == '2'){
 				$class = 'bg-danger';
 				if($event_operator == null){
-					$audio_source = URL_ROOT. 'src/libs/scs_sounds/P2.wav';	
+					$audio_source = URL_ROOT. '/src/libs/scs_sounds/P2.wav';	
 				} else {
 					$audio_source = '';
 				}
 			} elseif($prio_nr == '3'){
 				$class = 'bg-danger';
 				if($event_operator == null){
-					$audio_source = URL_ROOT. 'src/libs/scs_sounds/P3.wav';	
+					$audio_source = URL_ROOT. '/src/libs/scs_sounds/P3.wav';	
 				} else {
 					$audio_source = '';
 				}
 			} elseif($prio_nr == '4'){
 				$class = 'bg-warning';
 				if($event_operator == null){
-					$audio_source = URL_ROOT. 'src/libs/scs_sounds/P4.wav';	
+					$audio_source = URL_ROOT. '/src/libs/scs_sounds/P4.wav';	
 				} else {
 					$audio_source = '';
 				}
 			} elseif($prio_nr == '5'){
 				$class = 'bg-yellow';
 				if($event_operator == null){
-					$audio_source = URL_ROOT. 'src/libs/scs_sounds/P5.wav';	
+					$audio_source = URL_ROOT. '/src/libs/scs_sounds/P5.wav';	
 				} else {
 					$audio_source = '';
 				}				

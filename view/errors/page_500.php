@@ -13,7 +13,7 @@
 	<!-- Mainly CSS -->
 	<?php
 		foreach($arr_css as $css){
-			echo '<link href="'.$css.'" rel="stylesheet">';
+			echo '<link href="'.URL_ROOT.$css.'" rel="stylesheet">';
 		}
 	?>
 
@@ -28,14 +28,14 @@
 
         <div class="error-desc">
             The server encountered something unexpected that didn't allow it to complete the request. We apologize.<br/>
-            You can go back to main page: <br/><a href="<?= URL_ROOT; ?>Src/login/redirect.php" class='btn btn-primary' >Return to safety</a>
+            You can go back to main page: <br/><a href="<?= URL_ROOT; ?>/Src/login/redirect.php" class='btn btn-primary' >Return to safety</a>
         </div>
     </div>
 
 	<!-- Mainly scripts -->
 	<?php
 		foreach($arr_js as $js){
-			echo '<script src="'.$js.'"></script>';
+			echo '<script src="'.URL_ROOT.$js.'"></script>';
 		}
 	?>
 

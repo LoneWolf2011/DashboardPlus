@@ -29,7 +29,7 @@
 						if($handle=opendir('../src/logs/'.date("Y"))){
 							while(false !==($file = readdir($handle))) {
 								if(strpos($file, $year.'-' ) === 0) {
-									echo "<tr><td>Log: <a class='link' href='".URL_ROOT."src/logs/".$year."/". $file ."'>".$file."</a></td></tr>"; 
+									echo "<tr><td>Log: <a class='link' href='".URL_ROOT."/src/logs/".$year."/". $file ."'>".$file."</a></td></tr>"; 
 								}
 							}
 							closedir($handle);	
@@ -53,7 +53,7 @@
 				
 							while(false !==($file = readdir($handle))) {
 								if(strpos($file, $year.'-' ) === 0) {
-									echo "<tr><td>Log: <a class='link' href='".URL_ROOT."src/logs/errors/". $file ."'>".$file."</a></td></tr>"; 
+									echo "<tr><td>Log: <a class='link' href='".URL_ROOT."/src/logs/errors/". $file ."'>".$file."</a></td></tr>"; 
 								}
 							}
 							closedir($handle);	
@@ -69,12 +69,12 @@
 
 	<?php
 		// View specific scripts
-		array_push($arr_js, '/mdb/js/plugins/dataTables/datatables.min.js');
+		array_push($arr_js, '/js/plugins/dataTables/datatables.min.js');
 		
 	?>	
 	<?php
 		foreach($arr_js as $js){
-			echo '<script src="'.$js.'"></script>';
+			echo '<script src="'.URL_ROOT.$js.'"></script>';
 		}		
 	?>	
 
@@ -93,7 +93,7 @@
 		
 		$.extend( true, $.fn.dataTable.defaults, {
 			language: {
-				url: '/mdb/js/plugins/dataTables/'+$('html').attr('lang')+'.json'
+				url: <?= json_encode(URL_ROOT);?>+'/js/plugins/dataTables/'+$('html').attr('lang')+'.json'
 			},
 			iDisplayLength: 5,
 			deferRender: true,

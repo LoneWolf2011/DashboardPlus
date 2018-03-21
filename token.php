@@ -8,7 +8,7 @@
     }    
 	
     // At the top of the page we check to see whether the user is logged in or not 
-    if(!empty($_SESSION['db_user'])) 
+    if(!empty($_SESSION[SES_NAME])) 
     { 
 		header("Location: ".URL_ROOT); 
     } 
@@ -31,7 +31,7 @@
 
 	<?php
 		foreach($arr_css as $css){
-			echo '<link href="'.$css.'" rel="stylesheet">';
+			echo '<link href="'.URL_ROOT.$css.'" rel="stylesheet">';
 		}
 	?>
 
@@ -43,7 +43,7 @@
         <div class="wrapper wrapper-content">
 		
                 <!--<h1 class="logo-name">DB+</h1>-->
-                <h1 class="logo-name"><img src="<?= URL_ROOT_IMG.'DB+.png';?>" width="70%"></img></h1>
+                <h1 class="logo-name"><img src="<?= URL_ROOT_IMG.'app_logo.png';?>" width="70%"></img></h1>
 				<h3 data-i18n="[html]tokenmsg.welcome">Welcome to DB+</h3>
 				<p data-i18n="[html]tokenmsg.text">An improved experience for managing RMS and SCS.</p>
 
@@ -70,7 +70,7 @@
     <!-- Mainly scripts -->
 	<?php
 		foreach($arr_js as $js){
-			echo '<script src="'.$js.'"></script>';
+			echo '<script src="'.URL_ROOT.$js.'"></script>';
 		}		
 	?>
 

@@ -21,7 +21,7 @@
 ========================================================================================================== */
 
 	function setEmailTemplate($arr_val, $template_name){
-		$template = file_get_contents(URL_ROOT.'view/email_temp/'.$template_name);
+		$template = file_get_contents(URL_ROOT.'/view/email_temp/'.$template_name);
 		
 		foreach($arr_val as $key => $value){
 			$template = str_replace('{{'.$key.'}}', $value, $template);
@@ -164,7 +164,7 @@
 		
 	// Waves blockchain password seed function. Entropy > 3.0
 	function genPassSeed($length = 2){
-        $path = ROOT_PATH ."/Mdb/Src/config/seed_words.txt";
+        $path = ROOT_PATH ."/Src/config/seed_words.txt";
 		$file = file_get_contents($path);
 		$word_list = preg_split('/[\s]+/', $file, -1, PREG_SPLIT_NO_EMPTY);	
 		// var_dump($words);
@@ -244,15 +244,15 @@
 	// Functie voor het loggen van gebeurtenissen in log files 
 	function logToFile($file,$level,$msg) { 
 		// Connectie met DB
-		$db_conn = new SafeMySQL(array('db' => 'mdb_beheer_log'));	
-		$pdo = new PDO("mysql:host=".DB_HOST.";dbname=mdb_beheer_log;charset=utf8", DB_USER, DB_PASS); 	
+		$db_conn = new SafeMySQL(array('db'=>DB_LOGS));	
+		$pdo = new PDO("mysql:host=".DB_HOST.";dbname=".DB_LOGS.";charset=utf8", DB_USER, DB_PASS); 	
 
-		$user = (isset($_SESSION['db_user']['user_email'])) ? htmlentities($_SESSION['db_user']['user_email'], ENT_QUOTES, 'UTF-8') : '---';
+		$user = (isset($_SESSION[SES_NAME]['user_email'])) ? htmlentities($_SESSION[SES_NAME]['user_email'], ENT_QUOTES, 'UTF-8') : '---';
 		$env  = APP_ENV;		
 		$year = date("Y");
 		$date = date("Y-m-d");
 		$path = ROOT_PATH;
-        $path .= "/Mdb/Src/Logs/".$year."/";
+        $path .= "/Src/Logs/".$year."/";
 		// Bestaat de folder niet maak deze dan aan
 		if(!file_exists($path)){
 			mkdir($path);

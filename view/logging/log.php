@@ -1,7 +1,7 @@
 <?php
 	$year 		= date("Y");
 	$today		= date("Y-m-d");
-	$filename 	= URL_ROOT.'src/logs/'.$year.'/'.$today.".log"; 
+	$filename 	= URL_ROOT.'/src/logs/'.$year.'/'.$today.".log"; 
 	
 	$file = file($filename);
 	

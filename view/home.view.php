@@ -219,17 +219,17 @@
 		
 	</div>
 
-	<input type="text" hidden id="url_string" value="<?= URL_ROOT.'Src/controllers/home.controller.php';?>" />
+	<input type="text" hidden id="url_string" value="<?= URL_ROOT.'/Src/controllers/home.controller.php';?>" />
 	
 	<?php
 		// View specific scripts
-		array_push($arr_js, '/mdb/js/plugins/sparkline/jquery.sparkline.min.js');
-		array_push($arr_js, '/mdb/js/plugins/dataTables/datatables.min.js');
+		array_push($arr_js, '/js/plugins/sparkline/jquery.sparkline.min.js');
+		array_push($arr_js, '/js/plugins/dataTables/datatables.min.js');
 		
 	?>
 	<?php
 		foreach($arr_js as $js){
-			echo '<script src="'.$js.'"></script>';
+			echo '<script src="'.URL_ROOT.$js.'"></script>';
 		}		
 	?>	
 	
@@ -253,7 +253,7 @@
 		
 		$.extend( true, $.fn.dataTable.defaults, {
 			language: {
-				url: '/mdb/js/plugins/dataTables/'+$('html').attr('lang')+'.json'
+				url: <?= json_encode(URL_ROOT);?>+'/js/plugins/dataTables/'+$('html').attr('lang')+'.json'
 			},
 			iDisplayLength: 10,
 			deferRender: true,
@@ -275,7 +275,7 @@
 					table_active.ajax.reload( null, false ); 
 				}, refresh );
 				$.i18n.init({
-					resGetPath: '/mdb/src/lang/__lng__.json',
+					resGetPath: <?= json_encode(URL_ROOT);?>+'/src/lang/__lng__.json',
 					load: 'unspecific',
 					fallbackLng: false,
 					lng: lang_code
@@ -413,7 +413,7 @@
 	var err_icon;
 	var err_conn;
 	var err_txt;
-	var url = '/Mdb/img/GoogleMapsMarkers/';
+	var url = <?= json_encode(URL_ROOT_IMG);?>+'/GoogleMapsMarkers/';
 	var markers_arr = [];	
 	var map;
 	var markerCluster = null;
@@ -883,13 +883,13 @@
 			gridSize: 50, 
 			maxZoom: 15, 
 			styles: [{
-				url: '/Mdb/js/plugins/markerclusterer/images/m1.png',
+				url: <?= json_encode(URL_ROOT);?>+'/js/plugins/markerclusterer/images/m1.png',
 				textColor: 'white',
 				height: 52,
 				width: 52
 			},
 			{
-				url: '/Mdb/js/plugins/markerclusterer/images/m3.png',
+				url: <?= json_encode(URL_ROOT);?>+'/js/plugins/markerclusterer/images/m3.png',
 				textColor: 'white',
 				height: 65,
 				width: 65

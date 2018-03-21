@@ -8,7 +8,7 @@
     }    
 	
     // At the top of the page we check to see whether the user is logged in or not 
-    if(!empty($_SESSION['db_user'])) 
+    if(!empty($_SESSION[SES_NAME])) 
     { 
 		header("Location: ".URL_ROOT); 
     } 
@@ -25,13 +25,13 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-	<link rel='shortcut icon' type='image/x-icon' href='<?= URL_ROOT_IMG; ?>leaf.ico' />
+	<link rel='shortcut icon' type='image/x-icon' href='<?= URL_ROOT_IMG; ?>/leaf.ico' />
 	
     <title><?= APP_TITLE; ?> | Login</title>
 
 	<?php
 		foreach($arr_css as $css){
-			echo '<link href="'.$css.'" rel="stylesheet">';
+			echo '<link href="'.URL_ROOT.$css.'" rel="stylesheet">';
 		}
 	?>
 
@@ -43,7 +43,7 @@
         <div class="wrapper wrapper-content">
             <div>
                 <!--<h1 class="logo-name">DB+</h1>-->
-                <h1 class="logo-name"><img src="<?= URL_ROOT_IMG.'DB+.png';?>" width="70%"></img></h1>
+                <h1 class="logo-name"><img src="<?= URL_ROOT_IMG.'/app_logo.png';?>" width="70%"></img></h1>
             </div>
 				<h3 ><span data-i18n="[html]loginscreen.welcome">Welcome to</span> <?= APP_NAME;?> </h3>
 				<p data-i18n="[html]loginscreen.text">An improved experience for managing RMS and SCS.</p>
@@ -161,7 +161,7 @@
     <!-- Mainly scripts -->
 	<?php
 		foreach($arr_js as $js){
-			echo '<script src="'.$js.'"></script>';
+			echo '<script src="'.URL_ROOT.$js.'"></script>';
 		}		
 	?>
 	<script>

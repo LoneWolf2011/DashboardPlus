@@ -1,6 +1,6 @@
 <?php
     // Check om te zien of de user ingelogged is of niet
-    if(empty($_SESSION['db_user'])) 
+    if(empty($_SESSION[SES_NAME])) 
     { 
         // Indien dit niet het geval is, redirect naar inlog pagina. 
         header("Location: ".URL_ROOT); 
@@ -19,14 +19,14 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-	<link rel='shortcut icon' type='image/x-icon' href='<?= URL_ROOT_IMG; ?>leaf.ico' />
+	<link rel='shortcut icon' type='image/x-icon' href='<?= URL_ROOT_IMG; ?>/leaf.ico' />
 	
     <title><?= APP_TITLE; ?> | Home</title>
 	
 	<!-- Mainly CSS -->
 	<?php
 		foreach($arr_css as $css){
-			echo '<link href="'.$css.'" rel="stylesheet">';
+			echo '<link href="'.URL_ROOT.$css.'" rel="stylesheet">';
 		}
 	?>
 	
@@ -58,9 +58,9 @@
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
                     <!--<i class="fa fa-laptop modal-icon"></i>-->
-					<img src="<?= URL_ROOT_IMG.'DB+.png';?>" width="20%"/>
+					<img src="<?= URL_ROOT_IMG.'/app_logo.png';?>" width="20%"/>
                     <h4 class="modal-title">Welkom bij DB+</h4>
-					<?php 	if(htmlentities($_SESSION['db_user']['user_new'], ENT_QUOTES, 'UTF-8') == 1) { ?>
+					<?php 	if(htmlentities($_SESSION[SES_NAME]['user_new'], ENT_QUOTES, 'UTF-8') == 1) { ?>
 						<p class="font-bold">Dit is de eerste keer dat u inlogd.</p>
 						<p>	U dient uw wachtwoord te wijzigen naar een zelf gekozen wachtwoord. Dit om de veiligheid van uw account te kunnen waarborgen.</p>
 					<?php };?>
@@ -71,7 +71,7 @@
 						<div class="form-group">
 							<label class="control-label col-md-4 col-sm-4 col-xs-12">Wijzig E-Mail adres:</label>
 							<div class="col-md-8 col-sm-8 col-xs-12">
-								<input type="text" class="form-control" name="email" value="<?= htmlentities($_SESSION['db_user']['user_email'], ENT_QUOTES, 'UTF-8'); ?>" placeholder="Email"/> </li>
+								<input type="text" class="form-control" name="email" value="<?= htmlentities($_SESSION[SES_NAME]['user_email'], ENT_QUOTES, 'UTF-8'); ?>" placeholder="Email"/> </li>
 							</div>
 						</div>	
 								
@@ -117,7 +117,7 @@
             </div>
         </div>
     </div>
-
+	<input type="text" hidden id="index_url_string" value="<?= URL_ROOT.'/Src/controllers/user.controller.php';?>" />
 </html>
 
 	<script>
@@ -215,7 +215,7 @@
 			// Ajax om de data te posten naar de db
 			$.ajax({
 				type: "POST",
-				url: "/mdb/Src/controllers/user.controller.php?update",
+				url: $('#index_url_string').val()+ "?update",
 				data: $('form[name="form_update_acc"]').serialize(),
 				success: function(data){
 					$('#myModal').modal('hide');
@@ -238,7 +238,7 @@
 	});	
 	</script>
 	<?php 
-	if(htmlentities($_SESSION['db_user']['user_new'], ENT_QUOTES, 'UTF-8') == 1) {
+	if(htmlentities($_SESSION[SES_NAME]['user_new'], ENT_QUOTES, 'UTF-8') == 1) {
 		echo "<script>$('#myModal').modal('show');</script>";
 	}
 	?>

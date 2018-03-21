@@ -13,7 +13,7 @@
 	<!-- Mainly CSS -->
 	<?php
 		foreach($arr_css as $css){
-			echo '<link href="'.$css.'" rel="stylesheet">';
+			echo '<link href="'.URL_ROOT.$css.'" rel="stylesheet">';
 		}
 	?>
 
@@ -42,14 +42,14 @@
         <div class="error-desc">
 		   <p>Wacht uit of vraag status na bij de admins.
 			</p>	
-			<a href="<?= URL_ROOT; ?>login/redirect.php" class='btn btn-primary' >Return to safety</a>			
+			<a href="<?= URL_ROOT; ?>/login/redirect.php" class='btn btn-primary' >Return to safety</a>			
         </div>
     </div>
 
 	<!-- Mainly scripts -->
 	<?php
 		foreach($arr_js as $js){
-			echo '<script src="'.$js.'"></script>';
+			echo '<script src="'.URL_ROOT.$js.'"></script>';
 		}
 	?>
   </body>

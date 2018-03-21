@@ -6,12 +6,12 @@
 	
 	foreach($row_updates as $updates){
 		
-		if( $updates['ticket_update_by'] == htmlentities($_SESSION['db_user']['user_email'], ENT_QUOTES, 'UTF-8')){
+		if( $updates['ticket_update_by'] == htmlentities($_SESSION[SES_NAME]['user_email'], ENT_QUOTES, 'UTF-8')){
 			$position 	= 'right';
-			$img 		= URL_ROOT_IMG.'img_green.jpg';
+			$img 		= URL_ROOT_IMG.'/img_green.jpg';
 		}else {
 			$position = 'left';
-			$img 		= URL_ROOT_IMG.'img_blue.jpg';
+			$img 		= URL_ROOT_IMG.'/img_blue.jpg';
 		}
 		echo '<div class="chat-message '.$position.'">
             <img class="message-avatar" src="'.$img.'" alt="">

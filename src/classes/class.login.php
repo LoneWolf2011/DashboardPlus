@@ -2,14 +2,14 @@
 	
 	class Login {
 		protected $succesMessage;
-		protected $env_file = ROOT_PATH.'/Mdb/env.ini';
+		protected $env_file = ROOT_PATH.'/env.ini';
 		protected $msg;
 		protected $purifier = null;
 		
 		function __construct($db_conn) {
 			$this->db_conn 		= $db_conn;
-			$this->locale 		= json_decode(file_get_contents(URL_ROOT.'Src/lang/'.APP_LANG.'.json'), true);
-			$this->auth_user 	= @htmlentities($_SESSION['db_user']['user_email'], ENT_QUOTES, 'UTF-8');
+			$this->locale 		= json_decode(file_get_contents(URL_ROOT.'/Src/lang/'.APP_LANG.'.json'), true);
+			$this->auth_user 	= @htmlentities($_SESSION[SES_NAME]['user_email'], ENT_QUOTES, 'UTF-8');
 			$this->purifier 	= new HTMLPurifier(HTMLPurifier_Config::createDefault());
 		}	
 
@@ -97,10 +97,10 @@
 					unset($row['user_password']); 
 					unset($row['user_status']); 
 					
-					$_SESSION['db_user'] = $row; 
+					$_SESSION[SES_NAME] = $row; 
 					
 					// Log to file
-					$msg = "Login success. User: ".$_SESSION['db_user']['user_email'];
+					$msg = "Login success. User: ".$_SESSION[SES_NAME]['user_email'];
 					logToFile(__FILE__,0,$msg);
 					
 					// Verwijder alle login attempts van de user.
@@ -144,7 +144,7 @@
 			}
 			
 			// At the top of the page we check to see whether the user is logged in or not 
-			if(!empty($_SESSION['db_user'])) 
+			if(!empty($_SESSION[SES_NAME])) 
 			{ 
 				//header("Location: ../login/redirect.php"); 
 				$this->redirectLogin();
@@ -169,7 +169,7 @@
 				$msg = "Logout success. User: ".$this->auth_user;
 				logToFile(__FILE__,0,$msg);
 						
-				unset($_SESSION['db_user']);
+				unset($_SESSION[SES_NAME]);
 				unset($_SESSION['db_token']);
 			
 				// Otherwise, we unset all of the session variables.
@@ -222,14 +222,16 @@
 				//$e = (empty($env['RMS_DB']['USER'])) ? @$post_val['rms_user'] : $env['RMS_DB']['USER'];
 				//$f = (empty($env['RMS_DB']['PASS'])) ? @$post_val['rms_pass'] : $env['RMS_DB']['PASS'];
 				
-				$text = '# Generated ini file'.PHP_EOL;
+				$text = '; Generated ini file'.PHP_EOL;
 				$text .= '[APP]'.PHP_EOL;
-				$text .= 'URL_ROOT = '.$a.PHP_EOL;
-				$text .= 'URL_ROOT_IMG = '.$b.PHP_EOL;
-				$text .= 'ROOT_PATH = '.$c.PHP_EOL;
+				$text .= 'URL_ROOT = '.$env['APP']['URL_ROOT'].PHP_EOL;
+				$text .= 'URL_ROOT_IMG = '.$env['APP']['URL_ROOT_IMG'].PHP_EOL;
+				$text .= 'ROOT_PATH = '.$env['APP']['ROOT_PATH'].PHP_EOL;
+				$text .= 'SES_NAME = '.$env['APP']['SES_NAME'].PHP_EOL;
 				$text .= 'ENV = '.$env['APP']['ENV'].PHP_EOL;
+				$text .= 'VER = '.$env['APP']['VER'].PHP_EOL;
 				$text .= 'GOOGLE_API = '.$d.PHP_EOL;
-				$text .= 'DEBUG = false'.PHP_EOL;				
+				$text .= 'DEBUG = true'.PHP_EOL;				
 				$text .= '[EVENTS]'.PHP_EOL;
 				$text .= 'ENABLE_AUDIO = true'.PHP_EOL;
 				$text .= 'ENABLE_GROUPED_EVENTS = true'.PHP_EOL;
@@ -237,13 +239,14 @@
 				$text .= 'GROUPED_EVENTS_WARNING = 10'.PHP_EOL;
 				$text .= 'GROUPED_EVENTS_DANGER = 20'.PHP_EOL;
 				$text .= '[SMTP]'.PHP_EOL;
-				$text .= 'SMTP_HOST = '.$h.PHP_EOL;
-				$text .= 'SMTP_PORT = '.$i.PHP_EOL;
+				$text .= 'SMTP_HOST = '.$env['SMTP']['SMTP_HOST'].PHP_EOL;
+				$text .= 'SMTP_PORT = '.$env['SMTP']['SMTP_PORT'].PHP_EOL;
 				$text .= '[LOCAL_DB]'.PHP_EOL;
 				$text .= 'HOST = '.$env['LOCAL_DB']['HOST'].PHP_EOL;
 				$text .= 'USER = '.$env['LOCAL_DB']['USER'].PHP_EOL;
 				$text .= 'PASS = '.$env['LOCAL_DB']['PASS'].PHP_EOL;
 				$text .= 'NAME = '.$env['LOCAL_DB']['NAME'].PHP_EOL;
+				$text .= 'LOGS = '.$env['LOCAL_DB']['LOGS'].PHP_EOL;
 				$text .= '[SCS_DB]'.PHP_EOL;
 				$text .= 'HOST = '.$e.PHP_EOL;
 				$text .= 'USER = '.$f.PHP_EOL;
@@ -262,7 +265,6 @@
 					'app_lang' 			=>	strtolower($post_val['default_lang']),
 					'app_lat' 			=>	0.1+$arr[0], // convert to float
 					'app_lng' 			=>	0.1+$arr[1], // convert to float
-					'app_debug' 		=>	'false',
 					'app_initialize' 	=>	1			
 				); 	
 				
@@ -584,7 +586,7 @@
 		protected function redirectLogin(){
 			$conn 	= $this->db_conn;
 			// At the top of the page we check to see whether the user is logged in or not 
-			if(empty($_SESSION['db_user'])) 
+			if(empty($_SESSION[SES_NAME])) 
 			{ 
 				// If they are not, we redirect them to the login page. 
 				header("Location: ".URL_ROOT); 
@@ -595,7 +597,7 @@
 			} 
 		
 			//Update Lastaccess kolom in users database
-			$id 		= $_SESSION['db_user']['user_id'];		
+			$id 		= $_SESSION[SES_NAME]['user_id'];		
  
 			try {
 				$conn->query("UPDATE app_users SET user_last_access = now() WHERE user_id = ?s",$id);
@@ -607,14 +609,14 @@
 			}
 		
 			//Redirect naar juiste index pagina op basis van Userrole	
-			$user_role 		= $_SESSION['db_user']['user_role'];
+			$user_role 		= $_SESSION[SES_NAME]['user_role'];
 			
 			if(APP_INITIALIZE === 0 && $connected){
-				header("Location: ".URL_ROOT."view/install.php"); 
+				header("Location: ".URL_ROOT."/view/install.php"); 
 			} elseif($user_role == 1 && $connected){
-				header("location: ".URL_ROOT."view/admin/");
+				header("location: ".URL_ROOT."/view/admin/");
 			} elseif($user_role == 2 && $connected) {
-				header("location: ".URL_ROOT."view/home/");
+				header("location: ".URL_ROOT."/view/home/");
 			} else {
 				header("location: ".URL_ROOT);
 			}			

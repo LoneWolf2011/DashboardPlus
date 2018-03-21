@@ -7,8 +7,8 @@
 		
 		function __construct($db_conn) {
 			$this->db_conn 		= $db_conn;
-			$this->locale 		= json_decode(file_get_contents(URL_ROOT.'Src/lang/'.APP_LANG.'.json'), true);
-			$this->auth_user 	= htmlentities($_SESSION['db_user']['user_email'], ENT_QUOTES, 'UTF-8');
+			$this->locale 		= json_decode(file_get_contents(URL_ROOT.'/Src/lang/'.APP_LANG.'.json'), true);
+			$this->auth_user 	= htmlentities($_SESSION[SES_NAME]['user_email'], ENT_QUOTES, 'UTF-8');
 		}
 
 		public function newUser($post_val){
@@ -217,7 +217,7 @@
 			// Initial query parameter values 
 			$query_params = array( 
 				':email' 	=> $email_post, 
-				':user_id' 	=> $_SESSION['db_user']['user_id'], 
+				':user_id' 	=> $_SESSION[SES_NAME]['user_id'], 
 				':new_user' => $new_user, 
 			); 
 			
@@ -284,8 +284,8 @@
 			
 			// Now that the user's E-Mail address has changed, the data stored in the $_SESSION 
 			// array is stale; we need to update it so that it is accurate.
-			$_SESSION['db_user']['user_email'] 	= $email_post; 
-			$_SESSION['db_user']['user_new'] 	= $new_user; 
+			$_SESSION[SES_NAME]['user_email'] 	= $email_post; 
+			$_SESSION[SES_NAME]['user_new'] 	= $new_user; 
 			
 			$response_array['label'] 	= $this->succesMessage;
 			$response_array['text'] 	= $this->msg;
@@ -354,7 +354,7 @@
 					'db' => "user_last_name",
 					'dt' => 5,
 					'formatter' => function($d,$row){
-						$edit = "<a class='label label-success' href='".URL_ROOT."view/user/?id=".$row[0]."' >Edit</a>";
+						$edit = "<a class='label label-success' href='".URL_ROOT."/view/user/?id=".$row[0]."' >Edit</a>";
 						$dele = "<a class='label label-danger' id='delete' value='".$row[0]."' rel='".$row[2]."' >Delete</a>";
 						return $edit. ' '.$dele;
 					}					

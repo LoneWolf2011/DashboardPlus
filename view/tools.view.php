@@ -6,8 +6,8 @@
 						<h5 >Settings</h5>
 					</div>
 					<div class="ibox-content">
-						<button class="btn btn-primary" onclick="popupWindow('/mdb/view/tools/graphs/', 'graphs', 1980, 1080 ); return false;" >Open responds tijden</button>								
-						<button class="btn btn-primary" onclick="popupWindow('/mdb/view/tools/port/', 'port', 1980, 1080 ); return false;" >Open port monitor</button>								
+						<button class="btn btn-primary" onclick="popupWindow('graphs/', 'graphs', 1980, 1080 ); return false;" >Open responds tijden</button>								
+						<button class="btn btn-primary" onclick="popupWindow('port/', 'port', 1980, 1080 ); return false;" >Open port monitor</button>								
 					</div>
 				</div>
             </div>		
@@ -17,8 +17,8 @@
 						<h5 >Settings</h5>
 					</div>
 					<div class="ibox-content">
-						<button class="btn btn-primary" onclick="popupWindow('/mdb/view/tools/events/', 'events', 1980, 1080 ); return false;" >Open pending events</button>
-						<button class="btn btn-primary" onclick="popupWindow('/mdb/view/tools/events_group/', 'events_group', 1980, 1080 ); return false;" >Open grouped events</button>
+						<button class="btn btn-primary" onclick="popupWindow('events/', 'events', 1980, 1080 ); return false;" >Open pending events</button>
+						<button class="btn btn-primary" onclick="popupWindow('events_group/', 'events_group', 1980, 1080 ); return false;" >Open grouped events</button>
 					</div>
 				</div>
             </div>			
@@ -27,11 +27,11 @@
 	
 	<input type="text" hidden id="url_query" value="<?= $_SERVER['QUERY_STRING']; ?>" />	
 	<input type="text" hidden id="mac_adres"  />	
-	<input type="text" hidden id="url_string" value="<?= URL_ROOT.'Src/controllers/tools.controller.php';?>" />	
+	<input type="text" hidden id="url_string" value="<?= URL_ROOT.'/Src/controllers/tools.controller.php';?>" />	
 	
 	<?php
 		foreach($arr_js as $js){
-			echo '<script src="'.$js.'"></script>';
+			echo '<script src="'.URL_ROOT.$js.'"></script>';
 		}		
 	?>	
 

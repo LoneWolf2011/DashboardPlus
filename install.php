@@ -5,7 +5,7 @@
     }   
 	
     // At the top of the page we check to see whether the user is logged in or not 
-    if(!empty($_SESSION['db_user'])) 
+    if(!empty($_SESSION[SES_NAME])) 
     { 
 		header("Location: Src/Login/redirect.php"); 
     } 
@@ -22,13 +22,13 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-	<link rel='shortcut icon' type='image/x-icon' href='<?= URL_ROOT_IMG; ?>leaf.ico' />
+	<link rel='shortcut icon' type='image/x-icon' href='<?= URL_ROOT_IMG; ?>/leaf.ico' />
 	
     <title><?= APP_TITLE; ?> | Install</title>
 
 	<?php
 		foreach($arr_css as $css){
-			echo '<link href="'.$css.'" rel="stylesheet">';
+			echo '<link href="'.URL_ROOT.$css.'" rel="stylesheet">';
 		}
 	?>
 
@@ -40,8 +40,8 @@
         <div class="wrapper wrapper-content">
             <div class="text-center">
                 <!--<h1 class="logo-name">DB+</h1>-->
-                <h1 class="logo-name"><img src="<?= URL_ROOT_IMG.'DB+.png';?>" width="70%"></img></h1>      
-				<h3 data-i18n="[html]installscreen.welcome">Welcome to DB+</h3>
+                <h1 class="logo-name"><img src="<?= URL_ROOT_IMG.'/app_logo.png';?>" width="70%"></img></h1>      
+				<h3 ><span data-i18n="[html]installscreen.welcome">Welcome to</span> <?= APP_NAME;?> </h3>
 				<p data-i18n="[html]installscreen.text">This is your first time.</p>
 				<p data-i18n="[html]installscreen.subtext">Please take the time to fill in the below details.</p>
 				<?php 
@@ -112,7 +112,7 @@
             </form>
 				<?php }; ?>
 			<div class="text-center">
-				<p class="m-t"> <small><?= date("D d-m-Y"). "<font color='#0092D0'> | </font>". date("H:i:s")."<font color='#0092D0'> | </font> ".APP_ENV." " . appVersionCode(APP_ENV); ?></small> </p>
+				<p class="m-t"> <small><?= date("D d-m-Y"). "<font color='#0092D0'> | </font>". date("H:i:s")."<font color='#0092D0'> | </font> ".APP_ENV." " . APP_VER; ?></small> </p>
 			</div>
         </div>
     </div>
@@ -120,7 +120,7 @@
     <!-- Mainly scripts -->
 	<?php
 		foreach($arr_js as $js){
-			echo '<script src="'.$js.'"></script>';
+			echo '<script src="'.URL_ROOT.$js.'"></script>';
 		}		
 	?>
 	<script>

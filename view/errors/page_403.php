@@ -13,7 +13,7 @@
 	<!-- Mainly CSS -->
 	<?php
 		foreach($arr_css as $css){
-			echo '<link href="'.$css.'" rel="stylesheet">';
+			echo '<link href="'.URL_ROOT.$css.'" rel="stylesheet">';
 		}
 	?>
 
@@ -30,14 +30,14 @@
            <p>
 			Admin rechten zijn verplicht voor toegang. Neem contact op met de admins.
             </p>
-			<a href="<?= URL_ROOT; ?>Src/login/redirect.php" class='btn btn-primary' >Return to safety</a>
+			<a href="<?= URL_ROOT; ?>/Src/login/redirect.php" class='btn btn-primary' >Return to safety</a>
         </div>
     </div>
 
 	<!-- Mainly scripts -->
 	<?php
 		foreach($arr_js as $js){
-			echo '<script src="'.$js.'"></script>';
+			echo '<script src="'.URL_ROOT.$js.'"></script>';
 		}
 	?>
 

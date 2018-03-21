@@ -68,12 +68,12 @@
 	
 	<?php
 		// View specific scripts
-		array_push($arr_js, '/mdb/js/plugins/dataTables/datatables.min.js');
+		array_push($arr_js, '/js/plugins/dataTables/datatables.min.js');
 		
 	?>		
 	<?php
 		foreach($arr_js as $js){
-			echo '<script src="'.$js.'"></script>';
+			echo '<script src="'.URL_ROOT.$js.'"></script>';
 		}		
 	?>	
     <script>
@@ -81,7 +81,7 @@
 		var lang_code = $('html').attr('lang');
 		$.extend( true, $.fn.dataTable.defaults, {
 			language: {
-				url: '/mdb/js/plugins/dataTables/'+$('html').attr('lang')+'.json'
+				url: <?= json_encode(URL_ROOT);?>+'/js/plugins/dataTables/'+$('html').attr('lang')+'.json'
 			},
 			iDisplayLength: 10,
 			deferRender: true,
@@ -123,7 +123,7 @@
 		
 		var interval;
 		var table_active = $("#datatable-all").DataTable({	
-			ajax: "/mdb/Src/controllers/ticket.controller.php?soort=all",
+			ajax: <?= json_encode(URL_ROOT);?>+"/Src/controllers/ticket.controller.php?soort=all",
 	
 			fnInitComplete: function(oSettings, json) {
 				$('#ibox1').children('.ibox-content').toggleClass('sk-loading');
@@ -133,7 +133,7 @@
 				}, 10000 );
 				var lang_code = $('html').attr('lang');
 				$.i18n.init({
-					resGetPath: '/mdb/src/lang/__lng__.json',
+					resGetPath: <?= json_encode(URL_ROOT);?>+'/src/lang/__lng__.json',
 					load: 'unspecific',
 					fallbackLng: false,
 					lng: lang_code

@@ -160,12 +160,12 @@
 	
 	<?php
 		// View specific scripts
-		array_push($arr_js, '/mdb/js/plugins/dataTables/datatables.min.js');
+		array_push($arr_js, '/js/plugins/dataTables/datatables.min.js');
 		
 	?>		
 	<?php
 		foreach($arr_js as $js){
-			echo '<script src="'.$js.'"></script>';
+			echo '<script src="'.URL_ROOT.$js.'"></script>';
 		}		
 	?>	
     <script>
@@ -187,7 +187,7 @@
 			}, function () {
 				$.ajax({
                     type: "post",
-                    url: "/mdb/Src/controllers/user.controller.php?delete",
+                    url: <?= json_encode(URL_ROOT);?>+"/Src/controllers/user.controller.php?delete",
                     data: { user_id : id, csrf : csrf_token },
                     success: function(data){
 						swal({
@@ -205,7 +205,7 @@
 		var lang_code = $('html').attr('lang');
 		$.extend( true, $.fn.dataTable.defaults, {
 			language: {
-				url: '/mdb/js/plugins/dataTables/'+$('html').attr('lang')+'.json'
+				url: <?= json_encode(URL_ROOT);?>+'/js/plugins/dataTables/'+$('html').attr('lang')+'.json'
 			},
 			iDisplayLength: 10,
 			deferRender: true,
@@ -218,10 +218,10 @@
 		
 		var interval;
 		var table_active = $(".datatable").DataTable({
-			ajax: "/mdb/Src/controllers/user.controller.php?get=users",
+			ajax: <?= json_encode(URL_ROOT);?>+"/Src/controllers/user.controller.php?get=users",
 			fnInitComplete: function(oSettings, json) {			
 				$.i18n.init({
-					resGetPath: '/mdb/src/lang/__lng__.json',
+					resGetPath: <?= json_encode(URL_ROOT);?>+'/src/lang/__lng__.json',
 					load: 'unspecific',
 					fallbackLng: false,
 					lng: $('html').attr('lang')
@@ -295,7 +295,7 @@
 
 			$.ajax({
 				type: "POST",
-				url: "/mdb/Src/controllers/user.controller.php?updateuser",
+				url: <?= json_encode(URL_ROOT);?>+"/Src/controllers/user.controller.php?updateuser",
 				data: $('form[name="update_user"]').serialize(),
 				success: function(data){
 					swal({
@@ -375,7 +375,7 @@
 
 			$.ajax({
 				type: "POST",
-				url: "/mdb/Src/controllers/user.controller.php?new",
+				url: <?= json_encode(URL_ROOT);?>+"/Src/controllers/user.controller.php?new",
 				data: $('form[name="new_wb"]').serialize(),
 				success: function(data){
 					swal({

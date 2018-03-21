@@ -143,7 +143,7 @@
 		
 	<?php
 		foreach($arr_js as $js){
-			echo '<script src="'.$js.'"></script>';
+			echo '<script src="'.URL_ROOT.$js.'"></script>';
 		}		
 	?>	
 	
@@ -318,11 +318,11 @@
 			var json_url;
 			
 			if(button == "Verzenden"){
-				json_url = "/mdb/Src/controllers/ticket.controller.php?new";
+				json_url = <?= json_encode(URL_ROOT);?>+"/Src/controllers/ticket.controller.php?new";
 			} else if(button == "Totaal_uitval"){
-				json_url = "/mdb/Src/controllers/ticket.controller.php?send=totaal";				
+				json_url = <?= json_encode(URL_ROOT);?>+"/Src/controllers/ticket.controller.php?send=totaal";				
 			} else {
-				json_url = "mdb/";
+				json_url = <?= json_encode(URL_ROOT);?>;
 			}
 
 			$.ajax({
@@ -356,7 +356,7 @@
 // ==========================================================================================================	
 	$(document).ready(function() {
 		$('#autocomplete-custom-append').autocomplete({
-			serviceUrl: '/mdb/src/scs_naw_hint.json.php',
+			serviceUrl: <?= json_encode(URL_ROOT);?>+'/src/scs_naw_hint.json.php',
 			max: 10,
 			onSearchComplete: function (query, suggestions) {
 				if(!suggestions.length) {
@@ -379,7 +379,7 @@
 			$.ajax({
 				type: 'POST',
 				data: ({p : inpval}),
-				url: '/mdb/src/scs_naw_get.json.php',
+				url: <?= json_encode(URL_ROOT);?>+'/src/scs_naw_get.json.php',
 				success: function(data) {
 				
 				var object = $.parseJSON(data);

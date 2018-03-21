@@ -5,14 +5,13 @@
  *
  */
 
-
 $(document).ready(function () {
 	
 	// Set lang code for i18next
 	var lang_code = $('html').attr('lang');
 
 	$.i18n.init({
-		resGetPath: '/mdb/src/lang/__lng__.json',
+		resGetPath: '/antdb/src/lang/__lng__.json',
 		load: 'unspecific',
 		fallbackLng: false,
 		lng: lang_code

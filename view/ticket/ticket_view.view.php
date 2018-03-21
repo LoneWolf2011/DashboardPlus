@@ -37,7 +37,7 @@
                   <div class="ibox-title">
 				  <span class="pull-right"><span data-i18n="[html]tickets.update.submitted_by">Submitted by door</span>: <b><?= $row['ticket_created_by'];?></b> <span data-i18n="[html]tickets.update.checked_by">Checked by</span>: <b><?= $row['ticket_checked_by'];?></b></span>
                                
-                    <h2><a href="<?= URL_ROOT. 'view/ticket/';?>" class="text-primary"><i class="fa fa-arrow-left"></i> </a><span data-i18n="[html]tickets.update.label">Ticket</span> <b><?= $row['ticket_nr'];?></b> <small></small></h2>
+                    <h2><a href="<?= URL_ROOT. '/view/ticket/';?>" class="text-primary"><i class="fa fa-arrow-left"></i> </a><span data-i18n="[html]tickets.update.label">Ticket</span> <b><?= $row['ticket_nr'];?></b> <small></small></h2>
 
                     <div class="clearfix"></div>
                   </div>
@@ -157,7 +157,7 @@
 		
 	<?php
 		foreach($arr_js as $js){
-			echo '<script src="'.$js.'"></script>';
+			echo '<script src="'.URL_ROOT.$js.'"></script>';
 		}		
 	?>	
 	
@@ -209,7 +209,7 @@
 	function loadInfo(){
 		$('.chat-discussion').load('ticket_updates.view.php?id='+getUrlParameter('id'), function(){
 			$.i18n.init({
-				resGetPath: '/mdb/src/lang/__lng__.json',
+				resGetPath: <?= json_encode(URL_ROOT);?>+'/src/lang/__lng__.json',
 				load: 'unspecific',
 				fallbackLng: false,
 				lng: $('html').attr('lang')
@@ -221,7 +221,7 @@
 	function loadUpdates(){
 		$('#ticket_info').load('ticket_info.view.php?id='+getUrlParameter('id'), function(){
 			$.i18n.init({
-				resGetPath: '/mdb/src/lang/__lng__.json',
+				resGetPath: <?= json_encode(URL_ROOT);?>+'/src/lang/__lng__.json',
 				load: 'unspecific',
 				fallbackLng: false,
 				lng: $('html').attr('lang')
@@ -348,15 +348,15 @@
 			var json_url;
 			
 			if(button == "Opslaan") {
-				json_url = "/mdb/Src/controllers/ticket.controller.php?save";
+				json_url = <?= json_encode(URL_ROOT);?>+"/Src/controllers/ticket.controller.php?save";
 			} else if(button == "Verzenden"){
-				json_url = "/mdb/Src/controllers/ticket.controller.php?send";
+				json_url = <?= json_encode(URL_ROOT);?>+"/Src/controllers/ticket.controller.php?send";
 			} else if(button == "VerzendenOpnieuw"){
-				json_url = "/mdb/Src/controllers/ticket.controller.php?send=again";
+				json_url = <?= json_encode(URL_ROOT);?>+"/Src/controllers/ticket.controller.php?send=again";
 			} else if(button == "Doorzetten"){
-				json_url = "/mdb/Src/controllers/ticket.controller.php?send=extern";					
+				json_url = <?= json_encode(URL_ROOT);?>+"/Src/controllers/ticket.controller.php?send=extern";					
 			} else {
-				json_url = "/mdb/";
+				json_url = <?= json_encode(URL_ROOT);?>;
 			}
 			
 			$.ajax({	

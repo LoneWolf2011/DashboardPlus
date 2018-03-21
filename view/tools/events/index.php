@@ -1,6 +1,6 @@
 <?php
     // Check om te zien of de user ingelogged is of niet
-    if(empty($_SESSION['db_user'])) 
+    if(empty($_SESSION[SES_NAME])) 
     { 
         // Indien dit niet het geval is, redirect naar inlog pagina. 
         header("Location: ".URL_ROOT); 
@@ -19,18 +19,18 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-	<link rel='shortcut icon' type='image/x-icon' href='<?= URL_ROOT_IMG; ?>leaf.ico' />
+	<link rel='shortcut icon' type='image/x-icon' href='<?= URL_ROOT_IMG; ?>/leaf.ico' />
 	
     <title><?= APP_TITLE; ?> | Pending events</title>
 	
 	<!-- Mainly CSS -->
 	<?php
 		// View specific CSS
-		array_push($arr_css, '/Mdb/css/dash_custom.css');		
+		array_push($arr_css, '/css/dash_custom.css');		
 	?>		
 	<?php
 		foreach($arr_css as $css){
-			echo '<link href="'.$css.'" rel="stylesheet">';
+			echo '<link href="'.URL_ROOT.$css.'" rel="stylesheet">';
 		}
 	?>
 

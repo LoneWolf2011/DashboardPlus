@@ -20,18 +20,18 @@
 							
 	<input type="text" hidden id="url_query" value="<?= $_SERVER['QUERY_STRING']; ?>" />	
 	<input type="text" hidden id="mac_adres"  />	
-	<input type="text" hidden id="url_string" value="<?= URL_ROOT.'Src/controllers/tools.controller.php';?>" />	
+	<input type="text" hidden id="url_string" value="<?= URL_ROOT.'/Src/controllers/tools.controller.php';?>" />	
 	<?php
 		// View specific scripts
-		array_push($arr_js, '/mdb/js/plugins/sparkline/jquery.sparkline.min.js');
-		array_push($arr_js, '/mdb/js/plugins/d3/d3.min.js');
-		array_push($arr_js, '/mdb/js/plugins/c3/c3.min.js');
+		array_push($arr_js, '/js/plugins/sparkline/jquery.sparkline.min.js');
+		array_push($arr_js, '/js/plugins/d3/d3.min.js');
+		array_push($arr_js, '/js/plugins/c3/c3.min.js');
 		
 	?>	
 	
 	<?php
 		foreach($arr_js as $js){
-			echo '<script src="'.$js.'"></script>';
+			echo '<script src="'.URL_ROOT.$js.'"></script>';
 		}		
 	?>	
 
