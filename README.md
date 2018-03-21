@@ -9,4 +9,4 @@
 - change **/mdb/** to match your root folder name.
 - **HINT:** if your root folder is htdocs or html, remove **/mdb/**
 
-- Edit .htaccess change the urls so they match your root folder 
+- Edit **.htaccess** in root folder and change the urls so they match your folder structure
