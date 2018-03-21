@@ -5,5 +5,6 @@ env.ini
 src/statusjob/import_into_db.php
 *.log
 test/index.php
-Test/*
+test/*
 Test_data.sql
+
