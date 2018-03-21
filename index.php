@@ -8,7 +8,7 @@
     }    
 	
     // At the top of the page we check to see whether the user is logged in or not 
-    if(!empty($_SESSION[SES_NAME])) 
+    if(empty($_SESSION[SES_NAME])) 
     { 
 		header("Location: ".URL_ROOT); 
     } 
