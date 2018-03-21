@@ -3,9 +3,9 @@ src/statusjob/WinSCP/
 *.csv
 env.ini
 src/statusjob/import_into_db.php
+
 *.log
+*.sql
 
-test/*
 test/index.php
-Test_data.sql
-
+test/*
