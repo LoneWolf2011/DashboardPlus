@@ -5,18 +5,7 @@ env.ini
 src/statusjob/import_into_db.php
 
 *.log
-<<<<<<< HEAD
 *.sql
 
 test/index.php
 test/*
-<<<<<<< HEAD
-
-=======
->>>>>>> master
-=======
-
-test/index.php
-test/*
-*.sql
->>>>>>> develop

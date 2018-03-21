@@ -10,7 +10,7 @@
 									<h2># <?= preg_replace("/[^0-9]/","", $_SERVER['QUERY_STRING']); ?></h2>
 									<h3 id="location_name"></h3>
 									<?php if(isset($_GET['err'])){ ?>
-									<a href="<?= URL_ROOT;?>/view/ticket/?<?= preg_replace("/[^0-9]/","", $_SERVER['QUERY_STRING']); ?>"class="btn btn-success btn-xs" data-i18n="[html]tickets.create.label">Create ticket</a>
+									<a href="<?= URL_ROOT;?>view/ticket/?<?= preg_replace("/[^0-9]/","", $_SERVER['QUERY_STRING']); ?>"class="btn btn-success btn-xs" data-i18n="[html]tickets.create.label">Create ticket</a>
 									<?php }; ?>
 								</div>
 							</div>
@@ -305,20 +305,20 @@
 	
 	<input type="text" hidden id="url_query" value="<?= $_SERVER['QUERY_STRING']; ?>" />	
 	<input type="text" hidden id="mac_adres"  />	
-	<input type="text" hidden id="url_string" value="<?= URL_ROOT.'/Src/controllers/location.controller.php';?>" />	
+	<input type="text" hidden id="url_string" value="<?= URL_ROOT.'Src/controllers/location.controller.php';?>" />	
 	
 	<?php
 		// View specific scripts
-		array_push($arr_js, '/js/plugins/sparkline/jquery.sparkline.min.js');
-		array_push($arr_js, '/js/plugins/dataTables/datatables.min.js');
-		array_push($arr_js, '/js/plugins/d3/d3.min.js');
-		array_push($arr_js, '/js/plugins/c3/c3.min.js');
+		array_push($arr_js, '/mdb/js/plugins/sparkline/jquery.sparkline.min.js');
+		array_push($arr_js, '/mdb/js/plugins/dataTables/datatables.min.js');
+		array_push($arr_js, '/mdb/js/plugins/d3/d3.min.js');
+		array_push($arr_js, '/mdb/js/plugins/c3/c3.min.js');
 		
 	?>	
 	<?php
 		foreach($arr_js as $js){
 			echo '<script src="'.URL_ROOT.$js.'"></script>';
-		}	
+		}		
 	?>		
 	<script>
     var theme = {

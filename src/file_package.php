@@ -42,6 +42,9 @@ define('ROOT_FILE', array(
 		'google' 			=> '/Src/Classes/class.googleHelper.php',
 		'login' 			=> '/Src/Classes/class.login.php',
 		'home' 				=> '/Src/Classes/class.home.php',
+		'location' 			=> '/Src/Classes/class.location.php',
+		'tools' 			=> '/Src/Classes/class.tools.php',	
+		'ticket' 			=> '/Src/Classes/class.ticket.php',	
 		'user' 				=> '/Src/Classes/class.user.php',	
 	)		
 ));
