@@ -5,7 +5,7 @@
 		
 		function __construct($db_conn) {
 			$this->db_conn 	= $db_conn;
-			$this->locale 	= json_decode(file_get_contents(URL_ROOT.'Src/lang/'.APP_LANG.'.json'), true);
+			$this->locale 	= json_decode(file_get_contents(URL_ROOT.'/Src/lang/'.APP_LANG.'.json'), true);
 		}	
 
 		public function getLocation($post_val){
