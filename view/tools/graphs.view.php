@@ -10,33 +10,32 @@
 				<div id="piechart2"></div>	
             </div>
             <div class="col-lg-4">
-				<h2>Top 10 meeste signalen deze week </h2>
+				<h2>Top 15 meeste signalen deze week </h2>
 				<table class="table no-margins" id="signal_table" style="color: white;"></table>
             </div>			
         </div>
         <div class="row">
             <div class="col-lg-12">
-				<h2>Signaal belasting<small>  <span></span></small></h2>
+				<h2>Top 5 events per 24h<small>  <span></span></small></h2>
 				<div id="sign_chart"></div>
             </div>
-		
         </div>		
     </div>
 	
 	<input type="text" hidden id="url_query" value="<?= $_SERVER['QUERY_STRING']; ?>" />	
 	<input type="text" hidden id="mac_adres"  />	
-	<input type="text" hidden id="url_string" value="<?= URL_ROOT.'Src/controllers/tools.controller.php';?>" />	
+	<input type="text" hidden id="url_string" value="<?= URL_ROOT.'/Src/controllers/tools.controller.php';?>" />	
 	
 	<?php
 		// View specific scripts
-		array_push($arr_js, '/mdb/js/plugins/sparkline/jquery.sparkline.min.js');
-		array_push($arr_js, '/mdb/js/plugins/d3/d3.min.js');
-		array_push($arr_js, '/mdb/js/plugins/c3/c3.min.js');
+		array_push($arr_js, '/js/plugins/sparkline/jquery.sparkline.min.js');
+		array_push($arr_js, '/js/plugins/d3/d3.min.js');
+		array_push($arr_js, '/js/plugins/c3/c3.min.js');
 		
 	?>		
 	<?php
 		foreach($arr_js as $js){
-			echo '<script src="'.$js.'"></script>';
+			echo '<script src="'.URL_ROOT.$js.'"></script>';
 		}		
 	?>	
 
@@ -49,13 +48,14 @@
 		
 		getOperatorThresholds(url_str, 1);
 		getOperatorThresholds(url_str, 2);
-		getSignalLoad(url_str);
+		getSignalLoadEvents(url_str);
 		getLocationSignalCount(url_str);
 		
 		interval = setInterval( function () {
 			getOperatorThresholds(url_str, 1);
 			getOperatorThresholds(url_str, 2);
-			getSignalLoad(url_str);
+			getLocationSignalCount(url_str);
+			getSignalLoadEvents(url_str);
 		}, refresh );	
 		
 		
@@ -72,7 +72,7 @@
 			columns: []
 		},
 		size: {
-			height:500
+			height:450
 		},		
 		type: 'pie'	
 	});
@@ -82,7 +82,7 @@
 			columns: []
 		},
 		size: {
-			height:500
+			height:450
 		},		
 		type: 'pie'	
 	});	
@@ -93,6 +93,9 @@
 			xFormat: '%H:%M',
 			columns: []
 		},
+		point: {
+			show: false
+		},		
 		type: 'spline',
 		size: {
 			height:500
@@ -104,29 +107,13 @@
 		},
 		
 		color: {
-			pattern: ["#1ab394",  "#d3d3d3", "#1C84C6", "#bababa", "#79d2c0","#1ab394"]
+			pattern: ["rgba(26, 179, 148, 0.8)", "rgba(28, 132, 198, 0.8)",  "rgba(211, 211, 211, 0.8)", "rgba(150, 186, 186, 0.8)", "rgba(121, 210, 192, 0.8)", ""]
 		},		
 		zoom: {
 			enabled: true
 		}			
 	});	
 
-	function popupWindow(url, title, w, h) {
-		// Create reference to new window
-		var newWindow = window.open(url, title, 'toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=no, resizable=yes, copyhistory=no, width=' + w + ', height=' + h + ', top=' + top + ', left=' + left);
-		// Position secondary screen
-		var left = 2100;
-		var top = 100;
-		
-		if(newWindow.location.href === 'about:blank')
-		{
-			newWindow.location.href = url
-		}
-		//console.log(newWindow.location.href);
-		return newWindow;
-	}
-
-	
 	function getLocationSignalCount(url){
 		$.ajax({
 			type: 'GET',
@@ -141,30 +128,21 @@
 		});		
 	}
 	
-	function getSignalLoad(url){
+	function getSignalLoadEvents(url){
 		$.ajax({
 			type: 'GET',
-			url: url+"?get=signalload",
+			url: url+"?get=signalload&events",
 			success: function(data) {
 				if(data.status != 0){
 					compchart.load({
-						columns: [
-							data.hours,
-							data.signal
-						],
-						type: 'area-spline'						
+						columns: data.signal,
+						type: 'bar'
+						
 					});
-					compchart.ygrids([
-						{value: data.avg_last, class: data.avg_last > data.avg_now ? 'gridorange': '', text: 'Gemiddelde vorige week ' + data.avg_last},
-						{value: data.avg_now, class: data.avg_now > data.avg_last ? 'gridorange': 'gridgreen', text: 'Gemiddelde deze week ' + data.avg_now}
-					]);					
-					compchart.data.names({
-						signal: 'Signaal belasting afgelopen 24h'
-					});					
+					compchart.groups( [data.groups]);
 				} else {
 					compchart.destroy();	
 				}
-				$('#spinner2').css('display','none');
 						
 			}
 		});		
@@ -186,9 +164,9 @@
 								data.red
 							],					
 							colors: {
-								green: 'rgba(26, 179, 148, 0.28)',
-								orange: 'rgb(248, 172, 89, 0.28)',
-								red: 'rgba(237, 85, 101, 0.28)'
+								green: 'rgba(26, 179, 148, 0.5)',
+								orange: 'rgb(248, 172, 89, 0.5)',
+								red: 'rgba(237, 85, 101, 0.5)'
 							},						
 							type: 'pie'						
 						});
@@ -208,9 +186,9 @@
 								data.red
 							],					
 							colors: {
-								green: 'rgba(26, 179, 148, 0.28)',
-								orange: 'rgb(248, 172, 89, 0.28)',
-								red: 'rgba(237, 85, 101, 0.28)'
+								green: 'rgba(26, 179, 148, 0.5)',
+								orange: 'rgb(248, 172, 89, 0.5)',
+								red: 'rgba(237, 85, 101, 0.5)'
 							},						
 							type: 'pie'						
 						});
@@ -224,7 +202,6 @@
 					piechart1.destroy();	
 				}
 				$('#spinner2').css('display','none');
-						
 			}
 		});		
 	}

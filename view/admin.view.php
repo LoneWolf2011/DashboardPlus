@@ -23,14 +23,14 @@
 		
 	<?php
 		foreach($arr_js as $js){
-			echo '<script src="'.$js.'"></script>';
+			echo '<script src="'.URL_ROOT.$js.'"></script>';
 		}		
 	?>	
 
 	<script>
 	$(document).ready(function () {
 		setTimeout(function() {
-			window.location.href = '/mdb/view/home/';
+			window.location.href = <?= json_encode(URL_ROOT);?>+'/view/home/';
 		}, 3000);
 	});
 	</script>	

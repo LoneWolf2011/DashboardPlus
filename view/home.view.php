@@ -71,10 +71,10 @@
 													<table class="table table-hover datatable">
 														<thead>
 															<tr>
-																<th data-i18n="[html]home.locations.active.table.th1">Conexão</th>
+																<th data-i18n="[html]home.locations.active.table.th1">Connection</th>
 																<th data-i18n="[html]home.locations.active.table.th2">ID</th>
-																<th data-i18n="[html]home.locations.active.table.th3">Localização</th>
-																<th data-i18n="[html]home.locations.active.table.th4">Visto pela última vez</th>
+																<th data-i18n="[html]home.locations.active.table.th3">Location</th>
+																<th data-i18n="[html]home.locations.active.table.th4">Last seen</th>
 															</tr>
 														</thead>
 														<tbody><!--JSON RES--></tbody>
@@ -206,8 +206,9 @@
 								</div>
 							</div>
 						</div>		
-						<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=<?= GOOGLE_API;?>"></script>
-						
+						<script async defer src="https://maps.googleapis.com/maps/api/js?sensor=false&key=<?= GOOGLE_API;?>"></script>
+						<!--<script async defer src="Z:\google.js?sensor=false&key=<?= GOOGLE_API;?>"></script>-->
+
 						<div class="google-map" id="map" style="height:600px;"></div>
 					</div>
 					
@@ -218,17 +219,17 @@
 		
 	</div>
 
-	<input type="text" hidden id="url_string" value="<?= URL_ROOT.'Src/controllers/home.controller.php';?>" />
+	<input type="text" hidden id="url_string" value="<?= URL_ROOT.'/Src/controllers/home.controller.php';?>" />
 	
 	<?php
 		// View specific scripts
-		array_push($arr_js, '/mdb/js/plugins/sparkline/jquery.sparkline.min.js');
-		array_push($arr_js, '/mdb/js/plugins/dataTables/datatables.min.js');
+		array_push($arr_js, '/js/plugins/sparkline/jquery.sparkline.min.js');
+		array_push($arr_js, '/js/plugins/dataTables/datatables.min.js');
 		
 	?>
 	<?php
 		foreach($arr_js as $js){
-			echo '<script src="'.$js.'"></script>';
+			echo '<script src="'.URL_ROOT.$js.'"></script>';
 		}		
 	?>	
 	
@@ -252,7 +253,7 @@
 		
 		$.extend( true, $.fn.dataTable.defaults, {
 			language: {
-				url: '/mdb/js/plugins/dataTables/'+$('html').attr('lang')+'.json'
+				url: <?= json_encode(URL_ROOT);?>+'/js/plugins/dataTables/'+$('html').attr('lang')+'.json'
 			},
 			iDisplayLength: 10,
 			deferRender: true,
@@ -274,7 +275,7 @@
 					table_active.ajax.reload( null, false ); 
 				}, refresh );
 				$.i18n.init({
-					resGetPath: '/mdb/src/lang/__lng__.json',
+					resGetPath: <?= json_encode(URL_ROOT);?>+'/src/lang/__lng__.json',
 					load: 'unspecific',
 					fallbackLng: false,
 					lng: lang_code
@@ -412,7 +413,7 @@
 	var err_icon;
 	var err_conn;
 	var err_txt;
-	var url = '/Mdb/img/GoogleMapsMarkers/';
+	var url = <?= json_encode(URL_ROOT_IMG);?>+'/GoogleMapsMarkers/';
 	var markers_arr = [];	
 	var map;
 	var markerCluster = null;
@@ -446,10 +447,21 @@
 			ajaxObj.get(); //Start the get cycle.
 		}, 1000);		
 	}
-	
+			// OPEN STREET MAP
+           var mapTypeIds = [];
+            for(var type in google.maps.MapTypeId) {
+                mapTypeIds.push(google.maps.MapTypeId[type]);
+            }
+            mapTypeIds.push("OSM");	
+			
 	map = new google.maps.Map(document.getElementById('map'), {
 			center: center,
 			zoom: 8, 
+				// OPEN STREET MAP
+                mapTypeId: "OSM",
+                mapTypeControlOptions: {
+                    mapTypeIds: mapTypeIds
+                },			
 			// Style for Google Maps
 			//styles: [{"stylers":[{"hue":"#18a689"},{"visibility":"on"},{"invert_lightness":true},{"saturation":40},{"lightness":10}]}]
 			styles: [{
@@ -684,7 +696,18 @@
 				]
 			}]
         });
-	
+
+		
+            map.mapTypes.set("OSM", new google.maps.ImageMapType({
+                getTileUrl: function(coord, zoom) {
+                    // See above example if you need smooth wrapping at 180th meridian
+                    return "http://tile.openstreetmap.org/" + zoom + "/" + coord.x + "/" + coord.y + ".png";
+                },
+                tileSize: new google.maps.Size(256, 256),
+                name: "OpenStreetMap",
+                maxZoom: 18
+            }));
+		
 	var infowindow = new google.maps.InfoWindow();
 	//When true, markers for all unreported locs will be removed. 
 	// if false; removal must be specified in json data: scsnr: { remove: true }
@@ -860,13 +883,13 @@
 			gridSize: 50, 
 			maxZoom: 15, 
 			styles: [{
-				url: '/Mdb/js/plugins/markerclusterer/images/m1.png',
+				url: <?= json_encode(URL_ROOT);?>+'/js/plugins/markerclusterer/images/m1.png',
 				textColor: 'white',
 				height: 52,
 				width: 52
 			},
 			{
-				url: '/Mdb/js/plugins/markerclusterer/images/m3.png',
+				url: <?= json_encode(URL_ROOT);?>+'/js/plugins/markerclusterer/images/m3.png',
 				textColor: 'white',
 				height: 65,
 				width: 65

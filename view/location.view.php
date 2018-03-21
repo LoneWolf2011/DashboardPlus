@@ -317,7 +317,7 @@
 	?>	
 	<?php
 		foreach($arr_js as $js){
-			echo '<script src="'.$js.'"></script>';
+			echo '<script src="'.URL_ROOT.$js.'"></script>';
 		}		
 	?>		
 	<script>

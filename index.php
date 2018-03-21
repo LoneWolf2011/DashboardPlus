@@ -1,6 +1,6 @@
 <?php
     // Create CSRF token
-    $_SESSION['token'] =  bin2hex(random_bytes(32));  
+    $_SESSION['db_token'] =  bin2hex(random_bytes(32));  
 	
     if(APP_INITIALIZE === 0) 
     { 
@@ -8,9 +8,9 @@
     }    
 	
     // At the top of the page we check to see whether the user is logged in or not 
-    if(!empty($_SESSION['user'])) 
+    if(!empty($_SESSION[SES_NAME])) 
     { 
-		header("Location: Src/Login/redirect.php"); 
+		header("Location: ".URL_ROOT); 
     } 
 
     // Everything below this point in the file is secured by the login system 
@@ -25,13 +25,13 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-	<link rel='shortcut icon' type='image/x-icon' href='<?= URL_ROOT_IMG; ?>leaf.ico' />
+	<link rel='shortcut icon' type='image/x-icon' href='<?= URL_ROOT_IMG; ?>/leaf.ico' />
 	
     <title><?= APP_TITLE; ?> | Login</title>
 
 	<?php
 		foreach($arr_css as $css){
-			echo '<link href="'.$css.'" rel="stylesheet">';
+			echo '<link href="'.URL_ROOT.$css.'" rel="stylesheet">';
 		}
 	?>
 
@@ -42,57 +42,62 @@
     <div class="middle-box text-center loginscreen animated fadeInDown ">
         <div class="wrapper wrapper-content">
             <div>
-                <h1 class="logo-name">DB+</h1>
+                <!--<h1 class="logo-name">DB+</h1>-->
+                <h1 class="logo-name"><img src="<?= URL_ROOT_IMG.'/app_logo.png';?>" width="70%"></img></h1>
             </div>
-				<h3 data-i18n="[html]loginscreen.welcome">Welcome to DB+</h3>
+				<h3 ><span data-i18n="[html]loginscreen.welcome">Welcome to</span> <?= APP_NAME;?> </h3>
 				<p data-i18n="[html]loginscreen.text">An improved experience for managing RMS and SCS.</p>
 				<p data-i18n="[html]loginscreen.subtext">Login in. To see it in action.</p>
 
 		<?php 
-			if(isset($_GET['lck'])){
+			if(isset($_GET['fail'])){
 					$search = '<div class="alert alert-danger" >
-									<font color="red"><b data-i18n="[html]loginmsg.blocked">Account locked</b></font><br><span data-i18n="[html]loginmsg.lck"> for 2 hours.</span>
+									<font color="red"><b data-i18n="[html]error_msg.die.label">Account locked</b></font><br><span data-i18n="[html]error_msg.die.msg"> for 2 hours.</span>
+								</div>';					
+			} elseif(isset($_GET['lck'])){
+					$search = '<div class="alert alert-danger" >
+									<font color="red"><b data-i18n="[html]loginmsg.lck.label">Account locked</b></font><br><span data-i18n="[html]loginmsg.lck.msg"> for 2 hours.</span>
 								</div>';		
 			} elseif(isset($_GET['dev'])){
 					$search = '<div class="alert alert-warning" >
-									<font color="orange"><b data-i18n="[html]loginmsg.failed">Login failed</b></font><br><span data-i18n="[html]loginmsg.lck"> Geen DEV account.<br> Indien je toegang nodig hebt meldt dit bij de admins.</span>
+									<font color="orange"><b data-i18n="[html]loginmsg.dev.label">Login failed</b></font><br><span data-i18n="[html]loginmsg.dev.msg"> Geen DEV account.<br> Indien je toegang nodig hebt meldt dit bij de admins.</span>
 								</div>';			
 			} elseif(isset($_GET['blc'])){
 					$search = '<div class="alert alert-danger" >
-									<font color="red"><b data-i18n="[html]loginmsg.failed">Login failed</b></font><br><span data-i18n="[html]loginmsg.id"> User account is block. Contact your admins.</span>
+									<font color="red"><b data-i18n="[html]loginmsg.blc.label">Login failed</b></font><br><span data-i18n="[html]loginmsg.blc.msg"> User account is block. Contact your admins.</span>
 								</div>';			
 			} elseif(isset($_GET['id'])){
 					$search = '<div class="alert alert-danger" >
-									<font color="red"><b data-i18n="[html]loginmsg.failed">Login failed</b></font><br><span data-i18n="[html]loginmsg.id"> Check your initials or password.</span>
+									<font color="red"><b data-i18n="[html]loginmsg.id.label">Login failed</b></font><br><span data-i18n="[html]loginmsg.id.msg"> Check your initials or password.</span>
 								</div>';
 			} elseif(isset($_GET['err'])){
-					$search = '<div class="alert alert-danger" data-i18n="[html]loginmsg.err">
-									<font color="red"><b>Logged out</b></font><br> due to inactivity
+					$search = '<div class="alert alert-danger" >
+									<font color="red"><b data-i18n="[html]loginmsg.err.label"><br></font><span data-i18n="[html]loginmsg.err.msg">  due to inactivity.</span>
 								</div>';
 			} elseif(isset($_GET['uknw'])){
-					$search = '<div class="alert alert-danger" data-i18n="[html]loginmsg.uknw">
-									<font color="red"><b>Error</b></font><br> User: '. $_GET['uknw'].' does not exist.
+					$search = '<div class="alert alert-danger" >
+									<font color="red"><b data-i18n="[html]loginmsg.uknw.label"><br></font><br><span data-i18n="[html]loginmsg.uknw.msg"> User: '. $_GET['uknw'].' does not exist.</span> .
 								</div>';
 			} elseif(isset($_GET['tok'])){
 				if($_GET['tok'] == "suc"){
 					$search = '<div class="alert alert-success" >
-									<font color="green"><b data-i18n="[html]loginmsg.success">Successful</b></font><br><span data-i18n="[html]loginmsg.tok.suc"> Reset token requested.</span>
+									<font color="green"><b data-i18n="[html]loginmsg.tok.suc.label">Successful</b></font><br><span data-i18n="[html]loginmsg.tok.suc.msg"> Reset token requested.</span>
 								</div>';		
 				} elseif($_GET['tok'] == "err") {
-					$search = '<div class="alert alert-danger" data-i18n="[html]loginmsg.tok.err">
-									<font color="red"><b>Reset token aanvraag mislukt</b></font><br> Mail niet correct verzonden<br>Vraag een nieuwe token aan of meldt dit bij een admin.
+					$search = '<div class="alert alert-danger">
+									<font color="red"><b data-i18n="[html]loginmsg.tok.err.label">Reset token aanvraag mislukt</b></font><br><span data-i18n="[html]loginmsg.tok.err.msg"></span>
 								</div>';	
 				} elseif($_GET['tok'] == "inv") {
-					$search = '<div class="alert alert-danger" data-i18n="[html]loginmsg.tok.inv">
-									<font color="red"><b>Token is ongeldig</b></font><br> Vraag een nieuwe aan of meldt dit bij een admin.
+					$search = '<div class="alert alert-danger" >
+									<font color="red"><b data-i18n="[html]loginmsg.tok.inv.label">Reset token aanvraag mislukt</b></font><br><span data-i18n="[html]loginmsg.tok.inv.msg"></span>
 								</div>';		
 				} elseif($_GET['tok'] == "uknw") {
-					$search = '<div class="alert alert-danger" data-i18n="[html]loginmsg.tok.uknw">
-									<font color="red"><b>Token niet gevonden</b></font><br> Vraag een nieuwe aan of meldt dit bij een admin.
+					$search = '<div class="alert alert-danger" >
+									<font color="red"><b data-i18n="[html]loginmsg.tok.uknw.label">Reset token aanvraag mislukt</b></font><br><span data-i18n="[html]loginmsg.tok.uknw.msg"></span>
 								</div>';
 				} elseif($_GET['tok'] == "exp") {
-					$search = '<div class="alert alert-danger" data-i18n="[html]loginmsg.tok.exp">
-									<font color="red"><b>Token vervallen</b></font><br> en niet meer bruikbaar. Vraag een nieuwe token aan
+					$search = '<div class="alert alert-danger" >
+									<font color="red"><b data-i18n="[html]loginmsg.tok.exp.label">Reset token aanvraag mislukt</b></font><br><span data-i18n="[html]loginmsg.tok.exp.msg"></span>
 								</div>';								
 				} else {
 					$search = "";
@@ -117,7 +122,7 @@
 		
 		?>			
 			
-            <form class="m-t" id="signinForm" action="Src/Login/login_process.php" method="post">
+            <form class="m-t" id="signinForm" action="Src/controllers/login.controller.php?login" method="post">
                 <div class="form-group">
                     <input type="email" class="form-control" placeholder="Email" name="email" required="" value="<?php 
 				if(isset($_GET['id'])){ 
@@ -133,22 +138,22 @@
 
                 <a class="link" id="password"><small data-i18n="[html]loginscreen.forget">Forgot password?</small></a>
 				
-				<input type="hidden" name="csrf" value="<?= htmlspecialchars($_SESSION['token'], ENT_QUOTES, 'UTF-8');?>">
+				<input type="hidden" name="csrf" value="<?= htmlspecialchars($_SESSION['db_token'], ENT_QUOTES, 'UTF-8');?>">
             </form>
 		
 			<div id="show_form" style="display: none;">
-				<form class="login-form" action="Src/Login/gen_token.php" method="post">
+				<form class="login-form" action="Src/controllers/login.controller.php?gentoken" method="post">
 					<div class="form-group">
 						<input type="email" class="form-control" placeholder="Email" name="email" required="">
 					</div>			
 					<button type="submit" name="request" value="request" class="btn btn-primary block full-width m-b" data-i18n="[html]loginscreen.request">Request </button>
 
 					<a class="link" id="password" data-i18n="[html]loginscreen.login">Login</a>
-					<input type="hidden" name="csrf" value="<?= htmlspecialchars($_SESSION['token'], ENT_QUOTES, 'UTF-8');?>">
+					<input type="hidden" name="csrf" value="<?= htmlspecialchars($_SESSION['db_token'], ENT_QUOTES, 'UTF-8');?>">
 				</form>
 			</div>	
 
-            <p class="m-t"> <small><?= date("D d-m-Y"). "<font color='#0092D0'> | </font>". date("H:i:s")."<font color='#0092D0'> | </font> ".APP_ENV." " . appVersionCode(APP_ENV); ?></small> </p>
+            <p class="m-t"> <small><?= date("D d-m-Y"). "<font color='#0092D0'> | </font>". date("H:i:s")."<font color='#0092D0'> | </font> ".APP_ENV." " . APP_VER; ?></small> </p>
 			
         </div>
     </div>
@@ -156,7 +161,7 @@
     <!-- Mainly scripts -->
 	<?php
 		foreach($arr_js as $js){
-			echo '<script src="'.$js.'"></script>';
+			echo '<script src="'.URL_ROOT.$js.'"></script>';
 		}		
 	?>
 	<script>

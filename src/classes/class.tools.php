@@ -2,37 +2,52 @@
 	
 	class Tools {
 		protected $succesMessage;
+		protected $defaults = array(
+			'host'	=>	'',
+			'user'	=>	'PreProcessor',
+			'pass'	=>	'ikhouvanjou',
+			'db'  	=>	'scs_stat'
+		);
+		protected $enableAudio = ENABLE_AUDIO;
+		protected $enableAlarmThreshold = ENABLE_GROUPED_EVENTS;
+		protected $alarmThreshold = GROUPED_EVENTS;
+		protected $alarmThresholdWarning = GROUPED_EVENTS_WARNING;
+		protected $alarmThresholdDanger = GROUPED_EVENTS_DANGER;
 		
 		function __construct($db_conn) {
 			$this->db_conn 	= $db_conn;
-			$this->locale 	= json_decode(file_get_contents(URL_ROOT.'Src/lang/'.APP_LANG.'.json'), true);
+			$this->locale 	= json_decode(file_get_contents(URL_ROOT.'/Src/lang/'.APP_LANG.'.json'), true);
 		}
 		
 		public function getThreshold($post_val){
 			$conn_scs = $this->db_conn;
 
 			$priority = preg_replace("/[^0-9]/","", $post_val['prio']);
+			$year 			= date('Y');
+
+			$now_week_no 	= date('W');
+			$past_week_no 	= date('W', strtotime('-24 hours'));
 			
 			$rms_res = $conn_scs->query("SELECT AVG(`Event_First_Action`) AS average, 
 									COUNT(IF(`Event_First_Action` <= '60' ,1,NULL)) AS green, 
 									COUNT(IF((`Event_First_Action` <= '120' AND `Event_First_Action` > '60') ,1,NULL)) AS orange, 
 									COUNT(IF(`Event_First_Action` > '120' ,1,NULL)) AS red FROM 
 									((SELECT `Event_First_Action` 
-									FROM `events2018_10`.`event_received` 
+									FROM `events".$year.'_'.$now_week_no."`.`event_received` 
 									WHERE `Event_Priority` =  ".$priority." 
 									AND `Event_First_Action` != -1 
 									ORDER BY DATETIME DESC LIMIT 100) 
 									UNION (SELECT `Event_First_Action` 
-									FROM `events2018_09`.`event_received` 
+									FROM `events".$year.'_'.$past_week_no."`.`event_received` 
 									WHERE `Event_Priority` =  ".$priority." 
 									AND `Event_First_Action` != -1 
 									ORDER BY DATETIME DESC LIMIT 100) 
 									LIMIT 100) AS First_Action");
 				
-				$green = array('green');
+				$green 	= array('green');
 				$orange = array('orange');
-				$red = array('red');
-				$avg = array();
+				$red 	= array('red');
+				$avg 	= array();
 				while ($row = $conn_scs->fetch($rms_res)) {			
 					$green[]		= $row['green'];				
 					$orange[]		= $row['orange'];				
@@ -45,7 +60,7 @@
 					'green'			=> $green,
 					'orange'		=> $orange,
 					'red'			=> $red,
-					'avg'			=> round($avg) . ' sec',
+					'avg'			=> round($avg) . ' sec'
 				);
 				
 				if($priority == 1){
@@ -178,65 +193,187 @@
 				
 		}
 
-		public function getSignalLoad(){
-			$conn_scs = $this->db_conn;
+		public function getSignalLoadEvents($primair_conn = array()){
+			$table_now 		= 'events'.date('Y').'_'.date('W');		
 			
-			$year = date('Y');
+			$this->defaults = array(
+				'user'	=>	'scsClient',
+				'pass'	=>	'ikhouvanjou',
+				'db'  	=>	$table_now
+			);
+			$opt_prim = array_merge($this->defaults,$primair_conn);
+			try {
+				$conn_scs 			= (!empty($primair_conn)) ? new SafeMySQL($opt_prim) : null;
+				$connected 	= true;
+			} catch (Exception $e) {
+				$connected 	= false;
+			}			
 			
-			// Get weeknumber from today
-			$now 			= date('YmdHis', strtotime('tomorrow'));
-			$now_week_no 	= date('W');
-			$table_now 		= 'signals_'.$year.'_'.$now_week_no;
-			
-			// Get weeknumber from past 24 hours
-			$past 			= date('YmdHis', strtotime('-24 hours'));
-			$past_week_no 	= date('W', strtotime('past week'));
-			$table_past 	= 'signals_'.$year.'_'.$past_week_no;
-			
-			// Check if both dates are in the same week and specify query
-			if($past_week_no == $now_week_no){
-				$query = "SELECT PreProcessor_Signal_DateTime AS signalDate, COUNT(*) AS signal
-										FROM scs_fep.".$table_now."
-										WHERE PreProcessor_Signal_DateTime 
-										BETWEEN '".$past."' AND '".$now."' 
-										GROUP BY MID(PreProcessor_Signal_DateTime, 5, 6) 
-										ORDER BY PreProcessor_Signal_DateTime";
-			} else {
-				$query = "(SELECT PreProcessor_Signal_DateTime AS signalDate, COUNT(*) AS signal
-										FROM scs_fep.".$table_past."
-										WHERE PreProcessor_Signal_DateTime 
-										BETWEEN '".$past."' AND '".$now."' 
-										GROUP BY MID(PreProcessor_Signal_DateTime, 5, 6) 
-										ORDER BY PreProcessor_Signal_DateTime) 
-										UNION 
-										(SELECT PreProcessor_Signal_DateTime AS signalDate, COUNT(*) AS signal
-										FROM scs_fep.".$table_now." 
-										WHERE PreProcessor_Signal_DateTime 
-										BETWEEN '".$past."' AND '".$now."' 
-										GROUP BY MID(PreProcessor_Signal_DateTime, 5, 6) 
-										ORDER BY PreProcessor_Signal_DateTime)";
-			}
-			
-			$res = $conn_scs->query($query);
+			if($connected){
+				$past_24 = date('YmdH'.'0000', strtotime('-24 hours'));
+				$now_24 = date('YmdH'.'0000', strtotime('+1 hour'));
 				
-				$signal = array('signal');
-				$hours 	= array('x');
+				$period = new DatePeriod(
+					new DateTime($past_24),
+					new DateInterval('PT1H'),
+					new DateTime($now_24)
+				);
 				
-				while ($row = $conn_scs->fetch($res)) {			
-					$signal[]	= $row['signal'];				
-					$hours[]	= date('H:i', strtotime($row['signalDate']));													
-				};			
+				$q = '';
+				$signal_str = '';
+				$i= 1;
+				foreach($period as $date){
+					$minus_1_hour = date('YmdH', strtotime('-1 hour', strtotime($date->format('YmdHis'))));
+					$q .= "SUM(IFNULL((`DateTime` > '".$minus_1_hour."0000' AND `DateTime` <= '".$date->format('YmdHis')."'),0)) AS h".$i.",";
+					$signal_str .= '$row["h'.$i.'"]';
+					$i++;
+				}
+			
+				try {			
+					$query = "SELECT
+									".$q."
+									Event_Type
+									FROM `".$table_now."`.`event_received`  
+									WHERE `DateTime` > '".date('YmdH'.'0000', strtotime('-25 hours'))."' AND `DateTime` < '".$now_24."'
+									GROUP BY  Event_Type
+									ORDER BY h1 DESC
+									LIMIT 5;";
+							
+					$res = $conn_scs->query($query);
+					
+					$signal = array();
+					$hours 	= array('x');
+					$groups = array();
+					
+					for($i= 0;$i<25;$i++){
+						$plus_1_hour = strtotime($past_24) + 60*60*$i;
+						$hours[] = date('H:i', $plus_1_hour);
+					}
+
+					while ($row = $conn_scs->fetch($res)) {	
+						$signal[] = array($row['Event_Type'], $row['h1'],$row['h2'],$row['h3'],$row['h4'],$row['h5'],$row['h6'],$row['h7'],$row['h8'],$row['h9'],$row['h10'],$row['h11'],$row['h12'],$row['h13'],$row['h14'],$row['h15'],$row['h16'],$row['h17'],$row['h18'],$row['h19'],$row['h20'],$row['h21'],$row['h22'],$row['h23'],$row['h24'],$row['h25']);
+						$groups[] = $row['Event_Type'];
+					};			
+					array_pop($hours);
+					$signal[] = $hours;
+					
+				}  catch (Exception $e) {
+					return $response_array['status'] = 0;
+				}
+				
 				
 				$response_array = array(
 					'status'	=> 1,
 					'signal'	=> $signal,
+					'groups'	=> $groups,
+					'q'	=> $query
+					
+				);
+			} else {
+				$response_array['status'] = 0;
+			}
+			
+			jsonArr($response_array);			
+				
+		}		
+		
+		public function getSignalLoad($primair_conn = array()){
+			//if($conn_scs != null){
+			//	$conn_scs = $this->db_conn;	
+			//}
+			$opt_prim = array_merge($this->defaults,$primair_conn);
+			try {
+				$conn_scs 			= (!empty($primair_conn)) ? new SafeMySQL($opt_prim) : null;
+				$connected 	= true;
+			} catch (Exception $e) {
+				$connected 	= false;
+			}			
+			
+			if($connected){
+				$year = date('Y');
+				
+				// Get weeknumber from today
+				$now 			= date('YmdHis', strtotime('+1 hour'));
+				$now_week_no 	= date('W');
+				$table_now 		= 'signals_'.$year.'_'.$now_week_no;
+				
+				// Get weeknumber from past 24 hours
+				$past 			= date('YmdHis', strtotime('-24 hours'));
+				$past_week_no 	= date('W', strtotime('-24 hours'));
+				$table_past 	= 'signals_'.$year.'_'.$past_week_no;
+				
+				// Check if both dates are in the same week and specify query
+				try {			
+					if($past_week_no == $now_week_no){
+						$query = "SELECT PreProcessor_Signal_DateTime AS signalDate, COUNT(*) AS signal
+												FROM scs_fep.".$table_now."
+												WHERE PreProcessor_Signal_DateTime 
+												BETWEEN '".$past."' AND '".$now."' 
+												GROUP BY MID(PreProcessor_Signal_DateTime, 5, 6) 
+												ORDER BY PreProcessor_Signal_DateTime";
+					} else {
+						$query = "(SELECT PreProcessor_Signal_DateTime AS signalDate, COUNT(*) AS signal
+												FROM scs_fep.".$table_past."
+												WHERE PreProcessor_Signal_DateTime 
+												BETWEEN '".$past."' AND '".$now."' 
+												GROUP BY MID(PreProcessor_Signal_DateTime, 5, 6) 
+												ORDER BY PreProcessor_Signal_DateTime) 
+												UNION 
+												(SELECT PreProcessor_Signal_DateTime AS signalDate, COUNT(*) AS signal
+												FROM scs_fep.".$table_now." 
+												WHERE PreProcessor_Signal_DateTime 
+												BETWEEN '".$past."' AND '".$now."' 
+												GROUP BY MID(PreProcessor_Signal_DateTime, 5, 6) 
+												ORDER BY PreProcessor_Signal_DateTime)";
+					}
+		
+					$res = $conn_scs->query($query);
+					
+					$signal = array('signal');
+					$hours 	= array('x');
+					$t = array();
+					while ($row = $conn_scs->fetch($res)) {	
+						
+						$signal[]	= $row['signal'];				
+						$t[]		= $row['signal'];				
+						$hours[]	= date('H:i', strtotime($row['signalDate']));													
+					};			
+					array_pop($signal);
+					array_pop($hours);
+				}  catch (Exception $e) {
+					return $response_array['status'] = 0;
+				}
+				
+				$c_hours = count($hours) -1;
+				$hour = array();
+				for($i=0;$i<$c_hours; $i++){
+					$hour[] = $i;
+				}
+				
+				//$hour = array(1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25);
+				$trendarray = $this->trendLineAnalyse($hour, $t );
+				
+				$trend = array('trend');
+				foreach ( $hour as $item ) {
+					$number = ( $trendarray['slope'] * $item ) + $trendarray['intercept'];
+					$number = ( $number <= 0 )? 0 : $number;
+					$trend[] = round($number);
+				}
+
+				
+				$response_array = array(
+					'status'	=> 1,
+					'signal'	=> $signal,
+					'trend'		=> $trend,
 					'hours'		=> $hours,
-					'avg_last'	=> $this->getSignalLoadWeeklyAvg($past_week_no),
+					'avg_last'	=> $this->getSignalLoadWeeklyAvg(date('W', strtotime('last week'))),
 					'avg_now'	=> $this->getSignalLoadWeeklyAvg($now_week_no)
 				);
-				
-			// Return JSON array
-			jsonArr($response_array);				
+			} else {
+				$response_array['status'] = 0;
+			}
+			// Return response_array
+			return $response_array;				
 				
 		}
 		
@@ -250,12 +387,12 @@
 			$now_week_no 	= date('W');
 			$table_now 		= 'signals_'.$year.'_'.$now_week_no;
 
-			
-			
 			if($event_type == 'TASK'){
-				$where = "WHERE Event_Type IN ('TASK')";
+				$where = "WHERE Event_Type IN ('TASK') OR Alarm_Priority IN (91)";
+				$order = "ORDER BY `Alarm_Priority` ASC, `Alarm_Priority_Original` ASC, `DateTime` ASC";
 			} else {
-				$where = "WHERE Event_Type NOT IN ('TRTS')";
+				$where = "WHERE Event_Type NOT IN ('TRTS', 'TASK') AND Alarm_Priority NOT IN ('91')";
+				$order = "ORDER BY `Alarm_Priority` ASC, `DateTime` ASC";
 			}
 		
 			$query = "SELECT
@@ -268,26 +405,16 @@
 					`Alarm_Description`,
 					`Event_Code`,
 					`Event_Zone`,
+					`Event_Type`,
 					`Event_Description`,
 					`Event_Operator`,
 					`Event_Operator_First`,
 					`Event_Reaction_Time`
 					FROM `scs`.`scs_pending_events`
-					".$where."
-					ORDER BY `Alarm_Priority` ASC, `DateTime` ASC";
+					".$where.$order;
 			
 			$res = $conn_scs->query($query);
-			
-			$count = $conn_scs->getAll("SELECT
-					COUNT(Event_Zone) as aantal,
-					Event_Zone
-					FROM `scs`.`scs_pending_events`
-					GROUP BY Event_Zone");
-			$count_arr = array();
-			foreach($count as $event){
-				$count_arr[$event['Event_Zone']] = $event['aantal'];
-			}
-						
+				
 			$rows = '<thead>
 						<th>#</th>
 						<th>Datum tijd</th>
@@ -299,67 +426,30 @@
 						<th>In gebruik</th>
 						<th>Eerste</th>
 						<th>Reactie tijd</th>
-						<th class="hidden"></th>
 					</thead>';
 					
+			$count_arr = $this->getAlarmDescriptionCount();
+			//var_dump($count_arr);	
 			while ($row = $conn_scs->fetch($res)) {	
-				if($row['Alarm_Priority'] == '1'){
-					$class = 'bg-danger';
-					if($row['Event_Operator'] == null){
-						$audio_source = URL_ROOT. 'src/libs/scs_sounds/P1.wav';	
-					} else {
-						$audio_source = '';
-					}
-				} elseif($row['Alarm_Priority'] == '2'){
-					$class = 'bg-danger';
-					if($row['Event_Operator'] == null){
-						$audio_source = URL_ROOT. 'src/libs/scs_sounds/P2.wav';	
-					} else {
-						$audio_source = '';
-					}
-				} elseif($row['Alarm_Priority'] == '3'){
-					$class = 'bg-danger';
-					if($row['Event_Operator'] == null){
-						$audio_source = URL_ROOT. 'src/libs/scs_sounds/P3.wav';	
-					} else {
-						$audio_source = '';
-					}
-				} elseif($row['Alarm_Priority'] == '4'){
-					$class = 'bg-warning';
-					if($row['Event_Operator'] == null){
-						$audio_source = URL_ROOT. 'src/libs/scs_sounds/P4.wav';	
-					} else {
-						$audio_source = '';
-					}
-				} elseif($row['Alarm_Priority'] == '5'){
-					$class = 'bg-yellow';
-					if($row['Event_Operator'] == null){
-						$audio_source = URL_ROOT. 'src/libs/scs_sounds/P5.wav';	
-					} else {
-						$audio_source = '';
-					}				
-				} elseif($row['Alarm_Priority'] == '7'){
-					$class = 'bg-primary';
-					$audio_source = '';
-				} elseif($row['Alarm_Priority'] == '8'){
-					$class = 'bg-dark-green';
-					$audio_source = '';
-				} elseif($row['Alarm_Priority'] == '9'){
-					$class = 'bg-white';	
-					$audio_source = '';					
-				} elseif($row['Alarm_Priority'] == '91'){
-					$class = 'bg-gray';	
-					$audio_source = '';					
-				} else {
-					$class = '';
-					$audio_source = '';
-				}
+				$reaction_time = $row['Event_Reaction_Time'] != '-1' ?  $row['Event_Reaction_Time'] : '0';
+				$dt1 = new DateTime('@0');
+				$dt2 = new DateTime("@$reaction_time");
+				$if_day = ($dt1->diff($dt2)->format('%a')) ? '%a d, ' : '';
+				$format_time = $row['Event_Reaction_Time'] != '-1' ? $dt1->diff($dt2)->format($if_day. '%H:%I:%S') : '';			
+			
+				//$reaction_time = $row['Event_Reaction_Time'] != '-1' ?  gmdate('H:i:s',$row['Event_Reaction_Time']) : '';
+					
+				$org_arr = $this->setPriority($row['Alarm_Priority_Original']);
+				$org_prio = ($row['Alarm_Priority'] != $row['Alarm_Priority_Original']) ? '<span class="badge '.$org_arr['class'].'">'.$row['Alarm_Priority_Original'].'</span>' : '';
 				
-				$reaction_time = $row['Event_Reaction_Time'] == '-1' ? '' : $row['Event_Reaction_Time'].' sec';
-
-					$rows	.= '<tr class="'.$class.'" >
-					<td>'.$row['Alarm_Priority'].'</td>
-					<td>'.date('d-m-Y H:i:s', strtotime($row['DateTime'])).'</td>
+				$prio_arr = $this->setPriority($row['Alarm_Priority'],$row['Event_Operator']);
+				
+				if($this->enableAlarmThreshold == true && $row['Account_Group'] == @$count_arr[$row['Account_Group']]['group_name'] && @$count_arr[$row['Account_Group']][$row['Event_Type']]['e_type_count'] >= $this->alarmThreshold){
+					$rows .= '';
+				} else {
+					$rows .= '<tr class="'.$prio_arr['class'].'" >
+					<td>'.$row['Alarm_Priority'].' '.$org_prio.'</td>
+					<td>'.date('d-m-y H:i:s', strtotime($row['DateTime'])).'</td>
 					<td>'.$row['Account_Nmbr'].'</td>
 					<td>'.$row['Account_Name'].'</td>
 					<td>'.$row['Account_Group'].'</td>
@@ -367,24 +457,94 @@
 					<td>'.$row['Event_Description'].'</td>
 					<td>'.$row['Event_Operator'].'</td>
 					<td>'.$row['Event_Operator_First'].'</td>
-					<td>'.$reaction_time.'</td>
-					<td class="hidden"><audio controls autoplay loop>
-							<source src="'.$audio_source. '" type="audio/wav" >
-						</audio></td>
-					</tr>';	
+					<td>'.$format_time.'</td>
+					</tr>';						
+				}
 				
 			};			
 			
+			$audio = $conn_scs->getRow("SELECT `Alarm_Priority`, `Event_Operator` FROM `scs`.`scs_pending_events` WHERE Alarm_Priority IN ('1','2','3','4','5') ORDER BY `Event_Operator` ASC, `Alarm_Priority` ASC, `DateTime` ASC");
+			$audio_arr = $this->setPriority($audio['Alarm_Priority'],$audio['Event_Operator']);
+			
 			$response_array = array(
 				'status'	=> 1,
-				'rows'		=> $rows				
+				'audio'		=> $audio_arr['audio'],
+				'rows'		=> $rows,
+				'sound'		=> $this->enableAudio == true ? 'fa fa-volume-up' : 'fa fa-volume-off' 			
 			);
 				
 			// Return JSON array
 			jsonArr($response_array);				
 		}
+
+		public function getPendingEventsGouped(){
+			if($this->enableAlarmThreshold == true){
+				$count = $this->getAlarmDescriptionCount();	
+				//var_dump($count);
+				
+				$blocks = '';
+				foreach($count as $group_name => $val){
+					$event_text = '';
+					$name = $this->db_conn->getOne("SELECT SCS_Dealer_Name FROM `scs`.`scs_dealer_status` WHERE SCS_Dealer_Code = '".$group_name."'");
+
+					foreach($val as $val_arr => $event_type_arr){
+						if($val_arr != 'group_name'){
+							
+							if($event_type_arr['e_type_count'] > $this->alarmThresholdDanger){
+								$event_class = 'red-bg';
+								$event_icon = 'fa fa-minus-circle';
+							} elseif($event_type_arr['e_type_count'] > $this->alarmThresholdWarning){
+								$event_class = 'yellow-bg';
+								$event_icon = 'fa fa-warning';
+							} elseif($event_type_arr['e_type_count'] >= $this->alarmThreshold) {
+								$event_class = 'blue-bg';
+								$event_icon = 'fa fa-info-circle';
+							} else {
+								$event_class = 'blue-bg';
+							}
+							
+							if($event_type_arr['e_type_count'] >= $this->alarmThreshold){
+								$event_text =  $event_type_arr['e_type_name'];
+								
+								$blocks .= '<div class="col-lg-2">
+									<div class="widget '.$event_class.' p-sm text-center">
+										<div class="m-b-md">
+											<i class="'.$event_icon.' fa-3x"></i>
+											<h1 class="m-xs">'.$event_type_arr['e_type_count'].'</h1>
+											<h3 class="font-bold no-margins">
+												'.substr($name,0,23).'
+											</h3>
+											<small>'.$event_text.'</small>
+										</div>
+									</div>
+								</div>';					
+							}
+	
+						}
+	
+					}
+				
+				}
+
+				if($blocks != ''){
+					$response_array = array(
+						'status'	=> 1,
+						'blocks'	=> $blocks				
+					);					
+				} else {
+					$response_array['status'] = 0;
+				}				
+			} else {
+				$response_array['status'] = 0;
+			}
+			
+				
+			// Return JSON array
+			jsonArr($response_array);	
+			
+		}
 		
-		public function getLocationSignalCount(){
+		public function getLocationSignalCount($limit_count){
 			$conn_scs = $this->db_conn;
 			
 			$year = date('Y');
@@ -415,7 +575,6 @@
 					'010278',
 					'010276',
 					'010274',
-					'010099',
 					'010098',
 					'010273',
 					'010100',
@@ -423,7 +582,7 @@
 					)
 					GROUP BY PreProcessor_Account_Nmbr 
 					ORDER BY signal DESC
-					LIMIT 15";
+					LIMIT ".$limit_count;
 			
 			$res = $conn_scs->query($query);
 			
@@ -445,7 +604,242 @@
 			// Return JSON array
 			jsonArr($response_array);			
 		}
+		
+		public function getPortMonitor(){
+			/*
+			 * TODO: Make blocks available through database
+			 *
+			*/
+			$blocks_asb ='';
+			$blocks_kpn ='';
+			$blocks_gw = '';
+			
+			
+			//$blocks_asb .= $this->getPortMonitorBlock('BW ASB (EHV)',array('host'=>'10.53.183.101'), array('host'=>'10.53.183.105'));
+			//$blocks_asb .= $this->getPortMonitorBlock('BW ASB (VRF)',array('host'=>'10.53.254.241','user'=>'root','pass'=>'asbbv'));
+			//
+			//$blocks_kpn .= $this->getPortMonitorBlock('BW KPN (EHV)',array('host'=>'10.53.183.21'), array('host'=>'10.53.183.22'));
+			//
+			//$blocks_gw .= $this->getPortMonitorBlock('Beheercentrum FEP',SCS_DB_CONN, array('host'=>'172.16.8.11','user'=>'scsClient'));
+			
+			$blocks_asb .= $this->getPortMonitorBlock('BW ASB (EHV)',array('host'=>'10.53.183.101'));
+			//$blocks_asb .= $this->getPortMonitorBlock('BW ASB (VRF)',array('host'=>'10.53.254.241','user'=>'root','pass'=>'asbbv'));
+			//$blocks_asb .= $this->getPortMonitorBlock('BW ASB (VR GV)',array('host'=>'10.53.254.209'));
+			//$blocks_asb .= $this->getPortMonitorBlock('BW ASB (VRU)',array('host'=>'10.53.254.50'));
+			
+			$blocks_asb .= $this->getPortMonitorBlock('BW KPN (EHV)',array('host'=>'10.53.183.21'), array(), array('host'=>'10.53.183.9','user'=>'root','pass'=>'asbbv','db'=>'scs_fep'));
+			$blocks_asb .= $this->getPortMonitorBlock('BW HRH',array('host'=>'10.53.64.92'));
+			//$blocks_asb .= $this->getPortMonitorBlock('BW NHN',array('host'=>'192.168.100.197'));
+			//$blocks_kpn .= $this->getPortMonitorBlock('BW KPN VF (25))',array('host'=>'10.53.254.225'));
+			//$blocks_kpn .= $this->getPortMonitorBlock('BW KPN VGV (14)',array('host'=>'10.53.254.193'));
+			//$blocks_kpn .= $this->getPortMonitorBlock('BW KPN VRAA (13)',array('host'=>'10.53.231.130'));			
+			//$blocks_kpn .= $this->getPortMonitorBlock('BW KPN ZHZ (18)',array('host'=>'10.53.183.130'));
+			
+			$blocks_gw .= $this->getPortMonitorBlock('Beheercentrum FEP',SCS_DB_CONN);				
+			$blocks_gw .= $this->getPortMonitorAoip('AOIP gateway',array('host'=>'192.168.100.60','user'=>'PreProcessorWEB','pass'=>'asb','db'=>'scs_fep'));
+			
+			$response_array = array(
+				'status'			=> 1,
+				'block_asb'			=> $blocks_asb,
+				'block_kpn'			=> $blocks_kpn,
+				'block_gw'			=> $blocks_gw
+			);
+				
+			// Return JSON array
+			jsonArr($response_array);				
+		}
 
+		public function getPortMonitorAoip($monitor_name, $primair_conn = array()){			
+			$opt_prim = array_merge($this->defaults,$primair_conn);	
+			
+			try {
+				$conn_scs 	= new SafeMySQL($opt_prim);
+				$connected 	= true;
+			} catch (Exception $e) {
+				$connected 	= false;
+			}				
+			
+			if($connected){
+				$query = "SELECT `SCS_Gateway_IP`, `SCS_Gateway_Name`, `SCS_Gateway_Status` FROM `scs_gateway_table`";		
+				$res = $conn_scs->query($query);
+					
+				$port_stat = array();
+				while ($row = $conn_scs->fetch($res, 2)) {	
+					$int = ($row[2] == '5') ? 1 : 2;
+					$port_stat[] = $this->setPortState($row[2]);
+				}
+	
+				$res_err = $conn_scs->query($query." WHERE `SCS_Gateway_Status` NOT IN ('5')");
+						
+				$port_err = array();
+				while ($row_err = $conn_scs->fetch($res_err, 2)) {
+					$port_err[] = '<small style="color:white;">'.$row_err[0].'</small> - '.$row_err[1];
+				}
+			} else {
+				$port_err = array('Geen verbinding met SQL');
+			}
+			
+			$class = (count($port_err) != 0) ? 'red-bg': 'text-white';
+			
+			$block = '<div class="col-md-4">';
+			$block .= '<div class="widget '.$class.' p-sm text-center">';
+			$block .= '<div class="m-b-md">';
+			$block .= '<h1 class="m-xs">'.$monitor_name.'</h1>';
+			
+			if(count($port_err) != 0){
+				$block .= '<h1 class="m-xs"><i class="fa fa-warning"></i></h1><h2 >'.implode('<br>',$port_err).'</h2>';
+			} else {
+				$block .= '<h5 class="font-bold">Poort status</h5><div class="p_status">'.implode(',', $port_stat).'</div>';	
+				$signal = $this->getSignalLoad($primair_conn);
+				if($signal['status'] == 1){
+					$signal_s = array_slice($signal['signal'], 1);
+					//$signal_s = array_shift($signal['signal']);
+					$block .= '<h5 class="font-bold">Signaalbelasting (24h)</h5>';
+					$block .= '<table width="100%"><tr><td rowspan="2"><div class="sparkline m-b-sm">'.implode(',',$signal_s).'</div></td><td><span class="label label-warning pull-right">High '.max($signal_s).'</span></td></tr><tr><td><span class="label label-primary pull-right">Low '.min($signal_s).'</span></td></tr></table>';
+				}				
+			}
+						
+			$block .= '</div>';
+			$block .= '</div>';
+			$block .= '</div>';	
+			
+			return $block;
+		}
+		
+		public function getPortMonitorBlock($monitor_name, $primair_conn = array(), $backup_conn = array(), $signal_conn = array()){
+			
+			$opt_prim = array_merge($this->defaults,$primair_conn);
+			$opt_back = array_merge($this->defaults,$backup_conn);
+			try {
+				$conn_scs 			= (!empty($primair_conn)) ? new SafeMySQL($opt_prim) : null;
+				$conn_scs_backup 	= (!empty($backup_conn)) ? new SafeMySQL($opt_back) : null;
+				$connected 	= true;
+			} catch (Exception $e) {
+				$connected 	= false;
+			}
+			
+			$port_err 		= array();
+			$block_primair 	= '';
+			$block_backup 	= '';
+			if($connected){	
+				$query = "SELECT `SCS_Stat_Port`, `SCS_Stat_Port_Name`, `SCS_Stat_Port_Active`, `SCS_Stat_Port_State` FROM `scs_stat`.`scs_stat_port`";	
+				if($primair_conn != null){				
+					$res = $conn_scs->query($query." ORDER BY `SCS_Stat_Port` ASC");
+						
+					$port_stat = array();
+					while ($row = $conn_scs->fetch($res)) {	
+						$port_stat[] = $this->setPortState($row['SCS_Stat_Port_State']);
+					}
+		
+					$res_err = $conn_scs->query($query." WHERE `SCS_Stat_Port_State` = 1  ORDER BY `SCS_Stat_Port` ASC");
+							
+					$port_err = array();
+					while ($row_err = $conn_scs->fetch($res_err)) {
+						$port_err[] = '<small style="color:white;">Poort: '.$row_err['SCS_Stat_Port'].'</small> - '.$row_err['SCS_Stat_Port_Name'];
+					}
+					$block_primair = '<h5 class="font-bold">Poort status primair</h5><div class="p_status">'.implode(',', $port_stat).'</div>';				
+				}
+				$port_stat_b = array();
+				
+				if($backup_conn != null){
+					$res_b = $conn_scs_backup->query($query." ORDER BY `SCS_Stat_Port` ASC");
+					while ($row_b = $conn_scs_backup->fetch($res_b)) {	
+						$port_stat_b[] = $this->setPortState($row_b['SCS_Stat_Port_State']);
+					}
+					$block_backup = '<h5 class="font-bold no-margins">Poort status backup</h5><div class="p_status" >'.implode(',', $port_stat_b).'</div>';
+				}
+				$port_stat_b = array_pad($port_stat_b, 24, 0);
+			} else {
+				$port_err = array('Geen verbinding met SQL');
+			}
+			
+			$class = (count($port_err) != 0) ? 'red-bg': 'text-white';
+			
+			$block = '<div class="col-md-4">';
+			$block .= '<div class="widget '.$class.' p-sm text-center">';
+			$block .= '<div class="m-b-md">';
+			$block .= '<h1 class="m-xs">'.$monitor_name.'</h1>';
+			
+			if(count($port_err) != 0){
+				$block .= '<h1><i class="fa fa-warning"></i></h1><h2 class="font-bold">'.implode('<br>',$port_err).'</h2>';
+			} else {
+				$block .= $block_primair;
+				$block .= $block_backup;
+				$sign_conn = (empty($signal_conn)) ? $primair_conn : $signal_conn;
+				$signal = $this->getSignalLoad($sign_conn);
+				if($signal['status'] == 1){
+					$signal_s = array_slice($signal['signal'], 1);
+					$block .= '<h5 class="font-bold">Signaalbelasting (24h)</h5>';
+					$block .= '<table width="100%"><tr><td rowspan="2"><div class="sparkline m-b-sm">'.implode(',',$signal_s).'</div></td><td><span class="label label-warning pull-right">High '.max($signal_s).'</span></td></tr><tr><td><span class="label label-primary pull-right">Low '.min($signal_s).'</span></td></tr></table>';
+				}				
+			}
+			
+			$block .= '</div>';
+			$block .= '</div>';
+			$block .= '</div>';	
+			
+			return $block;	
+		}
+		
+		protected function setPortState($state){
+			switch($state) {
+				case '-1': // Disabled
+					$int = 0;
+					break;
+				case 1: // Error
+					$int = 2;
+					break;
+				case 2: // Okay
+					$int = 1;
+					break;						
+				case 3: // Inactive
+					$int = 0;
+					break;
+				case 4: // No signal
+					$int = 3;
+					break;
+				case 5: // AOIP gateway active
+					$int = 1;
+					break;					
+				default:
+					$int = 1;
+					break;
+			}
+			return $int;
+		}		
+		
+		protected function getAlarmDescriptionCount(){
+			$conn_scs = $this->db_conn;
+			// Bundle on event type
+			$count = $conn_scs->query("SELECT Account_Group, GROUP_CONCAT(event_type SEPARATOR ';') AS e_type FROM `scs`.`scs_pending_events` WHERE `Alarm_Priority` NOT IN ('91') GROUP BY Account_Group");
+				
+			$count_arr = array();
+
+			while ($row_count = $conn_scs->fetch($count)) {	
+				if($row_count['Account_Group'] != ''){
+					$str = $row_count['e_type'];
+					
+					$event_type_arr = explode(';', $str);
+					$counts = array_count_values($event_type_arr);
+					
+					$bb = array();
+					$bb['group_name'] = $row_count['Account_Group']; 
+					
+					foreach($event_type_arr as $a){
+					
+						$bb[$a] = array(
+							'e_type_name' 	=> $conn_scs->getOne("SELECT SCS_Alarm_Type_Short_Description FROM `scs`.`scs_alarm_type` WHERE SCS_Alarm_Type_Code = '".$a."'"), 
+							'e_type_count' 	=> $counts[$a]
+						);
+					}
+					$count_arr[$row_count['Account_Group']] = $bb;					
+				}
+
+			}
+
+			return $count_arr;
+		}
+		
 		protected function getLocationService($account_nr){
 			if(substr($account_nr, 0, 6) == "010013"){
 				$regio = "VRAA";
@@ -549,4 +943,91 @@
 			return round($avg);
 		}
 
+		protected function setPriority($prio_nr, $event_operator = null){
+			if($prio_nr == '1'){
+				$class = 'bg-danger';
+				if($event_operator == null){
+					$audio_source = URL_ROOT. '/src/libs/scs_sounds/P1.wav';	
+				} else {
+					$audio_source = '';
+				}
+			} elseif($prio_nr == '2'){
+				$class = 'bg-danger';
+				if($event_operator == null){
+					$audio_source = URL_ROOT. '/src/libs/scs_sounds/P2.wav';	
+				} else {
+					$audio_source = '';
+				}
+			} elseif($prio_nr == '3'){
+				$class = 'bg-danger';
+				if($event_operator == null){
+					$audio_source = URL_ROOT. '/src/libs/scs_sounds/P3.wav';	
+				} else {
+					$audio_source = '';
+				}
+			} elseif($prio_nr == '4'){
+				$class = 'bg-warning';
+				if($event_operator == null){
+					$audio_source = URL_ROOT. '/src/libs/scs_sounds/P4.wav';	
+				} else {
+					$audio_source = '';
+				}
+			} elseif($prio_nr == '5'){
+				$class = 'bg-yellow';
+				if($event_operator == null){
+					$audio_source = URL_ROOT. '/src/libs/scs_sounds/P5.wav';	
+				} else {
+					$audio_source = '';
+				}				
+			} elseif($prio_nr == '7'){
+				$class = 'bg-primary';
+				$audio_source = '';
+			} elseif($prio_nr == '8'){
+				$class = 'bg-dark-green';
+				$audio_source = '';
+			} elseif($prio_nr == '9'){
+				$class = 'bg-white';	
+				$audio_source = '';					
+			} elseif($prio_nr == '91'){
+				$class = 'bg-gray';	
+				$audio_source = '';					
+			} else {
+				$class = '';
+				$audio_source = '';
+			}
+			if($this->enableAudio == false){
+				$audio_source = '';
+			}
+			return $arr = array(
+				'class' => $class,
+				'audio' => $audio_source
+			);
+		}
+
+		protected function trendLineAnalyse( $x, $y ){
+
+			$n     = count($x);     // number of items in the array
+			$x_sum = array_sum($x); // sum of all X values
+			$y_sum = array_sum($y); // sum of all Y values
+			
+			$xx_sum = 0;
+			$xy_sum = 0;
+			
+			for($i = 0; $i < $n; $i++) {
+				@$xy_sum += ( $x[$i]*$y[$i] );
+				@$xx_sum += ( $x[$i]*$x[$i] );
+			}
+			
+			// Slope
+			$slope = ( ( $n * $xy_sum ) - ( $x_sum * $y_sum ) ) / ( ( $n * $xx_sum ) - ( $x_sum * $x_sum ) );
+			
+			// calculate intercept
+			$intercept = ( $y_sum - ( $slope * $x_sum ) ) / $n;
+			
+			return array( 
+				'slope'     => $slope,
+				'intercept' => $intercept,
+			);				
+		}
+		
 	}

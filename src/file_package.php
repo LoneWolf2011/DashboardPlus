@@ -13,66 +13,74 @@
 */
 define('ROOT_FILE', array(
 	// Layout
-	'menu_side' 		=> '/Mdb/View/Layout/sidenav.layout.php',
-	'menu_top' 			=> '/Mdb/View/Layout/topnav.layout.php',
-	'menu_footer' 		=> '/Mdb/View/Layout/footer.layout.php',
+	'menu_side' 		=> '/View/Layout/sidenav.layout.php',
+	'menu_top' 			=> '/View/Layout/topnav.layout.php',
+	'menu_footer' 		=> '/View/Layout/footer.layout.php',
 		
 	// Src
-	'common' 			=> '/Mdb/Src/Config/common.php',
-	'modal' 			=> '/Mdb/Src/Templates/modal.tpl.php',
+	'common' 			=> '/Src/Config/common.php',
+	'modal' 			=> '/Src/Templates/modal.tpl.php',
 
 	// Libs
 	'LIBS'			=> array (	
-		'phpmailer' 		=> '/Mdb/Src/libs/PHPmailer/class.phpmailer.php',
-		'tcpdf' 			=> '/Mdb/Src/libs/TCPDF/tcpdf.php',
+		'phpmailer' 		=> '/Src/libs/PHPMailer/PHPMailerAutoload.php',
+		'purifier' 			=> '/Src/libs/HTMLpurifier/HTMLPurifier.auto.php',
+		'tcpdf' 			=> '/Src/libs/TCPDF/tcpdf.php',
 	),
 	
 	// Helper functions
 	'FUNC'			=> array (
-		'error_handler' 	=> '/Mdb/Src/Config/error_handler.php',
-		'functions' 		=> '/Mdb/Src/functions.php',
+		'error_handler' 	=> '/Src/Config/error_handler.php',
+		'functions' 		=> '/Src/functions.php',
 	),
 	 
 	// Classes
 	'CLASS'			=> array (
-		'safemysql' 		=> '/Mdb/Src/Classes/class.safemysql.php',
-		'ssp_class' 		=> '/Mdb/Src/Classes/class.datatable.ssp.php',
-		'google' 			=> '/Mdb/Src/Classes/class.googleHelper.php',
-		'login' 			=> '/Mdb/Src/Classes/class.login.php',
-		'location' 			=> '/Mdb/Src/Classes/class.location.php',
-		'home' 				=> '/Mdb/Src/Classes/class.home.php',
-		'tools' 			=> '/Mdb/Src/Classes/class.tools.php',	
+		'safemysql' 		=> '/Src/Classes/class.safemysql.php',
+		'csrf' 				=> '/Src/Classes/class.csrf.php',
+		'ssp_class' 		=> '/Src/Classes/class.datatable.ssp.php',
+		'google' 			=> '/Src/Classes/class.googleHelper.php',
+		'login' 			=> '/Src/Classes/class.login.php',
+		'home' 				=> '/Src/Classes/class.home.php',
+		'tools' 			=> '/Src/Classes/class.tools.php',	
+		'ticket' 			=> '/Src/Classes/class.ticket.php',	
+		'user' 				=> '/Src/Classes/class.user.php',	
 	)		
 ));
 
 define('ROOT_CSS', array(
-	'/Mdb/css/bootstrap.min.css',
-	'/Mdb/fonts/font-awesome/css/font-awesome.css',
-	'/Mdb/css/animate.css',
-	'/Mdb/css/style.css',
-	'/Mdb/css/plugins/dataTables/datatables.min.css',
-	'/Mdb/css/plugins/iCheck/custom.css',
-	'/Mdb/css/plugins/formvalidation/dist/css/formValidation.min.css',
-	'/Mdb/css/plugins/c3/c3.min.css',
-	'/Mdb/css/plugins/sweetalert/sweetalert.css',
+	'/css/bootstrap.min.css',
+	'/fonts/font-awesome/css/font-awesome.css',
+	'/css/animate.css',
+	'/css/style.css',
+	'/css/plugins/dataTables/datatables.min.css',
+	'/css/plugins/iCheck/custom.css',
+	'/css/plugins/formvalidation/dist/css/formValidation.min.css',
+	'/css/plugins/c3/c3.min.css',
+	'/css/plugins/sweetalert/sweetalert.css',
+	'/css/plugins/datepicker/datepicker3.css',
 ));
 
 define('ROOT_JS', array(
-	'/Mdb/js/jquery-3.1.1.min.js',
-	'/Mdb/js/bootstrap.min.js',
-	'/Mdb/js/plugins/metisMenu/jquery.metisMenu.js',
-	'/Mdb/js/plugins/slimscroll/jquery.slimscroll.min.js',
-	'/Mdb/js/inspinia.js',
-	'/Mdb/js/plugins/pace/pace.min.js',
-	'/Mdb/js/plugins/markerclusterer/src/markerclusterer.js',
-	'/Mdb/js/plugins/i18next/i18next.min.js',
-	'/Mdb/js/plugins/iCheck/icheck.min.js',
-	'/Mdb/js/plugins/formvalidation/dist/js/formValidation.min.js',
-	'/Mdb/js/plugins/formvalidation/dist/js/framework/bootstrap.min.js',
-	'/Mdb/js/plugins/formvalidation/dist/js/language/'.strtolower(APP_LANG).'_'.strtoupper(APP_LANG).'.js',
-	'/Mdb/js/plugins/chartJs/Chart.min.js',
-	'/Mdb/js/plugins/echarts/dist/echarts.min.js',
-	'/Mdb/js/plugins/echarts/map/js/world.js',
-	'/Mdb/js/plugins/peity/jquery.peity.min.js',
-	'/Mdb/js/plugins/sweetalert/sweetalert.min.js',
+	'/js/jquery-3.1.1.min.js',
+	'/js/bootstrap.min.js',
+	'/js/plugins/metisMenu/jquery.metisMenu.js',
+	'/js/plugins/slimscroll/jquery.slimscroll.min.js',
+	'/js/main.js',
+	'/js/plugins/pace/pace.min.js',
+	'/js/plugins/markerclusterer/src/markerclusterer.js',
+	'/js/plugins/i18next/i18next.min.js',
+	'/js/plugins/iCheck/icheck.min.js',
+	'/js/plugins/formvalidation/dist/js/formValidation.min.js',
+	'/js/plugins/formvalidation/dist/js/framework/bootstrap.min.js',
+	'/js/plugins/formvalidation/dist/js/language/'.strtolower(APP_LANG).'_'.strtoupper(APP_LANG).'.js',
+	'/js/plugins/chartJs/Chart.min.js',
+	'/js/plugins/echarts/dist/echarts.min.js',
+	'/js/plugins/echarts/map/js/world.js',
+	'/js/plugins/peity/jquery.peity.min.js',
+	'/js/plugins/sweetalert/sweetalert.min.js',
+	'/js/plugins/zxcvbn/zxcvbn.js',
+	'/js/plugins/autocomplete/dist/jquery.autocomplete.min.js',
+	'/js/plugins/datepicker/bootstrap-datepicker.js',
+	'/js/plugins/datepicker/locales/bootstrap-datepicker.nl.js',
 ));

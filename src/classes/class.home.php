@@ -6,7 +6,7 @@
 		function __construct($db_conn) {
 			$this->db_conn 	= $db_conn;
 			$this->google	= new googleHelper(GOOGLE_API);
-			$this->locale 	= json_decode(file_get_contents(URL_ROOT.'Src/lang/'.APP_LANG.'.json'), true);
+			$this->locale 	= json_decode(file_get_contents(URL_ROOT.'/Src/lang/'.APP_LANG.'.json'), true);
 		}	
 
 		public function getMarkers($getall = false, $updatetime=''){

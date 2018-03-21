@@ -7,14 +7,14 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-	<link rel='shortcut icon' type='image/x-icon' href='<?= URL_ROOT_IMG; ?>leaf.ico' />
+	<link rel='shortcut icon' type='image/x-icon' href='<?= URL_ROOT_IMG; ?>/leaf.ico' />
 	
     <title><?= APP_TITLE;?> | Denied</title>
 
 	<!-- Mainly CSS -->
 	<?php
 		foreach($arr_css as $css){
-			echo '<link href="'.$css.'" rel="stylesheet">';
+			echo '<link href="'.URL_ROOT.$css.'" rel="stylesheet">';
 		}
 	?>
 
@@ -30,14 +30,14 @@
 		   <p>Denk je dat je hier iets te zoeken hebt? Vraag dan na bij een admin waarom je geen toegang hebt.
 			</p>
 			
-			<a href="<?= URL_ROOT; ?>Src/login/redirect.php" class='btn btn-primary' >Return to safety</a>
+			<a href="<?= URL_ROOT; ?>/Src/login/redirect.php" class='btn btn-primary' >Return to safety</a>
         </div>
     </div>
 
 	<!-- Mainly scripts -->
 	<?php
 		foreach($arr_js as $js){
-			echo '<script src="'.$js.'"></script>';
+			echo '<script src="'.URL_ROOT.$js.'"></script>';
 		}
 	?>
   </body>

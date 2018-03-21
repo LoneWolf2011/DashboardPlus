@@ -18,7 +18,7 @@
 	// Modify parse errors uit php.ini dmv APP_DEBUG
 	// indien APP_DEBUG = TRUE worden de errors in de applicatie weergegeven
 	ini_set("display_errors", (APP_DEBUG === 1) ? 'on' : 'off');
-	define('ERROR_LOG_FILE', ROOT_PATH.'/Mdb/Src/Logs/Errors/'.date("Y-m-d").'_error.log');
+	define('ERROR_LOG_FILE', ROOT_PATH.'/Src/Logs/Errors/'.date("Y-m-d").'_error.log');
 	
 	/**
 	* Custom error handler
@@ -39,7 +39,7 @@
 
 		$datum 	= date("D Y-m-d H:i:s");
 		$env 	= APP_ENV;
-		$user 	= (isset($_SESSION['user']['app_location_data'])) ? htmlentities($_SESSION['user']['app_location_data'], ENT_QUOTES, 'UTF-8') : '---';
+		$user 	= (isset($_SESSION[SES_NAME]['app_location_data'])) ? htmlentities($_SESSION[SES_NAME]['app_location_data'], ENT_QUOTES, 'UTF-8') : '---';
 		
 		$str 	= "[{$datum}] [{$error}] [{$user}] [{$env}] [{$file}, line {$line}] {$description}".PHP_EOL; 
 		fileLog($str);
@@ -138,7 +138,7 @@
 				case E_USER_ERROR:
 					$datum 			= date("D Y-m-d H:i:s");
 					$name 			= 'Fatal';
-					$user 			= (isset($_SESSION['user']['user_email'])) ? htmlentities($_SESSION['user']['user_email'], ENT_QUOTES, 'UTF-8') : '---';
+					$user 			= (isset($_SESSION[SES_NAME]['user_email'])) ? htmlentities($_SESSION[SES_NAME]['user_email'], ENT_QUOTES, 'UTF-8') : '---';
 					$env 			= APP_ENV;
 					$file 			= $error['file'];
 					$line 			= $error['line'];

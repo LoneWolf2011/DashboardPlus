@@ -5,7 +5,7 @@
     }   
 	
     // At the top of the page we check to see whether the user is logged in or not 
-    if(!empty($_SESSION['user'])) 
+    if(!empty($_SESSION[SES_NAME])) 
     { 
 		header("Location: Src/Login/redirect.php"); 
     } 
@@ -22,13 +22,13 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-	<link rel='shortcut icon' type='image/x-icon' href='<?= URL_ROOT_IMG; ?>leaf.ico' />
+	<link rel='shortcut icon' type='image/x-icon' href='<?= URL_ROOT_IMG; ?>/leaf.ico' />
 	
     <title><?= APP_TITLE; ?> | Install</title>
 
 	<?php
 		foreach($arr_css as $css){
-			echo '<link href="'.$css.'" rel="stylesheet">';
+			echo '<link href="'.URL_ROOT.$css.'" rel="stylesheet">';
 		}
 	?>
 
@@ -39,8 +39,9 @@
     <div class="middle-box loginscreen animated fadeInDown ">
         <div class="wrapper wrapper-content">
             <div class="text-center">
-                <h1 class="logo-name">DB+</h1>      
-				<h3 data-i18n="[html]installscreen.welcome">Welcome to DB+</h3>
+                <!--<h1 class="logo-name">DB+</h1>-->
+                <h1 class="logo-name"><img src="<?= URL_ROOT_IMG.'/app_logo.png';?>" width="70%"></img></h1>      
+				<h3 ><span data-i18n="[html]installscreen.welcome">Welcome to</span> <?= APP_NAME;?> </h3>
 				<p data-i18n="[html]installscreen.text">This is your first time.</p>
 				<p data-i18n="[html]installscreen.subtext">Please take the time to fill in the below details.</p>
 				<?php 
@@ -62,7 +63,7 @@
                 <div class="form-group">
 					<label data-i18n="[html]installscreen.admin.local">Enter location</label>
                     <select class="form-control"  name="default_local" required="">
-						<option value="52.032633,5.191266">Netherlands</option>
+						<option value="52.032633,5.191266">Nederland</option>
 						<option value="52.255518,-1.074320">England</option>
 						<option value="-23.359708,-45.196270">Brazil</option>
 					</select>
@@ -70,11 +71,26 @@
                 <div class="form-group">
 					<label data-i18n="[html]installscreen.admin.lang">Select default language</label>
                     <select class="form-control"  name="default_lang" required="">
-						<option value="nl">Dutch</option>
+						<option value="nl">Nederlands</option>
 						<option value="en">English</option>
 						<option value="pt">Portugues</option>
 					</select>
                 </div>
+				<?php if(empty($env['APP']['URL_ROOT'])){ ?>
+				<h2 data-i18n="[html]installscreen.app.txt">APP settings</h2>
+                <div class="form-group">
+					<label data-i18n="[html]installscreen.app.root">URL root</label>
+                    <input type="text" class="form-control" placeholder="URL root" name="app_url_root" value="<?= pathUrl();?>">
+                </div>
+                <div class="form-group">
+					<label data-i18n="[html]installscreen.app.docu">Document root</label>
+                    <input type="text" class="form-control" placeholder="Document root" name="app_document_root" value="<?= $_SERVER['DOCUMENT_ROOT'];?>">
+                </div>
+                <div class="form-group">
+					<label data-i18n="[html]installscreen.app.api">Google API key</label>
+                    <input type="text" class="form-control" placeholder="Google API" name="app_google_key" value="">
+                </div>
+				<?php }; ?>				
 				<?php if(empty($env['SCS_DB']['HOST'])){ ?>
 				<h2 data-i18n="[html]installscreen.scs.txt">SCS connection</h2>
                 <div class="form-group">
@@ -90,27 +106,13 @@
                     <input type="password" class="form-control" placeholder="Password" name="scs_pass" value="">
                 </div>
 				<?php }; ?>
-				<?php if(empty($env['RMS_DB']['HOST'])){ ?>
-				<h2 data-i18n="[html]installscreen.rms.txt">RMS connection</h2>
-                <div class="form-group">
-					<label>Host IP</label>
-                    <input type="text" class="form-control" placeholder="IP address" name="rms_host" value="">
-                </div>
-                <div class="form-group">
-					<label data-i18n="[html]installscreen.scs.user">Username</label>
-                    <input type="text" class="form-control" placeholder="username" name="rms_user" value="">
-                </div>
-                <div class="form-group">
-					<label data-i18n="[html]installscreen.scs.pass">Password</label>
-                    <input type="password" class="form-control" placeholder="Password" name="rms_pass" value="">
-                </div>		
-				<?php }; ?>
+
                 <button type="submit" class="btn btn-primary block full-width m-b" name="install" value="Install" data-i18n="[html]installscreen.login">Install</button>
-				<input type="hidden" name="csrf" value="<?= htmlspecialchars($_SESSION['token'], ENT_QUOTES, 'UTF-8');?>">
+				<input type="hidden" name="csrf" value="<?= htmlspecialchars($_SESSION['db_token'], ENT_QUOTES, 'UTF-8');?>">
             </form>
 				<?php }; ?>
 			<div class="text-center">
-				<p class="m-t"> <small><?= date("D d-m-Y"). "<font color='#0092D0'> | </font>". date("H:i:s")."<font color='#0092D0'> | </font> ".APP_ENV." " . appVersionCode(APP_ENV); ?></small> </p>
+				<p class="m-t"> <small><?= date("D d-m-Y"). "<font color='#0092D0'> | </font>". date("H:i:s")."<font color='#0092D0'> | </font> ".APP_ENV." " . APP_VER; ?></small> </p>
 			</div>
         </div>
     </div>
@@ -118,7 +120,7 @@
     <!-- Mainly scripts -->
 	<?php
 		foreach($arr_js as $js){
-			echo '<script src="'.$js.'"></script>';
+			echo '<script src="'.URL_ROOT.$js.'"></script>';
 		}		
 	?>
 	<script>
@@ -158,7 +160,7 @@
 			// Ajax om de data te posten naar de db
 			$.ajax({
 				type: "POST",
-				url: "/Mdb/Src/controllers/login.controller.php?install",
+				url: "Src/controllers/login.controller.php?install",
 				data: $('#form').serialize(),
 				success: function(res){
 					$('#res_msg').html(res.body);
