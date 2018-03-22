@@ -1,4 +1,7 @@
-# DashboardPlus
+# DashboardPlus (Dark ANT version)
+![alt text](https://raw.githubusercontent.com/username/projectname/branch/path/to/img.png)
+
+- Body class **dark-bg**
 
 - Copy env.example.ini to env.ini
 - Edit env.ini with DB settings for local DB and/or SCS DB, and local application settings
