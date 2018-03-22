@@ -36,6 +36,8 @@
     $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION); 
     $db->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC); 
 	
+	define('LOGO_NAME', $env['APP']['LOGO_NAME']);
+	define('FAVICON_NAME', $env['APP']['FAVICON_NAME']);
 	define('URL_ROOT', $env['APP']['URL_ROOT']);
 	//define('URL_ROOT_OTAP', getSetting($db, 'URL_ROOT_OTAP'));
 	define('URL_ROOT_IMG', $env['APP']['URL_ROOT_IMG']);
