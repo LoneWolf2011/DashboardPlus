@@ -23,10 +23,13 @@ $(document).ready(function () {
     if ($(this).width() < 769) {
         $('body').addClass('body-small'),
 		$('body').removeClass('mini-navbar'),
-		$('menu_bar').removeClass('hidden')
+		$('#menu_bar').removeClass('hidden'),
+		$('#log_out_span').addClass('hidden')
     } else {
+		$('body').addClass('mini-navbar'),
         $('body').removeClass('body-small'),
-		$('menu_bar').addClass('hidden')
+		$('#menu_bar').addClass('hidden'),
+		$('#log_out_span').removeClass('hidden')
     }
 
     // MetsiMenu
@@ -192,11 +195,14 @@ $(window).bind("resize", function () {
     if ($(this).width() < 769) {
         $('body').addClass('body-small'),
 		$('body').removeClass('mini-navbar'),
-		$('menu_bar').removeClass('hidden')
+		$('#menu_bar').removeClass('hidden'),
+		$('#log_out_span').addClass('hidden')
     } else {
+		$('body').addClass('mini-navbar'),
         $('body').removeClass('body-small'),
-		$('menu_bar').addClass('hidden')
-    }
+		$('#menu_bar').addClass('hidden'),
+		$('#log_out_span').removeClass('hidden')
+	}
 });
 
 // Local Storage functions

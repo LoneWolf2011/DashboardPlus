@@ -14,7 +14,7 @@
 					</li>
                     <li>
                         <a href="<?= URL_ROOT;?>/Src/controllers/login.controller.php?logout&csrf=<?= $_SESSION['db_token'];?>">
-                            <i class="fa fa-sign-out"></i> <span data-i18n="[html]layout.topnav.logout"> Log out </span>
+                            <i class="fa fa-sign-out"></i> <span data-i18n="[html]layout.topnav.logout" id="log_out_span"> Log out </span>
                         </a>
                     </li>
 					<?php if(APP_LANG == 'en'){ ?>
