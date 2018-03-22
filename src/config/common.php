@@ -11,7 +11,7 @@
 ==========================================================================================================
 */	
 	//define('ROOT_PATH', $_SERVER["DOCUMENT_ROOT"]);
-	$content = file_get_contents($_SERVER["DOCUMENT_ROOT"].'/mdb/env.ini');
+	$content = file_get_contents($_SERVER["DOCUMENT_ROOT"].'/antdb/env.ini');
 	$env = parse_ini_string($content, true);	
 	//$env = parse_ini_file($_SERVER["DOCUMENT_ROOT"].'/antdb/env.ini', true);	
 	
@@ -36,6 +36,8 @@
     $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION); 
     $db->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC); 
 	
+	define('LOGO_NAME', $env['APP']['LOGO_NAME']);
+	define('FAVICON_NAME', $env['APP']['FAVICON_NAME']);
 	define('URL_ROOT', $env['APP']['URL_ROOT']);
 	//define('URL_ROOT_OTAP', getSetting($db, 'URL_ROOT_OTAP'));
 	define('URL_ROOT_IMG', $env['APP']['URL_ROOT_IMG']);
