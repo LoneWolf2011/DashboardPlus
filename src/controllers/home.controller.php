@@ -1,30 +1,11 @@
 <?php
-	$db_conn = new SafeMySQL(SCS_DB_CONN);
+	$db_conn = new SafeMySQL();
 	
 	$obj = new Home($db_conn);
 		
 	if(isset($_GET['get'])){
-		if($_GET['get'] == 'markers'){
-			if(isset($_GET['all'])){
-				// Get all = true
-				$obj->getMarkers(true);
-			};
-			$obj->getMarkers(false,$_GET['time']);
-		}
-		
-		if($_GET['get'] == 'list'){
-
-			if(isset($_GET['state'])){
-				$obj->getList($_GET['state']);				
-			}
-
-			if(isset($_GET['rms'])){
-				$obj->getListRms();				
-			}			
-		}
-
-		if($_GET['get'] == 'event_count'){
-			$obj->getEventCount();
+		if($_GET['get'] == 'signalload'){
+			jsonArr($obj->getSignalLoad(array('db'=>'scs_motion')));
 		}		
 
 	}

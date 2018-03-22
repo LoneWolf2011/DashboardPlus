@@ -67,8 +67,8 @@
 		}
 	},
 	"loginscreen":{
-		"welcome": "Welkom bij",
-		"text": "Een verbeterde ervaring voor het beheer van RMS en SCS.",
+		"welcome": "Welcome bij",
+		"text": "Advanced People Tracking Dashboard.",
 		"subtext": "Log alstublieft in om het in actie te zien.",
 		"login": "Log in",
 		"request": "Request",
