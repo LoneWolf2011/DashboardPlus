@@ -14,3 +14,4 @@
 
 - Edit **.htaccess** in root folder and change the urls so they match your folder structure
 - If you want to use your own logo. Add your own image to the **/img/** folder and rename to **app_logo**.extension 
+
