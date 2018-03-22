@@ -1,5 +1,5 @@
 # DashboardPlus (Dark ANT version)
-![alt text](https://raw.github.com/MillieOfzo/DashboardPlus/blob/ANT-DB-dark/img/app_logo.png)
+![alt text](http://millieofzo.github.io/DashboardPlus/img/app_logo_dark.png)
 
 - Body class **dark-bg**
 
