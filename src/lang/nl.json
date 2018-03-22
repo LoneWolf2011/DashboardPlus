@@ -15,7 +15,30 @@
 		"230_err": "230v uitval",
 		"multi_err": "Meerdere uitvallen"
 	},
-	"error_msg":{
+	"error_page":{
+		"return_btn":"Ga terug",
+		"403":{
+			"label":"Toegang geweigerd",
+			"msg":"Admin rechten zijn verplicht voor toegang. Neem contact op met de admins. Doeidoei!"			
+		},
+		"404":{
+			"label":"Pagina niet gevonden",
+			"msg":"Sorry, maar de pagina die je zoekt kan niet gevonden worden. Controleer de URL op errors, refresh de pagina"			
+		},
+		"500":{
+			"label":"Interne server error",
+			"msg":"De server heeft iets onverwachts aangetroffen waardoor het verzoek niet kon worden voltooid. Wij verontschuldigen ons. U kunt teruggaan naar de hoofdpagina:"			
+		},
+		"denied":{
+			"label":"Toegang geweigerd",
+			"msg":"Admin rechten zijn verplicht voor toegang. Neem contact op met de admins. Doeidoei!"			
+		},
+		"maintenance":{
+			"label":"Maintenance bezig",
+			"msg":"Wacht uit of vraag status na bij de admins"			
+		}		
+	},	
+	"error_msg":{			
 		"die":{
 			"label":"Er ging iets goed mis",
 			"msg":"Check de log files!"		
@@ -67,18 +90,14 @@
 		}
 	},
 	"loginscreen":{
-		"welcome": "Welkom bij",
-		"text": "Een verbeterde ervaring voor het beheer van RMS en SCS.",
+		"welcome": "Welcome bij",
+		"text": "Advanced People Tracking Dashboard.",
 		"subtext": "Log alstublieft in om het in actie te zien.",
 		"login": "Log in",
 		"request": "Request",
 		"forget": "Wachtwoord vergeten"	
 	},
 	"tokenmsg":{
-		"email":{
-			"token_req":"wachtwoord token (1/2)",
-			"token_rec":"nieuw wachtwoord (2/2)"
-		},
 		"welcome": "Recover wachtwoord",
 		"text": "Klik op de recover knop.",
 		"button": "Recover"
