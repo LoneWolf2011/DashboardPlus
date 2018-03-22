@@ -10,8 +10,9 @@
     // At the top of the page we check to see whether the user is logged in or not 
     if(!empty($_SESSION[SES_NAME])) 
     { 
-		header("Location: ".URL_ROOT); 
-    } 
+		$obj 	= new Login( new SafeMySQL());
+		$obj->redirectLogin();
+    }  
 
     // Everything below this point in the file is secured by the login system 
 
@@ -25,7 +26,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-	<link rel='shortcut icon' type='image/x-icon' href='<?= URL_ROOT_IMG; ?>leaf.ico' />
+	<link rel='shortcut icon' type='image/x-icon' href='<?= URL_ROOT_IMG; ?>/leaf.ico' />
 	
     <title><?= APP_TITLE; ?> | Recover</title>
 
@@ -43,7 +44,7 @@
         <div class="wrapper wrapper-content">
 		
                 <!--<h1 class="logo-name">DB+</h1>-->
-                <h1 class="logo-name"><img src="<?= URL_ROOT_IMG.'app_logo.png';?>" width="70%"></img></h1>
+                <h1 class="logo-name"><img src="<?= URL_ROOT_IMG.'/app_logo.png';?>" width="70%"></img></h1>
 				<h3 data-i18n="[html]tokenmsg.welcome">Welcome to DB+</h3>
 				<p data-i18n="[html]tokenmsg.text">An improved experience for managing RMS and SCS.</p>
 
@@ -62,7 +63,7 @@
 				<input type="hidden" name="csrf" value="<?= htmlspecialchars($_SESSION['db_token'], ENT_QUOTES, 'UTF-8');?>">
             </form>
 		
-            <p class="m-t"> <small><?= date("D d-m-Y"). "<font color='#0092D0'> | </font>". date("H:i:s")."<font color='#0092D0'> | </font> ".APP_ENV." " . appVersionCode(APP_ENV); ?></small> </p>
+            <p class="m-t"> <small><?= date("D d-m-Y"). "<font color='#0092D0'> | </font>". date("H:i:s")."<font color='#0092D0'> | </font> ".APP_ENV." " . APP_VER; ?></small> </p>
 			
         </div>
     </div>

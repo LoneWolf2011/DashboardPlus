@@ -75,6 +75,10 @@
 		"forget": "Wachtwoord vergeten"	
 	},
 	"tokenmsg":{
+		"email":{
+			"token_req":"wachtwoord token (1/2)",
+			"token_rec":"nieuw wachtwoord (2/2)"
+		},
 		"welcome": "Recover wachtwoord",
 		"text": "Klik op de recover knop.",
 		"button": "Recover"

@@ -309,7 +309,7 @@
 		}
 
 		public function processGenToken($conn,$post_val){
-			
+			$lang = $this->locale;
 			$cleaned_email 	= strtolower($this->purifier->purify($post_val['email'])); 
 			
 			if(!empty($_POST['request']) && hash_equals($_POST['csrf'],$_SESSION['db_token']))
@@ -411,7 +411,7 @@
 					// Note: use the key names specified in the email template as array key
 					$email_template = array(
 						'user_name' 	=> $row['user_name']." ".$row['user_last_name'],
-						'recover_link' 	=> '<a class="link" href="'.URL_ROOT.'token.php?rec='.$token.'&id='.$row['user_email'].'">Recover token</a>'
+						'recover_link' 	=> '<a class="link" href="'.URL_ROOT.'/token.php?rec='.$token.'&id='.$row['user_email'].'">Recover token</a>'
 					);
 									
 					$mail = new PHPmailer();
@@ -420,7 +420,7 @@
 					$mail -> Port = SMTP_PORT;
 					$mail -> AddAddress($row['user_email']);	
 					$mail -> SetFrom(APP_EMAIL);
-					$mail -> Subject = APP_TITLE ." wachtwoord token (1/2)";
+					$mail -> Subject = APP_TITLE.' '.$lang['tokenmsg']['email']['token_req'];
 					$mail -> MsgHTML(setEmailTemplate($email_template, 'email.gen_token.php'));
 					$mail -> WordWrap = 80;
 					
@@ -442,6 +442,7 @@
 		}
 
 		public function processPassReset($conn,$post_val){
+			$lang = $this->locale;
 			$cleaned_email 	= strtolower($this->purifier->purify($post_val['email']));
 			
 			if(!empty($_POST['recover']) && hash_equals($_POST['csrf'],$_SESSION['db_token'])) 
@@ -562,7 +563,7 @@
 					$mail -> Port = SMTP_PORT;
 					$mail -> AddAddress($row['user_email']);	
 					$mail -> SetFrom(APP_EMAIL);
-					$mail -> Subject = APP_TITLE." nieuw wachtwoord (2/2)";
+					$mail -> Subject = APP_TITLE.' '.$lang['tokenmsg']['email']['token_rec'];
 					$mail -> MsgHTML(setEmailTemplate($email_template, 'email.password_reset.php'));
 					$mail -> WordWrap = 80;
 					
