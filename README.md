@@ -1,5 +1,6 @@
 # DashboardPlus (Dark ANT version)
-![alt text](img/app_logo_dark.png)
+<p align="center">
+<img src="img/app_logo_dark.png"  width="20%" align="center" /></p>
 
 - Body class **dark-bg**
 
