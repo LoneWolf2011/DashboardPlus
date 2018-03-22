@@ -49,10 +49,14 @@ define('ROOT_FILE', array(
 ));
 
 define('ROOT_CSS', array(
+	'/css/pe-icons/pe-icon-7-stroke.css',
+	'/css/pe-icons/helper.css',
+	'/css/stroke-icons/stroke-style.css',
 	'/css/bootstrap.min.css',
 	'/fonts/font-awesome/css/font-awesome.css',
 	'/css/animate.css',
-	'/css/style.css',
+	'/css/style-dark.css',
+	'/css/dash_custom-dark.css',
 	'/css/plugins/dataTables/datatables.min.css',
 	'/css/plugins/iCheck/custom.css',
 	'/css/plugins/formvalidation/dist/css/formValidation.min.css',

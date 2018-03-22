@@ -1,5 +1,52 @@
 	<div class="wrapper wrapper-content animated fadeInRight">
 		<div class="row">
+			<div class="col-lg-4">
+				<div class="widget yellow-bg p-lg text-center">
+					<div class="m-b-md">
+						<i class="fa fa-user fa-4x"></i>
+						<h1 class="m-xs">520</h1>
+						<h3 class="font-bold no-margins">
+							Persons
+						</h3>
+						<small>count</small>
+					</div>
+				</div>
+			</div>
+			<div class="col-lg-3">
+				<div class="widget style1 navy-bg">
+                    <div class="row vertical-align">
+                        <div class="col-xs-3">
+                            <h2>MAX</h2>
+                        </div>
+                        <div class="col-xs-9 text-right">
+                            <h2 class="font-bold">104</h2>
+                        </div>
+                    </div>
+                </div>
+				<div class="widget style1 navy-bg">
+                    <div class="row vertical-align">
+                        <div class="col-xs-3">
+                           <h2>MIN</h2>
+                        </div>
+                        <div class="col-xs-9 text-right">
+                            <h2 class="font-bold">23</h2>
+                        </div>
+                    </div>
+                </div>
+				<div class="widget style1 navy-bg">
+                    <div class="row vertical-align">
+                        <div class="col-xs-3">
+                            <h2>AVG</h2>
+                        </div>
+                        <div class="col-xs-9 text-right">
+                            <h2 class="font-bold">546</h2>
+                        </div>
+                    </div>
+                </div>				
+			</div>			
+		</div>	
+		
+		<div class="row">
 			<div class="col-lg-12">
                 <div class="ibox float-e-margins">
                   <div class="ibox-title">									  
@@ -65,7 +112,7 @@
 		},
 		
 		color: {
-			pattern: ["#1ab394", "#1C84C6",  "#d3d3d3", "#1C84C6", "#bababa", "#79d2c0","#1ab394"]
+			pattern: ["#f6a821", "#1C84C6",  "#d3d3d3", "#1C84C6", "#bababa", "#79d2c0","#1ab394"]
 		},		
 		zoom: {
 			enabled: true

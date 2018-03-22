@@ -22,7 +22,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-	<link rel='shortcut icon' type='image/x-icon' href='<?= URL_ROOT_IMG; ?>/leaf.ico' />
+	<link rel='shortcut icon' type='image/x-icon' href='<?= URL_ROOT_IMG; ?>/<?= FAVICON_NAME; ?>' />
 	
     <title><?= APP_TITLE; ?> | Install</title>
 
@@ -34,13 +34,13 @@
 
 </head>
 
-<body class="gray-bg" id="i18container">
+<body class="dark-bg" id="i18container">
 
     <div class="middle-box loginscreen animated fadeInDown ">
         <div class="wrapper wrapper-content">
             <div class="text-center">
                 <!--<h1 class="logo-name">DB+</h1>-->
-                <h1 class="logo-name"><img src="<?= URL_ROOT_IMG.'/app_logo.png';?>" width="70%"></img></h1>      
+				<h1 class="logo-name text-center"><img src="<?= URL_ROOT_IMG.'/'.LOGO_NAME;?>" width="70%"></img></h1>    
 				<h3 ><span data-i18n="[html]installscreen.welcome">Welcome to</span> <?= APP_NAME;?> </h3>
 				<p data-i18n="[html]installscreen.text">This is your first time.</p>
 				<p data-i18n="[html]installscreen.subtext">Please take the time to fill in the below details.</p>

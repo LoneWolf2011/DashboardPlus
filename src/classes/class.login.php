@@ -411,7 +411,7 @@
 					// Note: use the key names specified in the email template as array key
 					$email_template = array(
 						'user_name' 	=> $row['user_name']." ".$row['user_last_name'],
-						'recover_link' 	=> '<a class="link" href="'.URL_ROOT.'token.php?rec='.$token.'&id='.$row['user_email'].'">Recover token</a>'
+						'recover_link' 	=> '<a class="link" href="'.URL_ROOT.'/token.php?rec='.$token.'&id='.$row['user_email'].'">Recover token</a>'
 					);
 									
 					$mail = new PHPmailer();

@@ -19,7 +19,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-	<link rel='shortcut icon' type='image/x-icon' href='<?= URL_ROOT_IMG; ?>/leaf.ico' />
+	<link rel='shortcut icon' type='image/x-icon' href='<?= URL_ROOT_IMG; ?>/<?= FAVICON_NAME; ?>' />
 	
     <title><?= APP_TITLE; ?> | Home</title>
 	
@@ -38,7 +38,7 @@
 	
 		<?php include ROOT_PATH.ROOT_FILE['menu_side'];?>
 	
-		<div id="page-wrapper" class="gray-bg">
+		<div id="page-wrapper" class="dark-bg">
 		
 			<?php include ROOT_PATH.ROOT_FILE['menu_top'];?>
 			<?php include ROOT_PATH . $view_content; ?>
@@ -85,7 +85,7 @@
 						<div class="form-group">
 						<label class="control-label col-md-4 col-sm-4 col-xs-12"></label>
 							<div class="col-md-8 col-sm-8 col-xs-12">
-								<div class="progress password-progress">
+								<div class="progress-small password-progress">
 									<div id="strengthBar" class="progress-bar" role="progressbar" style="width: 0;"></div>
 								</div>
 							</div>
@@ -106,7 +106,7 @@
 
 						<div class="form-group" style="float: right;">
 							<button type="button" class="btn btn-primary" data-dismiss="modal">Sluiten</button>
-							<button type="submit" class="btn btn-success" name="update_account" value="Update Account" >Update</button>
+							<button type="submit" class="btn btn-success btn-outline" name="update_account" value="Update Account" >Update</button>
 						</div>
 					</form>						
 				</div>		
