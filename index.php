@@ -10,9 +10,9 @@
     // At the top of the page we check to see whether the user is logged in or not 
     if(!empty($_SESSION[SES_NAME])) 
     { 
-		header("Location: ".URL_ROOT); 
+		$obj 	= new Login( new SafeMySQL());
+		$obj->redirectLogin();
     } 
-
     // Everything below this point in the file is secured by the login system 
 
 ?>
@@ -137,7 +137,7 @@
 				}?>">
                 </div>
                 <div class="form-group">
-                    <input type="password" class="form-control" placeholder="Password" name="password" required="">
+                    <input type="password" class="form-control" placeholder="Password" name="password" required="" style="color:#f6a821;">
                 </div>
                 <button type="submit" class="btn btn-primary block full-width m-b" name="login" value="Login" data-i18n="[html]loginscreen.login">Login</button>
 

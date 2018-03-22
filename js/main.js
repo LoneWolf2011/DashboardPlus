@@ -6,6 +6,15 @@
  */
 
 $(document).ready(function () {
+
+		var url = window.location;
+		// Will only work if string in href matches with location
+		$('ul.nav a[href="'+ url +'"]').parent().addClass('active');
+		
+		// Will also work for relative and absolute hrefs
+		$('ul.nav a').filter(function() {
+			return this.href == url;
+		}).parent().addClass('active');
 	
 	// Set lang code for i18next
 	var lang_code = $('html').attr('lang');
@@ -23,10 +32,15 @@ $(document).ready(function () {
     if ($(this).width() < 769) {
         $('body').addClass('body-small'),
 		$('body').removeClass('mini-navbar'),
-		$('menu_bar').removeClass('hidden')
+		$('#menu_bar').removeClass('hidden'),
+		$('#user_span').addClass('hidden'),
+		$('#log_out_span').addClass('hidden')
     } else {
+		$('body').addClass('mini-navbar'),
         $('body').removeClass('body-small'),
-		$('menu_bar').addClass('hidden')
+		$('#menu_bar').addClass('hidden'),
+		$('#user_span').removeClass('hidden'),
+		$('#log_out_span').removeClass('hidden')
     }
 
     // MetsiMenu
@@ -192,11 +206,16 @@ $(window).bind("resize", function () {
     if ($(this).width() < 769) {
         $('body').addClass('body-small'),
 		$('body').removeClass('mini-navbar'),
-		$('menu_bar').removeClass('hidden')
+		$('#menu_bar').removeClass('hidden'),
+		$('#user_span').addClass('hidden'),
+		$('#log_out_span').addClass('hidden')
     } else {
+		$('body').addClass('mini-navbar'),
         $('body').removeClass('body-small'),
-		$('menu_bar').addClass('hidden')
-    }
+		$('#menu_bar').addClass('hidden'),
+		$('#user_span').removeClass('hidden'),
+		$('#log_out_span').removeClass('hidden')
+	}
 });
 
 // Local Storage functions

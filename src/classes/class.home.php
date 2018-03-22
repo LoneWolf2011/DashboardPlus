@@ -44,7 +44,7 @@
 						$query = "SELECT `From` AS signalDate, COUNT(*) AS signal
 									FROM sensor_events
 									WHERE `From` 
-									BETWEEN '2018-03-18 08:00:00' AND '2018-03-21 08:00:00' 
+									BETWEEN '2018-03-20 08:00:00' AND '2018-03-21 08:00:00' 
 									GROUP BY MID(signalDate, 7, 8) 
 									ORDER BY signalDate";
 					

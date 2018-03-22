@@ -583,14 +583,12 @@
 			}			
 		}
 		
-		protected function redirectLogin(){
+		public function redirectLogin(){
 			$conn 	= $this->db_conn;
 			// At the top of the page we check to see whether the user is logged in or not 
 			if(empty($_SESSION[SES_NAME])) 
 			{ 
-				// If they are not, we redirect them to the login page. 
-				header("Location: ".URL_ROOT); 
-				
+				// If they are not, we redirect them to the login page. 				
 				// Remember that this die statement is absolutely critical.  Without it, 
 				// people can view your members-only content without logging in. 
 				die(header("Location: ".URL_ROOT)); 

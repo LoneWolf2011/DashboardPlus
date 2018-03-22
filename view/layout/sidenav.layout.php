@@ -14,7 +14,12 @@
                         <?= APP_TITLE;?>
                     </div>
                 </li>
-                <li><a href="<?= URL_ROOT.'/view/home/';?>"><i class="fa fa-th-large fa-fw"></i> <span class="nav-label">Dashboard</span></a></li>
+                <li ><a href="<?= URL_ROOT.'/view/home/';?>"><i class="fa fa-th-large fa-fw"></i> <span class="nav-label"></span></a></li>
+                <li ><a href="<?= URL_ROOT.'/view/user/';?>"><i class="fa fa-user fa-fw"></i> <span class="nav-label"></span></a></li>
+				
+                <li ><a href="<?= URL_ROOT.'/view/zone/?id=1';?>">#1</a></li>
+                <li ><a href="<?= URL_ROOT.'/view/zone/?id=2';?>">#2</a></li>
+                <li ><a href="<?= URL_ROOT.'/view/zone/?id=3';?>">#3</a></li>
  				
             </ul>
 

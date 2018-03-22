@@ -170,6 +170,8 @@
 	?>	
     <script>
     $(document).ready(function() {
+		
+
 		$('#datatable').on('click', '#delete', function(){
 			var id =$(this).attr('value');
 			var user_email =$(this).attr('rel');

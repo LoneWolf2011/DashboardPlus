@@ -7,7 +7,13 @@
                     </h1>
                     
 					<p>
-						<button class="btn btn-primary" onclick="popupWindow('graphs/', 'graphs', 1980, 1080 ); return false;" >Open responds tijden</button>
+                        <div class="sk-spinner sk-spinner-wave">
+                            <div class="sk-rect1"></div>
+                            <div class="sk-rect2"></div>
+                            <div class="sk-rect3"></div>
+                            <div class="sk-rect4"></div>
+                            <div class="sk-rect5"></div>
+                        </div>
 					</p>
 					<small data-i18n="[html]admin.small"> Please standby...</small>
                 </div>
