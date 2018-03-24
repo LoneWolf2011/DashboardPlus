@@ -37,7 +37,7 @@
 
 </head>
 
-<body class="dark-bg" id="i18container">
+<body class="" id="i18container">
 
     <div class="middle-box text-center loginscreen animated fadeInDown ">
         <div class="wrapper wrapper-content">
@@ -77,11 +77,11 @@
 								</div>';
 			} elseif(isset($_GET['err'])){
 					$search = '<div class="alert alert-danger" >
-									<b data-i18n="[html]loginmsg.err.label"><br><span data-i18n="[html]loginmsg.err.msg">  due to inactivity.</span>
+									<b data-i18n="[html]loginmsg.err.label"></b><br><span data-i18n="[html]loginmsg.err.msg">  due to inactivity.</span>
 								</div>';
 			} elseif(isset($_GET['uknw'])){
 					$search = '<div class="alert alert-danger" >
-									<b data-i18n="[html]loginmsg.uknw.label"><br><br><span data-i18n="[html]loginmsg.uknw.msg"> User: '. $_GET['uknw'].' does not exist.</span> .
+									<b data-i18n="[html]loginmsg.uknw.label"></b><br><span data-i18n="[html]loginmsg.uknw.msg"> User does not exist.</span>
 								</div>';
 			} elseif(isset($_GET['tok'])){
 				if($_GET['tok'] == "suc"){

@@ -123,7 +123,18 @@
 	<script>
 	$(document).ready(function() {
 		var lang_code = $('html').attr('lang').toLowerCase()+'_'+$('html').attr('lang').toUpperCase();
-	
+
+		$('.autocomplete-append').autocomplete({
+			serviceUrl: <?= json_encode(URL_ROOT);?>+'/Src/controllers/home.controller.php?autocomplete',
+			max: 10,
+			onSelect: function (suggestion) {
+				//alert('You selected: ' + suggestion.value + ', ' + suggestion.data);
+				location.href = <?= json_encode(URL_ROOT);?>+'/view/home/?site='+suggestion.value.replace(/[^0-9\.]+/g, "");
+				$('#url_site').val(suggestion.value);
+				$('.site-nr').html(suggestion.value);
+			}			
+		});
+		
 		$('#loginForm').formValidation({
 			framework: 'bootstrap',
 			icon: {

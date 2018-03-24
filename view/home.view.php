@@ -1,95 +1,71 @@
 	<div class="wrapper wrapper-content animated fadeInRight">
 		<div class="row">
-			<div class="col-lg-4">
-				<div class="widget yellow-bg p-lg text-center">
-					<div class="m-b-md">
-						<i class="fa fa-user fa-4x"></i>
-						<h1 class="m-xs">520</h1>
-						<h3 class="font-bold no-margins">
-							Current count
-						</h3>
-						<small>total</small>
-					</div>
-				</div>
-			</div>
-			<div class="col-lg-3">
-				<div class="widget style1 navy-bg">
-                    <div class="row vertical-align">
-                        <div class="col-xs-3">
-                            <h2><i class="fa fa-user"></i> <small style="color:inherit;">max</small></h2>
-                        </div>
-                        <div class="col-xs-9 text-right">
-                            <h2 class="font-bold">104</h2>
-                        </div>
-                    </div>
-                </div>
-				<div class="widget style1 navy-bg">
-                    <div class="row vertical-align">
-                        <div class="col-xs-3">
-                           <h2><i class="fa fa-user"></i> <small style="color:inherit;">min</small></h2>
-                        </div>
-                        <div class="col-xs-9 text-right">
-                            <h2 class="font-bold">23</h2>
-                        </div>
-                    </div>
-                </div>
-				<div class="widget style1 navy-bg">
-                    <div class="row vertical-align">
-                        <div class="col-xs-3">
-                            <h2><i class="fa fa-user"></i> <small style="color:inherit;">avg</small></h2>
-                        </div>
-                        <div class="col-xs-9 text-right">
-                            <h2 class="font-bold">546</h2>
-                        </div>
-                    </div>
-                </div>				
-			</div>
 
+			<div class="col-lg-3">
+                <div class="ibox float-e-margins">
+					<div class="ibox-content">
+						<table class="table table-hover">
+							<thead>
+							<th>Site</th>
+							<th><?= $_GET['site'];?></th>
+							</thead>
+							<tbody id="location_tr">
+							</tbody>
+						</table>
+					</div>
+                </div>			
+			
+			</div>		
+		
 			<div class="col-lg-5">
-				<table class="table table-hover">
-					<thead>
-					<tr>
-						<th>Device#</th>
-						<th>Max wait time</th>
-						<th>Value</th>
-					</tr>
-					</thead>
-					<tbody>
-					<tr>
-						<td>1</td>
-						<td>25 min</td>
-						<td class="text-navy"> <i class="fa fa-level-up"></i> 40% </td>
-					</tr>
-					<tr>
-						<td>2</td>
-						<td>15 min</td>
-						<td class="text-warning"> <i class="fa fa-level-down"></i> -20% </td>
-					</tr>
-					<tr>
-						<td>3</td>
-						<td>10 min</td>
-						<td class="text-navy"> <i class="fa fa-level-up"></i> 26% </td>
-					</tr>
-					</tbody>
-				</table>			
-		</div>	
+                <div class="ibox float-e-margins">
+					<div class="ibox-content">
+						<table class="table table-hover">
+							<thead>
+							<tr>
+								<th>ZoneID</th>
+								<th>Name</th>
+								<th>Devices</th>
+								<th>Current wait time</th>
+							</tr>
+							</thead>
+							<tbody>
+							<?php
+								foreach($obj->getZones() as $key => $val ){
+									echo '<tr><td>'.$val['link'].'</td><td>'.$val['zone'].'</td><td>'.implode('<br>',$val['devices']).'</td><td>'.$val['wait'].'</td><td><span class="btn btn-primary btn-xs zone_graph" rel="'.$val['zone'].'" value="'.$val['zone_count'].'">graph</span></td></tr>';
+								}
+							?>
+							</tbody>
+						</table>
+					</div>
+                </div>			
+			
+			</div>		
+		
+			<div class="col-lg-2">
+				<div id="c_total"></div>
+			</div>
+			<div class="col-lg-2">
+				<div id="c_all"></div>
+			</div>
+	
 		</div>	
 		
 		<div class="row">
 			<div class="col-lg-12">
                 <div class="ibox float-e-margins">
 					<div class="ibox-title">									  
-						<h5>Person count (24h) <small></small> <a class="fullscreen-link"><i class="fa fa-expand"></i></a></h5>
+						<h5>Person count Site<?= $_GET['site'];?> (24h)<small></small> <a class="fullscreen-link"><i class="fa fa-expand"></i></a></h5>
 						<div class="clearfix"></div>
 					</div>
 					<div class="ibox-content">
 						<div class="row">
-							<div class="col-lg-8">				
+							<div class="col-lg-12">				
 								<div id="sign_chart"></div>
 							</div>
-							<div class="col-lg-4">				
+							<!--<div class="col-lg-4">				
 								<div id="time_chart"></div>
-							</div>							
+							</div>	-->						
 						</div>
 					</div>
                 </div>
@@ -99,6 +75,7 @@
 	</div>
 
 	<input type="text" hidden id="url_string" value="<?= URL_ROOT.'/Src/controllers/home.controller.php';?>" />
+	<input type="text" hidden id="url_site" value="<?= (isset($_GET['site'])) ? $_GET['site'] : 1;?>" />
 	
 	<?php
 		// View specific scripts
@@ -115,32 +92,46 @@
 
 	<script>
 	$(document).ready(function () {	
-
-	
-		var url_str = $('#url_string').val();
-		// 1 hour
-		var refresh = 3600000;
-		var interval;
 		
-
-		getSignalLoad(url_str);
+		var zone_name_arr = [];
 		
-		interval = setInterval( function () {
-			getSignalLoad(url_str);
-		}, refresh );	
+		$( '.zone_graph' ).on('click',function() {
+
+			var zone_data = $(this).attr('value');
+			var zone_name = $(this).attr('rel');
+			var zone_arr = zone_data.split(';');
+			zone_arr.unshift(zone_name);
+			
+			if($.inArray(zone_name, zone_name_arr) == -1) {
+				//add to array
+				zone_name_arr.push(zone_name);
+			} else {
+				zone_name_arr.splice($.inArray(zone_name, zone_name_arr),1);
+			}	
+			//console.log(zone_name_arr);
+			
+			compchart.load({
+				columns:[
+					zone_arr
+				],
+				type: 'bar'
+			});	
+			compchart.groups([ 
+				zone_name_arr
+			]);
+			
+		});	
+
+		getSignalLoad();
+		getCount();
 		
 		// Set chart zoom on mobile
 		if ($(this).width() < 769) {
 			compchart.zoom([0, 5]); 
 		}
-                $("#sparkline1").sparkline([34, 43, 43, 35, 44, 32, 44, 52], {
-                    type: 'line',
-                    width: '100%',
-                    height: '50',
-                    lineColor: '#f6a821',
-                    fillColor: "transparent"
-                });		
 	});	
+	
+	var url_str = $('#url_string').val();
 	
 	var chart = c3.generate({
 		bindto: '#time_chart',
@@ -185,7 +176,8 @@
 		data: {
 			x: 'x',
 			xFormat: '%H:%M',
-			columns: []
+			columns: [],
+			order: false
 		},
 		point: {
 			show: false
@@ -201,18 +193,65 @@
 		},
 		
 		color: {
-			pattern: ["#f6a821", "#1C84C6",  "#d3d3d3", "#1C84C6", "#bababa", "#79d2c0","#1ab394"]
+			pattern: ["#f6a821", "#d3d3d3",  "#676B73", "rgba(246,168,33, 1)", "#1ab394", "#fff","#1ab394"]
 		},		
 		zoom: {
 			enabled: true
 		}			
 	});		
 
-	function getSignalLoad(url){
-		$.ajax({
-			type: 'GET',
-			url: url+"?get=signalload",
-			success: function(data) {
+	var ajaxObj = {
+		options: {
+			url: null,
+			dataType: 'json' 
+		},
+		delay: 10000,
+		errorCount: 0,
+		errorThreshold: 5,
+		ticker: null,
+		updatetime: null,
+		get: function(function_name) { 
+			if(ajaxObj.errorCount < ajaxObj.errorThreshold) { // Gets triggered for all objects!?
+				ajaxObj.ticker = setTimeout(function_name, ajaxObj.delay);
+				 swal.close();
+			}
+		},
+		fail: function(jqXHR, textStatus, errorThrown) {
+			console.log(errorThrown);
+			swal({
+				html:true, 
+				title: textStatus,
+				text: errorThrown,
+				type: "error"
+			});		
+			ajaxObj.errorCount++;
+		}
+	};	
+	
+	function getCount(){
+		ajaxObj.options.url = url_str+"?get=peoplecount&site="+$('#url_site').val();
+		
+		$.ajax(ajaxObj.options)
+			.done(function(data){
+				if(data.status != 0){
+					$('#c_all').html(data.c_all);
+					$('#c_total').html(data.c_total);
+					$('#location_tr').html(data.location);
+				} else {
+					
+				}
+			}) 
+			.fail(ajaxObj.fail) 
+			.always(ajaxObj.get(getCount));
+		
+	}	
+
+	
+	function getSignalLoad(){
+		ajaxObj.options.url = url_str+"?get=signalload&site="+$('#url_site').val(),
+		
+		$.ajax(ajaxObj.options)
+			.done(function(data){
 				if(data.status != 0){
 					compchart.load({
 						columns: [
@@ -225,20 +264,20 @@
 							trend: 'line'
 						}					
 					});
-					compchart.ygrids([
-						{value: data.avg_last, class: data.avg_last > data.avg_now ? 'gridorange': '', text: 'Gemiddelde vorige week ' + data.avg_last, position: 'start'},
-						{value: data.avg_now, class: data.avg_now > data.avg_last ? 'gridorange': 'gridgreen', text: 'Gemiddelde deze week ' + data.avg_now}
-					]);					
+					//compchart.ygrids([
+					//	{value: data.avg_last, class: data.avg_last > data.avg_now ? 'gridorange': '', text: 'Gemiddelde vorige week ' + data.avg_last, position: 'start'},
+					//	{value: data.avg_now, class: data.avg_now > data.avg_last ? 'gridorange': 'gridgreen', text: 'Gemiddelde deze week ' + data.avg_now}
+					//]);					
 					compchart.data.names({
-						signal: 'Movement count',
+						signal: 'Total count',
 						trend: 'Trend'
 					});					
 				} else {
 					compchart.destroy();	
 				}
-						
-			}
-		});		
+			}) 
+			.fail(ajaxObj.fail) 
+			.always(ajaxObj.get(getSignalLoad));
 	}	
 	
 	</script>

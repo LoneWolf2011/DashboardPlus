@@ -34,7 +34,7 @@
 
 </head>
 
-<body class="dark-bg" id="i18container">
+<body class="" id="i18container">
 
     <div class="middle-box loginscreen animated fadeInDown ">
         <div class="wrapper wrapper-content">

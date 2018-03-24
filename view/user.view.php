@@ -90,7 +90,7 @@
 									
 									<div class="col-md-12">
 										<div class="form-group">
-											<button class="btn btn-success" name="save_button" ><i class='fa fa-save fa-fw'></i> <span>Update</span></button>	
+											<button class="btn btn-primary" name="save_button" ><i class='fa fa-save fa-fw'></i> <span>Update</span></button>	
 										</div>
 									</div>
 			

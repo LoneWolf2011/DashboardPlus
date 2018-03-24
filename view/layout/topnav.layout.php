@@ -2,15 +2,16 @@
             <nav class="navbar navbar-static-top white-bg" role="navigation" style="margin-bottom: 0">
                 <div class="navbar-header">
                     <a class="navbar-minimalize minimalize-styl-2 hidden" href="#" id="menu_bar"><i class="stroke-hamburgermenu"></i> </a>
-                    <!--<form role="search" class="navbar-form-custom" method="post" action="#">
+					
+                    <div class="navbar-form-custom" >
                         <div class="form-group">
-                            <input type="text" placeholder="Search for something..." class="form-control" name="top-search" id="top-search">
+                            <input type="text" class="form-control autocomplete-append site-nr"  id="top_search" placeholder="Search for site location" ></input>
                         </div>
-                    </form>-->
+                    </div>
                 </div>
                 <ul class="nav navbar-top-links navbar-right">
 					<li>
-						<a href="<?= URL_ROOT.'/view/user/?user='.htmlspecialchars($_SESSION[SES_NAME]['user_email'], ENT_QUOTES, 'UTF-8');?>"><i class="fa fa-user"></i> <span id="user_span"><?= htmlspecialchars($_SESSION[SES_NAME]['user_email'], ENT_QUOTES, 'UTF-8');?></span></a>
+						<a style="pointer:none;"><i class="fa fa-user"></i> <span id="user_span"><?= htmlspecialchars($_SESSION[SES_NAME]['user_email'], ENT_QUOTES, 'UTF-8');?></span></a>
 					</li>
                     <li>
                         <a href="<?= URL_ROOT;?>/Src/controllers/login.controller.php?logout&csrf=<?= $_SESSION['db_token'];?>">
@@ -18,11 +19,11 @@
                         </a>
                     </li>
 					<?php if(APP_LANG == 'en'){ ?>
-                    <li><a class="set_en active"><img src="<?= URL_ROOT_IMG;?>/flags/16/United-Kingdom.png"> EN</a></li>
+                    <li><a class="set_en active"><img src="<?= URL_ROOT_IMG;?>/flags/16/United-Kingdom.png"></a></li>
 					<?php } elseif(APP_LANG == 'nl'){ ?>
-                    <li> <a class="set_en active"><img src="<?= URL_ROOT_IMG;?>/flags/16/Netherlands.png"> NL</a></li>					
+                    <li> <a class="set_en active"><img src="<?= URL_ROOT_IMG;?>/flags/16/Netherlands.png"></a></li>					
 					<?php } elseif(APP_LANG == 'pt') { ?>
-					<li><a class="set_es"><img src="<?= URL_ROOT_IMG;?>/flags/16/Brazil.png"> PT</a></li>
+					<li><a class="set_es"><img src="<?= URL_ROOT_IMG;?>/flags/16/Brazil.png"></a></li>
 					<?php };?>
                 </ul>
 

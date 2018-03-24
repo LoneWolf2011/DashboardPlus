@@ -36,13 +36,38 @@
 			); 
 	
 			if($conn->query("INSERT INTO app_users SET ?u", $query_data)) {
+				
+				// Note: use the key names specified in the email template as array key
+				$email_template = array(
+					'user_name' 	=> $post_val['user_name']." ".$post_val['user_last_name'],
+					'app_name' 		=> APP_NAME,
+					'login_link' 	=> '<a class="link" href="'.URL_ROOT.'">'.APP_NAME.'</a>',
+					'gen_password' 	=> $gen_password
+				);
+								
+				$mail = new PHPmailer();
+				$mail -> isSMTP();
+				$mail -> Host = SMTP_HOST;
+				$mail -> Port = SMTP_PORT;
+				$mail -> AddAddress($post_val['user_email']);
+				$mail -> SetFrom(APP_EMAIL);
+				$mail -> Subject = "Welkom bij ".APP_TITLE;
+				$mail -> MsgHTML(setEmailTemplate($email_template, 'email.new_user.php'));
+				$mail -> WordWrap = 80;
+				
+				if($mail->Send()) {	
+					$send = 'Login email verzonden naar: <b>'.$post_val['user_email'].'</b>';
+				} else {
+					$send = 'Login email NIET verzonden naar: <b>'.$post_val['user_email'].'</b>';
+				}					
+				
 				// Log to file
 				$msg = "Nieuwe user ".$post_val['user_email'] ." aangemaakt door ".$this->auth_user;
 				$err_lvl =0;
 				
 				$response_array['type'] 	= 'success';				
 				$response_array['title'] 	= 'Success';				
-				$response_array['body'] 	= 'Test: '.$gen_password;	
+				$response_array['body'] 	= $send;	
 				
 			} else {
 				$msg = "Nieuwe user ".$post_val['user_email'] ." niet aangemaakt ";

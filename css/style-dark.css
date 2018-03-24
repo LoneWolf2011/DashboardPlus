@@ -265,7 +265,7 @@ ul.nav-second-level {
   float: left;
   height: 50px;
   padding: 0;
-  width: 200px;
+  width: 180px;
   display: block;
 }
 .navbar-form-custom .form-group {
@@ -1327,16 +1327,27 @@ button.dim:active:before {
 .pagination > .active > span:hover,
 .pagination > .active > a:focus,
 .pagination > .active > span:focus {
-  background-color: #f4f4f4;
-  border-color: #DDDDDD;
-  color: inherit;
+  background-color: #f6a82145;
+  border-color: #f6a821;
+  color: white;
   cursor: default;
   z-index: 2;
 }
+.pagination > .disabled > a,
+.pagination > .disabled > span,
+.pagination > .disabled > a:hover,
+.pagination > .disabled > span:hover,
+.pagination > .disabled > a:focus,
+.pagination > .disabled > span:focus {
+    color: #777;
+    cursor: not-allowed;
+    background-color: #f6a82145;
+    border-color: #f6a821;
+}
 .pagination > li > a,
 .pagination > li > span {
-  background-color: #FFFFFF;
-  border: 1px solid #DDDDDD;
+  background-color: transparent;
+  border: 1px solid #f6a821;
   color: inherit;
   float: left;
   line-height: 1.42857;
@@ -1344,6 +1355,14 @@ button.dim:active:before {
   padding: 4px 10px;
   position: relative;
   text-decoration: none;
+}
+.pagination > li > a:hover,
+.pagination > li > span:hover,
+.pagination > li > a:focus,
+.pagination > li > span:focus {
+    color: white;
+    background-color: #f6a82145;
+    border-color: #f6a821;	
 }
 /* TOOLTIPS */
 .tooltip-inner {
@@ -3819,7 +3838,7 @@ body.body-small .footer.fixed {
 .table > thead > tr > td,
 .table > tbody > tr > td,
 .table > tfoot > tr > td {
-  border-top: 1px solid #3d404c;
+  border-top: 1px solid #484c5a;
 }
 .table > thead > tr > th {
   border-bottom: none;
@@ -4165,7 +4184,8 @@ code {
 }
 .ibox-content {
   background-color: rgba(68, 70, 79, 0.5);
-  color: #FFFFFF;
+  /*color: #FFFFFF;*/
+  color: #949ba2;
   padding: 15px 20px 20px 20px;
   border-image: none;
   border-style: solid solid none;
@@ -4290,7 +4310,7 @@ table.table-mail tr td {
 }
 .dark-bg {
   font-family: 'Roboto', sans-serif, "open sans", "Helvetica Neue", Helvetica, Arial, sans-serif;	
-  background-color: #2f323b;
+  background-color: rgba(68, 70, 79, 0.5);
   color: #949ba2;
 }
 .panel-primary {
@@ -8698,9 +8718,7 @@ body.md-skin {
   .lock-word {
     display: none;
   }
-  .navbar-form-custom {
-    display: none;
-  }
+
   .navbar-header {
     display: inline;
     float: left;

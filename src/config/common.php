@@ -36,6 +36,17 @@
     $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION); 
     $db->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC); 
 	
+	// ANT ONLY
+	define('DEFAULT_SITE', $env['ANT']['DEFAULT_SITE']);
+	define('C_PER_WARNING', $env['ANT']['C_PER_WARNING']);
+	define('C_PER_DANGER', $env['ANT']['C_PER_DANGER']);
+	define('C_MAX_WARNING', $env['ANT']['C_MAX_WARNING']);
+	define('C_MAX_DANGER', $env['ANT']['C_MAX_DANGER']);
+	define('C_MIN_WARNING', $env['ANT']['C_MIN_WARNING']);
+	define('C_MIN_DANGER', $env['ANT']['C_MIN_DANGER']);
+	define('C_AVG_WARNING', $env['ANT']['C_AVG_WARNING']);
+	define('C_AVG_DANGER', $env['ANT']['C_AVG_DANGER']);
+	
 	define('LOGO_NAME', $env['APP']['LOGO_NAME']);
 	define('FAVICON_NAME', $env['APP']['FAVICON_NAME']);
 	define('URL_ROOT', $env['APP']['URL_ROOT']);

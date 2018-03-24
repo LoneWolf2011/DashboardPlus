@@ -37,16 +37,21 @@
 
 </head>
 
-<body class="dark-bg" id="i18container">
+<body class="" id="i18container">
 
     <div class="middle-box text-center loginscreen animated fadeInDown ">
         <div class="wrapper wrapper-content">
-		
-                <!--<h1 class="logo-name">DB+</h1>-->
-				<h1 class="logo-name text-center"><img src="<?= URL_ROOT_IMG.'/'.LOGO_NAME;?>" width="70%"></img></h1>
+			<h1 class="logo-name text-center"><img src="<?= URL_ROOT_IMG.'/'.LOGO_NAME;?>" width="70%"></img></h1>
+			<div class="view-header">
 
-				<h3 data-i18n="[html]tokenmsg.welcome">Welcome to DB+</h3>
-				<p data-i18n="[html]tokenmsg.text">An improved experience for managing RMS and SCS.</p>
+                <div class="header-icon">
+                    <i class="pe page-header-icon pe-7s-key"></i>
+                </div>
+                <div class="header-title">
+                    <h2 data-i18n="[html]tokenmsg.welcome"><?= APP_TITLE;?> login</h2>
+                    <h5 data-i18n="[html]tokenmsg.text"></h5>
+                </div>
+            </div>		
 
             <form class="m-t" id="signinForm" action="Src/controllers/login.controller.php?recover" method="post">
                 <div class="form-group">
