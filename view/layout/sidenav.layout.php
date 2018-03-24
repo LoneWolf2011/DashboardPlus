@@ -14,13 +14,16 @@
                         <?= APP_TITLE;?>
                     </div>
                 </li>
-                <li ><a href="<?= URL_ROOT.'/view/home/?site='.preg_replace("/[^0-9]/","",$_GET['site']);?>"><i class="fa fa-th-large fa-fw"></i> <span class="nav-label"></span></a></li>
-                <li ><a href="<?= URL_ROOT.'/view/user/?site='.preg_replace("/[^0-9]/","",$_GET['site']);?>"><i class="fa fa-user fa-fw"></i> <span class="nav-label"></span></a></li>
-				
+				<?php $site_nr = (isset($_GET['site']))? preg_replace("/[^0-9]/","",$_GET['site']) : preg_replace("/[^0-9]/","",DEFAULT_SITE);?>
+                <li ><a href="<?= URL_ROOT.'/view/home/?site='.$site_nr;?>"><i class="fa fa-th-large fa-fw"></i> <span class="nav-label"></span></a></li>
+                <li ><a href="<?= URL_ROOT.'/view/user/?site='.$site_nr;?>"><i class="fa fa-user fa-fw"></i> <span class="nav-label"></span></a></li>
+				<li><br></li>
+
+				<li ><a href="<?= URL_ROOT.'/view/site/?site='.$site_nr;?>"><i class="fa fa-sitemap fa-fw"></i> <span class="nav-label"></span></a></li>
 				<?php
-				$obj = new Home(new SafeMySQL(array('db'=>'scs_motion')));
+
 				if(isset($_GET['site'])){
-					$obj = new Home(new SafeMySQL(array('db'=>'scs_motion')),$_GET['site']);
+					$obj = new Site(new SafeMySQL(array('db'=>'scs_motion')),$_GET['site']);
 					foreach($obj->getZones() as $device){
 						
 						echo '<li>'.$device['link'].'</li>';

@@ -37,6 +37,7 @@ h4,
 h5 {
   margin-top: 5px;
   font-weight: 600;
+  color: #fff
 }
 h1 small,
 h2 small,
@@ -64,6 +65,10 @@ h6 .small,
 .h6 .small {
   color: #a4aab0;
 }
+.c-accent {
+  color: #f6a821;
+}
+
 .nav > li > a {
   color: #a7b1c2;
   font-weight: 600;

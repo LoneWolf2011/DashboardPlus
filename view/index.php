@@ -21,7 +21,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel='shortcut icon' type='image/x-icon' href='<?= URL_ROOT_IMG; ?>/<?= FAVICON_NAME; ?>' />
 	
-    <title><?= APP_TITLE; ?> | Home</title>
+    <title><?= APP_TITLE; ?> | <?= PAGE_TITLE;?></title>
 	
 	<!-- Mainly CSS -->
 	<?php
@@ -37,11 +37,19 @@
 	<div id="wrapper">
 	
 		<?php include ROOT_PATH.ROOT_FILE['menu_side'];?>
-	
+
 		<div id="page-wrapper" class="dark-bg">
-		
+	
 			<?php include ROOT_PATH.ROOT_FILE['menu_top'];?>
-			<?php include ROOT_PATH . $view_content; ?>
+			<?php 
+			if(file_exists(ROOT_PATH . $view_content)){
+				include ROOT_PATH . $view_content;
+			} else {
+				http_response_code(404);
+				include ROOT_PATH.'/view/errors/page_404.php';
+				die();
+			}
+			?>
 			<?php include ROOT_PATH.ROOT_FILE['menu_footer'];?>
 	
 		</div>
@@ -125,11 +133,11 @@
 		var lang_code = $('html').attr('lang').toLowerCase()+'_'+$('html').attr('lang').toUpperCase();
 
 		$('.autocomplete-append').autocomplete({
-			serviceUrl: <?= json_encode(URL_ROOT);?>+'/Src/controllers/home.controller.php?autocomplete',
+			serviceUrl: <?= json_encode(URL_ROOT);?>+'/Src/controllers/site.controller.php?autocomplete',
 			max: 10,
 			onSelect: function (suggestion) {
 				//alert('You selected: ' + suggestion.value + ', ' + suggestion.data);
-				location.href = <?= json_encode(URL_ROOT);?>+'/view/home/?site='+suggestion.value.replace(/[^0-9\.]+/g, "");
+				location.href = <?= json_encode(URL_ROOT);?>+'/view/site/?site='+suggestion.value.replace(/[^0-9\.]+/g, "");
 				$('#url_site').val(suggestion.value);
 				$('.site-nr').html(suggestion.value);
 			}			

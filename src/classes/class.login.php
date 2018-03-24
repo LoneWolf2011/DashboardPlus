@@ -614,7 +614,7 @@
 			} elseif($user_role == 1 && $connected){
 				header("location: ".URL_ROOT."/view/admin/");
 			} elseif($user_role == 2 && $connected) {
-				header("location: ".URL_ROOT."/view/home/?site=".DEFAULT_SITE);
+				header("location: ".URL_ROOT."/view/home/");
 			} else {
 				header("location: ".URL_ROOT);
 			}			

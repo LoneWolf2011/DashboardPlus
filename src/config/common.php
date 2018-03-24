@@ -178,10 +178,12 @@
 			//array_shift($urlarr);
 			unset($urlarr[1]);
 			$view_url = implode('/',$urlarr);
-			//var_dump($view_url);				
+			// Set page title
+			$title_arr = array_filter($urlarr);
+			define('PAGE_TITLE', ucfirst(end($title_arr)));
 		}
 
-		$view_content = preg_replace('{/$}', '.view.php', $view_url);	
+		$view_content = preg_replace('{/$}', '.view.php', $view_url);
 	}
 	
 	

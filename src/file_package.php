@@ -45,6 +45,7 @@ define('ROOT_FILE', array(
 		'tools' 			=> '/Src/Classes/class.tools.php',	
 		'ticket' 			=> '/Src/Classes/class.ticket.php',	
 		'user' 				=> '/Src/Classes/class.user.php',	
+		'site' 				=> '/Src/Classes/class.site.php',	
 	)		
 ));
 

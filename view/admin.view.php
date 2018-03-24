@@ -30,7 +30,7 @@
 	<script>
 	$(document).ready(function () {
 		setTimeout(function() {
-			window.location.href = <?= json_encode(URL_ROOT);?>+'/view/home/?site='+  <?= json_encode(DEFAULT_SITE);?>;
+			window.location.href = <?= json_encode(URL_ROOT);?>+'/view/home/';
 		}, 3000);
 	});
 	</script>	

@@ -20,7 +20,7 @@
 
   </head>
 
-<body class="dark-bg"  id="i18container">
+<body class=""  id="i18container">
 
     <div class="middle-box text-center animated fadeInDown">
         <h1 class="text-danger">X</h1>

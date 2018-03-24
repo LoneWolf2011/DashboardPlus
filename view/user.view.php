@@ -7,6 +7,7 @@
 
 	?>
 	<div class="wrapper wrapper-content animated fadeInRight">
+        <h2 class="m-b-xs"><i class="pe pe-7s-users text-warning m-r-xs"></i> Users </h2>	
         <div class="row">
             <div class="col-lg-12">
 					<div class="ibox float-e-margins">
@@ -15,7 +16,7 @@
 						</div>
 						<div class="ibox-content">
 						
-						<table class='table table-hover jambo_table bulk_action datatable' id="datatable" style="width:100%">
+						<table class="table table-hover jambo_table bulk_action datatable" id="datatable" style="width:100%">
 							<thead>
 								<th align='left'>Username</th>
 								<th align='left'>Email</th>
@@ -215,11 +216,12 @@
 			lengthMenu: [ 10, 20, 25 ],
 			processing: true,
 			serverSide: true,
-			responsive: true			
+					
 		} );		
 		
 		var interval;
 		var table_active = $(".datatable").DataTable({
+			responsive: true,
 			ajax: <?= json_encode(URL_ROOT);?>+"/Src/controllers/user.controller.php?get=users",
 			fnInitComplete: function(oSettings, json) {			
 				$.i18n.init({

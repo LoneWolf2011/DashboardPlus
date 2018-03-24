@@ -1,283 +1,292 @@
-	<div class="wrapper wrapper-content animated fadeInRight">
-		<div class="row">
-
-			<div class="col-lg-3">
-                <div class="ibox float-e-margins">
-					<div class="ibox-content">
-						<table class="table table-hover">
-							<thead>
-							<th>Site</th>
-							<th><?= $_GET['site'];?></th>
-							</thead>
-							<tbody id="location_tr">
-							</tbody>
-						</table>
-					</div>
-                </div>			
-			
-			</div>		
-		
-			<div class="col-lg-5">
-                <div class="ibox float-e-margins">
-					<div class="ibox-content">
-						<table class="table table-hover">
-							<thead>
-							<tr>
-								<th>ZoneID</th>
-								<th>Name</th>
-								<th>Devices</th>
-								<th>Current wait time</th>
-							</tr>
-							</thead>
-							<tbody>
-							<?php
-								foreach($obj->getZones() as $key => $val ){
-									echo '<tr><td>'.$val['link'].'</td><td>'.$val['zone'].'</td><td>'.implode('<br>',$val['devices']).'</td><td>'.$val['wait'].'</td><td><span class="btn btn-primary btn-xs zone_graph" rel="'.$val['zone'].'" value="'.$val['zone_count'].'">graph</span></td></tr>';
-								}
-							?>
-							</tbody>
-						</table>
-					</div>
-                </div>			
-			
-			</div>		
-		
-			<div class="col-lg-2">
-				<div id="c_total"></div>
-			</div>
-			<div class="col-lg-2">
-				<div id="c_all"></div>
-			</div>
-	
-		</div>	
-		
-		<div class="row">
-			<div class="col-lg-12">
-                <div class="ibox float-e-margins">
-					<div class="ibox-title">									  
-						<h5>Person count Site<?= $_GET['site'];?> (24h)<small></small> <a class="fullscreen-link"><i class="fa fa-expand"></i></a></h5>
-						<div class="clearfix"></div>
-					</div>
-					<div class="ibox-content">
-						<div class="row">
-							<div class="col-lg-12">				
-								<div id="sign_chart"></div>
-							</div>
-							<!--<div class="col-lg-4">				
-								<div id="time_chart"></div>
-							</div>	-->						
-						</div>
-					</div>
+    <div class="wrapper wrapper-content animated fadeInRight">
+            <div class="row">
+                
+                <div class="panel m-b-none">
+                    <div class="panel-body">
+                        <h2 class="m-b-xs"><i class="pe pe-7s-graph1 text-warning m-r-xs"></i> Activity </h2>
+                        <hr>
+                        <p class="small">
+                            <span class="c-white">Monitoring view provide real time</span>
+                            data from geographically distributed servers. Lorem ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and
+                            scrambled it to make a type specimen book.
+                        </p>
+                        <hr>
+                    </div>
                 </div>
-			</div>		
-		</div>
-		
-	</div>
+          
+            </div>
+			
+            <div class="row">
+                <div class="col-lg-5">
 
-	<input type="text" hidden id="url_string" value="<?= URL_ROOT.'/Src/controllers/home.controller.php';?>" />
-	<input type="text" hidden id="url_site" value="<?= (isset($_GET['site'])) ? $_GET['site'] : 1;?>" />
+                    <div class="panel">
+                        <div class="panel-body">
+
+                            <h4 class="m-t-n-sm m-b-xs">Server activity</h4>
+                            <samll>Real time geographically activity</samll>
+                            <div id="serverMap"></div>
+
+                            <div class="row">
+
+                                <div class="col-xs-6">
+                                    <div class="panel panel-filled">
+
+                                        <div class="panel-body">
+                                            <h2 class="m-b-none server1">
+                                                12%
+                                            </h2>
+                                            <div class="small">Memory usage</div>
+                                            <div class="slight m-t-sm"><i class="fa fa-clock-o"> </i> Updated: <span class="c-white time">19:44:30 pm</span>  </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xs-6">
+                                    <div class="panel panel-filled">
+                                        <div class="panel-body">
+                                            <h2 class="m-b-none server2">
+                                                140
+                                            </h2>
+                                            <div class="small">CPU1 Usage</div>
+                                            <div class="slight m-t-sm"><i class="fa fa-clock-o"> </i> Updated: <span class="c-white time">11:22:15 pm</span> </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-xs-6">
+                                    <div class="panel panel-filled">
+
+                                        <div class="panel-body">
+                                            <h2 class="m-b-none server3">
+                                                206
+                                            </h2>
+                                            <div class="small">CPU2 Usage</div>
+                                            <div class="slight m-t-sm"><i class="fa fa-clock-o"> </i> Updated: <span class="c-white time">04:44:32 pm</span>  </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xs-6">
+                                    <div class="panel panel-filled">
+                                        <div class="panel-body">
+                                            <h2 class="m-b-none server4">
+                                                140
+                                            </h2>
+                                            <div class="small">CPU3 Usage</div>
+                                            <div class="slight m-t-sm"><i class="fa fa-clock-o"> </i> Updated: <span class="c-white time">11:42:11 pm</span> </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-7">
+
+                    <div class="panel panel-filled">
+                        <div class="panel-body">
+
+
+                            <div class="table-responsive">
+                                <table class="table" id="logsTable">
+                                    <thead>
+                                    <tr>
+                                        <th>
+                                            Job ID
+                                        </th>
+                                        <th>
+                                            IP
+                                        </th>
+                                        <th>
+                                            Time
+                                        </th>
+                                        <th>
+                                            Value
+                                        </th>
+                                        <th>
+                                            Usage
+                                        </th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+
+                                    <tr>
+                                        <td> 43 AT_DFrtVs</td>
+                                        <td> 32.52.33.65</td>
+                                        <td> 16:55:99 pm</td>
+                                        <td> 34</td>
+                                        <td> 54%</td>
+                                    </tr>
+                                    <tr>
+                                        <td> 43 AT_DFrtVs</td>
+                                        <td> 55.754.33.54</td>
+                                        <td> 10:33:11 pm</td>
+                                        <td> 32</td>
+                                        <td><span class="c-accent"> 24%</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td> 43 AT_DFrtVs</td>
+                                        <td> 322.98.33.165</td>
+                                        <td> 11:21:53 pm</td>
+                                        <td> 92</td>
+                                        <td> 12%</td>
+                                    </tr>
+                                    <tr>
+                                        <td> 43 AT_DFrtVs</td>
+                                        <td> 100.22.33.65</td>
+                                        <td> 16:55:99 pm</td>
+                                        <td> 79</td>
+                                        <td> 44%</td>
+                                    </tr>
+                                    <tr>
+                                        <td> 43 AT_DFrtVs</td>
+                                        <td> 22.75.44.65</td>
+                                        <td> 16:55:99</td>
+                                        <td> 21</td>
+                                        <td> 61%</td>
+                                    </tr>
+                                    <tr>
+                                        <td> 43 AT_DFrtVs</td>
+                                        <td> 12.98.67.124</td>
+                                        <td> 12:23:61</td>
+                                        <td> 33</td>
+                                        <td><span class="c-accent">11%</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td> 43 AT_DFrtVs</td>
+                                        <td> 32.52.33.65</td>
+                                        <td> 10:43:65 pm</td>
+                                        <td> 28</td>
+                                        <td> 32%</td>
+                                    </tr>
+                                    <tr>
+                                        <td> 43 AT_DFrtVs</td>
+                                        <td> 93.22.642.65</td>
+                                        <td> 15:33:53 pm</td>
+                                        <td> 85</td>
+                                        <td> 55%</td>
+                                    </tr>
+                                    <tr>
+                                        <td> 43 AT_DFrtVs</td>
+                                        <td> 100.22.33.65</td>
+                                        <td> 16:55:99 pm</td>
+                                        <td> 79</td>
+                                        <td> 44%</td>
+                                    </tr>
+                                    <tr>
+                                        <td> 43 AT_DFrtVs</td>
+                                        <td> 22.75.44.65</td>
+                                        <td> 16:55:99</td>
+                                        <td> 21</td>
+                                        <td> 61%</td>
+                                    </tr>
+                                    <tr>
+                                        <td> 43 AT_DFrtVs</td>
+                                        <td> 22.52.33.421</td>
+                                        <td> 14:33:99 pm</td>
+                                        <td> 93</td>
+                                        <td><span class="c-accent"> 71%</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td> 43 AT_DFrtVs</td>
+                                        <td> 132.21.32.625</td>
+                                        <td> 16:55:44 pm</td>
+                                        <td> 32</td>
+                                        <td><span class="c-accent"> 10%</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td> 43 AT_DFrtVs</td>
+                                        <td> 32.52.33.65</td>
+                                        <td> 17:66:55 pm</td>
+                                        <td> 34</td>
+                                        <td> 8%</td>
+                                    </tr>
+                                    <tr>
+                                        <td> 43 AT_DFrtVs</td>
+                                        <td> 93.22.642.65</td>
+                                        <td> 15:33:53 pm</td>
+                                        <td> 85</td>
+                                        <td> 55%</td>
+                                    </tr>
+
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+
+		
+		
+    </div>
 	
 	<?php
 		// View specific scripts
-		array_push($arr_js, '/js/plugins/sparkline/jquery.sparkline.min.js');
-		array_push($arr_js, '/js/plugins/d3/d3.min.js');
-		array_push($arr_js, '/js/plugins/c3/c3.min.js');
-		
-	?>		
+		array_push($arr_js, '/js/plugins/moment/moment.js');
+	?>			
 	<?php
 		foreach($arr_js as $js){
 			echo '<script src="'.URL_ROOT.$js.'"></script>';
 		}		
 	?>	
 
-	<script>
-	$(document).ready(function () {	
-		
-		var zone_name_arr = [];
-		
-		$( '.zone_graph' ).on('click',function() {
 
-			var zone_data = $(this).attr('value');
-			var zone_name = $(this).attr('rel');
-			var zone_arr = zone_data.split(';');
-			zone_arr.unshift(zone_name);
-			
-			if($.inArray(zone_name, zone_name_arr) == -1) {
-				//add to array
-				zone_name_arr.push(zone_name);
-			} else {
-				zone_name_arr.splice($.inArray(zone_name, zone_name_arr),1);
-			}	
-			//console.log(zone_name_arr);
-			
-			compchart.load({
-				columns:[
-					zone_arr
-				],
-				type: 'bar'
-			});	
-			compchart.groups([ 
-				zone_name_arr
-			]);
-			
-		});	
+<script>
+    $(document).ready(function () {
 
-		getSignalLoad();
-		getCount();
-		
-		// Set chart zoom on mobile
-		if ($(this).width() < 769) {
-			compchart.zoom([0, 5]); 
-		}
-	});	
-	
-	var url_str = $('#url_string').val();
-	
-	var chart = c3.generate({
-		bindto: '#time_chart',
-		data: {
-			columns: [
-				['data', 60]
-			],
-			type: 'gauge',
-			onclick: function (d, i) { console.log("onclick", d, i); },
-			onmouseover: function (d, i) { console.log("onmouseover", d, i); },
-			onmouseout: function (d, i) { console.log("onmouseout", d, i); }
-		},
-		gauge: {
-			fullCircle: true, 
-			label: {
-				format: function(value, ratio) {
-					return value;
-				},
-				show: false // to turn off the min/max labels.
-			},
-			startingAngle: 90,
-			min: 0, // 0 is default, //can handle negative min e.g. vacuum / voltage / current flow / rate of change
-			max: 100, // 100 is default
-			units: ' %',
-			width: 20 // for adjusting arc thickness
-		},
-		color: {
-			pattern: ['#FF0000', '#f8ac59', '#1ab394'], // the three color levels for the percentage 1ab394 values.
-			threshold: {
-	//            unit: 'value', // percentage is default
-	//            max: 200, // 100 is default
-				values: [30, 60, 90, 100]
-			}
-		},
-		size: {
-			height: 180
-		}
-	});
-	
-	var compchart = c3.generate({
-		bindto: '#sign_chart',
-		data: {
-			x: 'x',
-			xFormat: '%H:%M',
-			columns: [],
-			order: false
-		},
-		point: {
-			show: false
-		},		
-		type: 'spline',
-		size: {
-			height:500
-		},		
-		axis: {
-			x: {
-				type: 'category'
-			}
-		},
-		
-		color: {
-			pattern: ["#f6a821", "#d3d3d3",  "#676B73", "rgba(246,168,33, 1)", "#1ab394", "#fff","#1ab394"]
-		},		
-		zoom: {
-			enabled: true
-		}			
-	});		
 
-	var ajaxObj = {
-		options: {
-			url: null,
-			dataType: 'json' 
-		},
-		delay: 10000,
-		errorCount: 0,
-		errorThreshold: 5,
-		ticker: null,
-		updatetime: null,
-		get: function(function_name) { 
-			if(ajaxObj.errorCount < ajaxObj.errorThreshold) { // Gets triggered for all objects!?
-				ajaxObj.ticker = setTimeout(function_name, ajaxObj.delay);
-				 swal.close();
-			}
-		},
-		fail: function(jqXHR, textStatus, errorThrown) {
-			console.log(errorThrown);
-			swal({
-				html:true, 
-				title: textStatus,
-				text: errorThrown,
-				type: "error"
-			});		
-			ajaxObj.errorCount++;
-		}
-	};	
-	
-	function getCount(){
-		ajaxObj.options.url = url_str+"?get=peoplecount&site="+$('#url_site').val();
-		
-		$.ajax(ajaxObj.options)
-			.done(function(data){
-				if(data.status != 0){
-					$('#c_all').html(data.c_all);
-					$('#c_total').html(data.c_total);
-					$('#location_tr').html(data.location);
-				} else {
-					
-				}
-			}) 
-			.fail(ajaxObj.fail) 
-			.always(ajaxObj.get(getCount));
-		
-	}	
+        // Fiunction to generate random text - for demo purpose
+        function simpleText()
+        {
+            var text = "";
+            var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
 
-	
-	function getSignalLoad(){
-		ajaxObj.options.url = url_str+"?get=signalload&site="+$('#url_site').val(),
-		
-		$.ajax(ajaxObj.options)
-			.done(function(data){
-				if(data.status != 0){
-					compchart.load({
-						columns: [
-							data.hours,
-							data.signal,
-							data.trend
-						],
-						type: 'area-spline',
-						types: {
-							trend: 'line'
-						}					
-					});
-					//compchart.ygrids([
-					//	{value: data.avg_last, class: data.avg_last > data.avg_now ? 'gridorange': '', text: 'Gemiddelde vorige week ' + data.avg_last, position: 'start'},
-					//	{value: data.avg_now, class: data.avg_now > data.avg_last ? 'gridorange': 'gridgreen', text: 'Gemiddelde deze week ' + data.avg_now}
-					//]);					
-					compchart.data.names({
-						signal: 'Total count',
-						trend: 'Trend'
-					});					
-				} else {
-					compchart.destroy();	
-				}
-			}) 
-			.fail(ajaxObj.fail) 
-			.always(ajaxObj.get(getSignalLoad));
-	}	
-	
-	</script>
+            for( var i=0; i < 5; i++ )
+                text += possible.charAt(Math.floor(Math.random() * possible.length));
+
+            return text;
+        }
+
+
+        // Function to generate new table row with random data
+        function generate() {
+
+            var now = new moment();
+            var endTime = now.format("HH:mm:ss a");
+
+            var number0 = Math.floor(Math.random() * 100) + 1;
+            var number1 = Math.floor(Math.random() * 100) + 1;
+            var number2 = Math.floor(Math.random() * 100) + 1;
+            var number3 = Math.floor(Math.random() * 100) + 1;
+            var number4 = Math.floor(Math.random() * 100) + 1;
+            var number5 = Math.floor(Math.random() * 100) + 1;
+            var number6 = Math.floor(Math.random() * 100) + 1;
+
+            var usage = number6 + '%';
+
+            if (number6 > 50) {
+                usage = '<span class="c-accent">' + usage + '%</span>';
+            }
+
+            $('#logsTable tbody tr:first').remove();
+
+            $('#logsTable').append('<tr><td>'+ number0 + ' AT_' + simpleText() + '</td><td>' + number1 +'.'+number2 +'.'+number3 +'.' +number4+ '</td><td>' + endTime +'</td>' + '<td>' + number5 +'</td><td>'+ usage + '</td></tr>');
+
+            $('.time').text(endTime);
+            $('.server1').text(number1 + '%');
+            $('.server2').text(number2);
+            $('.server3').text(number3);
+            $('.server4').text(number4);
+
+        }
+
+        // Run interval function
+        logsInterval = setInterval(generate, 1000);
+
+
+    });
+</script>
