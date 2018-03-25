@@ -15,8 +15,12 @@
                     </div>
                 </li>
 				<?php $site_nr = (isset($_GET['site']))? preg_replace("/[^0-9]/","",$_GET['site']) : preg_replace("/[^0-9]/","",DEFAULT_SITE);?>
+				
                 <li ><a href="<?= URL_ROOT.'/view/home/?site='.$site_nr;?>"><i class="fa fa-th-large fa-fw"></i> <span class="nav-label"></span></a></li>
                 <li ><a href="<?= URL_ROOT.'/view/user/?site='.$site_nr;?>"><i class="fa fa-user fa-fw"></i> <span class="nav-label"></span></a></li>
+				<?php if(htmlentities($_SESSION[SES_NAME]['user_role'], ENT_QUOTES, 'UTF-8') == 1){ ?>
+				<li ><a href="<?= URL_ROOT.'/view/users/?site='.$site_nr;?>"><i class="fa fa-users fa-fw"></i> <span class="nav-label"></span></a></li>
+				<?php }; ?>
 				<li><br></li>
 
 				<li ><a href="<?= URL_ROOT.'/view/site/?site='.$site_nr;?>"><i class="fa fa-sitemap fa-fw"></i> <span class="nav-label"></span></a></li>

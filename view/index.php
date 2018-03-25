@@ -40,8 +40,11 @@
 
 		<div id="page-wrapper" class="dark-bg">
 	
-			<?php include ROOT_PATH.ROOT_FILE['menu_top'];?>
 			<?php 
+			// Top menu bar
+			include ROOT_PATH.ROOT_FILE['menu_top'];
+			
+			// View content
 			if(file_exists(ROOT_PATH . $view_content)){
 				include ROOT_PATH . $view_content;
 			} else {
@@ -49,8 +52,9 @@
 				include ROOT_PATH.'/view/errors/page_404.php';
 				die();
 			}
-			?>
-			<?php include ROOT_PATH.ROOT_FILE['menu_footer'];?>
+			
+			// Footer
+			include ROOT_PATH.ROOT_FILE['menu_footer'];?>
 	
 		</div>
 		

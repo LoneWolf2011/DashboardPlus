@@ -35,18 +35,7 @@ define('ROOT_FILE', array(
 	),
 	 
 	// Classes
-	'CLASS'			=> array (
-		'safemysql' 		=> '/Src/Classes/class.safemysql.php',
-		'csrf' 				=> '/Src/Classes/class.csrf.php',
-		'ssp_class' 		=> '/Src/Classes/class.datatable.ssp.php',
-		'google' 			=> '/Src/Classes/class.googleHelper.php',
-		'login' 			=> '/Src/Classes/class.login.php',
-		'home' 				=> '/Src/Classes/class.home.php',
-		'tools' 			=> '/Src/Classes/class.tools.php',	
-		'ticket' 			=> '/Src/Classes/class.ticket.php',	
-		'user' 				=> '/Src/Classes/class.user.php',	
-		'site' 				=> '/Src/Classes/class.site.php',	
-	)		
+	'CLASS'			=> 	getClasses(ROOT_PATH.'/src/classes/')
 ));
 
 define('ROOT_CSS', array(

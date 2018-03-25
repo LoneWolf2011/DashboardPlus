@@ -84,9 +84,41 @@
 							die(header("Location: ../../?dev&id=".$cleaned_email));				
 						} else {
 							if(password_verify($post_val['password'], $row['user_password'])){ 
-								// Indien de passwords overeen komen zet $login_ok naar TRUE 
+								// Update current hash to ARGON2I
+								if (password_needs_rehash($row['user_password'], PASSWORD_ARGON2I)) {
+									$new_hash = password_hash($post_val['password'], PASSWORD_ARGON2I);
+									$query = " UPDATE app_users SET user_password = :password WHERE user_id = :user_id"; 
+									$query_params = array( 
+										':user_id' 		=> $row['user_id'],
+										':password' 	=> $new_hash
+									); 
+									
+									try 
+									{ 
+										// Execute the query 
+										$stmt = $conn->prepare($query); 
+										$result = $stmt->execute($query_params); 
+						
+										$msg = "Password hash van user: ".$row['user_email']. " geupdatet";
+										logToFile(__FILE__,0,$msg);	
+
+									} 
+									catch(PDOException $ex) 
+									{ 
+										// Note: On a production website, you should not output $ex->getMessage(). 
+										// It may provide an attacker with helpful information about your code.  
+										$msg = 'Regel: ' . $ex->getLine().' Bestand: ' . $ex->getFile().' Error: ' . $ex->getMessage();
+										logToFile(__FILE__,1,$msg);
+									} 									
+									
+								}
 								$login_ok = true; 
-							} 					
+								// Log user in
+							}							
+							//if(password_verify($post_val['password'], $row['user_password'])){ 
+							//	// Indien de passwords overeen komen zet $login_ok naar TRUE 
+							//	$login_ok = true; 
+							//} 					
 							
 						}
 					}
@@ -624,7 +656,7 @@
 			$conn 	= $this->db_conn;
 			
 			$pass = genPassSeed();
-			$hash = password_hash($pass, PASSWORD_DEFAULT);
+			$hash = password_hash($pass, PASSWORD_ARGON2I);
 			
 			$admin = array( 
 				'user_name' 		=>	'Root',

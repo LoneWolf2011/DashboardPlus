@@ -93,12 +93,15 @@
 			$query_data = array( 
 				'user_name' 		=>	$post_val['user_name'],
 				'user_last_name' 	=>	$post_val['user_last_name'],
-				'user_email' 		=>	$post_val['user_email'],
-				'user_status' 		=>	$post_val['user_status'],
-				'user_role' 		=>	$post_val['user_role']
+				'user_email' 		=>	$post_val['user_email']
 			); 
+			if (isset($_POST['user_status']) && !empty($_POST['user_status'])) {
+				$query_data['user_status'] =$post_val['user_status'];
+			}
+			if (isset($_POST['user_role']) && !empty($_POST['user_role'])) {
+				$query_data['user_role'] =$post_val['user_role'];
+			}
 			
-		
 			if($conn->query("UPDATE app_users SET ?u WHERE user_id = ?i", $query_data, $post_val['user_id'])) {
 				// Log to file
 				$msg = "User ".$post_val['user_email'] ." geupdatet door ".$this->auth_user;
@@ -230,7 +233,7 @@
 			// for good measure. 
 			if(!empty($password_post)) 
 			{ 
-				$password = password_hash($password_post, PASSWORD_DEFAULT); 
+				$password = password_hash($password_post, PASSWORD_ARGON2I); 
 			} 
 			else 
 			{ 
@@ -379,7 +382,7 @@
 					'db' => "user_last_name",
 					'dt' => 5,
 					'formatter' => function($d,$row){
-						$edit = "<a class='label label-success' href='".URL_ROOT."/view/user/?id=".$row[0]."' >Edit</a>";
+						$edit = "<a class='label label-success' href='".URL_ROOT."/view/users/?id=".$row[0]."' >Edit</a>";
 						$dele = "<a class='label label-danger' id='delete' value='".$row[0]."' rel='".$row[2]."' >Delete</a>";
 						return $edit. ' '.$dele;
 					}					

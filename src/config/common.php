@@ -128,6 +128,18 @@
 
 		return $row[strtolower($setting_name)];
 	}
+
+	function getClasses($path){
+		$class_arr = array();
+		$scanned_directory = array_diff(scandir($path), array('..', '.'));
+		foreach($scanned_directory as $file){
+			$file_name = substr($file, strpos($file, ".") + 1);
+			$file_key = substr($file_name, 0, strpos($file_name, "."));
+			//echo $variable.'<br>';
+			$class_arr[strtolower($file_key)] ='/src/classes/'.$file;
+		}	
+		return $class_arr;
+	}
 	
     if(function_exists('get_magic_quotes_gpc') && get_magic_quotes_gpc()) 
     { 
