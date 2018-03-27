@@ -27,7 +27,7 @@
 				<?php
 
 				if(isset($_GET['site'])){
-					$obj = new Site(new SafeMySQL(array('db'=>'scs_motion')),$_GET['site']);
+					$obj = new Site(new SafeMySQL(),$_GET['site']);
 					foreach($obj->getZones() as $device){
 						
 						echo '<li>'.$device['link'].'</li>';
@@ -35,6 +35,11 @@
 				}
 				?>
  				
+				<li><br></li>
+				<?php if(htmlentities($_SESSION[SES_NAME]['user_role'], ENT_QUOTES, 'UTF-8') == 1){ ?>
+				<li><a href="<?= URL_ROOT.'/view/logging/';?>"><i class="fa fa-file-text fa-fw"></i> <span class="nav-label">Logging</span></a></li>
+				<li ><a href="<?= URL_ROOT.'/view/settings/?site='.$site_nr;?>"><i class="fa fa-gear fa-fw"></i> <span class="nav-label"></span></a></li>
+				<?php }; ?>				
             </ul>
 
         </div>

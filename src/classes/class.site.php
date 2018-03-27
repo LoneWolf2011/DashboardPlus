@@ -21,18 +21,47 @@
 			$this->date_past_day = date('Y-m-d H:i:s', strtotime('-24 hours'));
 		}	
 		
+		public function getZonesTable(){
+			$conn = $this->db_conn;
+			$rows = array();	
+			foreach($this->getZones() as $key => $val ){
+				$count = $conn->getOne("SELECT `Value` FROM sensor_events WHERE `Group` = ?s ORDER BY `id` DESC LIMIT 1",$val['zone']);
+				if($count > 0){
+					$label = '<span class="badge badge-success">'.$count.'</span>';
+				} else {
+					$label = '';
+				}
+				
+				$rows[] = array(
+					$val['link'],
+					$val['zone'],
+					implode('<br>',$val['devices']),
+					$val['wait'],
+					$label,
+					'<span class="btn btn-primary btn-xs zone_graph" rel="'.$val['zone'].'" value="'.$val['zone_count'].'">graph</span>'
+				);
+			}
+			
+			$response_array = array(
+				'status'	=> 1,
+				'rows'		=> $rows
+			);	
+			
+			return $response_array;
+		}
+		
 		public function getZones() {
 			$conn = $this->db_conn;
 
 			try {			
-				$query = "SELECT `Group` AS zone, `site`, GROUP_CONCAT(DISTINCT  `IP_address` SEPARATOR ';') AS devices_ip, GROUP_CONCAT(DISTINCT  `Name` SEPARATOR ';') AS `devices`, GROUP_CONCAT(`value` SEPARATOR ';') AS `zone_count` FROM sensor_events";
+				$query = "SELECT `Group` AS zone, GROUP_CONCAT(DISTINCT  `IP_address` SEPARATOR ';') AS devices_ip, GROUP_CONCAT(DISTINCT  `Name` SEPARATOR ';') AS `devices`, GROUP_CONCAT(`value` SEPARATOR ';') AS `zone_count` FROM sensor_events";
 				
 				if(!empty($this->site_nr)){
-					$query .= " WHERE `Site` = ?s";
+					$query .= " WHERE `Group` IN (SELECT `Group` FROM sensor_sites_group WHERE site_id = ?i)";
 				}	
 				$query .= " GROUP BY `Group` ORDER BY `Group` ASC";
 		
-				$res = $conn->query($query,'site'.$this->site_nr);
+				$res = $conn->query($query,$this->site_nr);
 				
 				$zones = array();
 				$i = 1;
@@ -40,12 +69,12 @@
 					$z_count = $this->getZoneValCount($row['zone']);
 					$zones[] = array(
 						'id' 			=> $i,					
-						'site' 			=> $row['site'],					
+						'site' 			=> $conn->getOne("SELECT `site_id` FROM sensor_sites_group WHERE `Group` = ?s",$row['zone']),					
 						'zone' 			=> $row['zone'],
 						'zone_count' 	=> $z_count['count'],
 						'wait' 			=> $this->getZoneWaitTime($row['zone']),						
 						'devices' 		=> explode(';',$row['devices']),						
-						'link' 			=> '<a href="'. URL_ROOT.'/view/zone/?site='.$this->site_nr.'&id='.$row['zone'].'">#'.$i.'</a>'
+						'link' 			=> '<a  style="color:#f6a821;" href="'. URL_ROOT.'/view/zone/?site='.$this->site_nr.'&id='.$row['zone'].'">#'.$i.'</a>'
 					);					
 					$i++;
 				};			
@@ -55,56 +84,6 @@
 			}	
 						
 			return $zones;
-		}
-
-		protected function getZoneValCount($zone){
-			$conn = $this->db_conn;
-			try {			
-				//$query = "SELECT GROUP_CONCAT(`value` SEPARATOR ';') AS `zone_count` FROM sensor_events WHERE `Group` = ?s AND `From` BETWEEN ?s AND ?s";
-				$query = "SELECT `From` AS signalDate, SUM(`Value`) AS `zone_count`, `Group` FROM sensor_events WHERE `Group` = ?s AND `From` BETWEEN ?s AND ?s";
-				
-				if(!empty($this->site_nr)){
-					$query .= " AND `Site` = ?s";
-				}	
-				$query .= " GROUP BY MID(signalDate, 7, 8) ORDER BY signalDate";
-		
-				$res = $conn->query($query,$zone,$this->date_past_day,$this->date_now_day,'site'.$this->site_nr);
-				
-				$zones_count = array();
-				$zones_name = array();
-				while ($row = $conn->fetch($res)) {	
-					
-					$zones_count[] = $row['zone_count'];				
-					$zones_name[] = $row['Group'];				
-				
-				};			
-
-			}  catch (Exception $e) {
-				return $response_array['status'] = 0;
-			}
-
-			return array(
-				'count' => implode(';',$zones_count),
-				'name'	=> $zones_name
-			);
-		}
-		
-		protected function getZoneWaitTime($zone){
-			$conn = $this->db_conn;
-			
-			$count_this_hour = $conn->getOne("SELECT SUM(`Value`) AS total_count FROM sensor_events  WHERE `Group` = ?s AND `From` LIKE '".date('Y-m-d H')."%' GROUP BY `id` DESC", $zone);
-			$count_past_hour = $conn->getOne("SELECT SUM(`Value`) AS total_count FROM sensor_events  WHERE `Group` = ?s AND `From` LIKE '".date('Y-m-d H', strtotime('-1 hour'))."%' GROUP BY `id` DESC", $zone);
-						
-			$count = ($count_past_hour - $count_this_hour == 0) ? 1 : $count_past_hour - $count_this_hour;
-			
-			$time_sec = round(3600/abs($count),1);
-			$time_min = round($time_sec/60,1);
-			
-			$wait_time = $time_sec * $count_this_hour;
-			
-			return gmdate("H:i:s", $wait_time);
-			//return $wait_time;
-			
 		}
 
 		public function getPeopleCount($primair_conn = array()){
@@ -124,16 +103,16 @@
 				
 				// Check if both dates are in the same week and specify query
 				try {			
-					$query = "SELECT `From` AS signalDate, SUM(`Value`) AS signal, `site` FROM sensor_events  WHERE `From` BETWEEN ?s AND ?s";
+					$query = "SELECT `From` AS signalDate, SUM(`Value`) AS signal FROM sensor_events  WHERE `From` BETWEEN ?s AND ?s";
 									
 					if(!empty($this->site_nr)){
-						$query .= " AND `Site` = ?s";
+						$query .= " AND `Group` IN (SELECT `Group` FROM sensor_sites_group WHERE site_id = ?i)";
 					}					
 					
 					$query .= " GROUP BY MID(signalDate, 7, 8) ORDER BY signalDate";
 
 					
-					$res = $conn_scs->query($query,$this->date_past_day,$this->date_now_day,'site'.$this->site_nr);
+					$res = $conn_scs->query($query,$this->date_past_day,$this->date_now_day,$this->site_nr);
 					
 					$signal = array();
 
@@ -146,17 +125,28 @@
 					return $response_array['status'] = $e->getMessage();
 				}
 				
-				$max_bg = (max($signal) > C_MAX_DANGER) ? 'red-bg' : ((max($signal) > C_MAX_WARNING) ? 'yellow-bg' : 'dark-bg');
-				$min_bg = (min($signal) > C_MIN_DANGER) ? 'red-bg' : ((min($signal) > C_MIN_WARNING) ? 'yellow-bg' : 'dark-bg');
-				$avg_bg = (round(array_sum($signal)/count($signal)) > C_AVG_DANGER) ? 'red-bg' : ((round(array_sum($signal)/count($signal)) > C_AVG_WARNING) ? 'yellow-bg' : 'dark-bg');
-				
+				if(count($signal) > 0){
+					$max_bg = (max($signal) > C_MAX_DANGER) ? 'red-bg' : ((max($signal) > C_MAX_WARNING) ? 'yellow-bg' : 'dark-bg');
+					$min_bg = (min($signal) > C_MIN_DANGER) ? 'red-bg' : ((min($signal) > C_MIN_WARNING) ? 'yellow-bg' : 'dark-bg');
+					$avg_bg = (round(array_sum($signal)/count($signal)) > C_AVG_DANGER) ? 'red-bg' : ((round(array_sum($signal)/count($signal)) > C_AVG_WARNING) ? 'yellow-bg' : 'dark-bg');
+					$c_max = max($signal);
+					$c_min = min($signal);
+					$c_avg = round(array_sum($signal)/count($signal));
+				} else{
+					$max_bg = 'dark-bg';
+					$min_bg = 'dark-bg';
+					$avg_bg = 'dark-bg';
+					$c_max = 0;
+					$c_min = 0;
+					$c_avg = 0;					
+				}
 				$count = '<div class="widget style1 '.$max_bg.'">
                     <div class="row vertical-align">
                         <div class="col-xs-8">
                             <h2><i class="fa fa-user"></i> <small style="color:inherit;">max (24h)</small></h2>
                         </div>
                         <div class="col-xs-4 text-right">
-                            <h2 class="font-bold" >'.max($signal).'</h2>
+                            <h2 class="font-bold" >'.$c_max.'</h2>
                         </div>
                     </div>
                 </div>
@@ -166,7 +156,7 @@
                            <h2><i class="fa fa-user"></i> <small style="color:inherit;">min (24h)</small></h2>
                         </div>
                         <div class="col-xs-4 text-right">
-                            <h2 class="font-bold" id="c_min">'.min($signal).'</h2>
+                            <h2 class="font-bold" id="c_min">'.$c_min.'</h2>
                         </div>
                     </div>
                 </div>
@@ -176,15 +166,15 @@
                             <h2><i class="fa fa-user"></i> <small style="color:inherit;">avg (24h)</small></h2>
                         </div>
                         <div class="col-xs-4 text-right">
-                            <h2 class="font-bold" id="c_avg">'.round(array_sum($signal)/count($signal)).'</h2>
+                            <h2 class="font-bold" id="c_avg">'.$c_avg.'</h2>
                         </div>
                     </div>
                 </div>';
 				
-				$total_bg = (array_sum($signal) > C_PER_DANGER) ? 'red-bg' : ((array_sum($signal) > C_PER_WARNING) ? 'yellow-bg' : 'navy-bg');
+				$total_bg = (array_sum($signal) > C_PER_DANGER) ? 'red-bg' : ((array_sum($signal) > C_PER_WARNING) ? 'yellow-bg' : 'dark-bg');
 				
 				$total = '<div class="widget '.$total_bg.' p-lg text-center">
-					<div class="m-b-md">
+					<div class="m-b-md" style="color:white;">
 						<i class="fa fa-user fa-4x"></i>
 						<h1 class="m-xs" >'.array_sum($signal).'</h1>
 						<h3 class="font-bold no-margins">
@@ -194,11 +184,12 @@
 					</div>
 				</div>';
 				
+				$location_row = $conn_scs->getRow("SELECT * FROM sensor_sites WHERE site_id = ?i",$this->site_nr);
 				$location = 
-				'<tr><th>Location</th><td>ASB</tr></td>
-				<tr><th>Address</th><td>Boschdijk</tr></td>
-				<tr><th>Zipcode</th><td>5627</tr></td>
-				<tr><th>City</th><td>Eindhoven</tr></td>';
+				'<tr><th>Location</th><td>'.$location_row['site_location'].'</tr></td>
+				<tr><th>Address</th><td>'.$location_row['site_address'].'</tr></td>
+				<tr><th>Zipcode</th><td>'.$location_row['site_zipcode'].'</tr></td>
+				<tr><th>City</th><td>'.$location_row['site_city'].'</tr></td>';
 				
 				$response_array = array(
 					'status'	=> 1,
@@ -233,15 +224,15 @@
 				
 				// Check if both dates are in the same week and specify query
 				try {	
-					$query = "SELECT `From` AS signalDate, SUM(`Value`) AS signal, `site` FROM sensor_events  WHERE `From` BETWEEN ?s AND ?s";
+					$query = "SELECT `From` AS signalDate, SUM(`Value`) AS signal FROM sensor_events  WHERE `From` BETWEEN ?s AND ?s";
 									
 					if(!empty($this->site_nr)){
-						$query .= " AND `Site` = ?s";
+						$query .= " AND `Group` IN (SELECT `Group` FROM sensor_sites_group WHERE site_id = ?i)";
 					}					
 									
 					$query .= " GROUP BY MID(signalDate, 7, 8) ORDER BY signalDate";
 					
-					$res = $conn_scs->query($query,$this->date_past_day,$this->date_now_day,'site'.$this->site_nr);
+					$res = $conn_scs->query($query,$this->date_past_day,$this->date_now_day,$this->site_nr);
 					
 					$signal = array('signal');
 					$hours 	= array('x');
@@ -290,36 +281,57 @@
 			return $response_array;				
 				
 		}
+			
+		protected function getZoneValCount($zone){
+			$conn = $this->db_conn;
+			try {			
+				//$query = "SELECT GROUP_CONCAT(`value` SEPARATOR ';') AS `zone_count` FROM sensor_events WHERE `Group` = ?s AND `From` BETWEEN ?s AND ?s";
+				$query = "SELECT `From` AS signalDate, SUM(`Value`) AS `zone_count`, `Group` FROM sensor_events WHERE `Group` = ?s AND `From` BETWEEN ?s AND ?s";
+				
+				if(!empty($this->site_nr)){
+					$query .= " AND `Group` IN (SELECT `Group` FROM sensor_sites_group WHERE site_id = ?i)";
+				}	
+				$query .= " GROUP BY MID(signalDate, 7, 8) ORDER BY signalDate";
 		
-		protected function getSignalLoadWeeklyAvg($week_nr, $primair_conn = array()){
-			$opt_prim = array_merge($this->defaults,$primair_conn);
-			try {
-				$conn_scs 			= new SafeMySQL($opt_prim);
-				$connected 	= true;
-			} catch (Exception $e) {
-				$connected 	= false;
+				$res = $conn->query($query,$zone,$this->date_past_day,$this->date_now_day,$this->site_nr);
+				
+				$zones_count = array();
+				$zones_name = array();
+				while ($row = $conn->fetch($res)) {	
+					
+					$zones_count[] = $row['zone_count'];				
+					$zones_name[] = $row['Group'];				
+				
+				};			
+
+			}  catch (Exception $e) {
+				return $response_array['status'] = 0;
 			}
-			
-			$year = date('Y');
-			
-			// Get weeknumber from today
-			$table_now 		= 'signals_'.$year.'_'.$week_nr;	
-			
-			$query = "SELECT `From` AS signalDate, COUNT(*) AS signal FROM sensor_events WHERE `From` BETWEEN ?s AND ?s GROUP BY MID(signalDate, 7, 8) ORDER BY signalDate";
-									
-			$res = $conn_scs->query($query,$this->date_past_day,$this->date_now_day);
-			$i = 0;
-			while ($row = $conn_scs->fetch($res)) {			
-				$i += $row['signal'];												
-			};
-			
-			$row_cnt = $res->num_rows;
-			
-			$avg = $i / $row_cnt;
-			
-			return round($avg);
+
+			return array(
+				'count' => implode(';',$zones_count),
+				'name'	=> $zones_name
+			);
 		}
 		
+		protected function getZoneWaitTime($zone){
+			$conn = $this->db_conn;
+			
+			$count_this_hour = $conn->getOne("SELECT SUM(`Value`) AS total_count FROM sensor_events  WHERE `Group` = ?s AND `From` LIKE '".date('Y-m-d H')."%' GROUP BY `id` DESC", $zone);
+			$count_past_hour = $conn->getOne("SELECT SUM(`Value`) AS total_count FROM sensor_events  WHERE `Group` = ?s AND `From` LIKE '".date('Y-m-d H', strtotime('-1 hour'))."%' GROUP BY `id` DESC", $zone);
+						
+			$count = ($count_past_hour - $count_this_hour == 0) ? 1 : $count_past_hour - $count_this_hour;
+			
+			$time_sec = round(3600/abs($count),1);
+			$time_min = round($time_sec/60,1);
+			
+			$wait_time = $time_sec * $count_this_hour;
+			
+			return gmdate("H:i:s", $wait_time);
+			//return $wait_time;
+			
+		}
+
 		protected function trendLineAnalyse( $x, $y ){
 
 			$n     = count($x);     // number of items in the array
@@ -335,10 +347,10 @@
 			}
 			
 			// Slope
-			$slope = ( ( $n * $xy_sum ) - ( $x_sum * $y_sum ) ) / ( ( $n * $xx_sum ) - ( $x_sum * $x_sum ) );
+			@$slope = ( ( $n * $xy_sum ) - ( $x_sum * $y_sum ) ) / ( ( $n * $xx_sum ) - ( $x_sum * $x_sum ) );
 			
 			// calculate intercept
-			$intercept = ( $y_sum - ( $slope * $x_sum ) ) / $n;
+			@$intercept = ( $y_sum - ( $slope * $x_sum ) ) / $n;
 			
 			return array( 
 				'slope'     => $slope,

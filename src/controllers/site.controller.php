@@ -5,26 +5,30 @@
 		
 	if(isset($_GET['get'])){
 		if($_GET['get'] == 'signalload'){
-			jsonArr($obj->getSignalLoad(array('db'=>'scs_motion')));
+			jsonArr($obj->getSignalLoad());
 		}		
+
+		if($_GET['get'] == 'zonestable'){
+			jsonArr($obj->getZonesTable());
+		}
 		
 		if($_GET['get'] == 'peoplecount'){
-			jsonArr($obj->getPeopleCount(array('db'=>'scs_motion')));
+			jsonArr($obj->getPeopleCount());
 		}		
 	}
 	
 	if(isset($_GET['autocomplete'])){
-		$conn = new SafeMySQL(array('db'=>'scs_motion'));
+		$conn = new SafeMySQL();
 		$term = trim(strip_tags($_GET['query']));
 		
-		$query = $conn->query("SELECT `site` FROM sensor_events GROUP BY `site`");
+		$query = $conn->query("SELECT `site_id`, `site_name` FROM sensor_sites ");
 	
 		$reply['suggestions'] 	= array();
 	
 		while ($row = $db_conn->fetch($query))
 		{
 			//Add this row to the reply
-			array_push($reply['suggestions'], htmlentities(stripslashes($row['site'])));
+			$reply['suggestions'][] = array('value'=>htmlentities(stripslashes($row['site_name'])), 'data'=>htmlentities(stripslashes($row['site_id'])));
 		}
 		
 		echo json_encode($reply);

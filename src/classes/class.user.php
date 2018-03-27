@@ -126,7 +126,7 @@
 			jsonArr($response_array);		
 		}
 
-		public function deleteuser($post_val){
+		public function deleteUser($post_val){
 			$lang = $this->locale;
 			
 			$conn 	= $this->db_conn;
@@ -326,7 +326,7 @@
 		public function getTable(){
 			
 			$lang = $this->locale;
-			$db = new \PDO('mysql:host='.DB_HOST.';dbname='.DB_NAME.';charset=utf8', DB_USER, DB_PASS, array(\PDO::ATTR_PERSISTENT => true));
+			$db = @new \PDO('mysql:host='.DB_HOST.';dbname='.DB_NAME.';charset=utf8', DB_USER, DB_PASS, array(\PDO::ATTR_PERSISTENT => true));
 			
 			$columns = array(  
 				array (

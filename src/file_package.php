@@ -48,11 +48,13 @@ define('ROOT_CSS', array(
 	'/css/style-dark.css',
 	'/css/dash_custom-dark.css',
 	'/css/plugins/dataTables/datatables.min.css',
+	'/css/plugins/dataTables/datatables_responsive.min.css',
 	'/css/plugins/iCheck/custom.css',
 	'/css/plugins/formvalidation/dist/css/formValidation.min.css',
 	'/css/plugins/c3/c3.min.css',
 	'/css/plugins/sweetalert/sweetalert.css',
 	'/css/plugins/datepicker/datepicker3.css',
+	'/css/plugins/dualListbox/bootstrap-duallistbox.min.css',
 ));
 
 define('ROOT_JS', array(
@@ -77,4 +79,5 @@ define('ROOT_JS', array(
 	'/js/plugins/autocomplete/dist/jquery.autocomplete.min.js',
 	'/js/plugins/datepicker/bootstrap-datepicker.js',
 	'/js/plugins/datepicker/locales/bootstrap-datepicker.nl.js',
+	'/js/plugins/dualListbox/jquery.bootstrap-duallistbox.js',
 ));

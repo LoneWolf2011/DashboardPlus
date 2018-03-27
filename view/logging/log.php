@@ -5,7 +5,7 @@
 	
 	$file = file($filename);
 	
-	echo '<pre style="height: 520px; overflow-x: hidden; overflow-y: auto;">';
+	echo '<pre style="height: 520px; overflow: auto;">';
 		foreach($file as $text) {
 			echo $text;
 		}  

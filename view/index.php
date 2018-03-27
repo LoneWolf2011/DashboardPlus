@@ -141,9 +141,9 @@
 			max: 10,
 			onSelect: function (suggestion) {
 				//alert('You selected: ' + suggestion.value + ', ' + suggestion.data);
-				location.href = <?= json_encode(URL_ROOT);?>+'/view/site/?site='+suggestion.value.replace(/[^0-9\.]+/g, "");
-				$('#url_site').val(suggestion.value);
-				$('.site-nr').html(suggestion.value);
+				location.href = <?= json_encode(URL_ROOT);?>+'/view/site/?site='+suggestion.data.replace(/[^0-9\.]+/g, "");
+				$('#url_site').val(suggestion.data);
+				$('.site-nr').html(suggestion.data);
 			}			
 		});
 		

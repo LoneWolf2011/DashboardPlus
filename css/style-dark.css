@@ -65,6 +65,17 @@ h6 .small,
 .h6 .small {
   color: #a4aab0;
 }
+
+h2 small {
+  font-size: 14px;
+}
+
+pre {
+  color: white;
+  background-color: #24262d5c;
+  
+}
+
 .c-accent {
   color: #f6a821;
 }
@@ -1746,18 +1757,18 @@ table.dataTable thead .sorting_desc_disabled {
   float: right;
 }
 .html5buttons a {
-  border: 1px solid #e7eaec;
-  background: #fff;
-  color: #676a6c;
+  border: 1px solid #f6a821;
+  background: transparent;
+  color: inherit;
   box-shadow: none;
   padding: 6px 8px;
   font-size: 12px;
 }
 .html5buttons a:hover,
 .html5buttons a:focus:active {
-  background-color: #eee;
-  color: inherit;
-  border-color: #d2d2d2;
+  border: 1px solid #f6a821;
+  background-color: #f6a82145;
+  color: white;
 }
 div.dt-button-info {
   z-index: 100;
