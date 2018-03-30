@@ -30,7 +30,7 @@
            <p data-i18n="[html]error_page.403.msg">
 			Admin rechten zijn verplicht voor toegang. Neem contact op met de admins.
             </p>
-			<a href="<?= URL_ROOT; ?>/Src/login/redirect.php" class='btn btn-primary' data-i18n="[html]error_page.return_btn">Return to safety</a>
+			<a href="<?= URL_ROOT; ?>" class='btn btn-primary' data-i18n="[html]error_page.return_btn">Return to safety</a>
         </div>
     </div>
 

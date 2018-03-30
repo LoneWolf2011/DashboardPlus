@@ -18,8 +18,7 @@ ErrorDocument 500 /antdb/View/Errors/page_500.php
 	deny from all
 </Files>
 
-## Disable directory listing. If index.php is not found
-## use /antdb/View/index.php
+## Disable directory listing. If index.php is not found use /antdb/View/index.php
 DirectoryIndex index.php /antdb/View/
 
 ## Deny access to extension .map files
@@ -37,3 +36,4 @@ DirectoryIndex index.php /antdb/View/
 
 ## Redirect access /src/ to 403 page
 RedirectMatch 403 ^/src/.*$
+

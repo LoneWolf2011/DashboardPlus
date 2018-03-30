@@ -66,7 +66,7 @@
 							    
 							        while(false !==($file = readdir($handle))) {
 							            if(strpos($file, $year.'-' ) === 0) {
-							                echo "<tr><td>Log: <a class='link' href='".URL_ROOT."/src/logs/errors/". $file ."'>".$file."</a></td></tr>"; 
+							                echo "<tr><td>Log: <a class='link' href='".URL_ROOT."/src/logs/errors/". $file ."' >".$file."</a></td></tr>"; 
 							            }
 							        }
 							        closedir($handle);  

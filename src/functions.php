@@ -20,6 +20,15 @@
 		logToFile
 ========================================================================================================== */
 
+	function formatSecToTime($seconds){
+		$dt1 = new DateTime('@0');
+		$dt2 = new DateTime("@$seconds");
+		$if_day = ($dt1->diff($dt2)->format('%a')) ? '%a days, ' : '';
+		$format_time = $dt1->diff($dt2)->format($if_day. '%Hh %Im %Ss');
+
+		return $format_time;		
+	}
+	
 	function setEmailTemplate($arr_val, $template_name){
 		$template = file_get_contents(URL_ROOT.'/view/email_temp/'.$template_name);
 		

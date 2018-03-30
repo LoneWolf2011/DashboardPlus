@@ -42,7 +42,7 @@
         <div class="error-desc">
 		   <p data-i18n="[html]error_page.maintenance.msg">Wacht uit of vraag status na bij de admins.
 			</p>	
-			<a href="<?= URL_ROOT; ?>/login/redirect.php" class='btn btn-primary' data-i18n="[html]error_page.return_btn">Return to safety</a>			
+			<a href="<?= URL_ROOT; ?>" class='btn btn-primary' data-i18n="[html]error_page.return_btn">Return to safety</a>			
         </div>
     </div>
 

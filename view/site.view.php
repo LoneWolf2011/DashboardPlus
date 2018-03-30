@@ -30,7 +30,7 @@
 										<th>Name</th>
 										<th>Devices</th>
 										<th>Current wait time</th>
-										<th>Current count</th>
+										<th>Current queue</th>
 										<th>Show graph</th>
 									</tr>
 								</thead>
@@ -51,7 +51,7 @@
 			<div class="col-lg-12">
 				<div class="ibox float-e-margins">
 					<div class="ibox-title">
-						<h5>Person count site: <?= $site_conn->getOne("SELECT `site_name` FROM sensor_sites WHERE site_id = ?s", $_GET['site']);?> (24h)<small></small> <a class="fullscreen-link"><i class="fa fa-expand"></i></a></h5>
+						<h5>Person count site: <?= $site_conn->getOne("SELECT `site_name` FROM sensor_sites WHERE site_id = ?s", $_GET['site']);?> <small></small> <a class="fullscreen-link"><i class="fa fa-expand"></i></a></h5>
 						<div class="clearfix"></div>
 					</div>
 					<div class="ibox-content">
@@ -87,7 +87,9 @@
 		getCount();
 		getSignalLoad();
 		getZonesTable();
+		
 		var zone_name_arr = [];
+		
 		$('#table_rows').on('click', '.zone_graph', function() {
 			var zone_data = $(this).attr('value');
 			var zone_name = $(this).attr('rel');
@@ -110,11 +112,13 @@
 				zone_name_arr
 			]);
 		});
+		
 		// Set chart zoom on mobile
 		if ($(this).width() < 769) {
 			compchart.zoom([0, 5]);
 		}
 	});
+	
 	var url_str = $('#url_string').val();
 	var compchart = c3.generate({
 		bindto: '#sign_chart',
@@ -137,12 +141,13 @@
 			}
 		},
 		color: {
-			pattern: ["#f6a821", "#d3d3d3", "#676B73", "rgba(246,168,33, 1)", "#1ab394", "#fff", "#1ab394"]
+			pattern: ["#f6a821", "#e6ee9c", "#90a4ae", "4dd0e1", "#388e3c ", "#00897b", "#ff5722"]
 		},
 		zoom: {
 			enabled: true
 		}
 	});
+	
 	var ajaxObj = {
 		options: {
 			url: null,
@@ -186,31 +191,40 @@
 
 	function getSignalLoad() {
 		ajaxObj.options.url = url_str + "?get=signalload&site=" + $('#url_site').val(),
-			$.ajax(ajaxObj.options).done(function(data) {
-				if (data.status != 0) {
-					compchart.load({
-						columns: [
-							data.hours,
-							data.signal,
-							data.trend
-						],
-						type: 'area-spline',
-						types: {
-							trend: 'line'
-						}
-					});
-					//compchart.ygrids([
-					//	{value: data.avg_last, class: data.avg_last > data.avg_now ? 'gridorange': '', text: 'Gemiddelde vorige week ' + data.avg_last, position: 'start'},
-					//	{value: data.avg_now, class: data.avg_now > data.avg_last ? 'gridorange': 'gridgreen', text: 'Gemiddelde deze week ' + data.avg_now}
-					//]);					
-					compchart.data.names({
-						signal: 'Total count',
-						trend: 'Trend'
-					});
-				} else {
-					compchart.destroy();
-				}
-			}).fail(ajaxObj.fail).always(ajaxObj.get(getSignalLoad, 3600000));
+		$.ajax(ajaxObj.options).done(function(data) {
+			if (data.status != 0) {
+				compchart.load({
+					columns: [
+						data.hours,
+						data.signal,
+						data.fw,
+						data.bw,
+						data.queue,
+						data.trend
+					],
+					type: 'area-spline',
+					colors: {
+						trend: '#fff'
+					},
+					types: {
+						trend: 'line'
+					}
+				});
+				//compchart.ygrids([
+				//	{value: data.avg_last, class: data.avg_last > data.avg_now ? 'gridorange': '', text: 'Gemiddelde vorige week ' + data.avg_last, position: 'start'},
+				//	{value: data.avg_now, class: data.avg_now > data.avg_last ? 'gridorange': 'gridgreen', text: 'Gemiddelde deze week ' + data.avg_now}
+				//]);					
+				compchart.data.names({
+					signal: 'Total count',
+					fw: 'People out',
+					bw: 'People in',
+					queue: 'People in queue',
+					trend: 'Trend'
+				});
+			} else {
+				compchart.destroy();
+			}
+		}).fail(ajaxObj.fail).always(ajaxObj.get(getSignalLoad, 3600000));
 	}
 
 	function getZonesTable() {

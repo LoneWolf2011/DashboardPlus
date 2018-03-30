@@ -1,121 +1,175 @@
 <?php
-	class Zone {
-		protected $succesMessage;
-		protected $zone_nr;
-		protected $date_now_day;
-		protected $date_past_day;
-		
-		function __construct($db_conn,$zone_nr='') {
-			$this->db_conn 	= $db_conn;
-			$this->locale 	= json_decode(file_get_contents(URL_ROOT.'/Src/lang/'.APP_LANG.'.json'), true);
-			$this->zone_nr 	= preg_replace("/[^A-Za-z0-9]/","",$zone_nr);
 
-			$this->date_now_day = date('Y-m-d H:i:s');
-			$this->date_past_day = date('Y-m-d H:i:s', strtotime('-24 hours'));			
-		}
-		
-		public function getZoneDetails(){
-			$conn = $this->db_conn;
-			$groups = $conn->getRow("SELECT `Group`, GROUP_CONCAT(`Name` SEPARATOR ';') AS devices FROM sensor_status WHERE `Group` = ?s", $this->zone_nr);
-			
-			$devices_arr = explode(';',$groups['devices']);
-			
-			if($groups){
-				
-				$devices_row = array();
-				foreach($devices_arr as $devices){
-						
-					$zone_row = $conn->getRow("SELECT * FROM sensor_status WHERE `Name` = ?s",$devices);	
-						
-					$total_count = $conn->getOne("SELECT `Value` FROM sensor_events WHERE `Name` = ?s AND `Group` = ?s ORDER BY id DESC LIMIT 1", $zone_row['Name'], $this->zone_nr);
-					$total_bg = ($total_count > C_MIN_DANGER) ? 'red-bg' : (($total_count > C_MIN_WARNING) ? 'yellow-bg' : 'dark-bg');
-					
-					if($zone_row['Status_request'] != 'OK'){
-						$active = '<i class="fa fa-circle text-danger"></i>';
-					} else {
-						$active = '<i class="fa fa-circle text-navy"></i>';;
-					}						
-					
-					$location = 
-					'<tr><th>Serial</th><td>'.$zone_row['Serial_number'].'</tr></td>
-					<tr><th>IP address</th><td>'.$zone_row['IP_address'].'</tr></td>
-					<tr><th>Uptime</th><td>'.gmdate('H:i:s',$zone_row['Uptime']).'</tr></td>';	
-					;				
-					
-					$devices_row[] = '<div class="row">
-						<div class="col-lg-6">
+class Zone
+{
+    protected $succesMessage;
+    protected $site_id;
+    protected $date_now_day;
+    protected $date_past_day;
+    
+    function __construct($db_conn, $site_id = '')
+    {
+        $this->db_conn = $db_conn;
+        $this->locale  = json_decode(file_get_contents(URL_ROOT . '/Src/lang/' . APP_LANG . '.json'), true);
+        $this->site_id = preg_replace("/[^0-9]/", "", $site_id);
+        
+        $this->date_now_day  = date('Y-m-d H:i:s');
+        $this->date_past_day = date('Y-m-d H:i:s', strtotime('-24 hours'));
+    }
+    
+    public function getZoneDetails($zone_name)
+    {
+        $conn  = $this->db_conn;
+        $group = $conn->getRow("SELECT `Name`, `Group`, GROUP_CONCAT(DISTINCT `Name` SEPARATOR ';') AS devices FROM sensor_events WHERE `Group` = ?s GROUP BY `Group`", $zone_name);
+        
+        $devices_row       = array();
+        $devices_wait_time = array();
+        if ($group) {
+            $devices_arr = explode(';', $group['devices']);
+            
+            $i = 0;
+            foreach ($devices_arr as $device) {
+                $get_count = $this->getCountsTotal($device, $group['Group']);
+                
+                $count_current = $get_count['queue'];
+                $count_out     = $get_count['forward'];
+                //$count_out		= $this->getLabelCount($device, $group['Group'], 'fw');
+                //$count_out 		= $this->getLabelCount($device, $group['Group'], 'bw');
+                
+                $count_total       = $count_current + $count_out;
+                $avg_wait_time_min = ($count_out == 0) ? 0 : $count_current / $count_out; // Per minute
+                $avg_wait_time_sec = $avg_wait_time_min * 60; // Per seconds
+                
+                $zone_row = $conn->getRow("SELECT * FROM sensor_status WHERE `Name` = ?s ORDER BY `Datetime` DESC LIMIT 1", $device);
+                
+                $count_current = ($count_current != 0) ? $count_current : '';
+                $total_bg      = ($count_current > C_MIN_DANGER) ? 'red-bg' : (($count_current > C_MIN_WARNING) ? 'yellow-bg' : 'dark-bg');
+                
+                @$wait_time = ($count_out == 0 && $count_current == 0) ? '' : '<i class="fa fa-clock-o"></i> ' . $count_current / $count_out . ' min';
+                
+                if ($zone_row['Status_request'] != 'OK') {
+                    $active = '<i class="fa fa-circle text-danger"></i>';
+                } else {
+                    $active = '<i class="fa fa-circle text-navy"></i>';
+                    ;
+                }
+                $updatime = round($zone_row['Uptime'] / 1000);
+                
+                
+                $location = '<tr><th>Serial</th><td>' . $zone_row['Serial_number'] . '</tr></td>
+					<tr><th>IP address</th><td>' . $zone_row['IP_address'] . '</tr></td>
+					<tr><th>Uptime</th><td>' . formatSecToTime($updatime) . '</tr></td>';
+                
+                $devices_row[] = '<div class="row">
+						<div class="col-lg-3">
 							<div class="ibox float-e-margins">
 								<div class="ibox-content">
 									<table class="table table-hover">
 										<thead>
 											<tr>
 												<th>Device name</th>
-												<th>'.$active.' '.$zone_row['Name'].'</th>
+												<th>' . $active . ' ' . $device . '</th>
 											</tr>
 										</thead>
-										<tbody >'.$location.'</tbody>
+										<tbody >' . $location . '</tbody>
 									</table>
 								</div>
 							</div>			
 						</div>		
-			
 						<div class="col-lg-3">
-							<div class="widget '.$total_bg.' p-lg text-center">
+							<div class="widget ' . $total_bg . ' p-lg text-center">
 								<div class="m-b-md" style="color:white;">
 									<i class="fa fa-user fa-4x"></i>
-									<h1 class="m-xs" >'.$total_count.'</h1>
+									<h1 class="m-xs" >' . $count_current . '</h1>
 									<h3 class="font-bold no-margins">
-										Current count
+										Current queue
 									</h3>
-									<small>_</small>
+									<small>' . $wait_time . '</small>
 								</div>
 							</div>
-						</div>			
-					
+						</div>
 						<div class="col-lg-3">
 							<div class="widget style1 dark-bg">
 								<div class="row vertical-align">
 									<div class="col-xs-8">
-										<h2><i class="fa fa-user"></i> <small style="color:inherit;">max (24h)</small></h2>
+										<h2><i class="fa fa-users"></i> <small style="color:inherit;">Max in queue</small></h2>
 									</div>
 									<div class="col-xs-4 text-right">
-										<h2 class="font-bold" >10</h2>
+										<h2 class="font-bold" >' . $count_total . '</h2>
 									</div>
 								</div>
 							</div>
 							<div class="widget style1 dark-bg">
 								<div class="row vertical-align">
 									<div class="col-xs-8">
-										<h2><i class="fa fa-user"></i> <small style="color:inherit;">min (24h)</small></h2>
+										<h2><i class="fa fa-sign-out fa-flip-horizontal"></i> <small style="color:inherit;">People out</small></h2>
 									</div>
 									<div class="col-xs-4 text-right">
-										<h2 class="font-bold" >0</h2>
+										<h2 class="font-bold" >' . $count_out . '</h2>
 									</div>
 								</div>
 							</div>
 							<div class="widget style1 dark-bg">
 								<div class="row vertical-align">
 									<div class="col-xs-8">
-										<h2><i class="fa fa-user"></i> <small style="color:inherit;">avg (24h)</small></h2>
+										<h2><i class="fa fa-clock-o"></i> <small style="color:inherit;">Avg wait</small></h2>
 									</div>
 									<div class="col-xs-4 text-right">
-										<h2 class="font-bold" >6</h2>
+										<h2 class="font-bold" >' . round($avg_wait_time_min) . '</h2>
 									</div>
 								</div>
 							</div>				
 						</div>
+						<div class="col-lg-3">
+							<div class="ibox float-e-margins">
+								<div class="ibox-content">
+									<small class="pull-right"><i class="fa fa-clock-o"></i> Current wait time</small>
+									<div id="avg_wait_chart' . $i . '"></div>
+								</div>
+							</div>			
+						</div>						
 					</div>';
-				}
-				
-				$response_array = array(
-					'status'	=> 1,
-					'devices'	=> $devices_row,
-					'test'	=> $groups
-				);
-			} else {
-				$response_array['status'] = 0;
-			}
-			// Return response_array
-			return $response_array;					
-		}
-	}
+                
+                $devices_wait_time[] = $avg_wait_time_min;
+                $i++;
+            }
+        } else {
+            return $response_array['status'] = 0;
+            
+        }
+        $response_array = array(
+            'status' => 1,
+            'devices' => $devices_row,
+            'devices_wait_time' => $devices_wait_time
+        );
+        
+        // Return response_array
+        return $response_array;
+    }
+    
+    
+    
+    protected function getCountsTotal($device_name, $group_name)
+    {
+        $conn = $this->db_conn;
+        
+        $query = "SELECT ip_address, `name`, `group`, SUM(`fw`) AS forward, SUM(`bw`) AS backward,SUM(`count`) AS queue FROM sensor_info_values  WHERE `Name` = ?s AND `Group` = ?s";
+        
+        $device    = array();
+        $count_val = $conn->query($query, $device_name, $group_name);
+        
+        $q = 0;
+        $f = 0;
+        $b = 0;
+        while ($row = $conn->fetch($count_val)) {
+            $q += $row['queue'];
+            $f += $row['forward'];
+            $b += $row['backward'];
+        }
+        return array(
+            'queue' => $q,
+            'forward' => $f,
+            'backward' => $b
+        );
+    }
+}

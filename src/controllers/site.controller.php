@@ -28,7 +28,10 @@
 		while ($row = $db_conn->fetch($query))
 		{
 			//Add this row to the reply
-			$reply['suggestions'][] = array('value'=>htmlentities(stripslashes($row['site_name'])), 'data'=>htmlentities(stripslashes($row['site_id'])));
+			$reply['suggestions'][] = array(
+				'value'=>htmlentities(stripslashes($row['site_name'])), 
+				'data'=>htmlentities(stripslashes($row['site_id']))
+			);
 		}
 		
 		echo json_encode($reply);
