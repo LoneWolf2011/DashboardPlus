@@ -212,8 +212,10 @@
     		$('input[name="edit_site_zipcode"]').val(data[4]);
     		$('input[name="edit_site_city"]').val(data[5]);
     	});
-    	var lang_code = $('html').attr('lang').toLowerCase() + '_' + $('html').attr('lang').toUpperCase();
-    	$.extend(true, $.fn.dataTable.defaults, {
+    	
+		var lang_code = $('html').attr('lang').toLowerCase() + '_' + $('html').attr('lang').toUpperCase();
+    	
+		$.extend(true, $.fn.dataTable.defaults, {
     		language: {
     			url: <?= json_encode(URL_ROOT);?> + '/js/plugins/dataTables/' + $('html').attr('lang') + '.json'
     		},
@@ -227,7 +229,8 @@
     		serverSide: true,
     		responsive: true
     	});
-    	var interval;
+    	
+		var interval;
     	var table_active = $(".datatable").DataTable({
     		ajax: url_string + "?get=sitestable",
     		fnInitComplete: function(oSettings, json) {
@@ -241,9 +244,11 @@
     			});
     		}
     	});
-    	getSiteSelect();
+    	
+		getSiteSelect();
     	getZonesSelect();
-    	// Add zones to site
+    	
+		// Add zones to site
     	$('#setting_form').formValidation({
     		framework: 'bootstrap',
     		icon: {
@@ -371,6 +376,8 @@
     				});
     				table_active.ajax.reload(null, false);
     				getSiteSelect();
+					$('#new_site').find("input[type=text], textarea").val("");
+					fv.resetForm();
     			},
     			error: function(xhr, status, error) {
     				var json = $.parseJSON(xhr.responseText);
@@ -452,6 +459,8 @@
     				});
     				table_active.ajax.reload(null, false);
     				getSiteSelect();
+					$('#edit_site_name').find("input[type=text], textarea").val("");
+					fv.resetForm();
     			},
     			error: function(xhr, status, error) {
     				var json = $.parseJSON(xhr.responseText);
@@ -478,6 +487,7 @@
     		success: function(data) {
     			if (data.status != 0) {
     				$('#mySelect').empty();
+					$('#mySelect').append($("<option></option>").attr("value", 0).text('Remove from site'))
     				$.each(data.get_sites, function(key, value) {
     					$('#mySelect').append($("<option></option>").attr("value", key).text(value));
     				});
@@ -494,7 +504,10 @@
     			if (data.status != 0) {
     				dual.empty();
     				$.each(data.get_zones, function(key, value) {
-    					dual.append($("<option></option>").attr("value", key).text(value));
+						if(value['in_site'] == 0){
+							var add_class = 'text-navy';
+						}
+    					dual.append($('<option class="'+add_class+'"></option>').attr("value", key).text(value['text']));
     				});
     				dual.bootstrapDualListbox('refresh', true);
     			}

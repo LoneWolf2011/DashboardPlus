@@ -28,9 +28,9 @@
 
 				if(isset($_GET['site'])){
 					$obj = new Site(new SafeMySQL(),$_GET['site']);
-					foreach($obj->getZones() as $device){
+					foreach($obj->getSiteZones() as $device){
 						
-						echo '<li>'.$device['link'].'</li>';
+						echo '<li>'.$device['zone_link'].'</li>';
 					};					
 				}
 				?>

@@ -143,6 +143,8 @@ class Settings
             $site_name = $conn->getOne("SELECT site_name FROM sensor_sites WHERE site_id = ?i", $post_val['site_id']);
             
             if ($conn->query("DELETE FROM sensor_sites WHERE site_id = ?i", $post_val['site_id'])) {
+				$number = $conn->getOne("SELECT MAX( `site_id` ) FROM sensor_sites");
+				$conn->query("ALTER TABLE sensor_sites AUTO_INCREMENT = ?i", $number +1);
                 // Log to file
                 $msg     = $site_name . " verwijderd door " . $this->auth_user;
                 $err_lvl = 0;
@@ -194,26 +196,23 @@ class Settings
         $lang = $this->locale;
         $conn = $this->db_conn;
         
-        //$result = $conn->query("SELECT `site_id`, `Group` FROM sensor_sites_group");			
-        //
-        //$option = array();
-        //while ($row = $conn->fetch($result)) {				
-        //	$option[$row['Group']] = 'Zone: '.$row['Group'].' in site: '.$conn->getOne("SELECT `site_name` FROM sensor_sites WHERE site_id = ?s", $row['site_id']);
-        //};	
-        
-        $result = $conn->query("SELECT `Group` FROM sensor_events GROUP BY `Group`");
+        $result = $conn->query("SELECT `Group` FROM sensor_info GROUP BY `Group`");
         
         $option = array();
         while ($row = $conn->fetch($result)) {
             $site = $conn->getOne("SELECT `site_id` FROM sensor_sites_group WHERE `Group` = ?s", $row['Group']);
             if ($site) {
                 $site_name = 'in site: ' . $conn->getOne("SELECT `site_name` FROM sensor_sites WHERE `site_id` = ?i", $site);
+				$in_site = 1;
             } else {
                 $site_name = 'NEW';
+				$in_site = 0;
             }
-            $option[$row['Group']] = 'Zone: ' . $row['Group'] . ' ' . $site_name;
+            $option[$row['Group']] = array( 
+				'in_site' => $in_site,
+				'text' => 'Zone: ' . $row['Group'] . ' ' . $site_name
+			);
         }
-        ;
         
         if ($result) {
             $response_array = array(

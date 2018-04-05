@@ -5,20 +5,32 @@
 	Name: Mdb functions
 	Functie: 
 		- Bevat alle core functions die door meerdere pagina's gebruikt worden.	
-	Version: 1.0.3
+	Version: 1.0.5
 	Author:	Roelof Jan van Golen - <r.vangolen@asb.nl>
 
 	Function index:
 ==========================================================================================================
+		updateLastAccess
+		formatSecToTime
 		setEmailTemplate
-		getCategory
-		getOutOfService
-		getPathStatus
+		jsonArr
+		genPassSeed
 		containsWord
 		checkBrute
 		appVersionCode
 		logToFile
 ========================================================================================================== */
+
+	function updateLastAccess($db_conn, $user_id){
+		try {
+			$stmt 	= $db_conn->prepare("UPDATE app_users SET user_last_access = now() WHERE user_id = ?");
+			$stmt->execute([$user_id]);	
+		}
+		catch (Exception $ex) {
+			$msg = 'Regel: ' . $ex->getLine() . ' Bestand: ' . $ex->getFile() . ' Error: ' . $ex->getMessage();
+			logToFile(__FILE__, 1, $msg);
+		}			
+	}
 
 	function formatSecToTime($seconds){
 		$dt1 = new DateTime('@0');
@@ -36,133 +48,6 @@
 			$template = str_replace('{{'.$key.'}}', $value, $template);
 		}
 		return $template;
-	}
-
-	function getCategory($scsnr){
-		$oms = substr($scsnr,0,6);
-		
-		if($oms == "010013"){
-			$regio = "VRAA";
-			$dienst = "Brand";
-		} elseif($oms == "010018"){
-			$regio = "ZHZ";    
-			$dienst = "Brand";				
-		} elseif($oms == "020205"){
-			$regio = "NHN";
-			$dienst = "Brand";				
-		} elseif($oms == "010500") {
-			$regio = "VRH";    
-			$dienst = "Brand";					
-		} elseif($oms == "010109"){
-			$regio = "VRU_ASB";     
-			$dienst = "Brand";					
-		} elseif($oms == "010009"){
-			$regio = "VRU_KPN";   
-			$dienst = "Brand";					
-		} elseif($oms == "010114"){
-			$regio = "VRGV_ASB";   
-			$dienst = "Brand";					
-		} elseif($oms == "010014"){
-			$regio = "VRGV_KPN"; 
-			$dienst = "Brand";					
-		} elseif($oms == "010125"){
-			$regio = "VRF_ASB"; 
-			$dienst = "Brand";					
-		} elseif($oms == "010025"){
-			$regio = "VRF_KPN";
-			$dienst = "Brand";	
-		} elseif($oms == "010022") {
-			$regio = "EHV";    
-			$dienst = "Brand";	
-		} elseif($oms == "600100") {
-			$regio = "";    
-			$dienst = "Brand";						
-		} elseif($oms == "800100"){
-			$regio = "";
-			$dienst = "DIGI";	
-		} elseif($oms == "020000"){
-			$regio = "";
-			$dienst = "RAC";					
-		} elseif($oms == "010400"){
-			$regio = "";
-			$dienst = "ING";		
-		} elseif($oms == "010278"){
-			$regio = "";
-			$dienst = "IPC_ADT";
-		} elseif($oms == "010276"){
-			$regio = "";
-			$dienst = "IPC_SMC";
-		} elseif($oms == "010274"){
-			$regio = "";
-			$dienst = "IPC";				
-		} elseif($oms == "010099"){
-			$regio = "";
-			$dienst = "PAC";						
-		} elseif($oms == "010098"){
-			$regio = "";					
-			$dienst = "VERIFIRE";	
-		} elseif($oms == "010273"){
-			$regio = "";					
-			$dienst = "S&E";
-		} elseif($oms == "010100"){
-			$regio = "";					
-			$dienst = "MIST";
-		} elseif($oms == "010300"){
-			$regio = "";					
-			$dienst = "BNOT";				
-		} else {
-			$regio = "";
-			$dienst = "";					
-		}	
-		return $dienst;
-	}
-
-	function getOutOfService($db_conn, $id){
-		$id = preg_replace("/[^0-9]/","", $id);
-		
-		$query = "SELECT 
-			SCS_Account_Nmbr,
-			SCS_OUS_Start_DateTime,
-			SCS_OUS_End_DateTime 
-		FROM scs_outofservice 
-		WHERE SCS_Account_Nmbr = '".$id."'";
-		
-		$arr = array();
-		if($row = $db_conn->getRow($query)){
-			
-			$arr['status'] 	= 1;
-			$arr['scs_id'] 	= $row['SCS_Account_Nmbr'];
-			$arr['start'] 	= $row['SCS_OUS_Start_DateTime'];
-			$arr['end'] 	= $row['SCS_OUS_End_DateTime'];
-			
-		} else {
-			$arr['status'] = 0;
-		}
-		
-		return $arr;
-	}
-
-	function getPathStatus($path_status){
-		$path_status = (empty($path_status)) ? '????????' : $path_status;
-		$path_arr = str_split(substr($path_status,0,4));
-		
-		$primair = array( @$path_arr[0],  @$path_arr[2]);
-		$secundair = array( @$path_arr[1],  @$path_arr[3]);
-		
-		if(@$path_arr[0] =='?' && @$path_arr[2] == '?' && @$path_arr[1] == '?' && @$path_arr[3] == '?'){
-			// No path status 
-			$path_conn = 3;
-		} elseif(!in_array( '1', $primair ) && in_array( '1', $secundair )){
-			// Backup conn
-			$path_conn = 2;
-		} elseif(!in_array( '1', $primair ) && !in_array( '1', $secundair )){
-			// Disconnected
-			$path_conn = 0;
-		} else {
-			// Connected
-			$path_conn = 1;
-		}
-		return $path_conn;
 	}
 
 	function jsonArr($response_array){

@@ -71,7 +71,7 @@
                     <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
                     <!--<i class="fa fa-laptop modal-icon"></i>-->
 					<img src="<?= URL_ROOT_IMG.'/app_logo.png';?>" width="20%"/>
-                    <h4 class="modal-title">Welkom bij DB+</h4>
+                    <h4 class="modal-title">Welkom bij <?= APP_TITLE;?></h4>
 					<?php 	if(htmlentities($_SESSION[SES_NAME]['user_new'], ENT_QUOTES, 'UTF-8') == 1) { ?>
 						<p class="font-bold">Dit is de eerste keer dat u inlogd.</p>
 						<p>	U dient uw wachtwoord te wijzigen naar een zelf gekozen wachtwoord. Dit om de veiligheid van uw account te kunnen waarborgen.</p>

@@ -132,8 +132,11 @@
 					.attr('data-reached', function(d){ 
 						var val = chart.internal.data.targets[0].values[0].value;
 						return d < val ? 'yes' : 'no';
-					});					
+					});	
+				
 				});	
+				
+				
 			} else {}
 		}).fail(ajaxObj.fail).always(ajaxObj.get(getZoneDetails, 2000));
 	}

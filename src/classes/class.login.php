@@ -45,7 +45,7 @@ class Login
             }
             catch (PDOException $ex) {
                 
-                $msg = 'Regel: ' . $ex->getLine() . ' Bestand: ' . $ex->getFile() . ' Error: ' . $ex->getMessage();
+                $msg = 'Line: ' . $ex->getLine() . '  Error: ' . $ex->getMessage();
                 logToFile(__FILE__, 1, $msg);
                 die(header("Location: ../../?fail"));
             }
@@ -104,7 +104,7 @@ class Login
                                 catch (PDOException $ex) {
                                     // Note: On a production website, you should not output $ex->getMessage(). 
                                     // It may provide an attacker with helpful information about your code.  
-                                    $msg = 'Regel: ' . $ex->getLine() . ' Bestand: ' . $ex->getFile() . ' Error: ' . $ex->getMessage();
+                                    $msg = 'Line: ' . $ex->getLine() . ' Error: ' . $ex->getMessage();
                                     logToFile(__FILE__, 1, $msg);
                                 }
                                 
@@ -360,7 +360,7 @@ class Login
                 $result = $stmt->execute($query_params);
             }
             catch (PDOException $ex) {
-                $msg = 'Regel: ' . $ex->getLine() . ' Bestand: ' . $ex->getFile() . ' Error: ' . $ex->getMessage();
+                $msg = 'Line: ' . $ex->getLine() . ' Error: ' . $ex->getMessage();
                 logToFile(__FILE__, 1, $msg);
                 die(header("Location: ../../?fail"));
             }
@@ -420,7 +420,7 @@ class Login
                     logToFile(__FILE__, 0, $msg);
                 }
                 catch (PDOException $ex) {
-                    $msg = 'Regel: ' . $ex->getLine() . ' Bestand: ' . $ex->getFile() . ' Error: ' . $ex->getMessage();
+                    $msg = 'Line: ' . $ex->getLine() . ' Error: ' . $ex->getMessage();
                     logToFile(__FILE__, 1, $msg);
                     die(header("Location: ../../?tok=err"));
                 }
@@ -486,7 +486,7 @@ class Login
                 $result = $stmt->execute($query_params);
             }
             catch (PDOException $ex) {
-                $msg = 'Regel: ' . $ex->getLine() . ' Bestand: ' . $ex->getFile() . ' Error: ' . $ex->getMessage();
+                $msg = 'Line: ' . $ex->getLine() . ' Error: ' . $ex->getMessage();
                 logToFile(__FILE__, 1, $msg);
                 die(header("Location: ../../?fail"));
             }
@@ -556,7 +556,7 @@ class Login
                     logToFile(__FILE__, 0, $msg);
                 }
                 catch (PDOException $ex) {
-                    $msg = 'Regel: ' . $ex->getLine() . ' Bestand: ' . $ex->getFile() . ' Error: ' . $ex->getMessage();
+                    $msg = 'Line: ' . $ex->getLine() . ' Error: ' . $ex->getMessage();
                     logToFile(__FILE__, 1, $msg);
                     die(header("Location: ../../?fail"));
                 }
@@ -616,7 +616,7 @@ class Login
             $connected = true;
         }
         catch (Exception $ex) {
-            $msg = 'Regel: ' . $ex->getLine() . ' Bestand: ' . $ex->getFile() . ' Error: ' . $ex->getMessage();
+            $msg = 'Line: ' . $ex->getLine() . ' Error: ' . $ex->getMessage();
             logToFile(__FILE__, 1, $msg);
             $connected = false;
         }

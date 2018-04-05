@@ -118,7 +118,7 @@
 			compchart.zoom([0, 5]);
 		}
 	});
-	
+
 	var url_str = $('#url_string').val();
 	var compchart = c3.generate({
 		bindto: '#sign_chart',
@@ -168,6 +168,7 @@
 		},
 		fail: function(jqXHR, textStatus, errorThrown) {
 			console.log(errorThrown);
+			
 			swal({
 				html: true,
 				title: textStatus,

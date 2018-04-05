@@ -5,15 +5,15 @@
 		
 	if(isset($_GET['get'])){
 		if($_GET['get'] == 'signalload'){
-			jsonArr($obj->getSignalLoad());
+			jsonArr($obj->getSiteSignalLoad());
 		}		
 
 		if($_GET['get'] == 'zonestable'){
-			jsonArr($obj->getZonesTable());
+			jsonArr($obj->getSiteZonesTable());
 		}
 		
 		if($_GET['get'] == 'peoplecount'){
-			jsonArr($obj->getPeopleCount());
+			jsonArr($obj->getSitePeopleCount());
 		}		
 	}
 	
