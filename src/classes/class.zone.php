@@ -23,10 +23,8 @@ class Zone
 		try {
 			$res = $conn->getAll("SELECT `datetime`,`fw`, `count`, `ip_address` FROM sensor_data WHERE `ip_address` = ?s GROUP BY MID(`datetime`, 7,8) ORDER BY `id` DESC  LIMIT 2;",$device_ip_address);		
 			
-			$out_per_hour 	= abs((@$res[0]['fw'] -  @$res[1]['fw'])) / 3600; 
+			$out_per_hour 	= (abs((@$res[0]['fw'] -  @$res[1]['fw'])) / 3600) / 60; 
 			$queue_per_hour = abs((@$res[0]['count'] -  @$res[1]['count'])) / 3600; 
-			
-			
 			
 			$get_count = $this->getZoneCountsTotal(@$res[0]['ip_address']);
 			
@@ -92,8 +90,8 @@ class Zone
 				
 				$i = 0;
 				foreach ($devices_arr as $ip_address) {
-					$get_count = $this->getZoneCountsTotal($ip_address, $group['Group']);
-					$get_wait_time = $this->getZoneWaitTime($ip_address, $group['Group']);
+					$get_count = $this->getZoneCountsTotal($ip_address);
+					$get_wait_time = $this->getZoneWaitTime($ip_address);
 					
 					$count_queue	= $get_count['queue'];
 					$count_out		= ($get_count['forward'] > 0) ? $get_count['forward'] : 1;
@@ -102,6 +100,7 @@ class Zone
 					$wait_time 		= '<i class="fa fa-clock-o"></i> '.gmdate('H:i:s',$get_wait_time['seconds']);
 					$wait_avg 		= round($get_wait_time['seconds'] / $count_out);
 					$wait_now 		= round($get_wait_time['seconds'] / 60);				
+					//$wait_queue		= round($count_queue * $get_wait_time['queue_diff']);				
 					
 					$total_bg      	= ($count_queue > C_MIN_DANGER) ? 'red-bg' : (($count_queue > C_MIN_WARNING) ? 'yellow-bg' : 'dark-bg');				
 					$avg_bg 		= ($wait_avg > C_AVG_DANGER) ? 'red-bg' : (($wait_avg > C_AVG_WARNING) ? 'yellow-bg' : 'dark-bg');				
