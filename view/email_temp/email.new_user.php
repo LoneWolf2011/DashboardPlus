@@ -2,13 +2,15 @@
 	<?php include 'email.header.php';?>
 	
 		<!-- email body -->
-		Beste {{user_name}},<br>
+		Beste {{user_name}},
 		<br>
-		De authenticatie token is geverifeerd. <br>
-		Log in met jouw email adres en het onderstaande wachtwoord op {{link}}<br>			
+		<br>
+		Welkom bij {{app_name}}.<br>
+		Er is een account voor jou aangemaakt.	<br>	
+		Log in met jouw mail adres en onderstaande wachtwoord {{login_link}}.<br>
 		<br>			
 		<b>Wachtwoord:</b> {{gen_password}}	
 		<!-- / email body -->
-				
+	
 	<?php include 'email.footer.php';?>
 </body>

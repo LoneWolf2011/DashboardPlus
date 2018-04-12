@@ -20,7 +20,7 @@
 				
 				<?php if(htmlentities($_SESSION[SES_NAME]['user_role'], ENT_QUOTES, 'UTF-8') == 1){ ?>
                 <li><a href="<?= URL_ROOT.'/view/user/';?>"><i class="fa fa-users fa-fw"></i> <span class="nav-label">Users</span></a></li>
-                <li><a href="<?= URL_ROOT.'/view/logging/';?>"><i class="fa fa-file-text fa-fw"></i> <span class="nav-label">Users</span></a></li>
+                <li><a href="<?= URL_ROOT.'/view/logging/';?>"><i class="fa fa-file-text fa-fw"></i> <span class="nav-label">Logging</span></a></li>
                 <li><a href="<?= URL_ROOT.'/view/settings/';?>"><i class="fa fa-gear fa-fw"></i> <span class="nav-label">Settings</span></a></li>
 				<?php }; ?>
 				
