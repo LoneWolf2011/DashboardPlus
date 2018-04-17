@@ -137,15 +137,32 @@ class User
         $conn       = $this->db_conn;
         $user_email = $conn->getOne("SELECT user_email FROM app_users WHERE user_id = ?i", $post_val['user_id']);
         
-        
-        if ($conn->query("DELETE FROM app_users WHERE user_id = ?i", $post_val['user_id'])) {
+			$token = getApiToken();
+			$ch = curl_init('http://'.WEB_API.'/api/users'); // INITIALISE CURL
+	
+			$data = json_encode(array('userId'=>$post_val)); 
+			$authorization = "Authorization: Bearer ".$token; // **Prepare Autorisation Token**
+			curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json' , $authorization )); // **Inject Token into Header**
+			curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "DELETE");
+            curl_setopt($ch, CURLOPT_POST, true);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $data);			
+			curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+			curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
+			$result = curl_exec($ch);
+			curl_close($ch);
+			$res = json_decode($result, true);	
+			
+        if ($res) {
+			
+		$conn->query("DELETE FROM app_users WHERE user_id = ?i", $post_val['user_id']);
+			
             // Log to file
             $msg     = "User " . $user_email . " verwijderd door " . $this->auth_user;
             $err_lvl = 0;
             
             $response_array['type']  = 'success';
             $response_array['title'] = 'Success';
-            $response_array['body']  = 'User <b>' . $user_email . '</b> verwijderd';
+            $response_array['body']  = 'User <b>' . $user_email . '</b> verwijderd '. implode(',',$res);
             
         } else {
             $msg                     = "Nieuwe werkbon voor: ";
@@ -343,7 +360,6 @@ class User
                         $active = '<i class="fa fa-circle text-navy"></i>';
                     } else {
                         $active = '<i class="fa fa-circle text-danger"></i>';
-                        ;
                     }
                     return $active . ' ' . $d . ' ' . $row[6];
                 }

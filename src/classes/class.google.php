@@ -93,7 +93,11 @@
 				 	$coords = $data['results'][0]['geometry']['location'];
 				 	//$coords = explode(',',$coords);
 				 	if (count($coords) > 1){
-						return array('lat' => $coords['lat'], 'lng' => $coords['lng']);
+						return array(
+							'lat' => $coords['lat'], 
+							'lng' => $coords['lng'],
+							'q' => $url
+						);
 					}
 				}
 			}

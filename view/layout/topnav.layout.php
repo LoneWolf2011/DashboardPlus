@@ -5,7 +5,7 @@
 					
                     <div class="navbar-form-custom" >
                         <div class="form-group">
-                            <input type="text" class="form-control autocomplete-append site-nr"  id="top_search" placeholder="Search for site location" ></input>
+                            <input type="text" class="form-control autocomplete-append site-nr"  id="top_search" placeholder="Search for device" ></input>
                         </div>
                     </div>
                 </div>
@@ -18,13 +18,7 @@
                             <i class="fa fa-sign-out"></i> <span data-i18n="[html]layout.topnav.logout" id="log_out_span"> Log out </span>
                         </a>
                     </li>
-					<?php if(APP_LANG == 'en'){ ?>
-                    <li><a class="set_en active"><img src="<?= URL_ROOT_IMG;?>/flags/16/United-Kingdom.png"></a></li>
-					<?php } elseif(APP_LANG == 'nl'){ ?>
-                    <li> <a class="set_en active"><img src="<?= URL_ROOT_IMG;?>/flags/16/Netherlands.png"></a></li>					
-					<?php } elseif(APP_LANG == 'pt') { ?>
-					<li><a class="set_es"><img src="<?= URL_ROOT_IMG;?>/flags/16/Brazil.png"></a></li>
-					<?php };?>
+
                 </ul>
 
             </nav>

@@ -1,6 +1,36 @@
-	</div>	
-	</td></tr>
-	<tr>
-		<td style="border-top: 1px solid #ffb300; background: #2f323b; color:#ffb300;" colspan='2'><small style="font-size: 10px;">ASB Security, <?= date('D d.m.Y H:i:s');?></small></td>
-	</tr>
-</table>
+				<tr>
+					<td bgcolor="#2f323b" style="padding: 30px 30px 30px 30px;">
+						<table border="0" cellpadding="0" cellspacing="0" width="100%">
+							<tr>
+								<td style="color: #ffffff; font-family: Arial, sans-serif; font-size: 14px;">
+									&copy; ASB Security, <?= date('D d.m.Y H:i:s');?><br/>
+									<!--<a href="#" style="color: #ffffff;"><font color="#ffffff">Unsubscribe</font></a> to this newsletter instantly-->
+								</td>
+								<td align="right">
+									<!--<table border="0" cellpadding="0" cellspacing="0">
+										<tr>
+											<td>
+												<a href="http://www.twitter.com/">
+												<img src="images/tw.gif" alt="Twitter" width="38" height="38" style="display: block;" border="0" />
+												</a>
+											</td>
+											<td style="font-size: 0; line-height: 0;" width="20">&nbsp;</td>
+											<td>
+												<a href="http://www.twitter.com/">
+												<img src="images/fb.gif" alt="Facebook" width="38" height="38" style="display: block;" border="0" />
+												</a>
+											</td>
+										</tr>
+									</table>-->
+								</td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+			</table>
+			</td>
+		</tr>
+	</table>
+</body>
+
+</html>

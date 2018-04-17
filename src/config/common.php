@@ -13,10 +13,10 @@
 	
 	// define('ROOT_PATH', $_SERVER["DOCUMENT_ROOT"]);
 	
-	$content = file_get_contents($_SERVER["DOCUMENT_ROOT"] . '/antdb/env.ini');
+	$content = file_get_contents($_SERVER["DOCUMENT_ROOT"] . '/sentdb/env.ini');
 	$env = parse_ini_string($content, true);
 	
-	// $env = parse_ini_file($_SERVER["DOCUMENT_ROOT"].'/antdb/env.ini', true);
+	// $env = parse_ini_file($_SERVER["DOCUMENT_ROOT"].'/sentdb/env.ini', true);
 	// DB connectie for mdb database
 	
 	define('DB_HOST', $env['LOCAL_DB']['HOST']);
@@ -37,13 +37,7 @@
 	
 	$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 	$db->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
-	
-	// ANT ONLY
-	define('DEFAULT_SITE', $env['ANT']['DEFAULT_SITE']);
-	define('C_MIN_WARNING', $env['ANT']['C_MIN_WARNING']);
-	define('C_MIN_DANGER', $env['ANT']['C_MIN_DANGER']);
-	define('C_AVG_WARNING', $env['ANT']['C_AVG_WARNING']);
-	define('C_AVG_DANGER', $env['ANT']['C_AVG_DANGER']);
+			
 	define('LOGO_NAME', $env['APP']['LOGO_NAME']);
 	define('FAVICON_NAME', $env['APP']['FAVICON_NAME']);
 	define('URL_ROOT', $env['APP']['URL_ROOT']);
@@ -53,6 +47,9 @@
 	define('URL_ROOT_IMG', $env['APP']['URL_ROOT_IMG']);
 	define('ROOT_PATH', $env['APP']['ROOT_PATH']);
 	define('GOOGLE_API', $env['APP']['GOOGLE_API']);
+	define('WEB_API', $env['API']['WEB_API']);
+	define('WEB_USER', $env['API']['WEB_USER']);
+	define('WEB_PASS', $env['API']['WEB_PASS']);
 	define('APP_NAME', getSetting($db, 'APP_NAME'));
 	define('APP_TITLE', getSetting($db, 'APP_TITLE'));
 	define('APP_EMAIL', getSetting($db, 'APP_EMAIL'));
@@ -182,14 +179,15 @@
 	
 	session_start();
 	
-	// Set package const as variable
+	$db_conn = new SafeMySQL();
 	
+	// Set package const as variable
 	$arr_css = ROOT_CSS;
 	$arr_js = ROOT_JS;
 	
 	// Update user last access
 	
-	$id = $_SESSION[SES_NAME]['user_id'];
+	$id = @$_SESSION[SES_NAME]['user_id'];
 	updateLastAccess($db, $id);
 	
 	// Get url and set view relative to view folder

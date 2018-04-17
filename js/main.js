@@ -7,20 +7,20 @@
 
 $(document).ready(function () {
 
-		var url = window.location;
-		// Will only work if string in href matches with location
-		$('ul.nav a[href="'+ url +'"]').parent().addClass('active');
-		
-		// Will also work for relative and absolute hrefs
-		$('ul.nav a').filter(function() {
-			return this.href == url;
-		}).parent().addClass('active');
+	var url = window.location;
+	// Will only work if string in href matches with location
+	$('ul.nav a[href="'+ url +'"]').parent().addClass('active');
+	
+	// Will also work for relative and absolute hrefs
+	$('ul.nav a').filter(function() {
+		return this.href == url;
+	}).parent().addClass('active');
 	
 	// Set lang code for i18next
 	var lang_code = $('html').attr('lang');
 
 	$.i18n.init({
-		resGetPath: '/antdb/src/lang/__lng__.json',
+		resGetPath: '/sentdb/src/lang/__lng__.json',
 		load: 'unspecific',
 		fallbackLng: false,
 		lng: lang_code

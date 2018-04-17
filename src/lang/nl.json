@@ -91,7 +91,7 @@
 	},
 	"loginscreen":{
 		"welcome": "Welcome bij",
-		"text": "Advanced People Tracking Dashboard.",
+		"text": "Sentinel mist generator dashboard.",
 		"subtext": "Log alstublieft in om het in actie te zien.",
 		"login": "Log in",
 		"request": "Request",
@@ -152,13 +152,13 @@
 	},
 	"home":{
 		"events":{
-			"h5":"Events",
+			"h5":"Locaties",
 			"day":{
-				"label":"24h",
+				"label":"Actief",
 				"small_label":"Sinds een dag"
 			},
 			"week":{
-				"label":"Weekelijks",
+				"label":"Inactief",
 				"small_label":"Sinds een week"
 			},
 			"month":{
@@ -184,19 +184,20 @@
 			"active": {
 				"label":"Actieve locaties",
 				"table": {
-					"th1": "Connectie",
-					"th2": "ID",
-					"th3": "Locatie",
-					"th4": "Laatste signaal"
+					"th1": "Device ID",
+					"th2": "Device naam",
+					"th3": "Mac adres",
+					"th4": "Status",
+					"th5": "Locatie naam"
 				}				
 			},
 			"problem": {
 				"label":"Locaties met problemen",
 				"table": {
-					"th1": "Connectie",
-					"th2": "ID",
-					"th3": "Locatie",
-					"th4": "Laatste signaal"
+					"th1": "Device ID",
+					"th2": "Device naam",
+					"th3": "Mac adres",
+					"th4": "Status"
 				}				
 			},
 			"notactive": {
@@ -229,11 +230,11 @@
 		"last": "Laatst ontvangen signaal",
 		"path": "Pad status",
 		"mac": "MAC adres",
-		"udid": "UDID nr",
-		"serie": "Serie nr",
+		"udid": "IP adres",
+		"serie": "Device naam",
 		"sim": "Simkaart nr",
 		"serviceid": "ServiceID nr",
-		"lijn": "Lijnbenaming",
+		"lijn": "Port nr",
 		"components":{
 			"txt":"Locatie componenten",
 			"values":"Locatie waardes"
@@ -261,7 +262,7 @@
 			"count":"Totaal aantal events"
 		},
 		"tab":{
-			"location":"Locatie",
+			"location":"Device",
 			"update":"Laatst geupdatet",
 			"tab1":{
 				"text":"Connectie status",

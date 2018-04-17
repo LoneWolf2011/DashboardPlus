@@ -1,171 +1,219 @@
 <?php
+	
+	class Home 
+	{
+		protected $succesMessage;
+		
+		function __construct($db_conn) {
+			$this->db_conn 	= $db_conn;
+			$this->google	= new googleHelper(GOOGLE_API);
+			$this->locale 	= json_decode(file_get_contents(URL_ROOT.'/Src/lang/'.APP_LANG.'.json'), true);
+			$this->user_id	= htmlentities($_SESSION[SES_NAME]['user_id'], ENT_QUOTES, 'UTF-8');
+		}	
 
-class Home
-{
-    protected $succesMessage;
-    
-    function __construct($db_conn)
-    {
-        $this->db_conn = $db_conn;
-        $this->locale  = json_decode(file_get_contents(URL_ROOT . '/Src/lang/' . APP_LANG . '.json'), true);
-        
-    }
-    
-    public function refreshSitesTable($last_id)
-    {
-        $conn = $this->db_conn;
-        try {
-			if (!empty($last_id)) {
-				
-				//$res = $conn->query("SELECT * FROM sensor_events WHERE `id` > ?i AND `Label` NOT IN ('bw') ORDER BY `id` ASC", (int)$last_id);
-				$res = $conn->query("SELECT * FROM sensor_data WHERE `id` > ?i ORDER BY `id` ASC", (int)$last_id);
-				
-				$table_row = '';
-				while ($row = $conn->fetch($res)) {
-					
-					$count = ($row['count'] > 0) ? '<i class="fa fa-user"></i> ' . $row['count'] : '';
-					$table_row .= '<tr><td>' . $row['ip_address'] . '</td><td>' . $row['sensor_type'] . '</td><td>' . $row['datetime'] . '</td><td><i class="fa fa-sign-out fa-flip-horizontal text-danger"></i> ' . $row['fw'] . '</td><td>' . $count . '</td></tr>';
-					$last_id = $row['id'];
-					
-				}
-				$response_array = array(
-					'status' => 1,
-					'rows' => $table_row,
-					'last_id' => $last_id,
-					'row_count' => $conn->numRows($res)
-				);
+		public function checkGroups()
+		{
+			// Check if current user is attached to any group
+			if($this->db_conn->getOne("SELECT COUNT(group_id) FROM site_group_users WHERE user_id = ?i",$this->user_id) > 0){
+				return array(
+					'status' => true
+				);	
+			// If not, show msg
 			} else {
-				$response_array['status'] = 0;
+				$user_is_admin = $this->db_conn->getOne("SELECT user_role FROM app_users WHERE user_id = ?i",$this->user_id);
+
+				$msg = '<div class="middle-box text-center animated fadeInDown">
+								<h1><i class="fa fa-remove"></i></h1>
+								<h3 class="font-bold" data-i18n="[html]error_page.403.label">No groups</h3>
+								<div class="error-desc">
+								';
+								
+				$msg .=	'<p data-i18n="[html]error_page.403.msg">You have no locations attached to your account</p>';
+				
+				if($user_is_admin == 1){
+					$msg .=	'<a href="" class="btn btn-primary" data-i18n="[html]error_page.return_btn">Create first location</a>';					
+				}			
+
+				$msg .=	'</div>
+							</div>';
+				
+				return array(
+					'status' => false,
+					'msg' => $msg,
+				);
 			}
 		}
-		catch (Exception $e) {
-			return $response_array['status'] = 0;
-		}       
-        return $response_array;
-    }
-    
-    public function getSitesTable()
-    {
-        $conn = $this->db_conn;
-        try {
-			//$res = $conn->query("SELECT * FROM (SELECT * FROM sensor_events WHERE `Label` NOT IN ('bw') ORDER BY `id` DESC LIMIT 20) tmp ORDER BY tmp.id ASC");
-			$res       = $conn->query("SELECT * FROM (SELECT * FROM sensor_data ORDER BY `id` DESC LIMIT 20) tmp ORDER BY tmp.id ASC");
-			$table_row = '';
-			while ($row = $conn->fetch($res)) {
+		
+		public function getMarkers($getall = false, $updatetime='')
+		{
+			$conn = $this->db_conn;
+			$lang = $this->locale;
+			
+			$datetime = date('YmdHis', strtotime('now'));
+			$ids = $this->getUserIds();
+			// Get all locations associated with the group the user is attached too
+			$sql= "SELECT * FROM site_location WHERE location_id IN (?a)";
+							
+			$result = $conn->query($sql,$ids['get_location_ids']);
+
+			if($result){
+				while ($row = $conn->fetch($result)) {
+					// Check if there are devices associated with the locations
+					$get_device_id = explode(';',$this->db_conn->getOne("SELECT GROUP_CONCAT(DISTINCT `device_id` SEPARATOR ';') FROM site_location_device WHERE `location_id` = ?i", $row['location_id']));
+					// If so show devices marker, else remove marker from map
+					if(array_sum($get_device_id) > 0){
+						if(count($get_device_id) > 1){						
+							$link = '';
+							$status = 0;
+							
+							$device_arr = array();
+							foreach($get_device_id as $device_id){
+								$devices = getApiCall('http://'.WEB_API.'/api/devices/'.$device_id, 'GET');
+								
+								$device_arr[] = $device_id;
+								
+								if($devices['isAvailable'] == true){
+									$err_class = 'text-navy';
+									$status += 0;
+								} else {
+									$err_class = 'text-danger';
+									$status += 1;
+								}
+								
+								if($status == count($device_arr)) {
+									$path_status = 0;
+								} elseif($status > 0){
+									$path_status = 2;
+								} else {
+									$path_status = 1;
+								}
+								$link .= '<a class="text-info '.$err_class.'" onclick="popupWindow(\''.URL_ROOT.'/view/device/?'.$device_id.'\', \'location\', 1980, 1080 ); return false;">Device #'.$device_id.'</a><br>';
+							}
+							
+						} else {
+							$devices = getApiCall('http://'.WEB_API.'/api/devices/'.implode('',$get_device_id), 'GET');
+							if($devices['isAvailable'] == true){
+								$err_class = 'text-navy';
+								$path_status = 1;
+							} else {
+								$err_class = 'text-danger';
+								$path_status = 0;
+							}					
+							$link = '<a class="text-info '.$err_class.'" onclick="popupWindow(\''.URL_ROOT.'/view/device/?'.$devices['id'].'\', \'location\', 1980, 1080 ); return false;">Device #'.$devices['id'].'</a>';
+	
+						}
+						
+						$is_letter = strtoupper(substr($row['location_name'],0,1));				
+						$locs[$row['location_name']] = array( 
+							'info' 			=> '<div><b>'.$row['location_name'].'</b><br>'.$row['location_address'].'<br>'.$link.'<br></div>', 
+							'path_status' 	=> $path_status, 
+							'first_char' 	=> $is_letter, 
+							'lat' 			=> $row['location_latitude'], 
+							'lng' 			=> $row['location_longitude'],
+							'category' 		=> $row['location_name'],
+							'id' 			=> $row['location_id']
+						);
+					} else {
+						$locs[$row['location_name']] = array( 
+							'remove' 			=> true 
+						);						
+					}
+				}
+				$locs['updatetime'] = date('YmdHis');
+			} 
+			jsonArr($locs);			
+		}
+
+		public function getUserIds(){
+			// Get the group IDs the current user is assigned too
+			$get_group_ids = explode(';',$this->db_conn->getOne("SELECT GROUP_CONCAT(DISTINCT `group_id` SEPARATOR ';') FROM site_group_users WHERE user_id IN (?i)", $this->user_id));
+			// Get location IDs based on assigned group IDs
+			$get_location_ids = explode(';',$this->db_conn->getOne("SELECT GROUP_CONCAT(DISTINCT `location_id` SEPARATOR ';') FROM site_group_location WHERE group_id IN (?a)", $get_group_ids));
+			// Get device IDs based on assigned location IDs 
+			$get_device_ids = explode(';',$this->db_conn->getOne("SELECT GROUP_CONCAT(DISTINCT `device_id` SEPARATOR ';') FROM site_location_device WHERE location_id IN (?a)", $get_location_ids));
+		
+			return $ids = array(
+				'get_group_ids' 	=> $get_group_ids,
+				'get_location_ids' 	=> $get_location_ids,
+				'get_device_ids' 	=> $get_device_ids
+			);
+		}
+		
+		public function getList($state)
+		{
+			$lang = $this->locale;
+						
+			/* States:
+			 * - active
+			 * - inactive
+			 * - problem
+			 */
+			if($state == 'active'){
+				$check_status = true;
+			} else {
+				$check_status = false;
+			}
+			$devices = getApiCall('http://'.WEB_API.'/api/devices', 'GET');
+			
+			$data['data'] = array();
+			
+			foreach($devices['items'] as $device){
 				
-				$count = ($row['count'] > 0) ? '<i class="fa fa-user"></i> ' . $row['count'] : '';
-				$table_row .= '<tr><td>' . $row['ip_address'] . '</td><td>' . $row['sensor_type'] . '</td><td>' . $row['datetime'] . '</td><td><i class="fa fa-sign-out fa-flip-horizontal text-danger"></i> ' . $row['fw'] . '</td><td>' . $count . '</td></tr>';
-				$last_id = $row['id'];
+				if($device['isAvailable'] == true){
+					$active = '<i class="fa fa-circle text-navy"></i>';
+				} else {
+					$active = '<i class="fa fa-circle text-danger"></i>';
+				}
+				
+				$link = '<a href="'.URL_ROOT.'/view/device/?'.$device['id'].'" class="link"># '.$device['id'].'</a>';
+				
+				$get_location_name = $this->db_conn->getOne("SELECT `location_name` FROM site_location WHERE `location_id` IN (SELECT `location_id` FROM site_location_device WHERE `device_id` = ?i)", $device['id']);
+				$get_location_id = $this->db_conn->getOne("SELECT `location_id` FROM site_location WHERE `location_id` IN (SELECT `location_id` FROM site_location_device WHERE `device_id` = ?i)", $device['id']);
+				$location = ($get_location_name != false) ? $get_location_name : '';				
+				
+				$ids = $this->getUserIds();
+				if(in_array($device['id'],$ids['get_device_ids'])){
+					if($device['isAvailable'] == $check_status){
+						$data['data'][] = array(
+							$link,
+							$device['deviceTypeName'],
+							'<a onclick="selectMarker('.$get_location_id.');"><i class="fa fa-map-marker"></i></a> '. $location,
+							$device['macAddress'],
+							$active
+						);
+					}					
+				}
+			}	
+			return $data;			 
+		}
+
+		public function getEventCount()
+		{
+			$ids = $this->getUserIds();
+
+			$devices = getApiCall('http://'.WEB_API.'/api/devices', 'GET');
+			
+			$available = array();
+			$not_available = array();
+			
+			foreach($devices['items'] as $device){
+				if($device['isAvailable'] == false){	
+					$not_available[] = $device['id'];
+				} else {
+					$available[] = $device['id'];
+				}
 			}
 			
 			$response_array = array(
-				'status' => 1,
-				'rows' => $table_row,
-				'last_id' => $last_id
+				'day' => [
+					'count' 	=> count($available)
+				],				
+				'week' => [
+					'count' 	=> count($not_available)
+				]	
 			);
+			
+			jsonArr($response_array);
 		}
-		catch (Exception $e) {
-			return $response_array['status'] = 0;
-		}          
-        return $response_array;
-    }
-    
-    public function getSitesActivity()
-    {
-        $conn = $this->db_conn;
-        
-		try {
-			$res = $conn->query("SELECT `site_id`, `site_name` FROM sensor_sites");
-			
-			
-			$div = '';
-			while ($row = $conn->fetch($res)) {
-				// TODO: Check if the site contains active zones
-	
-					
-				$site_obj = new Site($conn, $row['site_id']); 
-				
-				$div .= '<div class="row">';
-				
-				if($conn->getOne("SELECT `group` FROM sensor_sites_group WHERE `site_id` = ?i", $row['site_id'])){
-					$div .= '<div class="col-xs-12"><h4 class="m-t-n-sm m-b-xs">Site name: <a  class="link;" href="' . URL_ROOT . '/view/site/?site=' . $row['site_id'] . '">' . $row['site_name'] . '</a></h4></div>';				
-				}
-			
-				$zones     = $site_obj->getSiteZones();
-				$count_que = 0;
-				$count_out = 0;
-	
-				foreach ($zones as $zone => $val) {
-					$get_count = $site_obj->getCountsTotal($val['site_group']);
-					$total_wait = $val['zone_wait'];
-					$count_que = $get_count['queue'];
-					$count_out = $get_count['forward'];
-					
-					$count_que = ($count_que > 0) ? '<small>In queue:</small> '.$count_que  : 0;
-					
-					$div .= '<div class="col-xs-6">
-									<div class="panel panel-filled">
-										<div class="panel-body">
-											<h3 class="m-b-none pull-right"><i class="fa fa-clock-o"></i> ' . gmdate('H:i:s',$total_wait) . '<small> wait time</small></h3>
-											<h2 class="m-b-none">' . $count_que . '</h2>
-											<div class="small">
-												Zone: <a  style="color:#f6a821;" href="' . URL_ROOT . '/view/zone/?site=' . $row['site_id'] . '&id=' . $val['site_group'] . '">#'. $val['id'] . ' '. $val['site_group'] . '</a>
-											</div>
-											<div class="small slight m-t-sm">
-												<i class="fa fa-clock-o"></i> Updated: <span class="c-white time">' . date('H:i:s') . '</span>
-											</div>
-										</div>
-									</div>
-								</div>';				
-				}			
-				
-	
-				$div .= '</div>';
-				
-			}
-		}
-		catch (Exception $e) {
-			return $response_array['status'] = 0;
-		} 
 		
-		$response_array = array(
-			'status' => 1,
-			'sites' => $div			
-		);
-        
-        return $response_array;
-        
-    }
-    
-    protected function getLabelIcon($label)
-    {
-        if ($label == 'bw') {
-            $label = '<i class="fa fa-sign-out "></i>';
-        } elseif ($label == 'fw') {
-            $label = '<i class="fa fa-sign-out fa-flip-horizontal text-danger"></i>';
-        } else {
-            $label = '<i class="fa fa-user"></i>';
-        }
-        
-        return $label;
-    }
-    
-    protected function getLabelCount($device_name, $group_name, $label = null)
-    {
-        $conn = $this->db_conn;
-        try{
-			$query = "SELECT `Value` FROM sensor_events WHERE `Name` = ?s AND `Group` = ?s ?p ORDER BY id DESC LIMIT 1";
-			
-			$qpart = '';
-			if ($label != null) {
-				$qpart = $conn->parse(" AND `Label` = ?s", $label);
-			}
-			
-			$count_val = $conn->getOne($query, $device_name, $group_name, $qpart);
-        }
-		catch (Exception $e) {
-			return $response_array['status'] = 0;
-		}  
-        return $count_val;
-    }
-}
+	}

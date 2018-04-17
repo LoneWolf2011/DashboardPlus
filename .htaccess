@@ -1,5 +1,5 @@
 ## PHP ini overrides
-php_value auto_prepend_file "C:/xampp/htdocs/antdb/Src/Config/common.php"
+php_value auto_prepend_file "C:/xampp/htdocs/sentdb/Src/Config/common.php"
 php_value max_execution_time 600
 php_value post_max_size 1024M 
 php_value upload_max_filesize 1024M 
@@ -8,9 +8,9 @@ php_value max_input_time 3600
 php_value memory_limit 1024M 
 
 ## Error page redirect
-ErrorDocument 403 /antdb/View/Errors/page_403.php
-ErrorDocument 404 /antdb/View/Errors/page_404.php
-ErrorDocument 500 /antdb/View/Errors/page_500.php
+ErrorDocument 403 /sentdb/View/Errors/page_403.php
+ErrorDocument 404 /sentdb/View/Errors/page_404.php
+ErrorDocument 500 /sentdb/View/Errors/page_500.php
 
 ## Deny access tot .htaccess
 <Files .htaccess>
@@ -18,8 +18,8 @@ ErrorDocument 500 /antdb/View/Errors/page_500.php
 	deny from all
 </Files>
 
-## Disable directory listing. If index.php is not found use /antdb/View/index.php
-DirectoryIndex index.php /antdb/View/
+## Disable directory listing. If index.php is not found use /sentdb/View/index.php
+DirectoryIndex index.php /sentdb/View/
 
 ## Deny access to extension .map files
 <Files ~ "\.map$">

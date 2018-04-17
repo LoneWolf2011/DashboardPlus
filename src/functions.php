@@ -5,11 +5,14 @@
 	Name: Mdb functions
 	Functie: 
 		- Bevat alle core functions die door meerdere pagina's gebruikt worden.	
-	Version: 1.0.5
+	Version: 1.0.6
 	Author:	Roelof Jan van Golen - <r.vangolen@asb.nl>
 
 	Function index:
 ==========================================================================================================
+		convertTimeZone
+		getApiCall
+		getApiToken
 		updateLastAccess
 		formatSecToTime
 		setEmailTemplate
@@ -20,7 +23,59 @@
 		appVersionCode
 		logToFile
 ========================================================================================================== */
+	function convertTimeZone($datetime){
+		
+		$timestamp = substr($datetime,6,10);
+		
+		$date = new DateTime(null, new DateTimeZone('+0200'));
+		
+		$date->setTimestamp($timestamp);
+		
+		return $date->format('Y-m-d H:i:s');	
+	}
 
+	function getApiCall($url, $request, $data = array()){
+		$token = getApiToken();
+		$ch = curl_init($url); // INITIALISE CURL
+	
+		$authorization = "Authorization: Bearer ".$token; // **Prepare Autorisation Token**
+		$request = strtoupper($request);
+		
+		curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json' , $authorization )); // **Inject Token into Header**
+		curl_setopt($ch, CURLOPT_CUSTOMREQUEST, $request);
+		
+		if(($request == 'POST' || $request == 'PUT') && !empty($data)){
+			curl_setopt($ch, CURLOPT_POST, true);
+			curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));			
+		}
+			
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
+		$result = curl_exec($ch);
+		curl_close($ch);
+		$res = json_decode($result, true);	
+		return $res;
+		//var_dump($res);		
+	}
+
+	function getApiToken(){
+		$url = 'http://'.WEB_API.'/auth/tokens';
+		$data = 'test';
+		$options = array(
+			'http' => array(
+				'method'  => 'POST',
+				'header' => "Content-Type:application/json\r\nContent-Length: 0\r\nAuthorization: Basic " . base64_encode(WEB_USER . ":" . WEB_PASS)
+			)
+		);
+		
+		$context = stream_context_create($options);
+		$result = file_get_contents($url, false, $context);	
+		$obj = json_decode($result);
+	
+		$token = $obj->token;	
+		return $token;
+	}
+	
 	function updateLastAccess($db_conn, $user_id){
 		try {
 			$stmt 	= $db_conn->prepare("UPDATE app_users SET user_last_access = now() WHERE user_id = ?");

@@ -70,8 +70,8 @@
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
                     <!--<i class="fa fa-laptop modal-icon"></i>-->
-					<img src="<?= URL_ROOT_IMG.'/app_logo.png';?>" width="20%"/>
-                    <h4 class="modal-title">Welkom bij <?= APP_TITLE;?></h4>
+					<img src="<?= URL_ROOT_IMG.'/'. LOGO_NAME;?>" width="20%"/>
+                    <h4 class="modal-title">Welkom bij <?= APP_NAME;?></h4>
 					<?php 	if(htmlentities($_SESSION[SES_NAME]['user_new'], ENT_QUOTES, 'UTF-8') == 1) { ?>
 						<p class="font-bold">Dit is de eerste keer dat u inlogd.</p>
 						<p>	U dient uw wachtwoord te wijzigen naar een zelf gekozen wachtwoord. Dit om de veiligheid van uw account te kunnen waarborgen.</p>
@@ -137,11 +137,11 @@
 		var lang_code = $('html').attr('lang').toLowerCase()+'_'+$('html').attr('lang').toUpperCase();
 
 		$('.autocomplete-append').autocomplete({
-			serviceUrl: <?= json_encode(URL_ROOT);?>+'/Src/controllers/site.controller.php?autocomplete',
+			serviceUrl: <?= json_encode(URL_ROOT);?>+'/Src/controllers/home.controller.php?autocomplete',
 			max: 10,
 			onSelect: function (suggestion) {
 				//alert('You selected: ' + suggestion.value + ', ' + suggestion.data);
-				location.href = <?= json_encode(URL_ROOT);?>+'/view/site/?site='+suggestion.data.replace(/[^0-9\.]+/g, "");
+				location.href = <?= json_encode(URL_ROOT);?>+'/view/device/?'+suggestion.data.replace(/[^0-9\.]+/g, "");
 				$('#url_site').val(suggestion.data);
 				$('.site-nr').html(suggestion.data);
 			}			

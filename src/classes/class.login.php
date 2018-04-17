@@ -566,7 +566,7 @@ class Login
                 
                 $email_template = array(
                     'user_name' => $row['user_name'] . " " . $row['user_last_name'],
-                    'link' => '<a class="link" href="' . URL_ROOT . '?ini=' . $cleaned_email . '">DB+</a>',
+                    'link' => '<a class="link" href="' . URL_ROOT . '?ini=' . $cleaned_email . '">'.APP_NAME.'</a>',
                     'gen_password' => $gen_password
                 );
                 
