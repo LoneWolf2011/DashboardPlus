@@ -62,7 +62,7 @@
                     </div>
 					
 					<div class="col-lg-7">
-						<script async defer src="https://maps.googleapis.com/maps/api/js?&key=<?= GOOGLE_API;?>"></script>
+
 						<!--<script async defer src="Z:\google.js?sensor=false&key=<?= GOOGLE_API;?>"></script>-->
 
 						<div class="google-map" id="map" style="height:350px;"></div>					
@@ -159,7 +159,8 @@
 		}		
 	?>	
 
-
+	<script async defer src="https://maps.googleapis.com/maps/api/js?&key=<?= GOOGLE_API;?>&callback=initMap"></script>
+	
 	<script>
 	$(document).ready(function () {
 		var refresh = 5000;	
@@ -218,9 +219,10 @@
 	var markerCluster = null;
 	var infoWindow = null;
 	//var center = {lat: 51.467384, lng: 5.449035};	
-	var center = {lat: <?= json_encode((int)APP_LAT) ;?>, lng: <?= json_encode((int)APP_LNG) ;?>};
-				
-	map = new google.maps.Map(document.getElementById('map'), {
+
+	function initMap(){
+		var center = {lat: <?= json_encode((int)APP_LAT) ;?>, lng: <?= json_encode((int)APP_LNG) ;?>};
+		map = new google.maps.Map(document.getElementById('map'), {
 			center: center,
 			zoom: 8, 
 		
@@ -461,7 +463,8 @@
 			]
     });
 
-	var infowindow = new google.maps.InfoWindow();		
+		infowindow = new google.maps.InfoWindow();		
+	}
 	
 	var device_id = $('#url_query').val();
 	var url_str = $('#url_string').val();	

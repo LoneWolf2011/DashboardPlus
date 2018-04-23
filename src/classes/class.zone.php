@@ -10,7 +10,6 @@ class Zone
     function __construct($db_conn, $site_id = '')
     {
         $this->db_conn = $db_conn;
-        $this->locale  = json_decode(file_get_contents(URL_ROOT . '/Src/lang/' . APP_LANG . '.json'), true);
         $this->site_id = preg_replace("/[^0-9]/", "", $site_id);
         
         $this->date_now_day  = date('Y-m-d H:i:s');

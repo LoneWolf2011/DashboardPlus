@@ -5,13 +5,13 @@
 
 	?>
 	<div class="wrapper wrapper-content animated fadeInRight">
-        <h2 class="m-b-xs"><i class="pe pe-7s-user text-warning m-r-xs"></i> User </h2>	
+        <h2 class="m-b-xs"><i class="pe pe-7s-user text-warning m-r-xs"></i> <span data-i18n="[html]user.title">User</span></h2>	
 
         <div class="row">
             <div class="col-lg-6">
 					<div class="ibox float-e-margins">
 						<div class="ibox-title">
-							<h5><span > Edit user</span> <small></small></h5>
+							<h5><span data-i18n="[html]user.edit.title"> Edit user</span> <small></small></h5>
 						</div>
 						<div class="ibox-content">
 							<div class="row">
@@ -19,20 +19,20 @@
 		
 									<div class="col-md-6">
 										<div class="form-group">
-											<label class="control-label" for="first-name"><span >User name</span><font color="red">*</font></label>
+											<label class="control-label" for="first-name"><span data-i18n="[html]user.edit.input.1">User name</span><font color="red">*</font></label>
 											<input type="text" class="form-control" name="user_name" value="<?= @$row['user_name'];?>" data-i18n="[placeholder]tickets.create.placeholder" >
 										</div>									
 									</div>									
 									<div class="col-md-6">
 										<div class="form-group">
-											<label class="control-label" for="first-name"><span >User last name</span><font color="red">*</font></label>
+											<label class="control-label" for="first-name"><span data-i18n="[html]user.edit.input.2">User last name</span><font color="red">*</font></label>
 											<input type="text" class="form-control" name="user_last_name" value="<?= @$row['user_last_name'];?>" data-i18n="[placeholder]tickets.create.placeholder"   >
 										</div>								
 									</div>								
 			
 									<div class="col-md-6">
 										<div class="form-group">
-											<label class="control-label" for="first-name"><span >User email</span><font color="red">*</font></label>
+											<label class="control-label" for="first-name"><span data-i18n="[html]user.edit.input.3">User email</span><font color="red">*</font></label>
 											<input type="text" class="form-control" name="user_email" value="<?= @$row['user_email'];?>" data-i18n="[placeholder]tickets.create.placeholder" value="<?= @$row['SCS_Account_Address_Name']; ?>">
 										</div>									
 									</div>									
@@ -42,7 +42,7 @@
 									
 									<div class="col-md-12">
 										<div class="form-group">
-											<button class="btn btn-primary" name="save_button" ><i class='fa fa-save fa-fw'></i> <span>Update</span></button>	
+											<button class="btn btn-primary" name="save_button" ><i class='fa fa-save fa-fw'></i> <span data-i18n="[html]user.edit.button">Update</span></button>	
 										</div>
 									</div>
 			
@@ -146,38 +146,32 @@
 				user_name: {
 					validators: {
 						notEmpty: {
-							message: 'Het user naam in'
 						}
 					}
 				},		
 				user_last_name: {
 					validators: {
 						notEmpty: {
-							message: 'Vul user achternaam in'
 						}
 					}
 				},
 				user_email: {
 					validators: {
 						notEmpty: {
-							message: 'Vul user email in'
 						},						
 						emailAddress: {
-							message: 'Dit is geen geldig email adres'
 						}
 					}
 				},								
 				user_role: {
 					validators: {
 						notEmpty: {
-							message: 'Selecteer de user role'
 						}
 					}
 				},
 				user_status: {
 					validators: {
 						notEmpty: {
-							message: 'Selecteer de user status'
 						}
 					}
 				}				
@@ -233,31 +227,26 @@
 				user_name: {
 					validators: {
 						notEmpty: {
-							message: 'Het user naam in'
 						}
 					}
 				},		
 				user_last_name: {
 					validators: {
 						notEmpty: {
-							message: 'Vul user achternaam'
 						}
 					}
 				},
 				user_email: {
 					validators: {
 						notEmpty: {
-							message: 'Vul user email in'
 						},
 						emailAddress: {
-							message: 'Dit is geen geldig email adres'
 						}
 					}
 				},								
 				user_role: {
 					validators: {
 						notEmpty: {
-							message: 'Selecteer de user role'
 						}
 					}
 				}				

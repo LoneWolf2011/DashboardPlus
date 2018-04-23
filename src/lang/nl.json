@@ -1,6 +1,7 @@
 {
 	"layout":{
 		"topnav":{
+			"placeholder":"Zoek naar device",
 			"logout":"Uitloggen"
 		}
 	},
@@ -91,7 +92,7 @@
 	},
 	"loginscreen":{
 		"welcome": "Welcome bij",
-		"text": "Sentinel mist generator dashboard.",
+		"text": "Mist generator dashboard.",
 		"subtext": "Log alstublieft in om het in actie te zien.",
 		"login": "Log in",
 		"request": "Request",
@@ -220,6 +221,105 @@
 			}			
 		}
 	},
+	"devices":{
+		"title":"Devices",
+		"table":{
+			"th1":"Device ID",
+			"th2":"Device IP",
+			"th3":"Device MAC",
+			"th4":"Device naam",
+			"th5":"Device locatie",
+			"th6":"Device status",
+			"th7":"Laatste signaal",
+			"th8":"Acties"
+		},
+		"new":{
+			"title":"Nieuwe locatie",
+			"button":"Opslaan",
+			"input":{
+				"1":"Device IP",
+				"2":"Device port nr",
+				"3":"Device MAC adres",
+				"4":"Voeg device toe aan locatie"
+			}
+		},
+		"add":{
+			"title":"Selecteer devices",
+			"button":"Update",
+			"input":{
+				"1":"Voeg device toe aan locatie"
+			}		
+		}
+	},	
+	"locations":{
+		"title":"Locaties",
+		"table":{
+			"th1":"Locatie ID",
+			"th2":"Locatie naam",
+			"th3":"Locatie adres",
+			"th4":"Locatie postcode",
+			"th5":"Locatie plaats",
+			"th6":"Locatie groep",
+			"th7":"Aantal devices",
+			"th8":"Acties"
+		},
+		"new":{
+			"title":"Nieuwe locatie",
+			"button":"Opslaan",
+			"input":{
+				"1":"Locatie naam",
+				"2":"Locatie adres",
+				"3":"Locatie postcode",
+				"4":"Locatie plaats",
+				"5":"Selecteer groep"
+			}
+		},		
+		"edit":{
+			"title":"Wijzig locatie",
+			"button":"Update",
+			"input":{
+				"1":"Locatie naam",
+				"2":"Locatie adres",
+				"3":"Locatie postcode",
+				"4":"Locatie plaats",
+				"5":"Selecteer groep"
+			}
+		}
+	},
+	"groups":{
+		"title":"Groepen",
+		"table":{
+			"th1":"Groep ID",
+			"th2":"Groep naam",
+			"th3":"Aantal locaties",
+			"th4":"Aantal users",
+			"th5":"Acties"
+		},
+		"modify":{
+			"title":"Wijzig groepen"
+		},
+		"new":{
+			"title":"Nieuwe groep",
+			"button":"Opslaan",
+			"input":{
+				"1":"Groep naam"
+			}
+		},		
+		"edit":{
+			"title":"Wijzig groep",
+			"button":"Update",
+			"input":{
+				"1":"Groep naam"
+			}
+		},		
+		"add":{
+			"title":"Users aan groep toevoegen",
+			"button":"Update",
+			"input":{
+				"1":"Selecteer groep"
+			}
+		}
+	},		
 	"location":{
 		"connection": "Connectie",
 		"status": "Status",
@@ -287,6 +387,16 @@
 		"small":"Even geduld aub"
 	},
 	"user":{
+		"title":"Gebruiker",
+		"edit":{
+			"title":"Wijzig gebruiker",
+			"button":"Update",
+			"input":{
+				"1":"Gebruiker naam",
+				"2":"Gebruiker achternaam",
+				"3":"Gebruiker email"
+			}
+		},			
 		"acc_update":{
 			"msg":{
 				"err_email":{

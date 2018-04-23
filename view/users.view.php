@@ -23,7 +23,7 @@
 									<th align='left'>Last access</th>
 									<th align='left'>Userrole</th>
 									<th align='left'>Status</th>
-									<th align='left'></th>
+									<th align='left'>Action</th>
 								</tr>
 							</thead>
 						</table>
@@ -225,7 +225,24 @@
     		lengthMenu: [10, 20, 25],
     		processing: true,
     		serverSide: true,
-    		responsive: true
+			responsive: {
+				details: {
+					renderer: function ( api, rowIdx, columns ) {
+						var data = $.map( columns, function ( col, i ) {
+							return col.hidden ?
+								'<tr data-dt-row="'+col.rowIndex+'" data-dt-column="'+col.columnIndex+'">'+
+									'<td>'+col.title+':'+'</td> '+
+									'<td>'+col.data+'</td>'+
+								'</tr>' :
+								'';
+						} ).join('');
+	
+						return data ?
+							$('<table/ width="100%" class="sub_responsive">').append( data ) :
+							false;
+					}
+				}
+			}
     	});
     	var interval;
     	var table_active = $(".datatable").DataTable({
@@ -253,38 +270,32 @@
     			user_name: {
     				validators: {
     					notEmpty: {
-    						message: 'Het user naam in'
     					}
     				}
     			},
     			user_last_name: {
     				validators: {
     					notEmpty: {
-    						message: 'Vul user achternaam in'
     					}
     				}
     			},
     			user_email: {
     				validators: {
     					notEmpty: {
-    						message: 'Vul user email in'
     					},
     					emailAddress: {
-    						message: 'Dit is geen geldig email adres'
     					}
     				}
     			},
     			user_role: {
     				validators: {
     					notEmpty: {
-    						message: 'Selecteer de user role'
     					}
     				}
     			},
     			user_status: {
     				validators: {
     					notEmpty: {
-    						message: 'Selecteer de user status'
     					}
     				}
     			}
@@ -335,31 +346,26 @@
     			user_name: {
     				validators: {
     					notEmpty: {
-    						message: 'Het user naam in'
     					}
     				}
     			},
     			user_last_name: {
     				validators: {
     					notEmpty: {
-    						message: 'Vul user achternaam'
     					}
     				}
     			},
     			user_email: {
     				validators: {
     					notEmpty: {
-    						message: 'Vul user email in'
     					},
     					emailAddress: {
-    						message: 'Dit is geen geldig email adres'
     					}
     				}
     			},
     			user_role: {
     				validators: {
     					notEmpty: {
-    						message: 'Selecteer de user role'
     					}
     				}
     			}

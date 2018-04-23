@@ -9,7 +9,6 @@ class Ticket
     function __construct($db_conn)
     {
         $this->db_conn   = $db_conn;
-        $this->locale    = json_decode(file_get_contents(URL_ROOT . '/Src/lang/' . APP_LANG . '.json'), true);
         $this->wb_link   = URL_ROOT . "/view/ticket/ticket_view/?id=";
         $this->auth_user = htmlentities($_SESSION[SES_NAME]['user_email'], ENT_QUOTES, 'UTF-8');
         // create new TCPDF document
@@ -19,7 +18,6 @@ class Ticket
     
     public function ticketSaveUpdate($post_val)
     {
-        $lang = $this->locale;
         
         $conn   = $this->db_conn;
         $row_wb = $this->getTicketRow($conn, $post_val['ID']);
@@ -147,7 +145,6 @@ class Ticket
     
     public function ticketCreateNew($post_val)
     {
-        $lang = $this->locale;
         
         $conn   = $this->db_conn;
         // Indien werkbon voor KPN zet de status op Open
@@ -232,7 +229,7 @@ class Ticket
     
     public function getTable()
     {
-        $lang = $this->locale;
+
         $db   = new \PDO('mysql:host=' . DB_HOST . ';dbname=' . DB_NAME . ';charset=utf8', DB_USER, DB_PASS, array(
             \PDO::ATTR_PERSISTENT => true
         ));

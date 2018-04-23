@@ -9,13 +9,11 @@ class User
     function __construct($db_conn)
     {
         $this->db_conn   = $db_conn;
-        $this->locale    = json_decode(file_get_contents(URL_ROOT . '/Src/lang/' . APP_LANG . '.json'), true);
         $this->auth_user = htmlentities($_SESSION[SES_NAME]['user_email'], ENT_QUOTES, 'UTF-8');
     }
     
     public function newUser($post_val)
     {
-        $lang = $this->locale;
         $conn = $this->db_conn;
         
         $check_email = $conn->getOne('SELECT user_email FROM app_users WHERE user_email = ?s', $post_val['user_email']);
@@ -90,7 +88,6 @@ class User
     
     public function updateUser($post_val)
     {
-        $lang = $this->locale;
         
         $conn = $this->db_conn;
         
@@ -132,7 +129,6 @@ class User
     
     public function deleteUser($post_val)
     {
-        $lang = $this->locale;
         
         $conn       = $this->db_conn;
         $user_email = $conn->getOne("SELECT user_email FROM app_users WHERE user_id = ?i", $post_val['user_id']);
@@ -180,7 +176,6 @@ class User
     
     public function updateUserPass($conn, $post_val)
     {
-        $lang = $this->locale;
         
         $email_post    = $post_val['email'];
         $password_post = $post_val['password'];
@@ -188,8 +183,8 @@ class User
         
         // Make sure the user entered a valid E-Mail address 
         if (!filter_var($email_post, FILTER_VALIDATE_EMAIL)) {
-            $response_array['label'] = $lang['user']['acc_update']['msg']['err_email']['label'];
-            $response_array['text']  = $lang['user']['acc_update']['msg']['err_email']['text'];
+            $response_array['label'] = LANG['user']['acc_update']['msg']['err_email']['label'];
+            $response_array['text']  = LANG['user']['acc_update']['msg']['err_email']['text'];
             $response_array['type']  = 'error';
             
             // Return JSON array
@@ -226,8 +221,8 @@ class User
                 $msg = 'Regel: ' . $ex->getLine() . ' Bestand: ' . $ex->getFile() . ' Error: ' . $ex->getMessage();
                 logToFile(__FILE__, 1, $msg);
                 
-                $response_array['label'] = $lang['user']['acc_update']['msg']['err']['label'];
-                $response_array['text']  = $lang['user']['acc_update']['msg']['err']['text'];
+                $response_array['label'] = LANG['user']['acc_update']['msg']['err']['label'];
+                $response_array['text']  = LANG['user']['acc_update']['msg']['err']['text'];
                 $response_array['type']  = 'error';
                 
                 // Return JSON array
@@ -238,8 +233,8 @@ class User
             // Retrieve results (if any) 
             $row = $stmt->fetch();
             if ($row) {
-                $response_array['label'] = $lang['user']['acc_update']['msg']['err_email_in_use']['label'];
-                $response_array['text']  = $lang['user']['acc_update']['msg']['err_email_in_use']['text'];
+                $response_array['label'] = LANG['user']['acc_update']['msg']['err_email_in_use']['label'];
+                $response_array['text']  = LANG['user']['acc_update']['msg']['err_email_in_use']['text'];
                 $response_array['type']  = 'error';
                 // Return JSON array
                 jsonArr($response_array);
@@ -304,8 +299,8 @@ class User
             $msg = "Password van user: " . $this->auth_user . " gewijzigd";
             logToFile(__FILE__, 0, $msg);
             
-            $this->succesMessage = $lang['user']['acc_update']['msg']['suc']['label'];
-            $this->msg           = $lang['user']['acc_update']['msg']['suc']['text'];
+            $this->succesMessage = LANG['user']['acc_update']['msg']['suc']['label'];
+            $this->msg           = LANG['user']['acc_update']['msg']['suc']['text'];
         }
         catch (PDOException $ex) {
             // Note: On a production website, you should not output $ex->getMessage(). 
@@ -313,8 +308,8 @@ class User
             $msg = 'Regel: ' . $ex->getLine() . ' Bestand: ' . $ex->getFile() . ' Error: ' . $ex->getMessage();
             logToFile(__FILE__, 1, $msg);
             
-            $response_array['label'] = $lang['user']['acc_update']['msg']['err']['label'];
-            $response_array['text']  = $lang['user']['acc_update']['msg']['err']['text'];
+            $response_array['label'] = LANG['user']['acc_update']['msg']['err']['label'];
+            $response_array['text']  = LANG['user']['acc_update']['msg']['err']['text'];
             $response_array['type']  = 'error';
             
             // Return JSON array
@@ -336,8 +331,7 @@ class User
     
     public function getTable()
     {
-        
-        $lang = $this->locale;
+
         $db   = @new \PDO('mysql:host=' . DB_HOST . ';dbname=' . DB_NAME . ';charset=utf8', DB_USER, DB_PASS, array(
             \PDO::ATTR_PERSISTENT => true
         ));

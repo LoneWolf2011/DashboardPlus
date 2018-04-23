@@ -1928,6 +1928,10 @@ a.list-group-item.active:focus {
   position: relative;
 }
 /* DATATABLES */
+.sub_responsive {
+  border-collapse: separate;
+  border-spacing: 5px;
+}
 table.dataTable thead .sorting,
 table.dataTable thead .sorting_asc:after,
 table.dataTable thead .sorting_desc,

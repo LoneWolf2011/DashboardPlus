@@ -7,11 +7,11 @@ class Location
     function __construct($db_conn)
     {
         $this->db_conn   = $db_conn;
-        $this->locale    = json_decode(file_get_contents(URL_ROOT . '/Src/lang/' . APP_LANG . '.json'), true);
         $this->auth_user = htmlentities($_SESSION[SES_NAME]['user_email'], ENT_QUOTES, 'UTF-8');
     }
 
-	public function getCoordinates($post_val){
+	public function getCoordinates($post_val)
+	{
 		$obj = new googleHelper(GOOGLE_API);
 
 		$str = str_replace(' ','%20',$post_val['addr']).','.str_replace(' ','%20',$post_val['zipc']).','.str_replace(' ','%20',$post_val['city']);
@@ -28,7 +28,6 @@ class Location
     
     public function updateLocation($post_val)
     {
-        $lang = $this->locale;
         $conn = $this->db_conn;
         
         $location_id = $post_val['site_id'];
@@ -88,7 +87,6 @@ class Location
     
     public function newLocation($post_val)
     {
-        $lang = $this->locale;
         $conn = $this->db_conn;
         
         $query_data = array(
@@ -139,7 +137,6 @@ class Location
     
     public function deleteLocation($post_val)
     {
-        $lang = $this->locale;
         
         $conn = $this->db_conn;
 
@@ -172,7 +169,6 @@ class Location
 	public function getTableLocation()
     {
         
-        $lang = $this->locale;
         $db   = @new \PDO('mysql:host=' . DB_HOST . ';dbname=' . DB_NAME . ';charset=utf8', DB_USER, DB_PASS, array(\PDO::ATTR_PERSISTENT => true));
         
         $columns = array(
@@ -211,22 +207,44 @@ class Location
                 }
             ),
             array(
-                'db' => "location_name",
+                'db' => "location_id",
                 'dt' => 6,
+                'formatter' => function($d, $row)
+                {
+                    $conn  = $this->db_conn;
+                    $count = $conn->getOne("SELECT COUNT(device_id) FROM site_location_device WHERE `location_id` = ?i", $d);
+					if($count == 0){
+						$label = '<span class="badge badge-danger">' . $count . '</span>';
+					} else {
+						$label = '<span class="badge badge-success">' . $count . '</span>';
+					}
+                    return ($count != "") ? $label : '';
+                }
+            ),			
+            array(
+                'db' => "location_name",
+                'dt' => 7,
                 'formatter' => function($d, $row)
                 {
                     $edit = "<a class='label label-success' id='edit' value='" . $row[0] . "' rel='" . $row[2] . "'>Edit</a>";
                     $dele = "<a class='label label-danger' id='delete' value='" . $row[0] . "' rel='" . $row[2] . "' >Delete</a>";
                     return $edit . ' ' . $dele;
                 }
-            )
+            ),
+            array(
+                'db' => "location_latitude",
+                'dt' => 8
+            ),
+            array(
+                'db' => "location_longitude",
+                'dt' => 9
+            )			
         );
         
         echo json_encode(SSP::complex($_GET, $db, 'site_location', 'location_id', $columns, $whereResult = null, $whereAll = null));
     }
 
 	public function getSelectLocation(){
-        $lang = $this->locale;
         $conn = $this->db_conn;
         
         $result_site = $conn->query("SELECT `location_id`, `location_name` FROM site_location");

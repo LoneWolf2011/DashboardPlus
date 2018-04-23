@@ -1,23 +1,24 @@
 	<?php 		array_push($arr_css, '/css/plugins/dataTables/datatables_responsive.min.css');?>
 	<div class="wrapper wrapper-content animated fadeInRight">
-		<h2 class="m-b-xs"><i class="pe pe-7s-map-marker text-warning m-r-xs"></i> Locations</h2>
+		<h2 class="m-b-xs"><i class="pe pe-7s-map-marker text-warning m-r-xs"></i> <span data-i18n="[html]locations.title">Locations</span></h2>
 		<div class="row">
 			<div class="col-lg-12">
 				<div class="ibox float-e-margins">
 					<div class="ibox-title">
-						<h5><span>Locations</span> <small></small></h5>
+						<h5><span data-i18n="[html]locations.table.title">Locations</span> <small></small></h5>
 					</div>
 					<div class="ibox-content">
 						<table class="table table-hover jambo_table bulk_action datatable" id="datatable" style="width:100%">
 							<thead>
 								<tr>
-									<th align='left'>SiteID</th>
-									<th align='left'>Site name</th>
-									<th align='left'>Site address</th>
-									<th align='left'>Site zipcode</th>
-									<th align='left'>Site city</th>
-									<th align='left'>Group</th>
-									<th align='left'></th>
+									<th align='left' data-i18n="[html]locations.table.th1">SiteID</th>
+									<th align='left' data-i18n="[html]locations.table.th2">Site name</th>
+									<th align='left' data-i18n="[html]locations.table.th3">Site address</th>
+									<th align='left' data-i18n="[html]locations.table.th4">Site zipcode</th>
+									<th align='left' data-i18n="[html]locations.table.th5">Site city</th>
+									<th align='left' data-i18n="[html]locations.table.th6">Group</th>
+									<th align='left' data-i18n="[html]locations.table.th7">Device count</th>
+									<th align='left' data-i18n="[html]locations.table.th8">Action</th>
 								</tr>
 							</thead>
 						</table>
@@ -29,7 +30,7 @@
 			<div class="col-lg-6">
 				<div class="ibox float-e-margins">
 					<div class="ibox-title">
-						<h5><span>Edit location</span> <small></small></h5>
+						<h5><span data-i18n="[html]locations.edit.title">Edit location</span> <small></small></h5>
 					</div>
 					<div class="ibox-content">
 
@@ -37,13 +38,13 @@
 								<div class="row">
 								<div class="col-md-6">
 									<div class="form-group">
-										<label class="control-label" for="first-name"><span>Site name</span><font color="red">*</font></label> 
+										<label class="control-label" for="first-name"><span data-i18n="[html]locations.edit.input.1">Site name</span><font color="red">*</font></label> 
 										<input class="form-control" data-i18n="[placeholder]tickets.create.placeholder" name="edit_site_name" type="text">
 									</div>
 								</div>
 								<div class="col-md-6">
 									<div class="form-group">
-										<label class="control-label" for="first-name"><span>Site address</span><font color="red">*</font></label> 
+										<label class="control-label" for="first-name"><span data-i18n="[html]locations.edit.input.2">Site address</span><font color="red">*</font></label> 
 										<input class="form-control" data-i18n="[placeholder]tickets.create.placeholder" name="edit_site_address" type="text">
 									</div>
 								</div>
@@ -51,13 +52,13 @@
 								<div class="row">
 								<div class="col-md-6">
 									<div class="form-group">
-										<label class="control-label" for="first-name"><span>Site zipcode</span><font color="red">*</font></label> 
+										<label class="control-label" for="first-name"><span data-i18n="[html]locations.edit.input.3">Site zipcode</span><font color="red">*</font></label> 
 										<input class="form-control" data-i18n="[placeholder]tickets.create.placeholder" name="edit_site_zipcode" type="text">
 									</div>
 								</div>
 								<div class="col-md-6">
 									<div class="form-group">
-										<label class="control-label" for="first-name"><span>Site city</span><font color="red">*</font></label> 
+										<label class="control-label" for="first-name"><span data-i18n="[html]locations.edit.input.4">Site city</span><font color="red">*</font></label> 
 										<input class="form-control" data-i18n="[placeholder]tickets.create.placeholder" name="edit_site_city" type="text">
 									</div>
 								</div>
@@ -65,7 +66,7 @@
 								<div class="row">
 								<div class="col-md-6">
 									<div class="form-group">
-										<label class="control-label" for="first-name"><span>Select group</span></label> 
+										<label class="control-label" for="first-name"><span data-i18n="[html]locations.edit.input.5">Select group</span></label> 
 										<select class="form-control" name="edit_site_group">
 											<option value="">Select...</option>
 											<?php
@@ -93,7 +94,7 @@
 								
 								<div class="col-md-6">
 									<div class="form-group">
-										<button class="btn btn-primary" name="save_button"><i class='fa fa-save fa-fw'></i> <span>Update</span></button>
+										<button class="btn btn-primary" name="save_button"><i class='fa fa-save fa-fw'></i> <span data-i18n="[html]locations.edit.button">Update</span></button>
 									</div>
 								</div>
 								</div>
@@ -105,7 +106,7 @@
 			<div class="col-lg-6">
 				<div class="ibox float-e-margins">
 					<div class="ibox-title">
-						<h5><span>New location</span> <small></small></h5>
+						<h5><span data-i18n="[html]locations.new.title">New location</span> <small></small></h5>
 					</div>
 					<div class="ibox-content">
 						
@@ -113,13 +114,13 @@
 								<div class="row">
 								<div class="col-md-6">
 									<div class="form-group">
-										<label class="control-label" for="first-name"><span>Site name</span><font color="red">*</font></label> 
+										<label class="control-label" for="first-name"><span data-i18n="[html]locations.new.input.1">Site name</span><font color="red">*</font></label> 
 										<input class="form-control" data-i18n="[placeholder]tickets.create.placeholder" name="new_site_name" type="text">
 									</div>
 								</div>
 								<div class="col-md-6">
 									<div class="form-group">
-										<label class="control-label" for="first-name"><span>Site address</span><font color="red">*</font></label> 
+										<label class="control-label" for="first-name"><span data-i18n="[html]locations.new.input.2">Site address</span><font color="red">*</font></label> 
 										<input class="form-control" data-i18n="[placeholder]tickets.create.placeholder" name="new_site_address" type="text">
 									</div>
 								</div>
@@ -127,13 +128,13 @@
 								<div class="row">
 								<div class="col-md-6">
 									<div class="form-group">
-										<label class="control-label" for="first-name"><span>Site zipcode</span><font color="red">*</font></label> 
+										<label class="control-label" for="first-name"><span data-i18n="[html]locations.new.input.3">Site zipcode</span><font color="red">*</font></label> 
 										<input class="form-control" data-i18n="[placeholder]tickets.create.placeholder" name="new_site_zipcode" type="text">
 									</div>
 								</div>
 								<div class="col-md-6">
 									<div class="form-group">
-										<label class="control-label" for="first-name"><span>Site city</span><font color="red">*</font></label> 
+										<label class="control-label" for="first-name"><span data-i18n="[html]locations.new.input.4">Site city</span><font color="red">*</font></label> 
 										<input class="form-control" data-i18n="[placeholder]tickets.create.placeholder" name="new_site_city" type="text">
 									</div>
 								</div>
@@ -141,7 +142,7 @@
 								<div class="row">
 								<div class="col-md-6">
 									<div class="form-group">
-										<label class="control-label" for="first-name"><span>Select group</span><font color="red">*</font></label> 
+										<label class="control-label" for="first-name"><span data-i18n="[html]locations.new.input.5">Select group</span><font color="red">*</font></label> 
 										<select class="form-control" name="new_site_group">
 											<option value="">Select...</option>
 											<?php
@@ -167,7 +168,7 @@
 								<input name="csrf" type="hidden" value="<?= htmlspecialchars($_SESSION['db_token'], ENT_QUOTES, 'UTF-8');?>">
 								<div class="col-md-6">
 									<div class="form-group">
-										<button class="btn btn-primary" name="save_button"><i class='fa fa-save fa-fw'></i> <span>Save</span></button>
+										<button class="btn btn-primary" name="save_button"><i class='fa fa-save fa-fw'></i> <span data-i18n="[html]locations.new.button">Save</span></button>
 									</div>
 								</div>
 								</div>
@@ -239,6 +240,8 @@
     		$('input[name="edit_site_address"]').val(data[2]);
     		$('input[name="edit_site_zipcode"]').val(data[3]);
     		$('input[name="edit_site_city"]').val(data[4]);
+    		$('input[name="edit_site_latitude"]').val(data[8]);
+    		$('input[name="edit_site_longitude"]').val(data[9]);
     	});
     	
 		var lang_code = $('html').attr('lang').toLowerCase() + '_' + $('html').attr('lang').toUpperCase();
@@ -255,7 +258,24 @@
     		lengthMenu: [5,10, 20, 25],
     		processing: true,
     		serverSide: true,
-    		responsive: true
+			responsive: {
+				details: {
+					renderer: function ( api, rowIdx, columns ) {
+						var data = $.map( columns, function ( col, i ) {
+							return col.hidden ?
+								'<tr data-dt-row="'+col.rowIndex+'" data-dt-column="'+col.columnIndex+'">'+
+									'<td>'+col.title+':'+'</td> '+
+									'<td>'+col.data+'</td>'+
+								'</tr>' :
+								'';
+						} ).join('');
+	
+						return data ?
+							$('<table/ width="100%" class="sub_responsive">').append( data ) :
+							false;
+					}
+				}
+			}
     	});
     	
 		var interval;
@@ -286,35 +306,30 @@
     			new_site_name: {
     				validators: {
     					notEmpty: {
-    						message: 'Vul site naam in'
     					}
     				}
     			},
     			new_site_group: {
     				validators: {
     					notEmpty: {
-    						message: 'Selecteer een groep'
     					}
     				}
     			},				
     			new_site_address: {
     				validators: {
     					notEmpty: {
-    						message: 'Vul het site adres in'
     					}
     				}
     			},
     			new_site_zipcode: {
     				validators: {
     					notEmpty: {
-    						message: 'Vul de site postcode in'
-    					}
+    					}					
     				}
     			},
     			new_site_city: {
     				validators: {
     					notEmpty: {
-    						message: 'Vul de site stad in'
     					}
     				}
     			}
@@ -369,7 +384,6 @@
     			edit_site_name: {
     				validators: {
     					notEmpty: {
-    						message: 'Vul site naam in'
     					}
     				}
     			},
@@ -377,21 +391,18 @@
     			edit_site_address: {
     				validators: {
     					notEmpty: {
-    						message: 'Vul het site adres in'
     					}
     				}
     			},
     			edit_site_zipcode: {
     				validators: {
     					notEmpty: {
-    						message: 'Vul de site postcode in'
     					}
     				}
     			},
     			edit_site_city: {
     				validators: {
     					notEmpty: {
-    						message: 'Vul de site stad in'
     					}
     				}
     			}

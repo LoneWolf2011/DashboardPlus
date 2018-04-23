@@ -2,8 +2,6 @@
 <p align="center">
 <img src="img/ti_logo_yellow.png"  width="20%" align="center" /></p>
 
-- Body class **dark-bg**
-
 - Copy env.example.ini to env.ini
 - Edit env.ini with DB settings for local DB and/or SCS DB, and local application settings
 - Edit 1st line in /src/config/common.php:

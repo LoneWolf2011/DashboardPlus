@@ -7,7 +7,6 @@ class Device
     function __construct($db_conn, $device_id)
     {
         $this->db_conn   = $db_conn;
-        $this->locale    = json_decode(file_get_contents(URL_ROOT . '/Src/lang/' . APP_LANG . '.json'), true);
         $this->auth_user = htmlentities($_SESSION[SES_NAME]['user_email'], ENT_QUOTES, 'UTF-8');
         $this->device_id = $device_id;
     }
@@ -15,19 +14,18 @@ class Device
 	public function getDeviceLocation()
 	{
 		$conn = $this->db_conn;
-		$lang = $this->locale;
 				
 		$device = getApiCall('http://'.WEB_API.'/api/devices/'.$this->device_id, 'GET');
 		
 		if($device['isAvailable'] == true){
-			$conn_status 	= '<span class="label label-primary">'.$lang['connection']['conn'].'</span>';
+			$conn_status 	= '<span class="label label-primary">'.LANG['connection']['conn'].'</span>';
 			$path_status 	= 1;
 		} else {
-			$conn_status 	= '<span class="label label-danger">'.$lang['connection']['diss'].'</span>';
+			$conn_status 	= '<span class="label label-danger">'.LANG['connection']['diss'].'</span>';
 			$path_status 	= 0;
 		}
 		
-		$result = $conn->query("SELECT * FROM site_location WHERE location_id IN (SELECT location_id FROM site_location_device WHERE device_id = ?i)", $device['id']);
+		$result = $conn->query("SELECT * FROM site_location WHERE location_id IN (SELECT location_id FROM site_location_device WHERE device_id = ?i)", $this->device_id);
 			
 		while ($line = $conn->fetch($result)) {			
 			$row = $line;
@@ -48,7 +46,7 @@ class Device
 			'location_udid'		=> $device['ipAddress'],
 			'location_lijn'		=> $device['ipPort'],
 			'location_serie'	=> $device['deviceTypeName'],
-			'events_count_week'	=> count($devices['items']),
+			'events_count_week'	=> @count($devices['items']),
 			'conn_status' 		=> $conn_status,
 			'lat' 				=> $row['location_latitude']+0.000001,
 			'lng' 				=> $row['location_longitude']+0.000001,
@@ -65,31 +63,38 @@ class Device
 		$device_actions = getApiCall('http://'.WEB_API.'/api/devices/'.$this->device_id.'/actions', 'GET');
 		
 		$response_array = array();
-		foreach($device_actions as $action){
-			$response_array['actions'][] = '<div "row"><button type="button" class="btn btn-accent block full-width m-b" value="'.$action['name'].'" onClick="sendAction(this.value);">'.$action['name'].'</button>';
-		}
 		
-		return $response_array;
+		if($device_actions){
+			
+			foreach($device_actions as $action){
+				$response_array['actions'][] = '<div "row"><button type="button" class="btn btn-accent block full-width m-b" value="'.$action['name'].'" onClick="sendAction(this.value);">'.$action['name'].'</button>';
+			}
+			
+			return $response_array;
+		
+		} else {
+			return $response_array;
+		}
 	}
 	
 	public function exeDeviceAction($post_val)
 	{
 		$data = array(
 			'deviceId' => 1,
-			'actionName' => 'ActivateSmoke'
+			'actionName' => $post_val['execute']
 		);			
 		$execute_action = getApiCall('http://'.WEB_API.'/api/devices/'.$this->device_id.'/actions/'.$post_val['execute'], 'POST', $data);
 		
 		$response_array = array();
 		
 		if($execute_action['exceptionMessage']){
-			$response_array['type'] = 'error';
-			$response_array['title'] = 'ERROR';
-			$response_array['msg'] = $execute_action['exceptionMessage'];
+			$response_array['type'] 	= 'error';
+			$response_array['title'] 	= 'ERROR';
+			$response_array['msg'] 		= $execute_action['exceptionMessage'];
 		} else {
-			$response_array['type'] = 'success';
-			$response_array['title'] = 'SUCCESS';
-			$response_array['msg'] = 'Success';			
+			$response_array['type'] 	= 'success';
+			$response_array['title'] 	= 'SUCCESS';
+			$response_array['msg'] 		= $post_val['execute']. ' uitgevoerd';			
 		}
 		
 		return $response_array;
@@ -101,42 +106,51 @@ class Device
 		
 		$data['status'] = array();
 		
-		foreach($device_status['parameters'] as $device){
-			if($device['value'] == 'Ok'){
-				$status = '<i class="fa fa-circle text-navy"></i>';
-			} else {
-				$status = $device['value'];
-			}
-			
-			
-			$data['status'][] = array(
-				$device['name'],
-				$status
-			);			
-		}
+		if($device_status){
+			foreach($device_status['parameters'] as $device){
+				if($device['value'] == 'Ok'){
+					$status = '<i class="fa fa-circle text-navy"></i>';
+				} else {
+					$status = $device['value'];
+				}
 				
-		return $data;		
+				
+				$data['status'][] = array(
+					$device['name'],
+					$status
+				);			
+			}
+				
+			return $data;	
+		} else {
+			return $data;
+		}		
 	}
 	
 	public function getTableDevice()
     {
 		$devices = getApiCall('http://'.WEB_API.'/api/devices/'.$this->device_id.'/signals', 'GET');
-		
 		$data['data'] = array();
 		
-		foreach($devices['items'] as $device){
-
-			$data['data'][] = array(
-				$device['code'],
-				$device['zone'],				
-				$device['statusName'],
-				$device['statusValue'],
-				$device['text'],
-				convertTimeZone($device['dateTime'])
-			);			
-		}
+		if($devices){
 				
-		return $data;
+			foreach($devices['items'] as $device){
+	
+				$data['data'][] = array(
+					$device['code'],
+					$device['zone'],				
+					$device['statusName'],
+					$device['statusValue'],
+					$device['text'],
+					convertTimeZone($device['dateTime'])
+				);			
+			}
+				
+			return $data;
+		
+		} else {
+			return $data;
+		}
 
     }	
 

@@ -2,10 +2,10 @@
 /* 
 ==========================================================================================================
 
-	Name: Mdb functions
+	Name: Helper functions
 	Functie: 
 		- Bevat alle core functions die door meerdere pagina's gebruikt worden.	
-	Version: 1.0.6
+	Version: 1.0.7
 	Author:	Roelof Jan van Golen - <r.vangolen@asb.nl>
 
 	Function index:
@@ -35,7 +35,7 @@
 	}
 
 	function getApiCall($url, $request, $data = array()){
-		$token = getApiToken();
+		$token = @getApiToken();
 		$ch = curl_init($url); // INITIALISE CURL
 	
 		$authorization = "Authorization: Bearer ".$token; // **Prepare Autorisation Token**
@@ -53,8 +53,15 @@
 		curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
 		$result = curl_exec($ch);
 		curl_close($ch);
-		$res = json_decode($result, true);	
-		return $res;
+		$res = json_decode($result, true);
+
+		if(!$res){
+			return null;
+		} else {
+			return $res;
+		}
+		
+		
 		//var_dump($res);		
 	}
 
@@ -63,13 +70,13 @@
 		$data = 'test';
 		$options = array(
 			'http' => array(
-				'method'  => 'POST',
+				'method' => 'POST',
 				'header' => "Content-Type:application/json\r\nContent-Length: 0\r\nAuthorization: Basic " . base64_encode(WEB_USER . ":" . WEB_PASS)
 			)
 		);
 		
 		$context = stream_context_create($options);
-		$result = file_get_contents($url, false, $context);	
+		@$result = file_get_contents($url, false, $context);	
 		$obj = json_decode($result);
 	
 		$token = $obj->token;	

@@ -11,7 +11,6 @@ class Site
     function __construct($db_conn, $site_nr = '')
     {
         $this->db_conn = $db_conn;
-        $this->locale  = json_decode(file_get_contents(ROOT_PATH . '/Src/lang/' . APP_LANG . '.json'), true);
         $this->site_nr = preg_replace("/[^0-9]/", "", $site_nr);
         
         $this->date_now_day  = date('Y-m-d H:i:s', strtotime('+24 hours')); // End of current day

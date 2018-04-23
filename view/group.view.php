@@ -1,21 +1,21 @@
 	<?php 		array_push($arr_css, '/css/plugins/dataTables/datatables_responsive.min.css');?>
 	<div class="wrapper wrapper-content animated fadeInRight">
-		<h2 class="m-b-xs"><i class="pe pe-7s-box2 text-warning m-r-xs"></i> Groups</h2>
+		<h2 class="m-b-xs"><i class="pe pe-7s-box2 text-warning m-r-xs"></i> <span data-i18n="[html]groups.title">Groups</span></h2>
 		<div class="row">
 			<div class="col-lg-6">
 				<div class="ibox float-e-margins">
 					<div class="ibox-title">
-						<h5><span>Groups</span> <small></small></h5>
+						<h5><span data-i18n="[html]groups.table.title">Groups</span> <small></small></h5>
 					</div>
 					<div class="ibox-content">
 						<table class="table table-hover jambo_table bulk_action datatable" id="datatable" style="width:100%">
 							<thead>
 								<tr>
-									<th align='left'>GroupID</th>
-									<th align='left'>Group name</th>
-									<th align='left'>Location count</th>
-									<th align='left'>User count</th>
-									<th align='left'></th>
+									<th align='left' data-i18n="[html]groups.table.th1">Group ID</th>
+									<th align='left' data-i18n="[html]groups.table.th2">Group name</th>
+									<th align='left' data-i18n="[html]groups.table.th3">Location count</th>
+									<th align='left' data-i18n="[html]groups.table.th4">User count</th>
+									<th align='left' data-i18n="[html]groups.table.th5">Action</th>
 								</tr>
 							</thead>
 						</table>
@@ -25,7 +25,7 @@
 			<div class="col-lg-6">
 				<div class="ibox float-e-margins">
 					<div class="ibox-title">
-						<h5><span>Modify groups</span> <small></small></h5>
+						<h5><span data-i18n="[html]groups.modify.title">Modify groups</span> <small></small></h5>
 					</div>
 					<div class="ibox-content">
 						<div class="row">
@@ -33,9 +33,9 @@
 							<form id="edit_site_name" name="edit_site_name">
 								
 								<div class="col-md-12">
-									<h5><span>Edit group</span> <small></small></h5>
+									<h5><span data-i18n="[html]groups.edit.title">Edit group</span> <small></small></h5>
 									<div class="form-group">
-										<label class="control-label" for="first-name"><span>Group name</span><font color="red">*</font></label> 
+										<label class="control-label" for="first-name"><span data-i18n="[html]groups.edit.input.1">Group name</span><font color="red">*</font></label> 
 										<input class="form-control" data-i18n="[placeholder]tickets.create.placeholder" name="edit_site_name" type="text">
 									</div>
 								</div>
@@ -45,7 +45,7 @@
 								
 								<div class="col-md-6">
 									<div class="form-group">
-										<button class="btn btn-primary" name="save_button"><i class='fa fa-save fa-fw'></i> <span>Update</span></button>
+										<button class="btn btn-primary" name="save_button"><i class='fa fa-save fa-fw'></i> <span data-i18n="[html]groups.edit.button">Update</span></button>
 									</div>
 								</div>
 							</form>
@@ -53,9 +53,9 @@
 							<div class="col-lg-6">
 								<form id="new_site" name="new_site">
 									<div class="col-md-12">
-										<h5><span>New group</span> <small></small></h5>
+										<h5><span data-i18n="[html]groups.new.title">New group</span> <small></small></h5>
 										<div class="form-group">
-											<label class="control-label" for="first-name"><span>Group name</span><font color="red">*</font></label> 
+											<label class="control-label" for="first-name"><span data-i18n="[html]groups.new.input.1">Group name</span><font color="red">*</font></label> 
 											<input class="form-control" data-i18n="[placeholder]tickets.create.placeholder" name="new_site_name" type="text">
 										</div>
 									</div>
@@ -63,7 +63,7 @@
 									<input name="csrf" type="hidden" value="<?= htmlspecialchars($_SESSION['db_token'], ENT_QUOTES, 'UTF-8');?>">
 									<div class="col-md-6">
 										<div class="form-group">
-											<button class="btn btn-primary" name="save_button"><i class='fa fa-save fa-fw'></i> <span>Save</span></button>
+											<button class="btn btn-primary" name="save_button"><i class='fa fa-save fa-fw'></i> <span data-i18n="[html]groups.new.button">Save</span></button>
 										</div>
 									</div>
 				
@@ -77,7 +77,7 @@
 				<div class="col-md-12">
 					<form class="wizard-big" id="setting_form" name="setting_form">
 						<div class="form-group">
-							<label class="control-label"><span>Select users</span> <font color="red">*</font></label> 
+							<label class="control-label"><span data-i18n="[html]groups.add.title">Select users</span> <font color="red">*</font></label> 
 							<select class="form-control dual_select" id="zones_select" multiple name="add_zones[]">
 							</select>
 						</div>
@@ -85,12 +85,12 @@
 						<input name="csrf" type="hidden" value="<?= htmlspecialchars($_SESSION['db_token'], ENT_QUOTES, 'UTF-8');?>">
 						
 						<div class="form-group">
-							<label class="control-label"><span>Add users to group</span> <font color="red">*</font></label> 
+							<label class="control-label"><span data-i18n="[html]groups.add.input.1">Add users to group</span> <font color="red">*</font></label> 
 							<select class="form-control" id="mySelect" name="select_site">
 							</select>
 						</div>
 						<div class="form-group">
-							<button class="btn btn-primary" name="save_button"><i class='fa fa-save fa-fw'></i> <span>Update</span></button>
+							<button class="btn btn-primary" name="save_button"><i class='fa fa-save fa-fw'></i> <span data-i18n="[html]groups.add.button">Update</span></button>
 						</div>
 					</form>
 				</div>
@@ -175,7 +175,24 @@
     		lengthMenu: [5, 10, 20, 25],
     		processing: true,
     		serverSide: true,
-    		responsive: true
+			responsive: {
+				details: {
+					renderer: function ( api, rowIdx, columns ) {
+						var data = $.map( columns, function ( col, i ) {
+							return col.hidden ?
+								'<tr data-dt-row="'+col.rowIndex+'" data-dt-column="'+col.columnIndex+'">'+
+									'<td>'+col.title+':'+'</td> '+
+									'<td>'+col.data+'</td>'+
+								'</tr>' :
+								'';
+						} ).join('');
+	
+						return data ?
+							$('<table/ width="100%" class="sub_responsive">').append( data ) :
+							false;
+					}
+				}
+			}
     	});
     	
 		var interval;
@@ -206,14 +223,12 @@
     			select_site: {
     				validators: {
     					notEmpty: {
-    						message: 'Het user naam in'
     					}
     				}
     			},
     			add_zones: {
     				validators: {
     					notEmpty: {
-    						message: 'Vul user achternaam in'
     					}
     				}
     			}
@@ -266,7 +281,6 @@
     			new_site_name: {
     				validators: {
     					notEmpty: {
-    						message: 'Vul site naam in'
     					}
     				}
     			}
@@ -321,7 +335,6 @@
     			edit_site_name: {
     				validators: {
     					notEmpty: {
-    						message: 'Vul site naam in'
     					}
     				}
     			}

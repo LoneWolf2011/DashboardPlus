@@ -5,7 +5,7 @@
 					
                     <div class="navbar-form-custom" >
                         <div class="form-group">
-                            <input type="text" class="form-control autocomplete-append site-nr"  id="top_search" placeholder="Search for device" ></input>
+                            <input type="text" class="form-control autocomplete-append site-nr"  id="top_search" data-i18n="[placeholder]layout.topnav.placeholder" ></input>
                         </div>
                     </div>
                 </div>

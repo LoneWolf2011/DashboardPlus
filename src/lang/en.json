@@ -1,195 +1,376 @@
 {
 	"layout":{
 		"topnav":{
-			"logout":"Logout"
+			"placeholder":"Search for device",
+			"logout":"Log out"
 		}
 	},
 	"connection":{
 		"conn": "Connected",
-		"diss": "Dissconnected",
-		"back": "Connected with backup",
-		"nopath": "No pathstatus",		
-		"oos": "Out of service",
-		"main_err": "Mainboard failure",
-		"batt_err": "Battery failure",
-		"230_err": "230v failure",
-		"multi_err": "Multiple issues"		
+		"diss": "Not connected",
+		"back": "Verbonden met backup",
+		"nopath": "No pathstatus",
+		"oos": "In onderhoud tot",
+		"main_err": "Mainboard uitval",
+		"batt_err": "Accu uitval",
+		"230_err": "230v uitval",
+		"multi_err": "Meerdere uitvallen"
 	},
-	"installscreen":{
-		"welcome": "Welcome to DB +",
-		"text": "This is your first time.",
-		"subtext": "Take the time to fill in the details below.",
-		"login": "Install",
-		"phpversion":{
-			"err":"Very low PHP version",
-			"msg":"Version 7.0.0 is a minimum requirement."
+	"error_page":{
+		"return_btn":"Go back",
+		"403":{
+			"label":"Access denied",
+			"msg":"Admin rights are required to access this part. Contact your administrator."			
 		},
-		"admin":{
-			"txt": "Administrator setting",
-			"email": "Enter admin email",
-			"pass": "Enter the administrator password",
-			"local": "Enter Location",
-			"lang": "Select the default language"
+		"404":{
+			"label":"Page not found",
+			"msg":"Sorry, but the page you are looking for does not seem to exsist. Check your page for errors, refresh the page or contact your administrator"			
 		},
-		"scs":{
-			"txt": "SCS Connection",	
-			"user": "User name",	
-			"pass": "Password"
+		"500":{
+			"label":"Internal server error",
+			"msg":"The server encountered something unexpected that prevented the request from being completed. We apologise. You can go back to the main page"			
 		},
-		"rms":{
-			"txt": "RMS Connection"		
+		"denied":{
+			"label":"Access denied",
+			"msg":"Admin rights are required to access this part. Contact your administrator."			
+		},
+		"maintenance":{
+			"label":"Maintenance",
+			"msg":"Please wait patiently"			
+		}		
+	},	
+	"error_msg":{			
+		"die":{
+			"label":"Something definitely went wrong",
+			"msg":"Check the log files!"		
+		},
+		"csrf":{
+			"label":"CSRF token not valid",
+			"msg":"Check the browser URL and refresh the page"
 		}		
 	},
-	"loginscreen":{
-		"welcome": "Welcome to DB +",
-		"text": "An enhanced experience for managing RMS and SCS.",
-		"subtext": "Please login. To see it in action.",		
-		"login": "Log in",
-		"request": "Order",
-		"forget": "Forgot password?"	
+	"installscreen":{
+		"welcome": "Welkom bij ",
+		"text": "Dit is je eerste keer.",
+		"subtext": "Neem de tijd om de onderstaande gegevens in te vullen.",		
+		"login": "Installeer",
+		"phpversion":{
+			"err":"PHP versie te laag",
+			"msg":"Versie 7.0.0 is minimaal vereist."
+		},		
+		"admin":{
+			"txt": "Administrator instelling",
+			"email": "Voer admin emailadres in",
+			"pass": "Voer admin wachtwoord in",
+			"local": "Selecteer locatie",
+			"lang": "Selecteer de standaard taal",
+			"msg":{
+				"user": "Admin gebruikersnaam",
+				"pass": "Eenmalig wachtwoord",
+				"store": "Noteer bovenstaande wachtwoord op een veilige plaats"
+			}
+		},
+		"app":{
+			"txt": "Applicatie instelling",
+			"root": "URL root",
+			"docu": "Root folder",
+			"api": "Google API key"
+		},		
+		"scs":{
+			"txt": "SCS connectie",	
+			"user": "Gebruikersnaam",	
+			"pass": "Wachtwoord"
+		},
+		"rms":{
+			"txt": "RMS connectie"
+		},
+		"msg":{
+			"fail": "Installatie niet succesvol",
+			"try": "Probeer opnieuw",
+			"suc": "Installatie succesvol"
+		}
 	},
+	"loginscreen":{
+		"welcome": "Welcome to",
+		"text": "Mist generator dashboard.",
+		"subtext": "Please login to see it in action.",
+		"login": "Log in",
+		"request": "Request",
+		"forget": "Forgot password"	
+	},
+	"tokenmsg":{
+		"welcome": "Recover password",
+		"text": "Click the recover button",
+		"button": "Recover"
+	},	
 	"loginmsg":{
-		"failed":"Authentication failed.",
-		"blocked":"Account locked",
-		"success":"Successful",
-		"lck": "for 2 hours.",
-		"id": "Check your initials or password.",
-		"dev": "Check your initials or password.",
-		"blk": "Check your initials or password.",
-		"uknw": "Check your initials or password.",
+		"lck":{
+			"label":"Account blocked",
+			"msg":"For 2 hours."
+		},
+		"id":{
+			"label":"Verification failed",
+			"msg":"Check your initials or password."
+		},
+		"dev":{
+			"label":"Error",
+			"msg":"No DEV account."
+		},
+		"blc":{
+			"label":"Error",
+			"msg":"User account is blocked. Contact the administrator."
+		},
+		"uknw":{
+			"label":"Error",
+			"msg":"User does not exist."
+		},
 		"tok":{
-			"suc": "reset token request.",
-			"err": "Check your initials or password.",
-			"inv": "Check your initials or password.",
-			"uknw": "Check your initials or password.",
-			"exp": "Check your initials or password."
+			"suc":{
+				"label":"Succesvol",
+				"msg":"Reset token requested."
+			},
+			"err":{
+				"label":"Reset token request failed",
+				"msg":"Mail not sent correctly <br> Request a new token or report this to an admin."
+			},
+			"inv":{
+				"label":"Token is invalid",
+				"msg":"Request a new one or report it to an admin."
+			},
+			"uknw":{
+				"label":"Token not found",
+				"msg":"Request a new one or report it to an admin."
+			},
+			"exp":{
+				"label":"Token expired",
+				"msg":"This is no longer usable. Request a new token."
+			}
 		},
 		"res":{
 			"suc": "Check your initials or password.",
 			"err": "Check your initials or password."
-		}	
+		}		
 	},
 	"home":{
 		"events":{
-			"h5":"Events",
+			"h5":"Locations",
 			"day":{
-				"label":"24h",
-				"small_label":"Since one day"
+				"label":"Active",
+				"small_label":"Sinds een dag"
 			},
 			"week":{
-				"label":"Weekly",
-				"small_label":"Since one week"
+				"label":"Inactive",
+				"small_label":"Sinds een week"
 			},
 			"month":{
-				"label":"Monthly",
-				"small_label":"Since one month"
+				"label":"Maandelijks",
+				"small_label":"Sinds een maand"
 			}				
-		},	
+		},
 		"filters": "Filters",
 		"actions": {
 			"selectdefault": "Default",
 			"text": "Actions",
-			"mapzoom": "Set the zoom level of the map:",
-			"clusterzoom": "Cluster Zoom Level:",
-			"clustersize": "Cluster size:",
-			"mapcontrols": "Map Controls:",
+			"mapzoom": "Set zoom level of map:",
+			"clusterzoom": "Cluster zoom level:",
+			"clustersize": "Cluster zoom size:",
+			"mapcontrols": "Map controls",
 			"buttons": {
-				"clear": "Clear",
+				"clear": "Clear clusters",
 				"refresh": "Refresh",
 				"center": "Center"
 			}	
 		},
 		"locations": {
-			"active":{
+			"active": {
 				"label":"Active locations",
 				"table": {
-					"th1": "Connection",
-					"th2": "ID",
-					"th3": "Location",
-					"th4": "Last seen"
+					"th1": "Device ID",
+					"th2": "Device name",
+					"th3": "Mac address",
+					"th4": "Status",
+					"th5": "Location name"
 				}				
 			},
 			"problem": {
-				"label":"Locations with problems",
+				"label":"Problem locations",
 				"table": {
-					"th1": "Connection",
-					"th2": "ID",
-					"th3": "Location",
-					"th4": "Last seen"
+					"th1": "Device ID",
+					"th2": "Device name",
+					"th3": "Mac address",
+					"th4": "Status"
 				}				
-			},			
+			},
 			"notactive": {
-				"label":"Offline locations",
+				"label":"Geen pathstatus",
 				"table": {
-					"th1": "Connection",
+					"th1": "Connectie",
 					"th2": "ID",
-					"th3": "Location",
-					"th4": "Last seen"
+					"th3": "Locatie",
+					"th4": "Laatste signaal"
 				}				
 			},
 			"device": {
-				"label":"230v / Battery problems",
+				"label":"230v / ACCU storing",
 				"table": {
-					"th1": "Connection",
+					"th1": "Connectie",
 					"th2": "ID",
-					"th3": "Location",
-					"th4": "Last seen"
+					"th3": "Locatie",
+					"th4": "Laatste signaal"
 				}				
 			}			
-
 		}
 	},
+	"devices":{
+		"title":"Devices",
+		"table":{
+			"th1":"Device ID",
+			"th2":"Device IP",
+			"th3":"Device MAC",
+			"th4":"Device name",
+			"th5":"Device location",
+			"th6":"Device status",
+			"th7":"Last signal",
+			"th8":"Actions"
+		},
+		"new":{
+			"title":"New device",
+			"button":"Save",
+			"input":{
+				"1":"Device IP",
+				"2":"Device port nr",
+				"3":"Device MAC address",
+				"4":"Add device to location"
+			}
+		},
+		"add":{
+			"title":"Add device(s) to location",
+			"button":"Update",
+			"input":{
+				"1":"Select location"
+			}		
+		}
+	},	
+	"locations":{
+		"title":"Locations",
+		"table":{
+			"th1":"Location ID",
+			"th2":"Location name",
+			"th3":"Location address",
+			"th4":"Location zipcode",
+			"th5":"Location city",
+			"th6":"Location group",
+			"th7":"Devices count",
+			"th8":"Actions"
+		},
+		"new":{
+			"title":"New Location",
+			"button":"Save",
+			"input":{
+				"1":"Location name",
+				"2":"Location address",
+				"3":"Location zipcode",
+				"4":"Location city",
+				"5":"Select group"
+			}
+		},		
+		"edit":{
+			"title":"Edit Location",
+			"button":"Update",
+			"input":{
+				"1":"Location name",
+				"2":"Location address",
+				"3":"Location zipcode",
+				"4":"Location city",
+				"5":"Select group"
+			}
+		}
+	},
+	"groups":{
+		"title":"Groups",
+		"table":{
+			"th1":"Group ID",
+			"th2":"Group name",
+			"th3":"Location count",
+			"th4":"Users count",
+			"th5":"Actions"
+		},
+		"modify":{
+			"title":"Modify groups"
+		},
+		"new":{
+			"title":"New group",
+			"button":"Save",
+			"input":{
+				"1":"Group name"
+			}
+		},		
+		"edit":{
+			"title":"Edit group",
+			"button":"Update",
+			"input":{
+				"1":"Group name"
+			}
+		},		
+		"add":{
+			"title":"Add users to group",
+			"button":"Update",
+			"input":{
+				"1":"Select group"
+			}
+		}
+	},		
 	"location":{
-		"connection": "Connection",
+		"connection": "Connectie",
 		"status": "Status",
-		"address": "Address",
-		"zipcode": "Zipcode",
-		"city": "City",
-		"first": "First signal",
-		"last": "Last signal",
-		"path": "Path state",
-		"mac": "MAC address",
-		"udid": "UDID number",
-		"serie": "Serial number",
-		"sim": "Sim card number",
-		"serviceid": "ServiceID number",
-		"lijn": "Line name",
+		"address": "Adres",
+		"zipcode": "Postcode",
+		"city": "Stad",
+		"first": "Eerste signaal",
+		"last": "Laatst ontvangen signaal",
+		"path": "Pad status",
+		"mac": "MAC adres",
+		"udid": "IP adres",
+		"serie": "Device naam",
+		"sim": "Simkaart nr",
+		"serviceid": "ServiceID nr",
+		"lijn": "Port nr",
 		"components":{
-			"txt":"Location components",
-			"values":"Location values"
+			"txt":"Locatie componenten",
+			"values":"Locatie waardes"
 		},
 		"values":{
 			"table": {
-				"txt":"Location values",
-				"th1": "Name",
-				"th2": "Value"
+				"txt":"Locatie waardes",
+				"th1": "Naam",
+				"th2": "Waarde"
 			}				
 		},
 		"components":{
 			"table": {
-				"txt":"Location components",
+				"txt":"Location componenten",
 				"th1": "Component",
-				"th2": "Quantity",
-				"th3": "Serial#",
-				"th4": "Date of installation",
-				"th5": "Expiration date"
+				"th2": "Aantal",
+				"th3": "Serie#",
+				"th4": "Installatie datum",
+				"th5": "Verloop datum"
 			}				
 		},		
 		"events":{
 			"week":"Week",
-			"label":"Events this week",
-			"count":"Total events"
+			"label":"Events deze week",
+			"count":"Totaal aantal events"
 		},
 		"tab":{
-			"location":"Location",
-			"update":"Updated",
+			"location":"Device",
+			"update":"Laatst geupdatet",
 			"tab1":{
-				"text":"Connection Status",
-				"h3":"Path state",
-				"path_conn":"Connection",
-				"path_name":"Path",
+				"text":"Connectie status",
+				"h3":"Pad status",
+				"path_conn":"Connectie",
+				"path_name":"Pad",
 				"power":"230 volt",
-				"battery":"Battery"
+				"battery":"Batterij"
 			},
 			"tab2":{
 				"text":"Poll delay",
@@ -202,65 +383,95 @@
 		}	
 	},
 	"admin":{
-		"h1":"Welcome admin",
-		"small":"Please wait"
+		"h1":"Welkom admin",
+		"small":"Even geduld aub"
 	},
 	"user":{
-		"h1":"Welcome to the Control Panel",
-		"subtxt":"An enhanced experience for managing RMS and SCS.",
-		"small":"Please wait"
+		"title":"User",
+		"edit":{
+			"title":"Edit user",
+			"button":"Update",
+			"input":{
+				"1":"User name",
+				"2":"User last name",
+				"3":"User email"
+			}
+		},			
+		"acc_update":{
+			"msg":{
+				"err_email":{
+					"label": "Er ging iets mis",
+					"text": "Dit is geen juist email adres"
+				},
+				"err_email_in_use":{
+					"label": "Er ging iets mis",
+					"text": "Dit email adres is al in gebruik"
+				},				
+				"suc":{
+					"label": "Succes",
+					"text": "User account is geupdatet"
+				},
+				"err":{
+					"label": "Er ging iets mis",
+					"text": "Probeer opnieuw of neem contact op met de administrator"
+				}				
+			}		
+		},	
+		"h1":"Welkom bij het configuratiescherm",
+		"subtxt":"Een verbeterde ervaring voor het beheer van RMS en SCS.",
+		"small":"Even geduld aub"
 	},	
 	"tickets":{
 		"label":"Ticket",
 		"state":{
-			"pending":"Pending",
-			"closed":"Closed"
+			"pending":"In afwachting",
+			"closed":"Gesloten"
 		},
 		"create":{
-			"label":"Create ticket",
+			"label":"Maak een ticket",
 			"placeholder":"Fill in...",
-			"dropdown":"Select...",
-			"txt_scs":"SCS number",
+			"dropdown":"Selecteer...",
+			"txt_scs":"SCS nummer",
 			"txt_service":"Service",
-			"txt_location":"Location",
-			"txt_address":"Address",
-			"txt_zipcode":"Zipcode",
-			"txt_city":"City",
-			"txt_for":"For",
-			"txt_storing":"Defective",
-			"txt_action":"Action",
-			"txt_cp":"Contactperson",
-			"txt_cptel":"Contactperson telephone number",
-			"txt_comment":"Extra Comment"
+			"txt_location":"Locatie",
+			"txt_address":"Adres",
+			"txt_zipcode":"Postcode",
+			"txt_city":"Stad",
+			"txt_for":"Voor",
+			"txt_storing":"Storing",
+			"txt_action":"Actie",
+			"txt_cp":"Contactpersoon",
+			"txt_cptel":"Contactpersoon tel nummer",
+			"txt_comment":"Extra commentaar"
 		},
 		"update":{
-			"placeholder":"Fill in...",		
-			"submitted_by":"Sent by",		
-			"checked_by":"Verified by",	
+			"placeholder":"Vul in...",		
+			"submitted_by":"Aangemaakt door",		
+			"checked_by":"Gecontroleerd door",	
 			"status":"Status",	
 			"updates":"Updates",	
-			"ticket_for":"Ticket for",
+			"ticket_for":"Ticket voor",
 			"create":{
 				"label":"Update ticket",
-				"external":"External ticket number",
-				"up_comm":"Update comment",
+				"external":"Extern ticket nummer",
+				"up_comm":"Update commentaar",
 				"up_status":"Update status"
 			}
 		},
 		"table": {
 			"th1": "Ticket#",
-			"th2": "Location ID",
+			"th2": "Locatie ID",
 			"th3": "Service",
-			"th4": "Last update",
+			"th4": "Laatste update",
 			"th5": "SLA",
 			"th6": "Status"
 		},
 		"buttons":{
-			"send":"Send",
-			"update":"Update"
+			"send":"Verzenden",
+			"update":"Updaten"
 		}
 	},
 	"footer":{
 		"copyright": "Copyright"
-	} 	
+	} 
 }

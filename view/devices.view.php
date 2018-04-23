@@ -1,23 +1,24 @@
 	<?php 		array_push($arr_css, '/css/plugins/dataTables/datatables_responsive.min.css');?>
 	<div class="wrapper wrapper-content animated fadeInRight">
-		<h2 class="m-b-xs"><i class="pe pe-7s-map-marker text-warning m-r-xs"></i> Devices</h2>
+		<h2 class="m-b-xs"><i class="pe pe-7s-map-marker text-warning m-r-xs"></i> <span data-i18n="[html]devices.title">Devices</span></h2>
 		<div class="row">
 			<div class="col-lg-12">
 				<div class="ibox float-e-margins">
 					<div class="ibox-title">
-						<h5><span>Devices</span> <small></small></h5>
+						<h5><span data-i18n="[html]devices.table.title">Devices</span> <small></small></h5>
 					</div>
 					<div class="ibox-content">
 						<table class="table table-hover jambo_table bulk_action datatable" id="datatable" style="width:100%">
 							<thead>
 								<tr>
-									<th align='left'>Device ID</th>
-									<th align='left'>Device IP</th>
-									<th align='left'>Device MAC</th>
-									<th align='left'>Device Name</th>
-									<th align='left'>Device Location</th>
-									<th align='left'>Device Status</th>
-									<th align='left'>Last Signal</th>
+									<th align='left' data-i18n="[html]devices.table.th1">Device ID</th>
+									<th align='left' data-i18n="[html]devices.table.th2">Device IP</th>
+									<th align='left' data-i18n="[html]devices.table.th3">Device MAC</th>
+									<th align='left' data-i18n="[html]devices.table.th4">Device Name</th>
+									<th align='left' data-i18n="[html]devices.table.th5">Device Location</th>
+									<th align='left' data-i18n="[html]devices.table.th6">Device Status</th>
+									<th align='left' data-i18n="[html]devices.table.th7">Last Signal</th>
+									<th align='left' data-i18n="[html]devices.table.th8">Action</th>
 								</tr>
 							</thead>
 						</table>
@@ -26,10 +27,62 @@
 			</div>
 		</div>
 		<div class="row">
-			<div class="col-md-12">
+		
+			<div class="col-lg-6">
+				<div class="ibox float-e-margins">
+					<div class="ibox-title">
+						<h5><span data-i18n="[html]devices.new.title">New location</span> <small></small></h5>
+					</div>
+					<div class="ibox-content">
+						
+						<form id="new_site" name="new_site">
+							<div class="row">
+								<div class="col-md-6">
+									<div class="form-group">
+										<label class="control-label" for="first-name"><span data-i18n="[html]devices.new.input.1">Device IP</span><font color="red">*</font></label> 
+										<input class="form-control" data-i18n="[placeholder]tickets.create.placeholder" name="device_ip" type="text">
+									</div>
+								</div>
+								<div class="col-md-6">
+									<div class="form-group">
+										<label class="control-label" for="first-name"><span data-i18n="[html]devices.new.input.2">Device port nr</span><font color="red">*</font></label> 
+										<input class="form-control" data-i18n="[placeholder]tickets.create.placeholder" name="device_ip_port" type="text">
+									</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-md-6">
+									<div class="form-group">
+										<label class="control-label" for="first-name"><span data-i18n="[html]devices.new.input.3">Device MAC address</span><font color="red">*</font></label> 
+										<input class="form-control" data-i18n="[placeholder]tickets.create.placeholder" name="device_mac" type="text" data-inputmask="'mask': '**:**:**:**:**:**'" >
+									</div>
+								</div>
+								<div class="col-md-6">
+									<div class="form-group">
+										<label class="control-label"><span data-i18n="[html]devices.new.input.4">Add new device to location</span> </label> 
+										<select class="form-control mySelect"  name="select_site">
+										</select>
+									</div>								
+								</div>
+							</div>
+
+							<div class="row">
+								<input name="csrf" type="hidden" value="<?= htmlspecialchars($_SESSION['db_token'], ENT_QUOTES, 'UTF-8');?>">
+								<div class="col-md-6">
+									<div class="form-group">
+										<button class="btn btn-primary" name="save_button"><i class='fa fa-save fa-fw'></i> <span data-i18n="[html]devices.new.button">Save</span></button>
+									</div>
+								</div>
+							</div>
+						</form>
+
+					</div>
+				</div>
+			</div>		
+			<div class="col-md-6">
 				<form class="wizard-big" id="setting_form" name="setting_form">
 					<div class="form-group">
-						<label class="control-label"><span>Select device(s)</span> <font color="red">*</font></label> 
+						<label class="control-label"><span data-i18n="[html]devices.add.title">Select device(s)</span> </label> 
 						<select class="form-control dual_select" id="zones_select" multiple name="add_zones[]">
 						</select>
 					</div>
@@ -37,15 +90,16 @@
 					<input name="csrf" type="hidden" value="<?= htmlspecialchars($_SESSION['db_token'], ENT_QUOTES, 'UTF-8');?>">
 					
 					<div class="form-group">
-						<label class="control-label"><span>Add device to location</span> <font color="red">*</font></label> 
-						<select class="form-control" id="mySelect" name="select_site">
+						<label class="control-label"><span data-i18n="[html]devices.add.input.1">Add device to location</span> <font color="red">*</font></label> 
+						<select class="form-control mySelect" name="select_site">
 						</select>
 					</div>
 					<div class="form-group">
-						<button class="btn btn-primary" name="save_button"><i class='fa fa-save fa-fw'></i> <span>Update</span></button>
+						<button class="btn btn-primary" name="save_button"><i class='fa fa-save fa-fw'></i> <span data-i18n="[html]devices.add.button">Update</span></button>
 					</div>
 				</form>
 			</div>
+		
 		</div>
 
 
@@ -56,6 +110,8 @@
 		// View specific scripts
 		array_push($arr_js, '/js/plugins/dataTables/datatables.min.js');
 		array_push($arr_js, '/js/plugins/dataTables/datatables_responsive.min.js');
+		array_push($arr_js, '/js/plugins/jquery.inputmask/dist/min/jquery.inputmask.bundle.min.js');
+
 		
 	?>		
 	<?php
@@ -66,6 +122,11 @@
 
 	<script>
     $(document).ready(function() {
+		$(":input").inputmask();
+
+		$('input[name=device_mac]').keyup(function(){
+			this.value = this.value.toUpperCase();
+		});		
 		
 		getDevicesSelect();		
 		getLocationSelect();	
@@ -79,7 +140,7 @@
     		swal({
     			html: true,
     			title: "Weet je het zeker?",
-    			text: "De site: <b>" + user_email + "</b> wordt permanent verwijderd!",
+    			text: "Device: <b>" + user_email + "</b> wordt permanent verwijderd!",
     			type: "warning",
     			showCancelButton: true,
     			confirmButtonColor: "#DD6B55",
@@ -101,7 +162,7 @@
     						type: data.type
     					});
     					table_active.ajax.reload(null, false);
-    					getSiteSelect();
+    					getDevicesSelect();
     				}
     			});
     		});
@@ -116,8 +177,9 @@
     		$('input[name="edit_site_city"]').val(data[4]);
     	});
     	
+		// Format ex: nl_NL
 		var lang_code = $('html').attr('lang').toLowerCase() + '_' + $('html').attr('lang').toUpperCase();
-    	
+
 		$.extend(true, $.fn.dataTable.defaults, {
     		language: {
     			url: <?= json_encode(URL_ROOT);?> + '/js/plugins/dataTables/' + $('html').attr('lang') + '.json'
@@ -125,10 +187,27 @@
     		iDisplayLength: 5,
     		deferRender: true,
     		order: [
-    			[0, "desc"]
+    			[6, "desc"]
     		],
     		lengthMenu: [5,10, 20, 25],
-    		responsive: true
+			responsive: {
+				details: {
+					renderer: function ( api, rowIdx, columns ) {
+						var data = $.map( columns, function ( col, i ) {
+							return col.hidden ?
+								'<tr data-dt-row="'+col.rowIndex+'" data-dt-column="'+col.columnIndex+'">'+
+									'<td>'+col.title+':'+'</td> '+
+									'<td>'+col.data+'</td>'+
+								'</tr>' :
+								'';
+						} ).join('');
+	
+						return data ?
+							$('<table/ width="100%" class="sub_responsive">').append( data ) :
+							false;
+					}
+				}
+			}
     	});
     	
 		var interval;
@@ -160,14 +239,12 @@
     			select_site: {
     				validators: {
     					notEmpty: {
-    						message: 'Het user naam in'
     					}
     				}
     			},
     			add_zones: {
     				validators: {
     					notEmpty: {
-    						message: 'Vul user achternaam in'
     					}
     				}
     			}
@@ -218,39 +295,28 @@
     		},
     		locale: lang_code,
     		fields: {
-    			new_site_name: {
+    			device_ip: {
     				validators: {
     					notEmpty: {
-    						message: 'Vul site naam in'
-    					}
+    					},
+    					ip: {
+    					}						
     				}
     			},
-    			new_site_group: {
+    			device_ip_port: {
     				validators: {
     					notEmpty: {
-    						message: 'Selecteer een groep'
+    					},
+    					digits: {
     					}
     				}
     			},				
-    			new_site_address: {
+    			device_mac: {
     				validators: {
     					notEmpty: {
-    						message: 'Vul het site adres in'
-    					}
-    				}
-    			},
-    			new_site_zipcode: {
-    				validators: {
-    					notEmpty: {
-    						message: 'Vul de site postcode in'
-    					}
-    				}
-    			},
-    			new_site_city: {
-    				validators: {
-    					notEmpty: {
-    						message: 'Vul de site stad in'
-    					}
+    					},
+    					mac: {
+    					}						
     				}
     			}
     		}
@@ -275,7 +341,7 @@
     					type: data.type
     				});
     				table_active.ajax.reload(null, false);
-    				getSiteSelect();
+    				getDevicesSelect();
 					$('#new_site').find("input[type=text], textarea").val("");
 					fv.resetForm();
     			},
@@ -304,7 +370,6 @@
     			edit_site_name: {
     				validators: {
     					notEmpty: {
-    						message: 'Vul site naam in'
     					}
     				}
     			},
@@ -312,21 +377,18 @@
     			edit_site_address: {
     				validators: {
     					notEmpty: {
-    						message: 'Vul het site adres in'
     					}
     				}
     			},
     			edit_site_zipcode: {
     				validators: {
     					notEmpty: {
-    						message: 'Vul de site postcode in'
     					}
     				}
     			},
     			edit_site_city: {
     				validators: {
     					notEmpty: {
-    						message: 'Vul de site stad in'
     					}
     				}
     			}
@@ -368,7 +430,8 @@
     			}
     		});
     	});
-    });
+    
+	});
 
     var dual = $('.dual_select').bootstrapDualListbox({
     	selectorMinimalHeight: 160
@@ -382,10 +445,10 @@
     		url: url_str + "?get=locationselect",
     		success: function(data) {
     			if (data.status != 0) {
-    				$('#mySelect').empty();
-					$('#mySelect').append($("<option></option>").attr("value", 0).text('Remove from group'))
+    				$('.mySelect').empty();
+					$('.mySelect').append($("<option></option>").attr("value", 0).text('Remove from location'))
     				$.each(data.get_sites, function(key, value) {
-    					$('#mySelect').append($("<option></option>").attr("value", key).text(value));
+    					$('.mySelect').append($("<option></option>").attr("value", key).text(value));
     				});
     			}
     		}
@@ -410,4 +473,5 @@
     		}
     	});
     }		
+	
 	</script>	

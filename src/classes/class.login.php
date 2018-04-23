@@ -10,7 +10,6 @@ class Login
     function __construct($db_conn)
     {
         $this->db_conn   = $db_conn;
-        $this->locale    = json_decode(file_get_contents(URL_ROOT . '/Src/lang/' . APP_LANG . '.json'), true);
         $this->auth_user = @htmlentities($_SESSION[SES_NAME]['user_email'], ENT_QUOTES, 'UTF-8');
         $this->purifier  = new HTMLPurifier(HTMLPurifier_Config::createDefault());
     }
@@ -226,7 +225,6 @@ class Login
     public function processInstall($post_val)
     {
         $conn = $this->db_conn;
-        $lang = $this->locale;
         
         if (hash_equals($post_val['csrf'], $_SESSION['db_token'])) {
             $env = parse_ini_file($this->env_file, true);
@@ -299,10 +297,10 @@ class Login
                 $admin_arr = $this->createAdmin($post_val);
                 
                 $suc_msg = '<div class="alert alert-success" >';
-                $suc_msg .= '<font color="green"><b data-i18n="[html]installscreen.msg.suc">' . $lang['installscreen']['msg']['suc'] . '</b></font><br>';
-                $suc_msg .= $lang['installscreen']['admin']['msg']['user'] . ': <h2><b>' . $admin_arr['name'] . '</b></h2><br>';
-                $suc_msg .= $lang['installscreen']['admin']['msg']['pass'] . ': <h2><b>' . $admin_arr['pass'] . '</b></h2><br>';
-                $suc_msg .= $lang['installscreen']['admin']['msg']['store'] . '.<br>';
+                $suc_msg .= '<font color="green"><b data-i18n="[html]installscreen.msg.suc">' . LANG['installscreen']['msg']['suc'] . '</b></font><br>';
+                $suc_msg .= LANG['installscreen']['admin']['msg']['user'] . ': <h2><b>' . $admin_arr['name'] . '</b></h2><br>';
+                $suc_msg .= LANG['installscreen']['admin']['msg']['pass'] . ': <h2><b>' . $admin_arr['pass'] . '</b></h2><br>';
+                $suc_msg .= LANG['installscreen']['admin']['msg']['store'] . '.<br>';
                 $suc_msg .= '<a href="' . URL_ROOT . '" class="btn btn-primary">Login</a></div>';
                 
                 $this->succesMessage = $suc_msg;
@@ -311,7 +309,7 @@ class Login
                 $err_lvl             = 0;
                 
             } else {
-                $this->succesMessage = '<div class="alert alert-danger" ><font color="red"><b>' . $lang['installscreen']['msg']['fail'] . '</b></font><br> ' . $lang['installscreen']['msg']['try'] . '.</div>';
+                $this->succesMessage = '<div class="alert alert-danger" ><font color="red"><b>' . LANG['installscreen']['msg']['fail'] . '</b></font><br> ' . LANG['installscreen']['msg']['try'] . '.</div>';
                 
                 $msg     = 'Install unsuccesful admin user: ' . $_POST['admin_email'];
                 $err_lvl = 2;
@@ -627,7 +625,7 @@ class Login
         if (APP_INITIALIZE === 0 && $connected) {
             header("Location: " . URL_ROOT . "/view/install.php");
         } elseif ($user_role == 1 && $connected) {
-            header("location: " . URL_ROOT . "/view/admin/");
+            header("location: " . URL_ROOT . "/view/home/");
         } elseif ($user_role == 2 && $connected) {
             header("location: " . URL_ROOT . "/view/home/");
         } else {

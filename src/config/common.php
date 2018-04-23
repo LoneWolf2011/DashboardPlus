@@ -87,6 +87,9 @@
 		'pass' => SCS_DB_PASS,
 		'db' => SCS_DB_NAME
 	));
+	// Make language file available as variable
+	$lang = json_decode(file_get_contents(URL_ROOT.'/Src/lang/'.APP_LANG.'.json'), true);
+	define('LANG',$lang);
 	
 	// Define RMS conn
 	// define('RMS_DB_HOST', $env['RMS_DB']['HOST']);
@@ -179,6 +182,7 @@
 	
 	session_start();
 	
+	// DB connection with wrapper
 	$db_conn = new SafeMySQL();
 	
 	// Set package const as variable
