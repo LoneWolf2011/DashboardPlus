@@ -22,7 +22,7 @@
 	<link rel='shortcut icon' type='image/x-icon' href='<?= URL_ROOT_IMG; ?>/<?= FAVICON_NAME; ?>' />
 	
     <title><?= APP_TITLE; ?> | <?= PAGE_TITLE;?></title>
-	
+
 	<!-- Mainly CSS -->
 	<?php
 		foreach($arr_css as $css){

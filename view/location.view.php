@@ -67,8 +67,8 @@
 								<div class="col-md-6">
 									<div class="form-group">
 										<label class="control-label" for="first-name"><span data-i18n="[html]locations.edit.input.5">Select group</span></label> 
-										<select class="form-control" name="edit_site_group">
-											<option value="">Select...</option>
+										<select class="select2 form-control" name="edit_site_group">
+											<option ></option>
 											<?php
 												$group = new Group($db_conn);
 												foreach($group->getSelectGroup() as $key => $val){
@@ -143,8 +143,8 @@
 								<div class="col-md-6">
 									<div class="form-group">
 										<label class="control-label" for="first-name"><span data-i18n="[html]locations.new.input.5">Select group</span><font color="red">*</font></label> 
-										<select class="form-control" name="new_site_group">
-											<option value="">Select...</option>
+										<select class="select2 form-control" name="new_site_group">
+											<option></option>
 											<?php
 												$group = new Group($db_conn);
 												foreach($group->getSelectGroup() as $key => $val){
@@ -196,20 +196,26 @@
 
 	<script>
     $(document).ready(function() {
+        $(".select2").select2({
+            placeholder: 'Select...',
+            allowClear: true
+        });			
+		
     	var url_string = $('#url_string').val();
 		
     	$('.datatable').on('click', '#delete', function() {
     		var id = $(this).attr('value');
-    		var user_email = $(this).attr('rel');
+    		var user_email = '<b>'+$(this).attr('rel')+'</b>';
     		var csrf_token = $('input[name="csrf"]').attr('value');
     		swal({
     			html: true,
-    			title: "Weet je het zeker?",
-    			text: "De site: <b>" + user_email + "</b> wordt permanent verwijderd!",
+    			title: i18n.t('swal.confirm.title'),
+    			text: i18n.t('locations.swal.confirm.text', { placeholder: user_email}),
     			type: "warning",
     			showCancelButton: true,
+				cancelButtonText: i18n.t('swal.confirm.cancelbutton'),				
     			confirmButtonColor: "#DD6B55",
-    			confirmButtonText: "Yes, verwijder",
+    			confirmButtonText: i18n.t('swal.confirm.confirmbutton'),
     			closeOnConfirm: false
     		}, function() {
     			$.ajax({

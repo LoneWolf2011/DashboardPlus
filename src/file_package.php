@@ -46,7 +46,6 @@ define('ROOT_CSS', array(
 	'/fonts/font-awesome/css/font-awesome.css',
 	'/css/plugins/c3/c3.min.css',
 	'/css/animate.css',
-	'/css/style-dark.css',
 	'/css/dash_custom-dark.css',
 	'/css/plugins/dataTables/datatables.min.css',
 	'/css/plugins/dataTables/datatables_responsive.min.css',
@@ -55,6 +54,8 @@ define('ROOT_CSS', array(
 	'/css/plugins/sweetalert/sweetalert.css',
 	'/css/plugins/datepicker/datepicker3.css',
 	'/css/plugins/dualListbox/bootstrap-duallistbox.min.css',
+	'/css/plugins/select2/dist/css/select2.min.css',
+	'/css/style-dark.css',	
 ));
 
 define('ROOT_JS', array(
@@ -80,4 +81,5 @@ define('ROOT_JS', array(
 	'/js/plugins/datepicker/bootstrap-datepicker.js',
 	'/js/plugins/datepicker/locales/bootstrap-datepicker.nl.js',
 	'/js/plugins/dualListbox/jquery.bootstrap-duallistbox.js',
+	'/js/plugins/select2/dist/js/select2.js',
 ));

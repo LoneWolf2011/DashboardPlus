@@ -107,7 +107,9 @@ class Device
 		$data['status'] = array();
 		
 		if($device_status){
+			
 			foreach($device_status['parameters'] as $device){
+				// TODO: $device['value'] need to change to $device['oidvalue'] so 0 or 1 can be used to validate
 				if($device['value'] == 'Ok'){
 					$status = '<i class="fa fa-circle text-navy"></i>';
 				} else {

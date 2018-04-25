@@ -5,6 +5,13 @@
 			"logout":"Log out"
 		}
 	},
+	"swal":{
+		"confirm":{
+			"title":"Are you sure?",
+			"confirmbutton":"Yes, i'm sure",
+			"cancelbutton":"Cancel"
+		}
+	},	
 	"connection":{
 		"conn": "Connected",
 		"diss": "Not connected",
@@ -222,6 +229,11 @@
 		}
 	},
 	"devices":{
+		"swal":{
+			"confirm":{
+				"text":"Device: __placeholder__ will be permanently deleted!"
+			}
+		},		
 		"title":"Devices",
 		"table":{
 			"th1":"Device ID",
@@ -252,6 +264,11 @@
 		}
 	},	
 	"locations":{
+		"swal":{
+			"confirm":{
+				"text":"The site: __placeholder__ will be permanently deleted!"
+			}
+		},	
 		"title":"Locations",
 		"table":{
 			"th1":"Location ID",
@@ -287,6 +304,11 @@
 		}
 	},
 	"groups":{
+		"swal":{
+			"confirm":{
+				"text":"The group: __placeholder__ will be permanently deleted!"
+			}
+		},		
 		"title":"Groups",
 		"table":{
 			"th1":"Group ID",
@@ -320,18 +342,18 @@
 			}
 		}
 	},		
-	"location":{
-		"connection": "Connectie",
+	"device":{
+		"connection": "Connection",
 		"status": "Status",
-		"address": "Adres",
-		"zipcode": "Postcode",
-		"city": "Stad",
-		"first": "Eerste signaal",
-		"last": "Laatst ontvangen signaal",
-		"path": "Pad status",
-		"mac": "MAC adres",
-		"udid": "IP adres",
-		"serie": "Device naam",
+		"address": "Address",
+		"zipcode": "Zipcode",
+		"city": "City",
+		"first": "First signal",
+		"last": "Last recieved signal",
+		"path": "Path status",
+		"mac": "MAC address",
+		"udid": "IP address",
+		"serie": "Device name",
 		"sim": "Simkaart nr",
 		"serviceid": "ServiceID nr",
 		"lijn": "Port nr",
@@ -341,9 +363,9 @@
 		},
 		"values":{
 			"table": {
-				"txt":"Locatie waardes",
-				"th1": "Naam",
-				"th2": "Waarde"
+				"txt":"Location device values",
+				"th1": "Name",
+				"th2": "Value"
 			}				
 		},
 		"components":{
@@ -358,15 +380,23 @@
 		},		
 		"events":{
 			"week":"Week",
-			"label":"Events deze week",
-			"count":"Totaal aantal events"
+			"label":"Events this week",
+			"count":"Total events count",
+			"table":{
+				"th1":"Code",
+				"th2":"Zone",
+				"th3":"Status name",
+				"th4":"Status value",
+				"th5":"Text",
+				"th6":"Datetime"
+			}
 		},
 		"tab":{
 			"location":"Device",
-			"update":"Laatst geupdatet",
+			"update":"Last update",
 			"tab1":{
-				"text":"Connectie status",
-				"h3":"Pad status",
+				"text":"Connection status",
+				"h3":"Path status",
 				"path_conn":"Connectie",
 				"path_name":"Pad",
 				"power":"230 volt",
@@ -386,7 +416,7 @@
 		"h1":"Welkom admin",
 		"small":"Even geduld aub"
 	},
-	"user":{
+	"user":{	
 		"title":"User",
 		"edit":{
 			"title":"Edit user",
@@ -420,7 +450,14 @@
 		"h1":"Welkom bij het configuratiescherm",
 		"subtxt":"Een verbeterde ervaring voor het beheer van RMS en SCS.",
 		"small":"Even geduld aub"
-	},	
+	},
+	"users":{
+		"swal":{
+			"confirm":{
+				"text":"The user: __placeholder__ will be permanently deleted!"
+			}
+		}		
+	},
 	"tickets":{
 		"label":"Ticket",
 		"state":{

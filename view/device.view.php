@@ -19,7 +19,7 @@
 						<div class="row">
 							<div class="col-xs-5">
 								<dl class="dl-horizontal">
-									<dt data-i18n="[html]location.connection">Connection:</dt> <dd id="conn_status"></dd>
+									<dt data-i18n="[html]device.connection">Connection:</dt> <dd id="conn_status"></dd>
 								</dl>
 							</div>
 							<div class="col-xs-7" id="cluster_info">
@@ -31,9 +31,9 @@
 							<!--<div class="col-xs-12">
 								<div class="col-lg-12">
 									<dl class="dl-horizontal">					
-										<dt data-i18n="[html]location.address">Address:</dt> <dd id="location_address"></dd>
-										<dt data-i18n="[html]location.zipcode">Postalcode:</dt> <dd id="location_zip"></dd>
-										<dt data-i18n="[html]location.city">City:</dt> <dd id="location_city"></dd>
+										<dt data-i18n="[html]device.address">Address:</dt> <dd id="location_address"></dd>
+										<dt data-i18n="[html]device.zipcode">Postalcode:</dt> <dd id="location_zip"></dd>
+										<dt data-i18n="[html]device.city">City:</dt> <dd id="location_city"></dd>
 									</dl>
 								</div>
 							</div>-->
@@ -41,17 +41,17 @@
 								<div class="col-xs-5">
 									<dl class="dl-horizontal">
 									<dl class="dl-horizontal" >
-										<dt data-i18n="[html]location.mac">MAC:</dt> <dd id="location_mac"> </dd>
-										<dt data-i18n="[html]location.udid">UDID:</dt> <dd id="location_udid"></dd>
-										<dt data-i18n="[html]location.lijn">Line name:</dt> <dd id="location_lijn"></dd>
+										<dt data-i18n="[html]device.mac">MAC:</dt> <dd id="location_mac"> </dd>
+										<dt data-i18n="[html]device.udid">UDID:</dt> <dd id="location_udid"></dd>
+										<dt data-i18n="[html]device.lijn">Line name:</dt> <dd id="location_lijn"></dd>
 									</dl>
 									</dl>
 								</div>
 								<div class="col-xs-7" id="cluster_info">
 									<dl class="dl-horizontal" >
-										<dt data-i18n="[html]location.serie">Serial nr:</dt> <dd id="location_serie"> </dd>
-										<dt data-i18n="[html]location.first">First signal:</dt> <dd id="location_first"> </dd>
-										<dt data-i18n="[html]location.last">Last seen:</dt> <dd id="location_last"></dd>
+										<dt data-i18n="[html]device.serie">Serial nr:</dt> <dd id="location_serie"> </dd>
+										<dt data-i18n="[html]device.first">First signal:</dt> <dd id="location_first"> </dd>
+										<dt data-i18n="[html]device.last">Last seen:</dt> <dd id="location_last"></dd>
 									</dl>				
 								</div>						
 							</div>				
@@ -73,14 +73,14 @@
 					<div class="col-lg-5">
 						<div class="ibox float-e-margins" id="values" >
 							<div class="ibox-title">
-								<h5 data-i18n="[html]location.values.table.txt">Location values</h5>
+								<h5 data-i18n="[html]device.values.table.txt">Location values</h5>
 							</div>
 							<div class="ibox-content">
 								<table class="table table-hover no-margins datatable_values" >
 									<thead>
 									<tr>
-										<th data-i18n="[html]location.values.table.th1">Name</th>
-										<th data-i18n="[html]location.values.table.th2">Value</th>
+										<th data-i18n="[html]device.values.table.th1">Name</th>
+										<th data-i18n="[html]device.values.table.th2">Value</th>
 									</tr>
 									</thead>
 									<tbody id="table_rows"></tbody>
@@ -94,14 +94,14 @@
 							<div class="ibox-content">
 								<div>
 									<span class="pull-right text-right">
-										<span data-i18n="[html]location.tab.location">Location</span>: <b><?= preg_replace("/[^0-9]/","", $_SERVER['QUERY_STRING']); ?></b>
+										<span data-i18n="[html]device.tab.location">Location</span>: <b><?= preg_replace("/[^0-9]/","", $_SERVER['QUERY_STRING']); ?></b>
 										<br/>
-										<span data-i18n="[html]location.events.count">Total event(s)</span>: <b><span id="events_count_week"></span></b>
+										<span data-i18n="[html]device.events.count">Total event(s)</span>: <b><span id="events_count_week"></span></b>
 									</span>
-									<h3 class="font-bold no-margins" data-i18n="[html]location.events.label">
+									<h3 class="font-bold no-margins" data-i18n="[html]device.events.label">
 										Events this week
 									</h3>
-									<small><span data-i18n="[html]location.events.week">Week</span> #<?= date('W');?></small>
+									<small><span data-i18n="[html]device.events.week">Week</span> #<?= date('W');?></small>
 								</div>
 								<div class="m-t-sm">
 					
@@ -110,12 +110,12 @@
 										<table class="table table-hover jambo_table bulk_action datatable">
 											<thead>
 												<tr>
-													<th >Code</th>
-													<th >Zone</th>													
-													<th >Status name</th>
-													<th >Status value</th>
-													<th >Text</th>
-													<th >Datetime</th>
+													<th data-i18n="[html]device.events.table.th1">Code</th>
+													<th data-i18n="[html]device.events.table.th2">Zone</th>													
+													<th data-i18n="[html]device.events.table.th3">Status name</th>
+													<th data-i18n="[html]device.events.table.th4">Status value</th>
+													<th data-i18n="[html]device.events.table.th5">Text</th>
+													<th data-i18n="[html]device.events.table.th6">Datetime</th>
 												</tr>
 											</thead>
 											<tbody><!--JSON RES--></tbody>
@@ -128,7 +128,7 @@
 								<div class="m-t-md">
 									<small class="pull-right">
 										<i class="fa fa-clock-o"> </i>
-										<span data-i18n="[html]location.tab.update">Updated on</span> <?= date('y.m.d H:i:s');?>
+										<span data-i18n="[html]device.tab.update">Updated on</span> <?= date('y.m.d H:i:s');?>
 									</small>
 									<small>
 										<b></b> 
@@ -538,6 +538,7 @@
 			type: 'GET',
 			url: url_str+"?get=status&id="+device_id,
 			success: function(data) {
+				$('#table_rows').empty();
 				$.each(data.status, function(value, val) {
 					$('#table_rows').append($('<tr><td>' + val[0] + '</td><td>' + val[1] +  '</td></tr>'));
 				});				
@@ -548,12 +549,13 @@
 	function sendAction(action){
     	swal({
     		html: true,
-    		title: "Weet je het zeker?",
+    		title: i18n.t('swal.confirm.title'),
     		text: "Execute: <b>" + action + "</b>",
     		type: "warning",
     		showCancelButton: true,
     		confirmButtonColor: "#DD6B55",
-    		confirmButtonText: "Yes, execute",
+			cancelButtonText: i18n.t('swal.confirm.cancelbutton'),
+    		confirmButtonText: i18n.t('swal.confirm.confirmbutton'),
     		closeOnConfirm: false
     	}, function() {
 			$.ajax({
@@ -569,6 +571,7 @@
 					});				
 				}
 			});	
+			getLocationStatus();
     	});		
 
 	}

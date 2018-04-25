@@ -5,6 +5,13 @@
 			"logout":"Uitloggen"
 		}
 	},
+	"swal":{
+		"confirm":{
+			"title":"Weet je het zeker?",
+			"confirmbutton":"Yes, ik weet het zeker",
+			"cancelbutton":"Annuleer"
+		}
+	},		
 	"connection":{
 		"conn": "Verbonden",
 		"diss": "Niet verbonden",
@@ -222,6 +229,11 @@
 		}
 	},
 	"devices":{
+		"swal":{
+			"confirm":{
+				"text":"Device: __placeholder__ wordt permanent verwijderd!"
+			}
+		},	
 		"title":"Devices",
 		"table":{
 			"th1":"Device ID",
@@ -252,6 +264,11 @@
 		}
 	},	
 	"locations":{
+		"swal":{
+			"confirm":{
+				"text":"De site: __placeholder__ wordt permanent verwijderd!"
+			}
+		},	
 		"title":"Locaties",
 		"table":{
 			"th1":"Locatie ID",
@@ -287,6 +304,11 @@
 		}
 	},
 	"groups":{
+		"swal":{
+			"confirm":{
+				"text":"De groep: __placeholder__ wordt permanent verwijderd!"
+			}
+		},	
 		"title":"Groepen",
 		"table":{
 			"th1":"Groep ID",
@@ -320,7 +342,7 @@
 			}
 		}
 	},		
-	"location":{
+	"device":{
 		"connection": "Connectie",
 		"status": "Status",
 		"address": "Adres",
@@ -359,7 +381,15 @@
 		"events":{
 			"week":"Week",
 			"label":"Events deze week",
-			"count":"Totaal aantal events"
+			"count":"Totaal aantal events",
+			"table":{
+				"th1":"Code",
+				"th2":"Zone",
+				"th3":"Status name",
+				"th4":"Status value",
+				"th5":"Text",
+				"th6":"Datetime"
+			}			
 		},
 		"tab":{
 			"location":"Device",
@@ -386,7 +416,7 @@
 		"h1":"Welkom admin",
 		"small":"Even geduld aub"
 	},
-	"user":{
+	"user":{	
 		"title":"Gebruiker",
 		"edit":{
 			"title":"Wijzig gebruiker",
@@ -420,6 +450,13 @@
 		"h1":"Welkom bij het configuratiescherm",
 		"subtxt":"Een verbeterde ervaring voor het beheer van RMS en SCS.",
 		"small":"Even geduld aub"
+	},
+	"users":{
+		"swal":{
+			"confirm":{
+				"text":"De user: __placeholder__ wordt permanent verwijderd!"
+			}
+		}		
 	},	
 	"tickets":{
 		"label":"Ticket",

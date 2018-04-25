@@ -1,4 +1,7 @@
-	<?php 		array_push($arr_css, '/css/plugins/dataTables/datatables_responsive.min.css');?>
+	<?php 		
+		//array_push($arr_css, '/css/plugins/dataTables/datatables_responsive.min.css');
+		array_push($arr_css, '/css/plugins/select2/dist/css/select2.min.css');
+	?>
 	<div class="wrapper wrapper-content animated fadeInRight">
 		<h2 class="m-b-xs"><i class="pe pe-7s-map-marker text-warning m-r-xs"></i> <span data-i18n="[html]devices.title">Devices</span></h2>
 		<div class="row">
@@ -60,7 +63,8 @@
 								<div class="col-md-6">
 									<div class="form-group">
 										<label class="control-label"><span data-i18n="[html]devices.new.input.4">Add new device to location</span> </label> 
-										<select class="form-control mySelect"  name="select_site">
+										<select class="select2 form-control mySelect"  name="select_site">
+											<option>
 										</select>
 									</div>								
 								</div>
@@ -91,7 +95,7 @@
 					
 					<div class="form-group">
 						<label class="control-label"><span data-i18n="[html]devices.add.input.1">Add device to location</span> <font color="red">*</font></label> 
-						<select class="form-control mySelect" name="select_site">
+						<select class="select2 form-control mySelect" name="select_site">
 						</select>
 					</div>
 					<div class="form-group">
@@ -112,7 +116,6 @@
 		array_push($arr_js, '/js/plugins/dataTables/datatables_responsive.min.js');
 		array_push($arr_js, '/js/plugins/jquery.inputmask/dist/min/jquery.inputmask.bundle.min.js');
 
-		
 	?>		
 	<?php
 		foreach($arr_js as $js){
@@ -122,6 +125,11 @@
 
 	<script>
     $(document).ready(function() {
+        $(".select2").select2({
+            placeholder: 'Select...',
+            allowClear: true
+        });		
+		
 		$(":input").inputmask();
 
 		$('input[name=device_mac]').keyup(function(){
@@ -135,16 +143,17 @@
 		
     	$('.datatable').on('click', '#delete', function() {
     		var id = $(this).attr('value');
-    		var user_email = $(this).attr('rel');
+    		var user_email = '<b>'+$(this).attr('rel')+'</b>';
     		var csrf_token = $('input[name="csrf"]').attr('value');
     		swal({
     			html: true,
-    			title: "Weet je het zeker?",
-    			text: "Device: <b>" + user_email + "</b> wordt permanent verwijderd!",
+    			title: i18n.t('swal.confirm.title'),
+    			text: i18n.t('devices.swal.confirm.text', { placeholder: user_email}),
     			type: "warning",
     			showCancelButton: true,
+				cancelButtonText: i18n.t('swal.confirm.cancelbutton'),
     			confirmButtonColor: "#DD6B55",
-    			confirmButtonText: "Yes, verwijder",
+    			confirmButtonText: i18n.t('swal.confirm.confirmbutton'),
     			closeOnConfirm: false
     		}, function() {
     			$.ajax({
@@ -446,7 +455,8 @@
     		success: function(data) {
     			if (data.status != 0) {
     				$('.mySelect').empty();
-					$('.mySelect').append($("<option></option>").attr("value", 0).text('Remove from location'))
+					$('.mySelect').append($("<option></option>"));
+					$('.mySelect').append($("<option></option>").attr("value", 0).text('Remove from location'));
     				$.each(data.get_sites, function(key, value) {
     					$('.mySelect').append($("<option></option>").attr("value", key).text(value));
     				});

@@ -61,7 +61,8 @@
 								<div class="col-md-6">
 									<div class="form-group">
 										<label class="control-label"><span>User role</span><font color="red">*</font></label> 
-										<select class="form-control" name="user_role">
+										<select class="select2 form-control" name="user_role">
+											<option></option>
 											<option value="<?= @$row['user_role'];?>">
 												<?= @$row['user_role'];?>
 											</option>
@@ -80,7 +81,8 @@
 								<div class="col-md-6">
 									<div class="form-group">
 										<label class="control-label"><span>User status</span><font color="red">*</font></label> 
-										<select class="form-control" name="user_status">
+										<select class="select2 form-control" name="user_status">
+											<option></option>
 											<option value="<?= @$row['user_status'];?>">
 												<?= @$row['user_status'];?>
 											</option>
@@ -139,7 +141,8 @@
 								<div class="col-md-6">
 									<div class="form-group">
 										<label class="control-label"><span>User role</span><font color="red">*</font></label> 
-										<select class="form-control" name="user_role">
+										<select class="select2 form-control" name="user_role">
+											<option></option>
 											<option data-i18n="[html]tickets.create.dropdown" value="">
 												Selecteer...
 											</option>
@@ -179,18 +182,24 @@
 	?>	
     <script>
     $(document).ready(function() {
+        $(".select2").select2({
+            placeholder: 'Select...',
+            allowClear: true
+        });
+		
     	$('#datatable').on('click', '#delete', function() {
     		var id = $(this).attr('value');
-    		var user_email = $(this).attr('rel');
+    		var user_email = '<b>'+$(this).attr('rel')+'</b>';
     		var csrf_token = $('input[name="csrf"]').attr('value');
     		swal({
     			html: true,
-    			title: "Weet je het zeker?",
-    			text: "De gebruiker: <b>" + user_email + "</b> wordt permanent verwijderd!",
+    			title: i18n.t('swal.confirm.title'),
+    			text: i18n.t('users.swal.confirm.text', { placeholder: user_email}),
     			type: "warning",
     			showCancelButton: true,
+				cancelButtonText: i18n.t('swal.confirm.cancelbutton'),
     			confirmButtonColor: "#DD6B55",
-    			confirmButtonText: "Yes, verwijder user",
+    			confirmButtonText: i18n.t('swal.confirm.confirmbutton'),
     			closeOnConfirm: false
     		}, function() {
     			$.ajax({

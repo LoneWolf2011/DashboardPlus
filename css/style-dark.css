@@ -2,8 +2,8 @@
 @import url("https://fonts.googleapis.com/css?family=Roboto:400,300,500,700");*/
 /*
  *
- *   INSPINIA - Responsive Admin Theme
- *   version 2.7
+ *   MAIN CSS
+ * 
  *
 */
 h1,
@@ -2226,7 +2226,7 @@ div.dt-button-info {
   color: #ed5565;
 }
 .input-group-addon {
-  background-color: #fff;
+  background-color: #3b3d45;
   border: 1px solid #E5E6E7;
   border-radius: 1px;
   color: inherit;
@@ -3420,22 +3420,53 @@ a.forum-item-title:hover {
   font-size: 26px;
 }
 /* Select2 custom styles */
+.select2-container .select2-selection--single {
+  height: 35px;
+}
 .select2-container--default .select2-selection--single,
 .select2-container--default .select2-selection--multiple {
-  border-color: #e7eaec;
+  color: #949ba2;
+  border-color: #3d404c;
+  background-color: #494b54;
+}
+.select2-container--default .select2-selection--single .select2-selection__rendered {
+  color: #949ba2;
+}
+.select2-container--default .select2-selection--multiple .select2-selection__choice {
+  background-color: #494b54;
+  border-color: #616779;
+}
+.select2-container--default .select2-selection--multiple .select2-selection__choice:hover {
+  background-color: #52555f;
+}
+.select2-container--default .select2-selection--multiple .select2-selection__choice__remove:hover {
+  color: #ffffff;
+}
+.select2-container .select2-selection--single .select2-selection__rendered {
+  padding-top: 2px;
+  padding-left: 10px;
+}
+.select2-container--default .select2-selection--single .select2-selection__arrow {
+  height: 35px;
 }
 .select2-container--default.select2-container--focus .select2-selection--single,
 .select2-container--default.select2-container--focus .select2-selection--multiple {
-  border-color: #1ab394;
+  border-color: #f6a821;
 }
 .select2-container--default .select2-results__option--highlighted[aria-selected] {
-  background-color: #1ab394;
+  background-color: #f6a821;
 }
 .select2-container--default .select2-search--dropdown .select2-search__field {
-  border-color: #e7eaec;
+  border-color: #3d404c;
+  background-color: #34363d;
+}
+.select2-container--default .select2-results__option[aria-selected=true] {
+  background-color: #606370;
+  color: white;
 }
 .select2-dropdown {
-  border-color: #e7eaec;
+  border-color: #3d404c;
+  background-color: #494b54;
 }
 .select2-dropdown input:focus {
   outline: none;
@@ -3443,6 +3474,10 @@ a.forum-item-title:hover {
 .select2-selection {
   outline: none;
 }
+.select2-container--default .select2-results > .select2-results__options {
+  color: #939aa1;
+}
+
 .ui-select-container.ui-select-bootstrap .ui-select-choices-row.active > a {
   background-color: #1ab394;
 }
