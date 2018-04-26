@@ -584,7 +584,7 @@
 			}			
 		}
 		
-		protected function redirectLogin(){
+		public function redirectLogin(){
 			$conn 	= $this->db_conn;
 			// At the top of the page we check to see whether the user is logged in or not 
 			if(empty($_SESSION[SES_NAME])) 

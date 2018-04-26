@@ -22,16 +22,36 @@
 		public function getThreshold($post_val){
 			$conn_scs = $this->db_conn;
 
-			$priority = preg_replace("/[^0-9]/","", $post_val['prio']);
+			$priority 		= preg_replace("/[^0-9]/","", $post_val['prio']);
 			$year 			= date('Y');
 
 			$now_week_no 	= date('W');
 			$past_week_no 	= date('W', strtotime('-24 hours'));
 			
-			$rms_res = $conn_scs->query("SELECT AVG(`Event_First_Action`) AS average, 
-									COUNT(IF(`Event_First_Action` <= '60' ,1,NULL)) AS green, 
-									COUNT(IF((`Event_First_Action` <= '120' AND `Event_First_Action` > '60') ,1,NULL)) AS orange, 
-									COUNT(IF(`Event_First_Action` > '120' ,1,NULL)) AS red FROM 
+			if($priority == 1){
+				$first 	= 30;
+				$second = 60;
+			} else {
+				$first 	= 90;
+				$second = 180;				
+			}
+			
+			if($now_week_no == $past_week_no){
+				$query = "SELECT AVG(`Event_First_Action`) AS average, 
+									COUNT(IF(`Event_First_Action` <= '".$first."' ,1,NULL)) AS green, 
+									COUNT(IF((`Event_First_Action` <= '".$second."' AND `Event_First_Action` > '".$first."') ,1,NULL)) AS orange, 
+									COUNT(IF(`Event_First_Action` > '".$second."' ,1,NULL)) AS red FROM 
+									((SELECT `Event_First_Action` 
+									FROM `events".$year.'_'.$now_week_no."`.`event_received` 
+									WHERE `Event_Priority` =  ".$priority." 
+									AND `Event_First_Action` != -1 
+									ORDER BY DATETIME DESC LIMIT 100) 
+									LIMIT 100) AS First_Action";
+			} else {
+				$query = "SELECT AVG(`Event_First_Action`) AS average, 
+									COUNT(IF(`Event_First_Action` <= '".$first."' ,1,NULL)) AS green, 
+									COUNT(IF((`Event_First_Action` <= '".$second."' AND `Event_First_Action` > '".$first."') ,1,NULL)) AS orange, 
+									COUNT(IF(`Event_First_Action` > '".$second."' ,1,NULL)) AS red FROM 
 									((SELECT `Event_First_Action` 
 									FROM `events".$year.'_'.$now_week_no."`.`event_received` 
 									WHERE `Event_Priority` =  ".$priority." 
@@ -42,7 +62,10 @@
 									WHERE `Event_Priority` =  ".$priority." 
 									AND `Event_First_Action` != -1 
 									ORDER BY DATETIME DESC LIMIT 100) 
-									LIMIT 100) AS First_Action");
+									LIMIT 100) AS First_Action";
+			}
+			
+			$rms_res = $conn_scs->query($query);
 				
 				$green 	= array('green');
 				$orange = array('orange');
