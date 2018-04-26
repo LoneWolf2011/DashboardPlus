@@ -25,6 +25,7 @@ $(document).ready(function () {
 		lng: lang_code
 	}, function (t){
 		$('#i18container').i18n();
+		$('[data-toggle="tooltip"]').tooltip(); 
 	});
 			
     // Add body-small class if window less than 768px

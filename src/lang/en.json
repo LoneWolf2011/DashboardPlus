@@ -3,6 +3,18 @@
 		"topnav":{
 			"placeholder":"Search for device",
 			"logout":"Log out"
+		},
+		"sidebar":{
+			"title":{
+				"1":"Home",
+				"2":"Devices",
+				"3":"Locations",
+				"4":"Groups",
+				"5":"User",
+				"6":"Users",
+				"7":"Logging",
+				"8":"Settings"
+			}
 		}
 	},
 	"swal":{
