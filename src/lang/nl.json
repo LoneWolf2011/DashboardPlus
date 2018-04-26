@@ -3,6 +3,18 @@
 		"topnav":{
 			"placeholder":"Zoek naar device",
 			"logout":"Uitloggen"
+		},
+		"sidebar":{
+			"title":{
+				"1":"Home",
+				"2":"Devices",
+				"3":"Locaties",
+				"4":"Groepen",
+				"5":"Gebruiker",
+				"6":"Gebruikers",
+				"7":"Logging",
+				"8":"Instellingen"
+			}
 		}
 	},
 	"swal":{
