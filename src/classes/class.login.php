@@ -615,7 +615,7 @@
 			if(APP_INITIALIZE === 0 && $connected){
 				header("Location: ".URL_ROOT."/view/install.php"); 
 			} elseif($user_role == 1 && $connected){
-				header("location: ".URL_ROOT."/view/admin/");
+				header("location: ".URL_ROOT."/view/home/");
 			} elseif($user_role == 2 && $connected) {
 				header("location: ".URL_ROOT."/view/home/");
 			} else {

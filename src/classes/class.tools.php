@@ -78,8 +78,11 @@ class Tools {
 			$orange = array('orange');
 			$red 	= array('red');
 			$avg 	= array();
-			while ($row = $conn_scs->fetch($rms_res)) {			
-				$green[]		= $row['green'];				
+			while ($row = $conn_scs->fetch($rms_res)) {	
+				if($row['green'] == 0 && $row['orange'] == 0 && $row['red'] ==0){
+					$full = 10;
+				}
+				$green[]		= $full;				
 				$orange[]		= $row['orange'];				
 				$red[]			= $row['red'];											
 				$avg			= $row['average'];											
@@ -307,7 +310,7 @@ class Tools {
 				'status'	=> 1,
 				'signal'	=> $signal,
 				'groups'	=> $groups,
-				'q'	=> $query
+				//'q'	=> $query
 				
 			);
 		} else {

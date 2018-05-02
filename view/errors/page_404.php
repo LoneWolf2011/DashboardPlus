@@ -19,7 +19,7 @@
 
 </head>
 
-<body class="dark-bg"  id="i18container">
+<body class="gray-bg"  id="i18container">
 
 
     <div class="middle-box text-center animated fadeInDown">

@@ -84,7 +84,11 @@
 		'pass' 	=> SCS_DB_PASS, 
 		'db' 	=> SCS_DB_NAME
 	));
-		
+
+	// Make language file available as variable
+	$lang = json_decode(file_get_contents(URL_ROOT.'/Src/lang/'.APP_LANG.'.json'), true);
+	define('LANG',$lang);
+	
 	// Include file router
 	require ROOT_PATH.'/Src/file_package.php';
 	
@@ -136,9 +140,13 @@
     } 
 	
     // Set header content
-    header('Content-Type: text/html; charset=UTF-8'); 
+    header('Content-Type: text/html; charset=UTF-8');
+	
     // Start session
 	session_start(); 
+	
+	// DB connection with wrapper
+	$db_conn = new SafeMySQL();	
 	
 	// Set package const as variable
 	$arr_css 	= ROOT_CSS;
