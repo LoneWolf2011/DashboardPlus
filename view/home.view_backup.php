@@ -225,7 +225,7 @@
 		// View specific scripts
 		array_push($arr_js, '/js/plugins/sparkline/jquery.sparkline.min.js');
 		array_push($arr_js, '/js/plugins/dataTables/datatables.min.js');
-		array_push($arr_js, '/js/google_style_dark.js');
+		array_push($arr_js, '/js/maps_style_dark.js');
 		
 	?>
 	<?php
@@ -458,8 +458,8 @@
 	map = new google.maps.Map(document.getElementById('map'), {
 		center: center,
 		zoom: 8, 
-		// Default map overlay
-        // mapTypeId: "OSM", 
+		// OPEN STREET MAP
+        mapTypeId: "OSM",
         mapTypeControlOptions: {
             mapTypeIds: mapTypeIds
         },			

@@ -2,20 +2,21 @@
 /* 
 ==========================================================================================================
 
-	Name: Common file
-	Functie: 
-			
-	Version: 1.0.8
+	Name: Main config file
 	Author:	Roelof Jan van Golen - <r.vangolen@asb.nl>
 
 ==========================================================================================================
 */	
-	//define('ROOT_PATH', $_SERVER["DOCUMENT_ROOT"]);
+	// Define environment array
 	$content = file_get_contents($_SERVER["DOCUMENT_ROOT"].'/mdb/env.ini');
 	$env = parse_ini_string($content, true);	
-	//$env = parse_ini_file($_SERVER["DOCUMENT_ROOT"].'/antdb/env.ini', true);	
 	
-	// DB connectie for mdb database
+	// Define port monitor array
+	$port_monitor = file_get_contents($_SERVER["DOCUMENT_ROOT"].'/mdb/port_monitor.ini');
+	$port = parse_ini_string($port_monitor, true);	
+	define('PORT_ARR', $port);
+	
+	// Define local DB connection
 	define('DB_HOST', $env['LOCAL_DB']['HOST']);
 	define('DB_USER', $env['LOCAL_DB']['USER']);
 	define('DB_PASS', $env['LOCAL_DB']['PASS']);
@@ -65,6 +66,12 @@
 	// Define SMTP settings
 	define('SMTP_HOST', $env['SMTP']['SMTP_HOST']);
 	define('SMTP_PORT', (int)$env['SMTP']['SMTP_PORT']);
+
+	// Define PORT monitor conn
+	define('PORT_MONITOR_HOST', $env['PORT_MONITOR']['HOST']);
+	define('PORT_MONITOR_USER', $env['PORT_MONITOR']['USER']);
+	define('PORT_MONITOR_PASS', $env['PORT_MONITOR']['PASS']);
+	define('PORT_MONITOR_NAME', $env['PORT_MONITOR']['NAME']);
 	
 	// Define SCS conn
 	define('SCS_DB_HOST', $env['SCS_DB']['HOST']);
@@ -77,19 +84,7 @@
 		'pass' 	=> SCS_DB_PASS, 
 		'db' 	=> SCS_DB_NAME
 	));
-	
-	// Define RMS conn
-	//define('RMS_DB_HOST', $env['RMS_DB']['HOST']);
-	//define('RMS_DB_USER', $env['RMS_DB']['USER']);
-	//define('RMS_DB_PASS', $env['RMS_DB']['PASS']);
-	//define('RMS_DB_NAME', $env['RMS_DB']['NAME']);		
-	//define('RMS_DB_CONN', array(
-	//	'host' 	=> RMS_DB_HOST, 
-	//	'user' 	=> RMS_DB_USER, 
-	//	'pass' 	=> RMS_DB_PASS, 
-	//	'db' 	=> RMS_DB_NAME
-	//));
-	
+		
 	// Include file router
 	require ROOT_PATH.'/Src/file_package.php';
 	
