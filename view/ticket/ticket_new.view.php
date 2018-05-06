@@ -180,7 +180,7 @@
 			document.getElementById('storing_wijzigen').innerHTML = '<select name="storing" class="form-control" onchange="Storing(this.value)" ><option value="">Selecteer...</option>	<option value="Geen lijnsync">Geen lijnsync</option><option value="GPRS uitval">GPRS uitval</option>	<option value="RAM uitval">RAM uitval</option>	<option value="ACCU uitval">ACCU uitval</option>	<option value="Voeding uitval">Voeding uitval</option>	<option value="Router uitval">Router uitval</option>	<option value="NVR comm uitval">NVR comm uitval</option>	<option value="Totale uitval">Totale uitval</option><option value="anders">Anders</option>	</select></div>',
 			clear.style.display='none';
 		});
-	
+		var url_str = $('#url_string').val();
 		var lang_code = $('html').attr('lang').toLowerCase()+'_'+$('html').attr('lang').toUpperCase();
 		var button;
 		$('button[name="save_button"]').click(function() {

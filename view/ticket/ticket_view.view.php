@@ -80,9 +80,9 @@
 						
 						<div class="form-group" >
 							<label class="control-label"><span >Update status:</span><font color='red'>*</font></label>
-							<select class="form-control selectpicker"  name="status_update" >
+							<select class="select2 form-control selectpicker"  name="status_update" >
+								<optgroup label="Huidige status..."></option>
 								<option value="<?=  $row['ticket_status'];?>"> <?=  $row['ticket_status'];?> </option>
-								<option data-i18n="[html]tickets.create.dropdown">  </option>
 								<optgroup label="Ticket opties..."></option>
 								<option value="Open">Open</option>
 								<option value="On hold">On hold</option>
@@ -247,6 +247,9 @@
 	};
 	
     $(document).ready(function() {
+		
+		var url_str = $('#url_string').val();
+		
 		loadInfo();
 		loadUpdates();
 	

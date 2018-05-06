@@ -2,20 +2,21 @@
 /* 
 ==========================================================================================================
 
-	Name: Common file
-	Functie: 
-			
-	Version: 1.0.8
+	Name: Main config file
 	Author:	Roelof Jan van Golen - <r.vangolen@asb.nl>
 
 ==========================================================================================================
 */	
-	//define('ROOT_PATH', $_SERVER["DOCUMENT_ROOT"]);
+	// Define environment array
 	$content = file_get_contents($_SERVER["DOCUMENT_ROOT"].'/mdb/env.ini');
 	$env = parse_ini_string($content, true);	
-	//$env = parse_ini_file($_SERVER["DOCUMENT_ROOT"].'/antdb/env.ini', true);	
 	
-	// DB connectie for mdb database
+	// Define port monitor array
+	$port_monitor = file_get_contents($_SERVER["DOCUMENT_ROOT"].'/mdb/port_monitor.ini');
+	$port = parse_ini_string($port_monitor, true);	
+	define('PORT_ARR', $port);
+	
+	// Define local DB connection
 	define('DB_HOST', $env['LOCAL_DB']['HOST']);
 	define('DB_USER', $env['LOCAL_DB']['USER']);
 	define('DB_PASS', $env['LOCAL_DB']['PASS']);
@@ -36,6 +37,8 @@
     $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION); 
     $db->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC); 
 	
+	define('LOGO_NAME', $env['APP']['LOGO_NAME']);
+	define('FAVICON_NAME', $env['APP']['FAVICON_NAME']);
 	define('URL_ROOT', $env['APP']['URL_ROOT']);
 	//define('URL_ROOT_OTAP', getSetting($db, 'URL_ROOT_OTAP'));
 	define('URL_ROOT_IMG', $env['APP']['URL_ROOT_IMG']);
@@ -59,10 +62,22 @@
 	define('GROUPED_EVENTS', $env['EVENTS']['GROUPED_EVENTS']);
 	define('GROUPED_EVENTS_WARNING', $env['EVENTS']['GROUPED_EVENTS_WARNING']);
 	define('GROUPED_EVENTS_DANGER', $env['EVENTS']['GROUPED_EVENTS_DANGER']);
+
+	// Define maps grouped threshold
+	define('ENABLE_GROUPED_LOCATIONS', $env['MAPS']['ENABLE_GROUPED_LOCATIONS']);
+	define('GROUPED_LOCATIONS', $env['MAPS']['GROUPED_LOCATIONS']);
+	define('GROUPED_LOCATIONS_WARNING', $env['MAPS']['GROUPED_LOCATIONS_WARNING']);
+	define('GROUPED_LOCATIONS_DANGER', $env['MAPS']['GROUPED_LOCATIONS_DANGER']);
 	
 	// Define SMTP settings
 	define('SMTP_HOST', $env['SMTP']['SMTP_HOST']);
 	define('SMTP_PORT', (int)$env['SMTP']['SMTP_PORT']);
+
+	// Define PORT monitor conn
+	define('PORT_MONITOR_HOST', $env['PORT_MONITOR']['HOST']);
+	define('PORT_MONITOR_USER', $env['PORT_MONITOR']['USER']);
+	define('PORT_MONITOR_PASS', $env['PORT_MONITOR']['PASS']);
+	define('PORT_MONITOR_NAME', $env['PORT_MONITOR']['NAME']);
 	
 	// Define SCS conn
 	define('SCS_DB_HOST', $env['SCS_DB']['HOST']);
@@ -75,18 +90,10 @@
 		'pass' 	=> SCS_DB_PASS, 
 		'db' 	=> SCS_DB_NAME
 	));
-	
-	// Define RMS conn
-	//define('RMS_DB_HOST', $env['RMS_DB']['HOST']);
-	//define('RMS_DB_USER', $env['RMS_DB']['USER']);
-	//define('RMS_DB_PASS', $env['RMS_DB']['PASS']);
-	//define('RMS_DB_NAME', $env['RMS_DB']['NAME']);		
-	//define('RMS_DB_CONN', array(
-	//	'host' 	=> RMS_DB_HOST, 
-	//	'user' 	=> RMS_DB_USER, 
-	//	'pass' 	=> RMS_DB_PASS, 
-	//	'db' 	=> RMS_DB_NAME
-	//));
+
+	// Make language file available as variable
+	$lang = json_decode(file_get_contents(URL_ROOT.'/Src/lang/'.APP_LANG.'.json'), true);
+	define('LANG',$lang);
 	
 	// Include file router
 	require ROOT_PATH.'/Src/file_package.php';
@@ -116,6 +123,25 @@
 		return $row[strtolower($setting_name)];
 	}
 	
+	function getClasses($path)
+	{
+		$class_arr = array();
+		$scanned_directory = array_diff(scandir($path) , array(
+			'..',
+			'.'
+		));
+		foreach($scanned_directory as $file) {
+			$file_name = substr($file, strpos($file, ".") + 1);
+			$file_key = substr($file_name, 0, strpos($file_name, "."));
+	
+			// echo $variable.'<br />';
+	
+			$class_arr[strtolower($file_key) ] = '/src/classes/' . $file;
+		}
+	
+		return $class_arr;
+	}	
+	
     if(function_exists('get_magic_quotes_gpc') && get_magic_quotes_gpc()) 
     { 
         function undo_magic_quotes_gpc(&$array) 
@@ -139,9 +165,13 @@
     } 
 	
     // Set header content
-    header('Content-Type: text/html; charset=UTF-8'); 
+    header('Content-Type: text/html; charset=UTF-8');
+	
     // Start session
 	session_start(); 
+	
+	// DB connection with wrapper
+	$db_conn = new SafeMySQL();	
 	
 	// Set package const as variable
 	$arr_css 	= ROOT_CSS;
@@ -169,6 +199,7 @@
 		}
 
 		$view_content = preg_replace('{/$}', '.view.php', $view_url);	
+		$view_basename = basename($view_url, '.view.php');		
 	}
 	
 	

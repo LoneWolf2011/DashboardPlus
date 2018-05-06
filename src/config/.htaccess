@@ -1,7 +1,3 @@
 Order Allow,Deny 
 Deny from all 
 
-<FilesMatch "\.(php)$">
-	Order Deny,Allow
-    Allow from all
-</FilesMatch>

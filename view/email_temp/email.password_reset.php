@@ -1,14 +1,37 @@
-<body>
-	<?php include 'email.header.php';?>
+<?php include 'email.header.php';?>
+
+	<!-- BODY -->
+	<tr>
+		<td bgcolor="#ffffff" style="padding: 40px 30px 40px 30px;" >
+			<table border="0" cellpadding="0" cellspacing="0" width="100%">
+				<tr>
+					<td style="color: #153643; font-family: Arial, sans-serif; font-size: 24px;">
+						<b>Beste {{user_name}},</b>
+					</td>
+				</tr>
+				<tr>
+					<td style="padding: 20px 0 30px 0;">
+						De authenticatie token is geverifeerd. Log in met jouw email adres en het onderstaande wachtwoord op {{link}}					
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<table border="0" cellpadding="0" cellspacing="0" width="100%">
+							<tr>
+								<td style="color: #153643; font-family: Arial, sans-serif; font-size: 24px;">
+									<b>Wachtwoord:</b>
+								</td>
+								<td width="350" valign="top">
+									{{gen_password}}
+								</td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+
+			</table>
+		</td>
+	</tr>
+	<!-- / BODY -->
 	
-		<!-- email body -->
-		<tr><td colspan='2'>Beste {{user_name}},</td></tr>
-		<tr><td colspan='2'> </td></tr>
-		<tr><td colspan='2'>De authenticatie token is geverifeerd. <br></td></tr>
-		<tr><td colspan='2'>Login met jouw gebruikersnaam en het onderstaande wachtwoord op {{link}}</td></tr>
-		<th style='border-bottom: 1px solid #ffb300; background: #eee;' colspan='3' align='left'>User</th>		
-		<tr><td><b>Nieuw wachtwoord</b> </td><td>{{gen_password}}</td></tr>	
-		<!-- / email body -->
-		
-	<?php include 'email.footer.php';?>
-</body>
+<?php include 'email.footer.php';?>

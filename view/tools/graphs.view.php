@@ -171,9 +171,9 @@
 							type: 'pie'						
 						});
 						piechart1.data.names({
-							green: 'Binnen 60 sec', 
-							orange: 'Binnen 120 sec', 
-							red: 'Meer dan 120 sec'
+							green: 'Binnen 30 sec', 
+							orange: 'Binnen 60 sec', 
+							red: 'Meer dan 60 sec'
 						});
 					}
 					
@@ -193,9 +193,9 @@
 							type: 'pie'						
 						});
 						piechart2.data.names({
-							green: 'Binnen 120 sec', 
-							orange: 'Binnen 240 sec', 
-							red: 'Meer dan 240 sec'
+							green: 'Binnen 90 sec', 
+							orange: 'Binnen 180 sec', 
+							red: 'Meer dan 180 sec'
 						});
 					}					
 				} else {

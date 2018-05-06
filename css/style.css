@@ -1284,19 +1284,19 @@ button.dim:active:before {
 }
 /* TOOLTIPS */
 .tooltip-inner {
-  background-color: #2F4050;
+  background-color: #19aa8d;
 }
 .tooltip.top .tooltip-arrow {
-  border-top-color: #2F4050;
+  border-top-color: #19aa8d;
 }
 .tooltip.right .tooltip-arrow {
-  border-right-color: #2F4050;
+  border-right-color: #19aa8d;
 }
 .tooltip.bottom .tooltip-arrow {
-  border-bottom-color: #2F4050;
+  border-bottom-color: #19aa8d;
 }
 .tooltip.left .tooltip-arrow {
-  border-left-color: #2F4050;
+  border-left-color: #19aa8d;
 }
 /* EASY PIE CHART*/
 .easypiechart {
@@ -3176,6 +3176,10 @@ a.forum-item-title:hover {
   font-size: 26px;
 }
 /* Select2 custom styles */
+.select2-container .select2-selection--single {
+  height: 35px;
+  border-radius: 1px;
+}
 .select2-container--default .select2-selection--single,
 .select2-container--default .select2-selection--multiple {
   border-color: #e7eaec;
@@ -3189,6 +3193,13 @@ a.forum-item-title:hover {
 }
 .select2-container--default .select2-search--dropdown .select2-search__field {
   border-color: #e7eaec;
+}
+.select2-container--default .select2-selection--single .select2-selection__arrow {
+  height: 35px;
+}
+.select2-container .select2-selection--single .select2-selection__rendered {
+  padding-top: 2px;
+  padding-left: 10px;
 }
 .select2-dropdown {
   border-color: #e7eaec;

@@ -305,7 +305,6 @@
 	
 	<input type="text" hidden id="url_query" value="<?= $_SERVER['QUERY_STRING']; ?>" />	
 	<input type="text" hidden id="mac_adres"  />	
-	<input type="text" hidden id="url_string" value="<?= URL_ROOT.'/Src/controllers/location.controller.php';?>" />	
 	
 	<?php
 		// View specific scripts

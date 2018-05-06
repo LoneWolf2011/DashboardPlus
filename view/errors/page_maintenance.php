@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="<?= APP_LANG;?>">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <!-- Meta, title, CSS, favicons, etc. -->
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-	<link rel='shortcut icon' type='image/x-icon' href='<?= URL_ROOT_IMG; ?>leaf.ico' />
+	<link rel='shortcut icon' type='image/x-icon' href='<?= URL_ROOT_IMG; ?>/<?= FAVICON_NAME; ?>' />
 	
     <title><?= APP_TITLE;?> | Maintenance</title>
 
@@ -19,7 +19,7 @@
 
   </head>
 
-<body class="gray-bg">
+<body class="gray-bg"  id="i18container">
 <?php
 	$img_arr = array(
 		'<i class="fa fa-fire"></i>', 
@@ -37,12 +37,12 @@
 ?>
     <div class="middle-box text-center animated fadeInDown">
         <h1 style="color: #ECC37C;"><?= getRandomArr($img_arr);?></h1>
-        <h3 class="font-bold">Maintenance bezig</h3>
+        <h3 class="font-bold" data-i18n="[html]error_page.maintenance.label">Maintenance bezig</h3>
 
         <div class="error-desc">
-		   <p>Wacht uit of vraag status na bij de admins.
+		   <p data-i18n="[html]error_page.maintenance.msg">Wacht uit of vraag status na bij de admins.
 			</p>	
-			<a href="<?= URL_ROOT; ?>/login/redirect.php" class='btn btn-primary' >Return to safety</a>			
+			<a href="<?= URL_ROOT; ?>" class='btn btn-primary' data-i18n="[html]error_page.return_btn">Return to safety</a>			
         </div>
     </div>
 

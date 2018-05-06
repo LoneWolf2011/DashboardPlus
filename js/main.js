@@ -1,32 +1,49 @@
 /*
  *
- *   INSPINIA - Responsive Admin Theme
- *   version 2.7
+ *   MAIN js file
  *
  */
 
 $(document).ready(function () {
 	
+    $(".select2").select2({
+        placeholder: 'Select...',
+        allowClear: true
+    });
+		
+	var url = window.location;
+	// Will only work if string in href matches with location
+	$('ul.nav a[href="'+ url +'"]').parent().addClass('active');
+	
+	// Will also work for relative and absolute hrefs
+	$('ul.nav a').filter(function() {
+		return this.href == url;
+	}).parent().addClass('active');	
+		
 	// Set lang code for i18next
 	var lang_code = $('html').attr('lang');
 
 	$.i18n.init({
-		resGetPath: '/antdb/src/lang/__lng__.json',
+		resGetPath: '/mdb/src/lang/__lng__.json',
 		load: 'unspecific',
 		fallbackLng: false,
 		lng: lang_code
 	}, function (t){
 		$('#i18container').i18n();
+		$('[data-toggle="tooltip"]').tooltip(); 		
 	});
 			
     // Add body-small class if window less than 768px
     if ($(this).width() < 769) {
         $('body').addClass('body-small'),
 		$('body').removeClass('mini-navbar'),
-		$('menu_bar').removeClass('hidden')
+		$('#menu_bar').removeClass('hidden'),
+		$('#log_out_span').addClass('hidden')
     } else {
+		$('body').addClass('mini-navbar'),
         $('body').removeClass('body-small'),
-		$('menu_bar').addClass('hidden')
+		$('#menu_bar').addClass('hidden'),
+		$('#log_out_span').removeClass('hidden')
     }
 
     // MetsiMenu
@@ -192,11 +209,14 @@ $(window).bind("resize", function () {
     if ($(this).width() < 769) {
         $('body').addClass('body-small'),
 		$('body').removeClass('mini-navbar'),
-		$('menu_bar').removeClass('hidden')
+		$('#menu_bar').removeClass('hidden'),
+		$('#log_out_span').addClass('hidden')
     } else {
+		$('body').addClass('mini-navbar'),
         $('body').removeClass('body-small'),
-		$('menu_bar').addClass('hidden')
-    }
+		$('#menu_bar').addClass('hidden'),
+		$('#log_out_span').removeClass('hidden')
+	}
 });
 
 // Local Storage functions

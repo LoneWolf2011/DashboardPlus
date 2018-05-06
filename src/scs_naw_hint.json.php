@@ -4,15 +4,15 @@
 	$scs_db_conn = new SafeMySQL(SCS_DB_CONN);	
 	
 	//retrieve the search term and strip and clean input
-	$term = trim(strip_tags($_GET['query']));
+	$term = '%'.trim(strip_tags($_GET['query'])).'%';
 	
 	//query the database for entries containing the term
 	$query = $scs_db_conn->query("SELECT SCS_Account_Nmbr FROM `scs_account_address` 
 		WHERE 
 			SCS_Account_Address_Type = 1 AND 
-			SCS_Account_Nmbr LIKE '%".$term."%' OR 
-			SCS_Account_Address_Name LIKE '%".$term."%' AND SCS_Account_Address_Type = 1 
-		LIMIT 10");
+			SCS_Account_Nmbr LIKE ?s OR 
+			SCS_Account_Address_Name LIKE ?s AND SCS_Account_Address_Type = 1 
+		LIMIT 10",$term,$term);
 
 	//array to return
 	//$reply 				= array();

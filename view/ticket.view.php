@@ -11,7 +11,7 @@
 
 						<div class="row">
 							<div class="col-md-2 col-sm-12 col-xs-12 form-group">				  
-								<select id="filter_dienst" class="selectpicker form-control" data-hide-disabled="true" data-live-search="true" data-size="10" data-width="100%" title="Maak een keuze">
+								<select id="filter_dienst" class="select2 form-control" data-hide-disabled="true" data-live-search="true" data-size="10" data-width="100%" title="Maak een keuze">
 									<option value="">Dienst (All)</option>
 									<option value="Brand">Brand</option>
 									<option value="ING">ING</option>
@@ -20,7 +20,7 @@
 								</select>
 							</div>
 							<div class="col-md-2 col-sm-12 col-xs-12 form-group">	
-								<select id="filter_extern" class="selectpicker form-control" data-hide-disabled="true" data-live-search="true" data-size="10" data-width="100%" title="Maak een keuze">
+								<select id="filter_extern" class="select2 form-control" data-hide-disabled="true" data-live-search="true" data-size="10" data-width="100%" title="Maak een keuze">
 									<option value="">Bon voor (All)</option>
 									<option value="ASB">ASB</option>
 									<option value="ACCI">ACCI</option>
@@ -29,7 +29,7 @@
 								</select>
 							</div>
 							<div class="col-md-2 col-sm-12 col-xs-12 form-group">	
-								<select id="filter_status" class="selectpicker form-control" data-hide-disabled="true" data-live-search="true" data-size="10" data-width="100%" title="Maak een keuze">
+								<select id="filter_status" class="select2 form-control" data-hide-disabled="true" data-live-search="true" data-size="10" data-width="100%" title="Maak een keuze">
 									<option value="">Status (All)</option>
 									<option value="Aangevraagd">Aangevraagd</option>
 									<option value="Open">Open</option>
@@ -47,14 +47,14 @@
 							<thead>
 								<th data-i18n="[html]tickets.table.th1">TicketID</th>
 								<th data-i18n="[html]tickets.table.th2">LocationID</th>
-								<th align='left'>Locatie</th>
-								<th align='left'>ServiceID</th>
-								<th align='left'>Dienst</th>
-								<th align='left'>Bon voor</th>
-								<th align='left'>Storing</th>
-								<th align='left'>Ticketnr</th>
-								<th align='left'>Aangemaakt op</th>
-								<th data-i18n="[html]tickets.table.th6">Status</th>
+								<th data-i18n="[html]tickets.table.th3">Locatie</th>
+								<th data-i18n="[html]tickets.table.th4">ServiceID</th>
+								<th data-i18n="[html]tickets.table.th5">Dienst</th>
+								<th data-i18n="[html]tickets.table.th6">Bon voor</th>
+								<th data-i18n="[html]tickets.table.th7">Storing</th>
+								<th data-i18n="[html]tickets.table.th8">Ticketnr</th>
+								<th data-i18n="[html]tickets.table.th9">Aangemaakt op</th>
+								<th data-i18n="[html]tickets.table.th10">Status</th>
 							</thead>
 						</table>
 
@@ -78,6 +78,7 @@
 	?>	
     <script>
     $(document).ready(function() {
+		var url_str = $('#url_string').val();
 		var lang_code = $('html').attr('lang');
 		$.extend( true, $.fn.dataTable.defaults, {
 			language: {
@@ -123,7 +124,7 @@
 		
 		var interval;
 		var table_active = $("#datatable-all").DataTable({	
-			ajax: <?= json_encode(URL_ROOT);?>+"/Src/controllers/ticket.controller.php?soort=all",
+			ajax: url_str+'?soort=all',
 	
 			fnInitComplete: function(oSettings, json) {
 				$('#ibox1').children('.ibox-content').toggleClass('sk-loading');

@@ -2,6 +2,7 @@ src/statusjob/WinSCP/
 
 *.csv
 env.ini
+port_monitor.ini
 src/statusjob/import_into_db.php
 
 *.log
@@ -9,8 +10,9 @@ src/statusjob/import_into_db.php
 
 test/index.php
 test/*
-port_monitor.ini
+
 .idea/Mdb.iml
 .idea/vcs.xml
 .idea/modules.xml
 .idea/workspace.xml
+
