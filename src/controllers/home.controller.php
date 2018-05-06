@@ -9,6 +9,11 @@
 				// Get all = true
 				$obj->getMarkers(true);
 			};
+			
+			if(isset($_GET['div'])){
+				$obj->getMarkersDiv($_GET['time']);
+			}
+			// Only get changed locations since $_GET['time']
 			$obj->getMarkers(false,$_GET['time']);
 		}
 		

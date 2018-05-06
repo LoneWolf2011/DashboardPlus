@@ -6,7 +6,7 @@
 	Functie: 
 		- Bevat array met de absolute file locaties.	
 			
-	Version: 1.0.8
+	Version: 1.1.0
 	Author:	Roelof Jan van Golen - <r.vangolen@asb.nl>
 
 ================================================================================
@@ -35,31 +35,21 @@ define('ROOT_FILE', array(
 	),
 	 
 	// Classes
-	'CLASS'			=> array (
-		'safemysql' 		=> '/Src/Classes/class.safemysql.php',
-		'csrf' 				=> '/Src/Classes/class.csrf.php',
-		'ssp_class' 		=> '/Src/Classes/class.datatable.ssp.php',
-		'google' 			=> '/Src/Classes/class.googleHelper.php',
-		'login' 			=> '/Src/Classes/class.login.php',
-		'home' 				=> '/Src/Classes/class.home.php',
-		'location' 			=> '/Src/Classes/class.location.php',
-		'tools' 			=> '/Src/Classes/class.tools.php',	
-		'ticket' 			=> '/Src/Classes/class.ticket.php',	
-		'user' 				=> '/Src/Classes/class.user.php',	
-	)		
+	'CLASS'			=> 	getClasses(ROOT_PATH.'/src/classes/')		
 ));
 
 define('ROOT_CSS', array(
 	'/css/bootstrap.min.css',
 	'/fonts/font-awesome/css/font-awesome.css',
 	'/css/animate.css',
-	'/css/style.css',
 	'/css/plugins/dataTables/datatables.min.css',
 	'/css/plugins/iCheck/custom.css',
 	'/css/plugins/formvalidation/dist/css/formValidation.min.css',
 	'/css/plugins/c3/c3.min.css',
 	'/css/plugins/sweetalert/sweetalert.css',
 	'/css/plugins/datepicker/datepicker3.css',
+	'/css/plugins/select2/dist/css/select2.min.css',
+	'/css/style.css',	
 ));
 
 define('ROOT_JS', array(
@@ -84,4 +74,5 @@ define('ROOT_JS', array(
 	'/js/plugins/autocomplete/dist/jquery.autocomplete.min.js',
 	'/js/plugins/datepicker/bootstrap-datepicker.js',
 	'/js/plugins/datepicker/locales/bootstrap-datepicker.nl.js',
+	'/js/plugins/select2/dist/js/select2.js',	
 ));

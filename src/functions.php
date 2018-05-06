@@ -1,23 +1,25 @@
 <?php
-/* 
+/**
+* Class and Function List:
+* Function list:
+* - setEmailTemplate()
+* - getCategory()
+* - getOutOfService()
+* - getPathStatus()
+* - jsonArr()
+* - genPassSeed()
+* - containsWord()
+* - checkBrute()
+* - appVersionCode()
+* - logToFile()
+* Classes list:
+
 ==========================================================================================================
 
-	Name: Mdb functions
-	Functie: 
-		- Bevat alle core functions die door meerdere pagina's gebruikt worden.	
+	Name: helper functions
 	Version: 1.0.3
 	Author:	Roelof Jan van Golen - <r.vangolen@asb.nl>
 
-	Function index:
-==========================================================================================================
-		setEmailTemplate
-		getCategory
-		getOutOfService
-		getPathStatus
-		containsWord
-		checkBrute
-		appVersionCode
-		logToFile
 ========================================================================================================== */
 
 	function setEmailTemplate($arr_val, $template_name){
@@ -85,7 +87,7 @@
 			$dienst = "IPC_SMC";
 		} elseif($oms == "010274"){
 			$regio = "";
-			$dienst = "IPC";				
+			$dienst = "MusDoNet";				
 		} elseif($oms == "010099"){
 			$regio = "";
 			$dienst = "PAC";						
@@ -97,7 +99,7 @@
 			$dienst = "S&E";
 		} elseif($oms == "010100"){
 			$regio = "";					
-			$dienst = "MIST";
+			$dienst = "SMOKE";
 		} elseif($oms == "010300"){
 			$regio = "";					
 			$dienst = "BNOT";				

@@ -155,19 +155,19 @@
 										<div class="col-sm-4 col-md-4">
 											<span data-i18n="[html]home.actions.mapzoom">Set map zoom level:</span>
 												<select class="form-control m-b" id="zoom_level" >
-												<option value="7" data-i18n="[html]home.actions.selectdefault">Default</option>
-												<option value="8">8</option>
-												<option value="9">9</option>
-												<option value="10">10</option>
-												<option value="11">11</option>
-												<option value="12">12</option>
-												<option value="13">13</option>
-												<option value="14">14</option>
+													<option value="7">Default</option>
+													<option value="8">8</option>
+													<option value="9">9</option>
+													<option value="10">10</option>
+													<option value="11">11</option>
+													<option value="12">12</option>
+													<option value="13">13</option>
+													<option value="14">14</option>
 												</select>
 										</div >																	
 										<div class="col-sm-4 col-md-4">				
 											<span >Filter status:</span>
-												<select class="form-control m-b" id="type" onchange="filterStatus(this.value);">
+												<select class="select2 form-control m-b" id="type" onchange="filterStatus(this.value);">
 													<option value="">All</option>
 													<option value="0">Disconnected</option>
 													<option value="1">Connected</option>
@@ -177,7 +177,7 @@
 										</div >
 										<div class="col-sm-4 col-md-4">				
 											<span >Filter location:</span>
-												<select class="form-control m-b" id="type" onchange="filterLocation(this.value);">
+												<select class="select2 form-control m-b" id="type" onchange="filterLocation(this.value);">
 													<option value="">All</option>
 													<option value="DIGI">Digialarm</option>
 													<option value="Brand">Brand</option>
@@ -206,8 +206,6 @@
 								</div>
 							</div>
 						</div>		
-						<script async defer src="<?= URL_ROOT;?>/js/google.js"></script>
-						<!--<script async defer src="Z:\google.js?sensor=false&key=<?= GOOGLE_API;?>"></script>-->
 
 						<div class="google-map" id="map" style="height:600px;"></div>
 					</div>
@@ -218,8 +216,6 @@
 		</div>
 		
 	</div>
-
-	<input type="text" hidden id="url_string" value="<?= URL_ROOT.'/Src/controllers/home.controller.php';?>" />
 	
 	<?php
 		// View specific scripts
@@ -233,6 +229,9 @@
 			echo '<script src="'.URL_ROOT.$js.'"></script>';
 		}		
 	?>	
+	<script async defer src="https://maps.googleapis.com/maps/api/js?&key=<?= GOOGLE_API;?>&callback=initMap"></script>
+	
+	<!--<script async defer src="<?= URL_ROOT;?>/js/google.js?callback=initMap"></script>-->
 	
     <script>
     $(document).ready(function() {
@@ -419,16 +418,7 @@
 	var map;
 	var markerCluster = null;
 	var infoWindow = null;
-	//var center = {lat: 51.467384, lng: 5.449035};	
-	var center = {lat: <?= json_encode((int)APP_LAT) ;?>, lng: <?= json_encode((int)APP_LNG) ;?>};
-	
-	// Set map zoom level
-    $("#zoom_level").change(function(){
-		var zoom_lvl = parseInt($(this).val(), 10);
-		map.setZoom(zoom_lvl);
-    });	
-	
-	
+			
 	//A repository for markers (and the data from which they were contructed).
 	var locations = {};
 	var locs;
@@ -448,38 +438,45 @@
 			ajaxObj.get(); //Start the get cycle.
 		}, 1000);		
 	}
-	// OPEN STREET MAP
-    var mapTypeIds = [];
-    for(var type in google.maps.MapTypeId) {
-        mapTypeIds.push(google.maps.MapTypeId[type]);
-    }
-    mapTypeIds.push("OSM");	
-			
-	map = new google.maps.Map(document.getElementById('map'), {
-		center: center,
-		zoom: 8, 
-		// Default map overlay
-        // mapTypeId: "OSM", 
-        mapTypeControlOptions: {
-            mapTypeIds: mapTypeIds
-        },			
-		// Style for Google Maps
-		//styles: [{"stylers":[{"hue":"#18a689"},{"visibility":"on"},{"invert_lightness":true},{"saturation":40},{"lightness":10}]}]
-		styles: google_styles
-    });
 
+	// Set map zoom level
+    $("#zoom_level").change(function(){
+		var zoom_lvl = parseInt($(this).val(), 10);
+		map.setZoom(zoom_lvl);
+    });	
+	
+	// Init google maps
+	function initMap(){	
+		// OPEN STREET MAP
+		var mapTypeIds = [];
+		for(var type in google.maps.MapTypeId) {
+			mapTypeIds.push(google.maps.MapTypeId[type]);
+		}
+		mapTypeIds.push("OSM");	
 		
-    map.mapTypes.set("OSM", new google.maps.ImageMapType({
-        getTileUrl: function(coord, zoom) {
-            // See above example if you need smooth wrapping at 180th meridian
-            return "http://tile.openstreetmap.org/" + zoom + "/" + coord.x + "/" + coord.y + ".png";
-        },
-        tileSize: new google.maps.Size(256, 256),
-        name: "OpenStreetMap",
-        maxZoom: 18
-    }));
+		var center = {lat: <?= json_encode((int)APP_LAT) ;?>, lng: <?= json_encode((int)APP_LNG) ;?>};
+		map = new google.maps.Map(document.getElementById('map'), {
+			center: center,
+			zoom: 8, 
+			styles: google_styles,
+			mapTypeControlOptions: {
+				mapTypeIds: mapTypeIds
+			}		
+        });
+
+        map.mapTypes.set("OSM", new google.maps.ImageMapType({
+            getTileUrl: function(coord, zoom) {
+                // See above example if you need smooth wrapping at 180th meridian
+                return "http://tile.openstreetmap.org/" + zoom + "/" + coord.x + "/" + coord.y + ".png";
+            },
+            tileSize: new google.maps.Size(256, 256),
+            name: "OpenStreetMap",
+            maxZoom: 18
+        }));
 		
-	var infowindow = new google.maps.InfoWindow();
+		infowindow = new google.maps.InfoWindow();
+	}
+	
 	//When true, markers for all unreported locs will be removed. 
 	// if false; removal must be specified in json data: scsnr: { remove: true }
 	var auto_remove = false;

@@ -2,8 +2,26 @@
 	"layout":{
 		"topnav":{
 			"logout":"Uitloggen"
-		}
+		},
+		"sidebar":{
+			"title":{
+				"1":"Home",
+				"2":"Tickets",
+				"3":"Tools",
+				"4":"Gebruiker",
+				"5":"Gebruikers",
+				"6":"Logging",
+				"7":"Instellingen"
+			}
+		}		
 	},
+	"swal":{
+		"confirm":{
+			"title":"Weet je het zeker?",
+			"confirmbutton":"Yes, ik weet het zeker",
+			"cancelbutton":"Annuleer"
+		}
+	},	
 	"connection":{
 		"conn": "Verbonden",
 		"diss": "Niet verbonden",
@@ -90,10 +108,14 @@
 		}
 	},
 	"loginscreen":{
-		"welcome": "Welcome bij",
-		"text": "Een verbeterde ervaring voor het beheer van RMS en SCS",
-		"subtext": "Log alstublieft in om het in actie te zien.",
+		"welcome": "Welkom bij",
+		"text": "Een verbeterde ervaring voor het beheer van RMS en SCS.",
+		"subtext": "Log in om het in actie te zien.",
 		"login": "Log in",
+		"placeholder": {
+			"email":"email",
+			"password":"wachtwoord"
+		},		
 		"request": "Request",
 		"forget": "Wachtwoord vergeten"	
 	},
@@ -286,8 +308,22 @@
 		"small":"Even geduld aub"
 	},
 	"user":{
+		"title":"Gebruiker",
+		"edit":{
+			"title":"Edit gebruiker",
+			"button":"Update",
+			"input":{
+				"1":"Gebruikersnaam",
+				"2":"Gebruiker achternaam",
+				"3":"Gebruiker email"
+			}
+		},		
 		"acc_update":{
 			"msg":{
+				"update":{
+					"label": "Succes",
+					"text": "succesvol geupdatet"
+				},			
 				"err_email":{
 					"label": "Er ging iets mis",
 					"text": "Dit is geen juist email adres"
@@ -305,11 +341,76 @@
 					"text": "Probeer opnieuw of neem contact op met de administrator"
 				}				
 			}		
-		},	
-		"h1":"Welkom bij het configuratiescherm",
-		"subtxt":"Een verbeterde ervaring voor het beheer van RMS en SCS.",
-		"small":"Even geduld aub"
-	},	
+		}
+	},
+	"users":{
+		"title":"Gebruikers",
+		"edit":{
+			"title":"Edit gebruikers",
+			"button":"Update",
+			"input":{
+				"1":"Gebruikers naam",
+				"2":"Gebruiker achternaam",
+				"3":"Gebruiker email",
+				"4":"Gebruikers role",
+				"5":"Gebruikers status"
+			},
+			"msg":{	
+				"del":{
+					"label": "Succes",
+					"text": "Succesvol verwijderd"
+				},			
+				"suc":{
+					"label": "Succes",
+					"text": "User account is geupdatet"
+				},
+				"err":{
+					"label": "Er ging iets mis",
+					"text": "Probeer opnieuw of neem contact op met de administrator"
+				}				
+			}			
+		},
+		"new":{
+			"title":"Nieuwe gebruiker",
+			"button":"Aanmaken",
+			"msg":{	
+				"login_email":{
+					"label": "Succes",
+					"text": "Login email verzonden naar",
+					"err": "Login email niet verzonden"
+				},			
+				"suc":{
+					"label": "Succes",
+					"text": "User account is geupdatet"
+				},
+				"err":{
+					"label": "Er ging iets mis",
+					"text": "Probeer opnieuw of neem contact op met de administrator"
+				}				
+			}			
+		},
+		"status":{
+			"active":"Actief",
+			"inactive":"Inactief"
+		},
+		"actions":{
+			"edit":"Edit",
+			"delete":"Delete"
+		},
+		"table":{
+			"th1":"Gebruikersnaam",
+			"th2":"Email adres",
+			"th3":"Laatst online",
+			"th4":"Gebruikers rol",
+			"th5":"Status",
+			"th6":"Actie"
+		},
+		"swal":{
+			"confirm":{
+				"text":"De user: __placeholder__ wordt permanent verwijderd!"
+			}
+		}		
+	},		
 	"tickets":{
 		"label":"Ticket",
 		"state":{

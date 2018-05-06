@@ -62,6 +62,12 @@
 	define('GROUPED_EVENTS', $env['EVENTS']['GROUPED_EVENTS']);
 	define('GROUPED_EVENTS_WARNING', $env['EVENTS']['GROUPED_EVENTS_WARNING']);
 	define('GROUPED_EVENTS_DANGER', $env['EVENTS']['GROUPED_EVENTS_DANGER']);
+
+	// Define maps grouped threshold
+	define('ENABLE_GROUPED_LOCATIONS', $env['MAPS']['ENABLE_GROUPED_LOCATIONS']);
+	define('GROUPED_LOCATIONS', $env['MAPS']['GROUPED_LOCATIONS']);
+	define('GROUPED_LOCATIONS_WARNING', $env['MAPS']['GROUPED_LOCATIONS_WARNING']);
+	define('GROUPED_LOCATIONS_DANGER', $env['MAPS']['GROUPED_LOCATIONS_DANGER']);
 	
 	// Define SMTP settings
 	define('SMTP_HOST', $env['SMTP']['SMTP_HOST']);
@@ -116,6 +122,25 @@
 
 		return $row[strtolower($setting_name)];
 	}
+	
+	function getClasses($path)
+	{
+		$class_arr = array();
+		$scanned_directory = array_diff(scandir($path) , array(
+			'..',
+			'.'
+		));
+		foreach($scanned_directory as $file) {
+			$file_name = substr($file, strpos($file, ".") + 1);
+			$file_key = substr($file_name, 0, strpos($file_name, "."));
+	
+			// echo $variable.'<br />';
+	
+			$class_arr[strtolower($file_key) ] = '/src/classes/' . $file;
+		}
+	
+		return $class_arr;
+	}	
 	
     if(function_exists('get_magic_quotes_gpc') && get_magic_quotes_gpc()) 
     { 
@@ -174,6 +199,7 @@
 		}
 
 		$view_content = preg_replace('{/$}', '.view.php', $view_url);	
+		$view_basename = basename($view_url, '.view.php');		
 	}
 	
 	

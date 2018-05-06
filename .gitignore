@@ -10,3 +10,7 @@ src/statusjob/import_into_db.php
 
 test/index.php
 test/*
+.idea/workspace.xml
+.idea/vcs.xml
+.idea/modules.xml
+.idea/Mdb.iml

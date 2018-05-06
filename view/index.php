@@ -39,13 +39,27 @@
 		<?php include ROOT_PATH.ROOT_FILE['menu_side'];?>
 	
 		<div id="page-wrapper" class="gray-bg">
-		
-			<?php include ROOT_PATH.ROOT_FILE['menu_top'];?>
-			<?php include ROOT_PATH . $view_content; ?>
-			<?php include ROOT_PATH.ROOT_FILE['menu_footer'];?>
+			<input type="text" hidden id="url_string" value="<?= URL_ROOT.'/Src/controllers/'.$view_basename.'.controller.php';?>" />
+	
+			<?php 
+			// Top menu bar
+			include ROOT_PATH.ROOT_FILE['menu_top'];
+			
+			// View content
+			if(file_exists(ROOT_PATH . $view_content)){
+				include ROOT_PATH . $view_content;
+			} else {
+				http_response_code(404);
+				include ROOT_PATH.'/view/errors/page_404.php';
+				die();
+			}
+			
+			// Footer
+			include ROOT_PATH.ROOT_FILE['menu_footer'];
+			?>
 	
 		</div>
-		
+
 	</div>
 	
 	<!-- Mainly scripts -->
