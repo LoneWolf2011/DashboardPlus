@@ -13,43 +13,43 @@
 								<div class="col-md-12">
 									<div class="form-group">
 										<label class="control-label" for="first-name"><span>App name</span></label> 
-										<input class="form-control" data-i18n="[placeholder]tickets.create.placeholder" name="app_name" type="text">
+										<input class="form-control" data-i18n="[placeholder]placeholders.input" name="app_name" type="text">
 									</div>
 								</div>
 								<div class="col-md-6">
 									<div class="form-group">
 										<label class="control-label" for="first-name"><span>App title</span></label>
-										<input class="form-control" data-i18n="[placeholder]tickets.create.placeholder" name="app_title" type="text">
+										<input class="form-control" data-i18n="[placeholder]placeholders.input" name="app_title" type="text">
 									</div>
 								</div>
 								<div class="col-md-6">
 									<div class="form-group">
 										<label class="control-label" for="first-name"><span>App email</span></label> 
-										<input class="form-control" data-i18n="[placeholder]tickets.create.placeholder" name="app_email" type="text">
+										<input class="form-control" data-i18n="[placeholder]placeholders.input" name="app_email" type="text">
 									</div>
 								</div>
 								<div class="col-md-6">
 									<div class="form-group">
 										<label class="control-label" for="first-name"><span>App latitude</span></label> 
-										<input class="form-control" data-i18n="[placeholder]tickets.create.placeholder" name="app_lat" type="text">
+										<input class="form-control" data-i18n="[placeholder]placeholders.input" name="app_lat" type="text">
 									</div>
 								</div>
 								<div class="col-md-6">
 									<div class="form-group">
 										<label class="control-label" for="first-name"><span>App longitude</span></label> 
-										<input class="form-control" data-i18n="[placeholder]tickets.create.placeholder" name="app_lng" type="text">
+										<input class="form-control" data-i18n="[placeholder]placeholders.input" name="app_lng" type="text">
 									</div>
 								</div>
 								<div class="col-md-6">
 									<div class="form-group">
 										<label class="control-label" for="first-name"><span>App language</span></label> 
-										<input class="form-control" data-i18n="[placeholder]tickets.create.placeholder" name="app_lang" type="text">
+										<input class="form-control" data-i18n="[placeholder]placeholders.input" name="app_lang" type="text">
 									</div>
 								</div>
 								<div class="col-md-6">
 									<div class="form-group">
 										<label class="control-label" for="first-name"><span>App initialized</span></label> 
-										<input class="form-control" data-i18n="[placeholder]tickets.create.placeholder" name="app_initialize" type="number" min="0" max="1">
+										<input class="form-control" data-i18n="[placeholder]placeholders.input" name="app_initialize" type="number" min="0" max="1">
 									</div>
 								</div>								
 								<input name="csrf" type="hidden" value="<?= htmlspecialchars($_SESSION['db_token'], ENT_QUOTES, 'UTF-8');?>"> 

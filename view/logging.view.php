@@ -1,19 +1,19 @@
     <div class="wrapper wrapper-content animated fadeInRight">
             <div class="row">
-			<!-- Logging vandaag -->
+			<!-- Logging view -->
               <div class="col-md-12 col-sm-12 col-xs-12">
                 <div class="ibox float-e-margins">
                   <div class="ibox-title">									  
-                    <h5>Log naam <?= date("Y-m-d").".txt";?> <small><b>Folder:</b> <?= date("Y");?></small></h5>
+                      <h5>Log naam <span  id="log_name"><?= date("Y-m-d").".log";?></span> <small><b>Folder:</b> <?= date("Y");?></small></h5>
                     <div class="clearfix"></div>
                   </div>
                   <div class="ibox-content" id="log" ></div>
                 </div>
               </div>
-			  <!-- /Logging vandaag -->
+			  <!-- /Logging view -->
 			</div>	
             <div class="row">
-			<!-- Logging vandaag -->
+			<!-- Logging history -->
               <div class="col-md-6 col-sm-12 col-xs-12">
                 <div class="ibox float-e-margins">
                   <div class="ibox-title">
@@ -25,14 +25,15 @@
 					<table id='datatable-log' class='table'>
 					<thead><th align='left'>Datum:</th></thead>
 						<?php
-						$year = date("Y");  
+						$year = date('Y');
 						if($handle=opendir('../src/logs/'.date("Y"))){
 							while(false !==($file = readdir($handle))) {
 								if(strpos($file, $year.'-' ) === 0) {
-									echo "<tr><td>Log: <a class='link' href='".URL_ROOT."/src/logs/".$year."/". $file ."'>".$file."</a></td></tr>"; 
+									echo '<tr><td>Log: <a class="link" id="'.$file.'" onClick="setLogFile(this.id)">'.$file.'</a></td></tr>';
 								}
+
 							}
-							closedir($handle);	
+							closedir($handle);
 						}
 						?>
 					</table>
@@ -49,11 +50,11 @@
 				    <table id='datatable-error' class='table'>
 					<thead><th align='left'>Datum:</th></thead>
 						<?php
-						if($handle=opendir('../src/logs/Errors')){
+						if($handle=opendir('../src/logs/'.date("Y").'/Errors')){
 				
 							while(false !==($file = readdir($handle))) {
 								if(strpos($file, $year.'-' ) === 0) {
-									echo "<tr><td>Log: <a class='link' href='".URL_ROOT."/src/logs/errors/". $file ."'>".$file."</a></td></tr>"; 
+                                    echo '<tr><td>Log: <a class="link" id="'.$file.'" onClick="setErrorLogFile(this.id)">'.$file.'</a></td></tr>';
 								}
 							}
 							closedir($handle);	
@@ -63,8 +64,9 @@
                   </div>
                 </div>
               </div>			  
-			  <!-- /Logging vandaag -->
+			  <!-- /Logging history -->
 			</div>
+        <input type="text" value="" id="get_log_name" hidden/>
     </div>
 
 	<?php
@@ -79,10 +81,6 @@
 	?>	
 
    <script>
-	function loadUpdates(){
-		$('#log').load('log.php', function(){});
-	}
-
    $(document).ready(function() {
 		
 		loadUpdates();
@@ -101,7 +99,7 @@
 			lengthMenu: [ 5, 10, 20, 25 ],
 			dom: '<"html5buttons"B>lTfgitp',
 			buttons: [
-                { extend: 'copy'},
+                {extend: 'copy'},
                 {extend: 'csv'},
                 {extend: 'excel', title: 'ExampleFile'},
                 {extend: 'pdf', title: 'ExampleFile'},
@@ -124,4 +122,21 @@
 
 	
     });
+
+   function setLogFile(file_name){
+       $('#get_log_name').val(file_name);
+       $('#log_name').html(file_name);
+       loadUpdates();
+   }
+   function setErrorLogFile(file_name){
+       $('#get_log_name').val(file_name);
+       $('#log_name').html(file_name);
+       loadUpdates();
+   }
+   function loadUpdates(){
+       var file = $('#get_log_name').val();
+       $('#log').load('log.php?file='+file, function(){});
+
+   }
+
     </script>

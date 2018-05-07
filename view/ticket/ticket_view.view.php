@@ -37,7 +37,7 @@
                   <div class="ibox-title">
 				  <span class="pull-right"><span data-i18n="[html]tickets.update.submitted_by">Submitted by door</span>: <b><?= $row['ticket_created_by'];?></b> <span data-i18n="[html]tickets.update.checked_by">Checked by</span>: <b><?= $row['ticket_checked_by'];?></b></span>
                                
-                    <h2><a href="<?= URL_ROOT. '/view/ticket/';?>" class="text-primary"><i class="fa fa-arrow-left"></i> </a><span data-i18n="[html]tickets.update.label">Ticket</span> <b><?= $row['ticket_nr'];?></b> <small></small></h2>
+                    <h2><a href="<?= URL_ROOT. '/view/ticket/';?>" class="text-primary"><i class="fa fa-arrow-left"></i> </a><span data-i18n="[html]tickets.label">Ticket</span> <b><?= $row['ticket_nr'];?></b> <small></small></h2>
 
                     <div class="clearfix"></div>
                   </div>
@@ -70,47 +70,47 @@
 				
 						<div class="form-group">
 							<label class="control-label" ><span >Extern ticketid:</span></label>			
-							<input type="text" class="form-control" name="ticketnr"  data-i18n="[placeholder]tickets.create.placeholder">
+							<input type="text" class="form-control" name="ticketnr"  data-i18n="[placeholder]placeholders.input">
 						</div>
 				
 						<div class="form-group">
 							<label class="control-label" ><span data-i18n="[html]tickets.update.create.label">Update comment:</span><font color='red'>*</font></label>			
-							<textarea class="form-control" name="extra_comment_update" rows="5" cols="40" data-i18n="[placeholder]tickets.create.placeholder"></textarea>
+							<textarea class="form-control" name="extra_comment_update" rows="5" cols="40" data-i18n="[placeholder]placeholders.input"></textarea>
 						</div>
 						
 						<div class="form-group" >
 							<label class="control-label"><span >Update status:</span><font color='red'>*</font></label>
 							<select class="select2 form-control selectpicker"  name="status_update" >
-								<optgroup label="Huidige status..."></option>
+								<optgroup data-i18n="[label]tickets.select.label.current" label="Huidige status..."></optgroup>
 								<option value="<?=  $row['ticket_status'];?>"> <?=  $row['ticket_status'];?> </option>
-								<optgroup label="Ticket opties..."></option>
-								<option value="Open">Open</option>
-								<option value="On hold">On hold</option>
-								<option value="Opnieuw geopend">Opnieuw openen</option>
-								<option value="Opnieuw verzonden">Opnieuw verzenden</option>									
-								<optgroup label="Ticket acties..."></option>				
-								<option value="Geannuleerd">Ticket annuleren</option>									
+								<optgroup data-i18n="[label]tickets.select.label.options" label="Ticket opties..."></optgroup>
+								<option value="Open" data-i18n="[html]tickets.status.open">Open</option>
+								<option value="On hold" data-i18n="[html]tickets.status.on_hold">On hold</option>
+								<option value="Opnieuw geopend" data-i18n="[html]tickets.status.opnieuw_geopend">Opnieuw openen</option>
+								<option value="Opnieuw verzonden" data-i18n="[html]tickets.status.opnieuw_verzenden">Opnieuw verzenden</option>
+								<optgroup data-i18n="[label]tickets.select.label.actions" label="Ticket acties..."></optgroup>
+								<option value="Geannuleerd" data-i18n="[html]tickets.status.geannuleerd">Ticket annuleren</option>
 								<!--<option value="Escaleren">Werkbon escaleren</option>-->									
-								<option value="Doorzetten">Ticket doorsturen</option>	
-								<option value="Gesloten">Ticket sluiten</option>				
+								<option value="Doorzetten" data-i18n="[html]tickets.status.doorzetten">Ticket doorsturen</option>
+								<option value="Gesloten" data-i18n="[html]tickets.status.gesloten">Ticket sluiten</option>
 							</select>
 						</div>
 						
 		
 						<div class="form-group" id="on_hold_div" style="<?= $display_hold;?>"> 
-							<label class="control-label">On hold tot:<font color='red'>*</font></label>
+							<label class="control-label"><span data-i18n="[html]tickets.select.label.on_hold">Doorzetten naar</span>:<font color='red'>*</font></label>
 							<div class="input-group">
 								<span class="input-group-addon"><i class="fa fa-calendar"></i></span>
 								<input type="text" name="datum_on_hold" class="form-control" value="<?= $on_hold_date;?>" placeholder="dd-mm-jjjj" data-inputmask="'mask': '99-99-9999'">
 							</div>
 						</div>	
 						<div class="form-group" id="geannuleerd_div" style="<?= $display_geannuleerd;?>"> 
-							<label class="control-label">Reden geannuleerd:<font color='red'>*</font></label>
+							<label class="control-label"><span data-i18n="[html]tickets.select.label.canceled">Reden geannuleerd</span>:<font color='red'>*</font></label>
 							<div class="input-group">
 								<span class="input-group-addon"><i class="fa fa-times"></i></span>
 								<select class="form-control"  name="reden_geannuleerd" >
 									<option value="<?=  $row['ticket_sub_status'];?>"> <?=  $row['ticket_sub_status'];?> </option>
-									<optgroup label="Eterne partijen..."></option>
+									<optgroup data-i18n="[label]tickets.select.label.canceled" label="Reason canceled..."></optgroup>
 									<option value="Storing hersteld">Storing hersteld</option>
 									<option value="Ticket onnodig">Ticket onnodig</option>			
 									<option value="Ticket foutief">Ticket foutief</option>			
@@ -118,17 +118,18 @@
 							</div>
 						</div>			
 						<div class="form-group" id="doorzet_div" style="display:none;"> 
-							<label class="control-label">Doorsturen naar:<font color='red'>*</font></label>
+							<label class="control-label"><span data-i18n="[html]tickets.select.label.sent_to">Doorzetten naar</span>:<font color='red'>*</font></label>
 							<div class="input-group">
 								<span class="input-group-addon"><i class="fa fa-envelope-o"></i></span>
-								<select class="form-control"  name="doorzetten_naar"  >
-				
+								<select class="form-control"  name="doorzetten_naar" >
 									<option value=""> </option>
-									<optgroup label="Externe partijen..."></option>
-									<option value="ASB">ASB</option>
-									<option value="KPN">KPN</option>
-									<option value="STRUKTON">STRUKTON</option>
-									<option value="ACCI">ACCI</option>					
+									<optgroup data-i18n="[label]tickets.select.label.external"  label="Externe partijen..."></optgroup>
+                                    <?php
+                                    $externals = $db_conn->getAll("SELECT external_id, external_name FROM app_customer_tickets_external");
+                                    foreach($externals as $external){
+                                        echo '<option value="'.$external['external_id'].'"  >'.$external['external_name'].'</option>';
+                                    }
+                                    ?>
 								</select>
 							</div>
 						</div>
@@ -143,9 +144,9 @@
 						<input type="hidden" name="csrf" value="<?= htmlspecialchars($_SESSION['db_token'], ENT_QUOTES, 'UTF-8');?>">	
 						
 							<button class="btn btn-primary" name="save_button" value="Opslaan" id="send"><i class='fa fa-save fa-fw'></i> <span data-i18n="[html]tickets.buttons.update">Update</span></button>
-							<button class="btn btn-success hidden" name="save_button" value="VerzendenOpnieuw" id="btn_send_opnieuw"  ><i class="fa fa-envelope"></i> Opnieuw verzenden</button>
-							<button class="btn btn-primary hidden"  name="save_button" value="Verzenden"><i class='fa fa-envelope fa-fw'></i> Onmiddelijk verzenden</button>
-							<button class="btn btn-warning hidden"  name="save_button" value="Doorzetten" id="btn_externe_partij"><i class='fa fa-arrow-right fa-fw'></i> Doorsturen</button>
+							<button class="btn btn-success hidden" name="save_button" value="VerzendenOpnieuw" id="btn_send_opnieuw"  ><i class="fa fa-envelope"></i> <span data-i18n="[html]tickets.buttons.re_send">Update</span></button>
+							<button class="btn btn-primary hidden"  name="save_button" value="Verzenden"><i class='fa fa-envelope fa-fw'></i> <span data-i18n="[html]tickets.buttons.send_fast">Onmiddelijk verzenden</span></button>
+							<button class="btn btn-warning hidden"  name="save_button" value="Doorzetten" id="btn_externe_partij"><i class='fa fa-arrow-right fa-fw'></i> <span data-i18n="[html]tickets.buttons.send_too">Doorzetten</span></button>
 					</form>
 					</div>
                 
@@ -203,7 +204,8 @@
 		}		
 	});
 	$('select[name="doorzetten_naar"]').on('change', function() {
-		$("#btn_externe_partij").html('<i class=\'fa fa-arrow-right fa-fw\'></i>Doorsturen naar: '+ this.value);
+        var text = i18n.t('tickets.select.label.sent_to');
+		$("#btn_externe_partij").html('<i class=\'fa fa-arrow-right fa-fw\'></i>'+text + ' ' + this.value);
 	});
 	
 	function loadInfo(){
@@ -289,49 +291,49 @@
 				actie: {
 					validators: {
 						notEmpty: {
-							message: 'Vul het actie commentaar in'
+
 						}
 					}
 				},		
 				extra_comment: {
 					validators: {
 						notEmpty: {
-							message: 'Vul het controle commentaar in'
+
 						}
 					}
 				},
 				status: {
 					validators: {
 						notEmpty: {
-							message: 'Wijzig de status'
+
 						}
 					}
 				},								
 				extra_comment_update: {
 					validators: {
 						notEmpty: {
-							message: 'Vul update commentaar in'
+
 						}
 					}
 				},
 				status_update: {
 					validators: {
 						notEmpty: {
-							message: 'Wijzig de status'
+
 						}
 					}
 				},
 				reden_geannuleerd: {
 					validators: {
 						notEmpty: {
-							message: 'Vul de reden in'
+
 						}
 					}
 				},
 				doorzetten_naar: {
 					validators: {
 						notEmpty: {
-							message: 'Selecteer de externe partij'
+
 						}
 					}
 				}					

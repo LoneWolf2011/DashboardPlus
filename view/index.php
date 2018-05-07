@@ -137,7 +137,16 @@
 	<script>
 	$(document).ready(function() {
 		var lang_code = $('html').attr('lang').toLowerCase()+'_'+$('html').attr('lang').toUpperCase();
-	
+
+        $('.autocomplete-append').autocomplete({
+            serviceUrl: <?= json_encode(URL_ROOT);?>+'/Src/scs_naw_hint.json.php',
+            max: 10,
+            onSelect: function (suggestion) {
+                //alert('You selected: ' + suggestion.value + ', ' + suggestion.data);
+                location.href = <?= json_encode(URL_ROOT);?>+'/view/location/?'+suggestion.value.replace(/[^0-9\.]+/g, "");
+            }
+        });
+
 		$('#loginForm').formValidation({
 			framework: 'bootstrap',
 			icon: {

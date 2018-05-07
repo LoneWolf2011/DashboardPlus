@@ -70,11 +70,11 @@ class Ticket
             'ticket_closed' => $gesloten,
             'ticket_external_ticket_nr' => empty($post_val['ticketnr']) ? $row_wb['ticket_external_ticket_nr'] : $post_val['ticketnr'],
             'ticket_extra_comment' => strip_tags($post_val['extra_comment_update']) ,
-            'ticket_status' => $this->setStatus($post_val, $row_wb) ,
+            'ticket_status' => $this->setStatus($post_val) ,
             'ticket_updates' => 1
         );
 
-        // Indien status Doorzetten
+        // Indien status Geannuleerd
         if ($post_val['status_update'] == "Geannuleerd")
         {
             $query_data['ticket_sub_status'] = $post_val['reden_geannuleerd'];
@@ -86,12 +86,14 @@ class Ticket
         // Indien status Doorzetten
         if ($post_val['status_update'] == "Doorzetten")
         {
-            $query_data['ticket_extern'] = $post_val['doorzetten_naar'];
+            $door_naar = $conn->getOne("SELECT external_name FROM app_customer_tickets_external WHERE external_id = ?s",$post_val['doorzetten_naar']);
+
+            $query_data['ticket_extern'] = $door_naar;
             $query_data['ticket_put_through'] = 1;
-            $query_data['ticket_put_through_too'] = $post_val['doorzetten_naar'];
+            $query_data['ticket_put_through_too'] = $door_naar;
             $msg_type = 'success';
             $msg_title = 'Succes';
-            $this->succesMessage .= "Werkbon doorgezet naar: <b>" . $post_val['doorzetten_naar'] . "</b><br>";
+            $this->succesMessage .= "Werkbon doorgezet naar: <b>" . $door_naar . "</b><br>";
         }
 
         // Indien status on hold
@@ -187,7 +189,7 @@ class Ticket
             'ticket_customer_scs' => substr(($post_val['OMS']) , -6) ,
             'ticket_customer_scsnr' => $post_val['OMS'],
             'ticket_created_by' => $this->auth_user,
-            'ticket_extern' => $post_val['extern'],
+            'ticket_extern' => $conn->getOne("SELECT external_name FROM app_customer_tickets_external WHERE external_id = ?i",$post_val['extern']),
             'ticket_service' => ucfirst($post_val['dienst']) ,
             'ticket_customer_region' => $post_val['regio'],
             'ticket_created_date' => date("Y-m-d H:i:s") ,
@@ -558,7 +560,7 @@ class Ticket
         return $status_text;
     }
 
-    protected function setStatus($post_val, $row_wb = '')
+    protected function setStatus($post_val)
     {
         if ($post_val['status_update'] == "Geannuleerd")
         {
@@ -593,6 +595,15 @@ class Ticket
             $status = $post_val['status_update'];
         }
         return $status;
+    }
+
+    protected function getStatusText($status_id)
+    {
+        $conn = $this->db_conn;
+
+        $status_text =  $conn->getOne("SELECT ticket_status_name FROM app_customer_tickets_status WHERE ticket_status_id = ?i", $$status_id);
+
+        return $status_text;
     }
 
     protected function getTicketRow($db_conn, $post_id)
