@@ -1,4 +1,5 @@
-    <div id="map"></div>	
+
+    <div id="map"></div>
 	
 	<div id="div_table" class="map-div-table">
 		<div class="map-div">

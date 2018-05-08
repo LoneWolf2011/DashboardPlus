@@ -37,7 +37,7 @@
                   <div class="ibox-title">
 				  <span class="pull-right"><span data-i18n="[html]tickets.update.submitted_by">Submitted by door</span>: <b><?= $row['ticket_created_by'];?></b> <span data-i18n="[html]tickets.update.checked_by">Checked by</span>: <b><?= $row['ticket_checked_by'];?></b></span>
                                
-                    <h2><a href="<?= URL_ROOT. '/view/ticket/';?>" class="text-primary"><i class="fa fa-arrow-left"></i> </a><span data-i18n="[html]tickets.label">Ticket</span> <b><?= $row['ticket_nr'];?></b> <small></small></h2>
+                    <h2><a href="<?= URL_ROOT. '/ticket/';?>" class="text-primary"><i class="fa fa-arrow-left"></i> </a><span data-i18n="[html]tickets.label">Ticket</span> <b><?= $row['ticket_nr'];?></b> <small></small></h2>
 
                     <div class="clearfix"></div>
                   </div>
@@ -209,7 +209,7 @@
 	});
 	
 	function loadInfo(){
-		$('.chat-discussion').load('ticket_updates.view.php?id='+getUrlParameter('id'), function(){
+		$('.chat-discussion').load(<?= json_encode(URL_ROOT);?> +'/view/ticket_updates.view.php?id='+getUrlParameter('id'), function(){
 			$.i18n.init({
 				resGetPath: <?= json_encode(URL_ROOT);?>+'/src/lang/__lng__.json',
 				load: 'unspecific',
@@ -221,7 +221,7 @@
 		});
 	}
 	function loadUpdates(){
-		$('#ticket_info').load('ticket_info.view.php?id='+getUrlParameter('id'), function(){
+		$('#ticket_info').load(<?= json_encode(URL_ROOT);?> +'/view/ticket_info.view.php?id='+getUrlParameter('id'), function(){
 			$.i18n.init({
 				resGetPath: <?= json_encode(URL_ROOT);?>+'/src/lang/__lng__.json',
 				load: 'unspecific',

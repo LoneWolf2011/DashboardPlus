@@ -21,7 +21,7 @@ class Ticket
     function __construct($db_conn)
     {
         $this->db_conn = $db_conn;
-        $this->wb_link = URL_ROOT . "/view/ticket/ticket_view/?id=";
+        $this->wb_link = URL_ROOT."/ticket/view/?id=";
         $this->auth_user = htmlentities($_SESSION[SES_NAME]['user_email'], ENT_QUOTES, 'UTF-8');
         // create new TCPDF document
         //$this->pdf 				= new MYPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);

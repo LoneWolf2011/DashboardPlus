@@ -147,7 +147,8 @@
 												?>
 										</select>
 									</div>
-								</div><input name="csrf" type="hidden" value="<?= htmlspecialchars($_SESSION['db_token'], ENT_QUOTES, 'UTF-8');?>">
+								</div>
+                                <input name="csrf" type="hidden" value="<?= htmlspecialchars($_SESSION['db_token'], ENT_QUOTES, 'UTF-8');?>">
 								<div class="col-md-12">
 									<div class="form-group">
 										<button class="btn btn-primary" name="save_button"><i class='fa fa-save fa-fw'></i> <span data-i18n="[html]users.new.button">Create</span></button>

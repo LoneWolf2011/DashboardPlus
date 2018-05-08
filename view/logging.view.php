@@ -135,7 +135,7 @@
    }
    function loadUpdates(){
        var file = $('#get_log_name').val();
-       $('#log').load('log.php?file='+file, function(){});
+       $('#log').load(<?= json_encode(URL_ROOT);?> +'/view/logging/log.php?file='+file, function(){});
 
    }
 

@@ -22,7 +22,22 @@
 
 ========================================================================================================== */
 
-	function setEmailTemplate($arr_val, $template_name){
+    function checkUserIsAdmin()
+    {
+        $user_db = new SafeMySQL();
+
+        $user_id = htmlentities($_SESSION[SES_NAME]['user_id'], ENT_QUOTES, 'UTF-8');
+
+        if($user_db->getRow("SELECT user_id FROM app_users WHERE user_status = 'Active' AND user_id =  ?s",$user_id)){
+            return true;
+        } else {
+            return false;
+        }
+
+    }
+
+	function setEmailTemplate($arr_val, $template_name)
+    {
 		$template = file_get_contents(URL_ROOT.'/view/email_temp/'.$template_name);
 		
 		foreach($arr_val as $key => $value){

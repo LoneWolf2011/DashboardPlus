@@ -42,7 +42,7 @@
 								</select>		
 							</div>
 							<div class="col-md-2 col-sm-12 col-xs-12 pull-right">
-								<a class="btn btn-success pull-right" href="ticket_new/"><i class="fa fa-plus"></i> <span data-i18n="[html]tickets.buttons.new">New</span> </a>
+								<a class="btn btn-success pull-right" href="<?= URL_ROOT.'/ticket/new/';?>"><i class="fa fa-plus"></i> <span data-i18n="[html]tickets.buttons.new">New</span> </a>
 							</div>							
 						</div>						
 						<table id='datatable-all' class='table table-hover jambo_table bulk_action' style="width:100%">

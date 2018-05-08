@@ -13,7 +13,7 @@
 
 	<!-- Mainly CSS -->
 	<?php
-		foreach($arr_css as $css){
+		foreach(ROOT_CSS as $css){
 			echo '<link href="'.URL_ROOT.$css.'" rel="stylesheet">';
 		}
 	?>
@@ -36,7 +36,7 @@
 
 	<!-- Mainly scripts -->
 	<?php
-		foreach($arr_js as $js){
+		foreach(ROOT_JS as $js){
 			echo '<script src="'.URL_ROOT.$js.'"></script>';
 		}
 	?>

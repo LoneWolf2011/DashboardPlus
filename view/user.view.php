@@ -142,7 +142,6 @@
 						text: data.body,
 						type: data.type
 					});
-					table_active.ajax.reload( null, false ); 
 				},
 				error: function(xhr, status, error){
 					var json = $.parseJSON(xhr.responseText);

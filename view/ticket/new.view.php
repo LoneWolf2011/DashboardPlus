@@ -333,7 +333,7 @@
 // ==========================================================================================================	
 	$(document).ready(function() {
 		$('#autocomplete-custom-append').autocomplete({
-			serviceUrl: <?= json_encode(URL_ROOT);?>+'/src/scs_naw_hint.json.php',
+			serviceUrl: <?= json_encode(URL_ROOT);?>+'/src/helpers/scs_naw_hint.json.php',
 			max: 10,
 			onSearchComplete: function (query, suggestions) {
 				if(!suggestions.length) {
@@ -356,7 +356,7 @@
 			$.ajax({
 				type: 'POST',
 				data: ({p : inpval}),
-				url: <?= json_encode(URL_ROOT);?>+'/src/scs_naw_get.json.php',
+				url: <?= json_encode(URL_ROOT);?>+'/src/helpers/scs_naw_get.json.php',
 				success: function(data) {
 				
 				var object = $.parseJSON(data);

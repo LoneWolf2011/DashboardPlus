@@ -1,4 +1,4 @@
-	<?php 		array_push($arr_css, '/css/plugins/dataTables/datatables_responsive.min.css');?>
+	<?php 	array_push($arr_css, '/css/plugins/dataTables/datatables_responsive.min.css');?>
 	<div class="wrapper wrapper-content animated fadeInRight">
 
 		<div class="row">
