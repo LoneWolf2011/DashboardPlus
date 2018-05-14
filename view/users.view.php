@@ -182,10 +182,6 @@
 	?>	
     <script>
     $(document).ready(function() {
-        $(".select2").select2({
-            placeholder: 'Select...',
-            allowClear: true
-        });
 		
     	$('#datatable').on('click', '#delete', function() {
     		var id = $(this).attr('value');

@@ -1,4 +1,7 @@
 {
+	"placeholders":{
+		"select":"Select..."
+	},
 	"layout":{
 		"topnav":{
 			"placeholder":"Search for device",
@@ -20,20 +23,20 @@
 	"swal":{
 		"confirm":{
 			"title":"Are you sure?",
-			"confirmbutton":"Yes, i'm sure",
+			"confirmbutton":"Yes, i am sure",
 			"cancelbutton":"Cancel"
 		}
 	},	
 	"connection":{
 		"conn": "Connected",
-		"diss": "Not connected",
-		"back": "Verbonden met backup",
+		"diss": "Disconnected",
+		"back": "Backup connected",
 		"nopath": "No pathstatus",
-		"oos": "In onderhoud tot",
-		"main_err": "Mainboard uitval",
-		"batt_err": "Accu uitval",
-		"230_err": "230v uitval",
-		"multi_err": "Meerdere uitvallen"
+		"oos": "In service till",
+		"main_err": "Mainboard failure",
+		"batt_err": "Battery failure",
+		"230_err": "230v failure",
+		"multi_err": "Multiple failures"
 	},
 	"error_page":{
 		"return_btn":"Go back",
@@ -69,44 +72,44 @@
 		}		
 	},
 	"installscreen":{
-		"welcome": "Welkom bij ",
-		"text": "Dit is je eerste keer.",
-		"subtext": "Neem de tijd om de onderstaande gegevens in te vullen.",		
-		"login": "Installeer",
+		"welcome": "Welcome to",
+		"text": "This is your first time.",
+		"subtext": "Take the time to fill in the information below.",
+		"login": "Install",
 		"phpversion":{
-			"err":"PHP versie te laag",
-			"msg":"Versie 7.0.0 is minimaal vereist."
+			"err":"PHP version too low",
+			"msg":"Version 7.0.0 is a minimum requirement."
 		},		
 		"admin":{
-			"txt": "Administrator instelling",
-			"email": "Voer admin emailadres in",
-			"pass": "Voer admin wachtwoord in",
-			"local": "Selecteer locatie",
-			"lang": "Selecteer de standaard taal",
+			"txt": "Administrator setting",
+			"email": "Enter admin email address",
+			"pass": "Enter admin password",
+			"local": "Select location",
+			"lang": "Select the default language",
 			"msg":{
-				"user": "Admin gebruikersnaam",
-				"pass": "Eenmalig wachtwoord",
-				"store": "Noteer bovenstaande wachtwoord op een veilige plaats"
+				"user": "Admin username",
+				"pass": "One-time password",
+				"store": "Write down the above password in a safe place"
 			}
 		},
 		"app":{
-			"txt": "Applicatie instelling",
+			"txt": "Application setting",
 			"root": "URL root",
 			"docu": "Root folder",
 			"api": "Google API key"
 		},		
 		"scs":{
-			"txt": "SCS connectie",	
-			"user": "Gebruikersnaam",	
-			"pass": "Wachtwoord"
+			"txt": "SCS connection",	
+			"user": "Username",	
+			"pass": "Password"
 		},
 		"rms":{
-			"txt": "RMS connectie"
+			"txt": "RMS connection"
 		},
 		"msg":{
-			"fail": "Installatie niet succesvol",
-			"try": "Probeer opnieuw",
-			"suc": "Installatie succesvol"
+			"fail": "Installation unsuccessful",
+			"try": "Try again",
+			"suc": "Installation successful"
 		}
 	},
 	"loginscreen":{
@@ -175,16 +178,16 @@
 			"h5":"Locations",
 			"day":{
 				"label":"Active",
-				"small_label":"Sinds een dag"
+				"small_label":"Since a day"
 			},
 			"week":{
 				"label":"Inactive",
-				"small_label":"Sinds een week"
+				"small_label":"Since a week"
 			},
 			"month":{
-				"label":"Maandelijks",
-				"small_label":"Sinds een maand"
-			}				
+				"label":"Monthly",
+				"small_label":"Since a month"
+			}					
 		},
 		"filters": "Filters",
 		"actions": {
@@ -425,8 +428,8 @@
 		}	
 	},
 	"admin":{
-		"h1":"Welkom admin",
-		"small":"Even geduld aub"
+		"h1":"Welcome admin",
+		"small":"Please wait"
 	},
 	"user":{	
 		"title":"User",
@@ -441,21 +444,25 @@
 		},			
 		"acc_update":{
 			"msg":{
+				"update":{
+					"label": "Success",
+					"text": "successfully updated"
+				},			
 				"err_email":{
-					"label": "Er ging iets mis",
-					"text": "Dit is geen juist email adres"
+					"label": "Something went wrong",
+					"text": "This is not a correct email address"
 				},
 				"err_email_in_use":{
-					"label": "Er ging iets mis",
-					"text": "Dit email adres is al in gebruik"
+					"label": "Something went wrong",
+					"text": "This email address is already in use"
 				},				
 				"suc":{
-					"label": "Succes",
-					"text": "User account is geupdatet"
+					"label": "Success",
+					"text": "User account has been updated"
 				},
 				"err":{
-					"label": "Er ging iets mis",
-					"text": "Probeer opnieuw of neem contact op met de administrator"
+					"label": "Something went wrong",
+					"text": "Try again or contact the administrator"
 				}				
 			}		
 		},	
@@ -464,60 +471,121 @@
 		"small":"Even geduld aub"
 	},
 	"users":{
+		"title":"Users",
+		"edit":{
+			"title":"Edit users",
+			"button":"Update",
+			"input":{
+				"1":"Users name",
+				"2":"User lastname",
+				"3":"User email",
+				"4":"Users role",
+				"5":"Users status"
+			},
+			"msg":{	
+				"del":{
+					"label": "Success",
+					"text": "Successfully removed"
+				},			
+				"suc":{
+					"label": "Success",
+					"text": "User account has been updated"
+				},
+				"err":{
+					"label": "Something went wrong",
+					"text": "Try again or contact the administrator"
+				}				
+			}			
+		},
+		"new":{
+			"title":"New user",
+			"button":"Create",
+			"msg":{	
+				"login_email":{
+					"label": "Success",
+					"text": "Login email sent to",
+					"err": "Login email not sent"
+				},			
+				"suc":{
+					"label": "Success",
+					"text": "User account has been updated"
+				},
+				"err":{
+					"label": "Something went wrong",
+					"text": "Try again or contact the administrator"
+				}				
+			}			
+		},
+		"status":{
+			"active":"Active",
+			"inactive":"Inactive"
+		},
+		"actions":{
+			"edit":"Edit",
+			"delete":"Delete"
+		},
+		"table":{
+			"th1":"Username",
+			"th2":"Email address",
+			"th3":"Last seen",
+			"th4":"User role",
+			"th5":"Status",
+			"th6":"ACtion"
+		},
 		"swal":{
 			"confirm":{
 				"text":"The user: __placeholder__ will be permanently deleted!"
 			}
-		}		
+		}	
 	},
 	"tickets":{
 		"label":"Ticket",
 		"state":{
-			"pending":"In afwachting",
-			"closed":"Gesloten"
+			"pending":"Pending",
+			"closed":"Closed"
 		},
 		"create":{
-			"label":"Maak een ticket",
-			"placeholder":"Fill in...",
-			"dropdown":"Selecteer...",
-			"txt_scs":"SCS nummer",
+			"label":"Make a ticket",
+			"placeholder":"Fill...",
+			"dropdown":"Select...",
+			"txt_scs":"SCS number",
 			"txt_service":"Service",
-			"txt_location":"Locatie",
-			"txt_address":"Adres",
-			"txt_zipcode":"Postcode",
-			"txt_city":"Stad",
-			"txt_for":"Voor",
-			"txt_storing":"Storing",
-			"txt_action":"Actie",
-			"txt_cp":"Contactpersoon",
-			"txt_cptel":"Contactpersoon tel nummer",
-			"txt_comment":"Extra commentaar"
+			"txt_location":"Location",
+			"txt_address":"Address",
+			"txt_zipcode":"Zipcode",
+			"txt_city":"City",
+			"txt_for":"For",
+			"txt_storing":"Malfunction",
+			"txt_action":"ACtion",
+			"txt_cp":"Contact",
+			"txt_cptel":"Contact phone number",
+			"txt_comment":"Extra comment"
 		},
 		"update":{
-			"placeholder":"Vul in...",		
-			"submitted_by":"Aangemaakt door",		
-			"checked_by":"Gecontroleerd door",	
+			"placeholder":"Fill...",		
+			"submitted_by":"Created by",		
+			"checked_by":"Checked by",	
 			"status":"Status",	
 			"updates":"Updates",	
-			"ticket_for":"Ticket voor",
+			"ticket_for":"Ticket for",
 			"create":{
 				"label":"Update ticket",
-				"external":"Extern ticket nummer",
-				"up_comm":"Update commentaar",
+				"external":"External ticket number",
+				"up_comm":"Update comment",
 				"up_status":"Update status"
 			}
 		},
 		"table": {
 			"th1": "Ticket#",
-			"th2": "Locatie ID",
+			"th2": "Location ID",
 			"th3": "Service",
-			"th4": "Laatste update",
+			"th4": "Last update",
 			"th5": "SLA",
 			"th6": "Status"
 		},
 		"buttons":{
-			"send":"Verzenden",
-			"update":"Updaten"
+			"send":"Send",
+			"update":"Update"
 		}
 	},
 	"footer":{

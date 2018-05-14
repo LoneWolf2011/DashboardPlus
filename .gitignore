@@ -9,4 +9,5 @@ src/statusjob/import_into_db.php
 
 test/index.php
 test/*
+.idea/*
 

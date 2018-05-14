@@ -109,19 +109,20 @@
 										<div class="col-sm-4 col-md-4">
 											<span data-i18n="[html]home.actions.mapzoom">Set map zoom level:</span>
 												<select class="form-control m-b" id="zoom_level" >
-												<option value="7" data-i18n="[html]home.actions.selectdefault">Default</option>
-												<option value="8">8</option>
-												<option value="9">9</option>
-												<option value="10">10</option>
-												<option value="11">11</option>
-												<option value="12">12</option>
-												<option value="13">13</option>
-												<option value="14">14</option>
+													<option value="">All</option>
+													<option value="7">Default</option>
+													<option value="8">8</option>
+													<option value="9">9</option>
+													<option value="10">10</option>
+													<option value="11">11</option>
+													<option value="12">12</option>
+													<option value="13">13</option>
+													<option value="14">14</option>
 												</select>
 										</div >																	
 										<div class="col-sm-4 col-md-4">				
 											<span >Filter status:</span>
-												<select class="form-control m-b" id="type" onchange="filterStatus(this.value);">
+												<select class="select2 form-control m-b" id="type" onchange="filterStatus(this.value);">
 													<option value="">All</option>
 													<option value="0">Disconnected</option>
 													<option value="1">Connected</option>
@@ -131,7 +132,7 @@
 										</div >
 										<div class="col-sm-4 col-md-4">				
 											<span >Filter location:</span>
-												<select class="form-control m-b" id="type" onchange="filterLocation(this.value);">
+												<select class="select2 form-control m-b" id="type" onchange="filterLocation(this.value);">
 													<option value="">All</option>
 													<option value="DIGI">Digialarm</option>
 													<option value="Brand">Brand</option>
@@ -183,7 +184,8 @@
 		// View specific scripts
 		array_push($arr_js, '/js/plugins/sparkline/jquery.sparkline.min.js');
 		array_push($arr_js, '/js/plugins/dataTables/datatables.min.js');
-		array_push($arr_js, '/js/plugins/dataTables/datatables_responsive.min.js');		
+		array_push($arr_js, '/js/plugins/dataTables/datatables_responsive.min.js');	
+		array_push($arr_js, '/js/google_style_dark.js');				
 		
 	?>
 	<?php
@@ -388,237 +390,7 @@
 		
 			// Style for Google Maps
 			//styles: [{"stylers":[{"hue":"#18a689"},{"visibility":"on"},{"invert_lightness":true},{"saturation":40},{"lightness":10}]}]
-			styles: [{
-				"elementType": "geometry",
-				"stylers": [
-				{
-					"color": "#242f3e"
-				}
-				]
-			},
-			{
-				"elementType": "labels.text.fill",
-				"stylers": [
-				{
-					"color": "#746855"
-				}
-				]
-			},
-			{
-				"elementType": "labels.text.stroke",
-				"stylers": [
-				{
-					"color": "#242f3e"
-				}
-				]
-			},
-			{
-				"featureType": "administrative.land_parcel",
-				"stylers": [
-				{
-					"visibility": "off"
-				}
-				]
-			},
-			{
-				"featureType": "administrative.locality",
-				"elementType": "labels.text.fill",
-				"stylers": [
-				{
-					"color": "#d59563"
-				}
-				]
-			},
-			{
-				"featureType": "administrative.neighborhood",
-				"stylers": [
-				{
-					"visibility": "off"
-				}
-				]
-			},
-			{
-				"featureType": "poi",
-				"elementType": "labels.text",
-				"stylers": [
-				{
-					"visibility": "off"
-				}
-				]
-			},
-			{
-				"featureType": "poi",
-				"elementType": "labels.text.fill",
-				"stylers": [
-				{
-					"color": "#d59563"
-				}
-				]
-			},
-			{
-				"featureType": "poi.business",
-				"stylers": [
-				{
-					"visibility": "off"
-				}
-				]
-			},
-			{
-				"featureType": "poi.park",
-				"elementType": "geometry",
-				"stylers": [
-				{
-					"color": "#263c3f"
-				}
-				]
-			},
-			{
-				"featureType": "poi.park",
-				"elementType": "labels.text",
-				"stylers": [
-				{
-					"visibility": "off"
-				}
-				]
-			},
-			{
-				"featureType": "poi.park",
-				"elementType": "labels.text.fill",
-				"stylers": [
-				{
-					"color": "#6b9a76"
-				}
-				]
-			},
-			{
-				"featureType": "road",
-				"elementType": "geometry",
-				"stylers": [
-				{
-					"color": "#38414e"
-				}
-				]
-			},
-			{
-				"featureType": "road",
-				"elementType": "geometry.stroke",
-				"stylers": [
-				{
-					"color": "#212a37"
-				}
-				]
-			},
-			{
-				"featureType": "road",
-				"elementType": "labels",
-				"stylers": [
-				{
-					"visibility": "off"
-				}
-				]
-			},
-			{
-				"featureType": "road",
-				"elementType": "labels.text.fill",
-				"stylers": [
-				{
-					"color": "#9ca5b3"
-				}
-				]
-			},
-			{
-				"featureType": "road.highway",
-				"elementType": "geometry",
-				"stylers": [
-				{
-					"color": "#746855"
-				}
-				]
-			},
-			{
-				"featureType": "road.highway",
-				"elementType": "geometry.stroke",
-				"stylers": [
-				{
-					"color": "#1f2835"
-				}
-				]
-			},
-			{
-				"featureType": "road.highway",
-				"elementType": "labels.text.fill",
-				"stylers": [
-				{
-					"color": "#f3d19c"
-				}
-				]
-			},
-			{
-				"featureType": "transit",
-				"elementType": "geometry",
-				"stylers": [
-				{
-					"color": "#2f3948"
-				}
-				]
-			},
-			{
-				"featureType": "transit.station",
-				"elementType": "labels.text.fill",
-				"stylers": [
-				{
-					"color": "#d59563"
-				}
-				]
-			},
-			{
-				"featureType": "water",
-				"elementType": "geometry",
-				"stylers": [
-				{
-					"color": "#17263c"
-				}
-				]
-			},
-			{
-				"featureType": "water",
-				"elementType": "geometry.fill",
-				"stylers": [
-				{
-					"color": "#539a4b"
-				},
-				{
-					"saturation": -100
-				}
-				]
-			},
-			{
-				"featureType": "water",
-				"elementType": "labels.text",
-				"stylers": [
-				{
-					"visibility": "off"
-				}
-				]
-			},
-			{
-				"featureType": "water",
-				"elementType": "labels.text.fill",
-				"stylers": [
-				{
-					"color": "#515c6d"
-				}
-				]
-			},
-			{
-				"featureType": "water",
-				"elementType": "labels.text.stroke",
-				"stylers": [
-				{
-					"color": "#17263c"
-				}
-				]
-			}]
+			styles: google_styles
         });
 
             map.mapTypes.set("OSM", new google.maps.ImageMapType({

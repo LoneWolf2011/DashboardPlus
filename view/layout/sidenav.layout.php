@@ -28,7 +28,7 @@
 			<li><br></li>
 
 			<?php if(htmlentities($_SESSION[SES_NAME]['user_role'], ENT_QUOTES, 'UTF-8') == 1){ ?>
-			<li><a href="<?= URL_ROOT.'/view/logging/';?>" data-toggle="tooltip" data-placement="right" data-i18n="[title]layout.sidebar.title.7"><i class="fa fa-file-text fa-fw c-accent"></i> <span class="nav-label">Logging</span></a></li>
+			<li><a href="<?= URL_ROOT.'/view/logging/';?>" data-toggle="tooltip" data-placement="right" data-i18n="[title]layout.sidebar.title.7"><i class="fa fa-file-text fa-fw c-accent"></i> <span class="nav-label"></span></a></li>
 			<li><a href="<?= URL_ROOT.'/view/settings/';?>" data-toggle="tooltip" data-placement="right" data-i18n="[title]layout.sidebar.title.8"><i class="fa fa-gear fa-fw c-accent"></i> <span class="nav-label"></span></a></li>
 			<?php }; ?>				
         </ul>

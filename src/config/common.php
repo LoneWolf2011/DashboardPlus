@@ -87,6 +87,7 @@
 		'pass' => SCS_DB_PASS,
 		'db' => SCS_DB_NAME
 	));
+	
 	// Make language file available as variable
 	$lang = json_decode(file_get_contents(URL_ROOT.'/Src/lang/'.APP_LANG.'.json'), true);
 	define('LANG',$lang);
@@ -102,12 +103,11 @@
 	//	'pass' 	=> RMS_DB_PASS,
 	//	'db' 	=> RMS_DB_NAME
 	// ));
-	// Include file router
 	
+	// Include file router	
 	require ROOT_PATH . '/Src/file_package.php';
 	
-	// Function files
-	
+	// Function files	
 	foreach(ROOT_FILE['FUNC'] as $func) {
 		require ROOT_PATH . $func;
 	
@@ -217,7 +217,9 @@
 	
 			$title_arr = array_filter($urlarr);
 			define('PAGE_TITLE', ucfirst(end($title_arr)));
+			
 		}
 	
 		$view_content = preg_replace('{/$}', '.view.php', $view_url);
+		$view_basename = basename($view_url, '.view.php');
 	}

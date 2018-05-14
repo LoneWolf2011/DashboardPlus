@@ -93,7 +93,7 @@ class Device
 			$response_array['msg'] 		= $execute_action['exceptionMessage'];
 		} else {
 			$response_array['type'] 	= 'success';
-			$response_array['title'] 	= 'SUCCESS';
+			$response_array['title'] 	= 'SUCCES';
 			$response_array['msg'] 		= $post_val['execute']. ' uitgevoerd';			
 		}
 		
@@ -109,13 +109,19 @@ class Device
 		if($device_status){
 			
 			foreach($device_status['parameters'] as $device){
-				// TODO: $device['value'] need to change to $device['oidvalue'] so 0 or 1 can be used to validate
-				if($device['value'] == 'Ok'){
-					$status = '<i class="fa fa-circle text-navy"></i>';
+				// Criticality defines status
+				// 1 = active
+				// 2 = warning
+				// 3 = error
+				if($device['criticality'] == 3 && !is_numeric($device['value'])){
+					$status = '<i class="fa fa-circle text-danger"></i>' . ' ' . $device['value'];
+				} elseif($device['criticality'] == 2 && !is_numeric($device['value'])){
+					$status = '<i class="fa fa-circle text-warning"></i>' . ' ' . $device['value'];
+				} elseif($device['criticality'] == 1 && !is_numeric($device['value'])){
+					$status = '<i class="fa fa-circle text-navy"></i>' . ' ' . $device['value'];
 				} else {
 					$status = $device['value'];
 				}
-				
 				
 				$data['status'][] = array(
 					$device['name'],
@@ -143,7 +149,6 @@ class Device
 					$device['zone'],				
 					$device['statusName'],
 					$device['statusValue'],
-					$device['text'],
 					convertTimeZone($device['dateTime'])
 				);			
 			}

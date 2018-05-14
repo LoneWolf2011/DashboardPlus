@@ -21,7 +21,7 @@
 								<td style="font-size: 0; line-height: 0;" width="20">&nbsp;</td>
 								<td>
 									<h2 style="color: #f6a821; margin-bottom:0;"><?=APP_NAME;?></h2>
-									<h5 style="color: #fff; margin-top:0;"><?= $lang['loginscreen']['text'];?></h5>
+									<h5 style="color: #fff; margin-top:0;"><?= LANG['loginscreen']['text'];?></h5>
 								</td>
 							</tr>
 						</table>

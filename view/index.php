@@ -54,7 +54,8 @@
 			}
 			
 			// Footer
-			include ROOT_PATH.ROOT_FILE['menu_footer'];?>
+			include ROOT_PATH.ROOT_FILE['menu_footer'];
+			?>
 	
 		</div>
 		
