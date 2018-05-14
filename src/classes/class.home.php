@@ -44,8 +44,34 @@ class Home
 		}
 	}
 	
+	private function getDeviceCriticalityArr($device_id)
+	{
+		//var_dump($device_id);
+		$device = getApiCall('http://'.WEB_API.'/api/devices/'.$device_id, 'GET');
+		$data = array();
+		if($device['isAvailable'] == true)
+		{
+			$device_status = getApiCall('http://'.WEB_API.'/api/devices/'.$device_id.'/status', 'GET');
+			
+			
+							
+			foreach($device_status['parameters'] as $device){
+				$data[] = 	$device['criticality'];
+			}
+				
+			return $data;	
+	
+		}
+		else 
+		{
+			return $data;
+		}
+		
+	}
+	
 	public function getMarkers($getall = false, $updatetime='')
 	{
+		
 		$conn = $this->db_conn;
 		
 		$datetime = date('YmdHis', strtotime('now'));
@@ -69,7 +95,7 @@ class Home
 						$device_arr = array();
 						foreach($get_device_id as $device_id){
 							$devices = getApiCall('http://'.WEB_API.'/api/devices/'.$device_id, 'GET');
-							
+							$crit_arr = $this->getDeviceCriticalityArr($device_id);
 							// Skip device if there is a deviceID in the local DB but there are no API results
 							if(array_key_exists('exceptionMessage', $devices)){
 								continue;
@@ -77,12 +103,17 @@ class Home
 							
 							$device_arr[] = $device_id;
 							
-							if($devices['isAvailable'] == true){
-								$err_class = 'text-navy';
-								$status += 0;
-							} else {
+							// Increment status if there are errors
+							// Status defines the marker color on the map
+							if($devices['isAvailable'] != true){
 								$err_class = 'text-danger';
 								$status += 1;
+							} elseif(in_array_any(array(2,3), $crit_arr)) {
+								$err_class = 'text-warning';
+								$status += 1;								
+							} else {
+								$err_class = 'text-navy';
+								$status += 0;
 							}
 							
 							if($status == count($device_arr)) {
@@ -92,25 +123,31 @@ class Home
 							} else {
 								$path_status = 1;
 							}
-							$link .= '<a class="text-info '.$err_class.'" onclick="popupWindow(\''.URL_ROOT.'/view/device/?'.$device_id.'\', \'location\', 1980, 1080 ); return false;">Device #'.$device_id.'</a><br>';
-							
+							$link .= '<a class="text-info '.$err_class.'" onclick="popupWindow(\''.URL_ROOT.'/device/?'.$device_id.'\', \'location\', 1980, 1080 ); return false;">Device #'.$device_id.'</a><br>';
+							$device_type = $devices['deviceTypeName'];
 						}
 						
 					} else {
 						$devices = getApiCall('http://'.WEB_API.'/api/devices/'.implode('',$get_device_id), 'GET');
+						$crit_arr = $this->getDeviceCriticalityArr($devices['id']);
+						
 						// Skip device if there is a deviceID in the local DB but there are no API results
 						if(array_key_exists('exceptionMessage', $devices)){
 							continue;
 						}
-						if($devices['isAvailable'] == true){
-							$err_class = 'text-navy';
-							$path_status = 1;
-						} else {
+						if($devices['isAvailable'] != true){
 							$err_class = 'text-danger';
 							$path_status = 0;
+						// If device status array contains a value other than 1 display problem marker
+						} elseif(in_array_any(array(2,3), $crit_arr)) {
+							$err_class = 'text-warning';
+							$path_status = 2;					
+						} else {
+							$err_class = 'text-navy';
+							$path_status = 1;
 						}					
-						$link = '<a class="text-info '.$err_class.'" onclick="popupWindow(\''.URL_ROOT.'/view/device/?'.$devices['id'].'\', \'location\', 1980, 1080 ); return false;">Device #'.$devices['id'].'</a>';
-						
+						$link = '<a class="text-info '.$err_class.'" onclick="popupWindow(\''.URL_ROOT.'/device/?'.$devices['id'].'\', \'location\', 1980, 1080 ); return false;">Device #'.$devices['id'].'</a>';
+						$device_type = $devices['deviceTypeName'];
 					}
 					
 					$is_letter = strtoupper(substr($row['location_name'],0,1));	
@@ -121,7 +158,7 @@ class Home
 						'first_char' 	=> $is_letter, 
 						'lat' 			=> $row['location_latitude'], 
 						'lng' 			=> $row['location_longitude'],
-						'category' 		=> $row['location_name'],
+						'category' 		=> $device_type,
 						'id' 			=> $row['location_id']
 					);
 				} else {
@@ -171,13 +208,18 @@ class Home
 		if($devices){
 			foreach($devices['items'] as $device){
 				
-				if($device['isAvailable'] == true){
-					$active = '<i class="fa fa-circle text-navy"></i>';
-				} else {
-					$active = '<i class="fa fa-circle text-danger"></i>';
-				}
+				$crit_arr = $this->getDeviceCriticalityArr($device['id']);
 				
-				$link = '<a href="'.URL_ROOT.'/view/device/?'.$device['id'].'" class="link"># '.$device['id'].'</a>';
+				if($device['isAvailable'] != true){
+					$active = '<i class="fa fa-circle text-danger"></i>';
+				// If device status array contains a value other than 1 display problem marker
+				} elseif(in_array_any(array(2,3), $crit_arr)) {
+					$active = '<i class="fa fa-circle text-warning"></i>';				
+				} else {
+					$active = '<i class="fa fa-circle text-navy"></i>';
+				}
+						
+				$link = '<a href="'.URL_ROOT.'/device/?'.$device['id'].'" class="link"># '.$device['id'].'</a>';
 				
 				$get_location_name = $this->db_conn->getOne("SELECT `location_name` FROM site_location WHERE `location_id` IN (SELECT `location_id` FROM site_location_device WHERE `device_id` = ?i)", $device['id']);
 				$get_location_id = $this->db_conn->getOne("SELECT `location_id` FROM site_location WHERE `location_id` IN (SELECT `location_id` FROM site_location_device WHERE `device_id` = ?i)", $device['id']);

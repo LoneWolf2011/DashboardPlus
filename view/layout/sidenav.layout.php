@@ -15,21 +15,21 @@
                 </div>
             </li>
 			
-            <li><a href="<?= URL_ROOT.'/view/home/';?>" data-toggle="tooltip" data-placement="right" data-i18n="[title]layout.sidebar.title.1" ><i class="fa fa-area-chart fa-fw" ></i> <span class="nav-label"></span></a></li>
-            <li><a href="<?= URL_ROOT.'/view/devices/';?>" data-toggle="tooltip" data-placement="right" data-i18n="[title]layout.sidebar.title.2"><i class="fa fa-th-large fa-fw"></i> <span class="nav-label"></span></a></li>
-            <li><a href="<?= URL_ROOT.'/view/location/';?>" data-toggle="tooltip" data-placement="right" data-i18n="[title]layout.sidebar.title.3"><i class="fa fa-map-marker fa-fw"></i> <span class="nav-label"></span></a></li>
-            <li><a href="<?= URL_ROOT.'/view/group/';?>" data-toggle="tooltip" data-placement="right" data-i18n="[title]layout.sidebar.title.4"><i class="fa fa-cubes fa-fw"></i> <span class="nav-label"></span></a></li>
+            <li><a href="<?= URL_ROOT.'/home/';?>" data-toggle="tooltip" data-placement="right" data-i18n="[title]layout.sidebar.title.1" ><i class="fa fa-area-chart fa-fw" ></i> <span class="nav-label"></span></a></li>
+            <li><a href="<?= URL_ROOT.'/devices/';?>" data-toggle="tooltip" data-placement="right" data-i18n="[title]layout.sidebar.title.2"><i class="fa fa-th-large fa-fw"></i> <span class="nav-label"></span></a></li>
+            <li><a href="<?= URL_ROOT.'/location/';?>" data-toggle="tooltip" data-placement="right" data-i18n="[title]layout.sidebar.title.3"><i class="fa fa-map-marker fa-fw"></i> <span class="nav-label"></span></a></li>
+            <li><a href="<?= URL_ROOT.'/group/';?>" data-toggle="tooltip" data-placement="right" data-i18n="[title]layout.sidebar.title.4"><i class="fa fa-cubes fa-fw"></i> <span class="nav-label"></span></a></li>
 			
 			<li><br></li>
-            <li><a href="<?= URL_ROOT.'/view/user/';?>" data-toggle="tooltip" data-placement="right" data-i18n="[title]layout.sidebar.title.5"><i class="fa fa-user fa-fw"></i> <span class="nav-label"></span></a></li>			
+            <li><a href="<?= URL_ROOT.'/user/';?>" data-toggle="tooltip" data-placement="right" data-i18n="[title]layout.sidebar.title.5"><i class="fa fa-user fa-fw"></i> <span class="nav-label"></span></a></li>			
 			<?php if(htmlentities($_SESSION[SES_NAME]['user_role'], ENT_QUOTES, 'UTF-8') == 1){ ?>
-			<li><a href="<?= URL_ROOT.'/view/users/';?>" data-toggle="tooltip" data-placement="right" data-i18n="[title]layout.sidebar.title.6"><i class="fa fa-users fa-fw c-accent"></i> <span class="nav-label"></span></a></li>
+			<li><a href="<?= URL_ROOT.'/users/';?>" data-toggle="tooltip" data-placement="right" data-i18n="[title]layout.sidebar.title.6"><i class="fa fa-users fa-fw c-accent"></i> <span class="nav-label"></span></a></li>
 			<?php }; ?>
 			<li><br></li>
 
 			<?php if(htmlentities($_SESSION[SES_NAME]['user_role'], ENT_QUOTES, 'UTF-8') == 1){ ?>
-			<li><a href="<?= URL_ROOT.'/view/logging/';?>" data-toggle="tooltip" data-placement="right" data-i18n="[title]layout.sidebar.title.7"><i class="fa fa-file-text fa-fw c-accent"></i> <span class="nav-label"></span></a></li>
-			<li><a href="<?= URL_ROOT.'/view/settings/';?>" data-toggle="tooltip" data-placement="right" data-i18n="[title]layout.sidebar.title.8"><i class="fa fa-gear fa-fw c-accent"></i> <span class="nav-label"></span></a></li>
+			<li><a href="<?= URL_ROOT.'/logging/';?>" data-toggle="tooltip" data-placement="right" data-i18n="[title]layout.sidebar.title.7"><i class="fa fa-file-text fa-fw c-accent"></i> <span class="nav-label"></span></a></li>
+			<li><a href="<?= URL_ROOT.'/settings/';?>" data-toggle="tooltip" data-placement="right" data-i18n="[title]layout.sidebar.title.8"><i class="fa fa-gear fa-fw c-accent"></i> <span class="nav-label"></span></a></li>
 			<?php }; ?>				
         </ul>
 

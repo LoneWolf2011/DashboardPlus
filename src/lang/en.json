@@ -30,7 +30,7 @@
 	"connection":{
 		"conn": "Connected",
 		"diss": "Disconnected",
-		"back": "Backup connected",
+		"back": "Connected but with problems",
 		"nopath": "No pathstatus",
 		"oos": "In service till",
 		"main_err": "Mainboard failure",
@@ -215,7 +215,7 @@
 				}				
 			},
 			"problem": {
-				"label":"Problem locations",
+				"label":"Inactive locations",
 				"table": {
 					"th1": "Device ID",
 					"th2": "Device name",

@@ -105,7 +105,7 @@
 	// ));
 	
 	// Include file router	
-	require ROOT_PATH . '/Src/file_package.php';
+	require ROOT_PATH . '/Src/Config/file_package.php';
 	
 	// Function files	
 	foreach(ROOT_FILE['FUNC'] as $func) {
@@ -194,32 +194,5 @@
 	$id = @$_SESSION[SES_NAME]['user_id'];
 	updateLastAccess($db, $id);
 	
-	// Get url and set view relative to view folder
-	
-	$url_arr = parse_url($_SERVER['REQUEST_URI']);
-	
-	// Prevent access to errors and layout folders
-	
-	if ($url_arr['path'] == '/view/errors/' || $url_arr['path'] == '/view/layout/') {
-		http_response_code(404);
-		include ROOT_PATH . '/view/errors/page_404.php';
-	
-		die();
-	} else {
-		$urlarr = explode('/', $url_arr['path']);
-		if (count($urlarr) > 2) {
-	
-			// array_shift($urlarr);
-			unset($urlarr[1]);
-			$view_url = implode('/', $urlarr);
-	
-			// Set page title
-	
-			$title_arr = array_filter($urlarr);
-			define('PAGE_TITLE', ucfirst(end($title_arr)));
-			
-		}
-	
-		$view_content = preg_replace('{/$}', '.view.php', $view_url);
-		$view_basename = basename($view_url, '.view.php');
-	}
+    // Define router
+    require ROOT_PATH.'/Src/config/router.php';

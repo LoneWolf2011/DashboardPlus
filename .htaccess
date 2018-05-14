@@ -12,6 +12,13 @@ ErrorDocument 403 /sentdb/View/Errors/page_403.php
 ErrorDocument 404 /sentdb/View/Errors/page_404.php
 ErrorDocument 500 /sentdb/View/Errors/page_500.php
 
+RewriteEngine On
+
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME} !-f
+
+RewriteRule ^(.+)$ view/index.php/$1 [L]
+
 ## Deny access tot .htaccess
 <Files .htaccess>
 	order allow,deny

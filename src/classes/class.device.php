@@ -10,19 +10,48 @@ class Device
         $this->auth_user = htmlentities($_SESSION[SES_NAME]['user_email'], ENT_QUOTES, 'UTF-8');
         $this->device_id = $device_id;
     }
-    	
+
+	private function getDeviceCriticalityArr($device_id)
+	{
+		//var_dump($device_id);
+		$device = getApiCall('http://'.WEB_API.'/api/devices/'.$device_id, 'GET');
+		$data = array();
+		if($device['isAvailable'] == true)
+		{
+			$device_status = getApiCall('http://'.WEB_API.'/api/devices/'.$device_id.'/status', 'GET');
+			
+			
+							
+			foreach($device_status['parameters'] as $device){
+				$data[] = 	$device['criticality'];
+			}
+				
+			return $data;	
+	
+		}
+		else 
+		{
+			return $data;
+		}
+		
+	}
+	
 	public function getDeviceLocation()
 	{
 		$conn = $this->db_conn;
 				
 		$device = getApiCall('http://'.WEB_API.'/api/devices/'.$this->device_id, 'GET');
+		$crit_arr = $this->getDeviceCriticalityArr($this->device_id);
 		
-		if($device['isAvailable'] == true){
+		if($device['isAvailable'] != true){
+			$conn_status 	= '<span class="label label-danger">'.LANG['connection']['diss'].'</span>';
+			$path_status 	= 0;	
+		} elseif(in_array_any(array(2,3), $crit_arr)){
+			$conn_status 	= '<span class="label label-warning">'.LANG['connection']['back'].'</span>';
+			$path_status 	= 2;				
+		} else {
 			$conn_status 	= '<span class="label label-primary">'.LANG['connection']['conn'].'</span>';
 			$path_status 	= 1;
-		} else {
-			$conn_status 	= '<span class="label label-danger">'.LANG['connection']['diss'].'</span>';
-			$path_status 	= 0;
 		}
 		
 		$result = $conn->query("SELECT * FROM site_location WHERE location_id IN (SELECT location_id FROM site_location_device WHERE device_id = ?i)", $this->device_id);
@@ -108,6 +137,16 @@ class Device
 		
 		if($device_status){
 			
+			// Device status names to be excluded from list
+			$name_arr = array(
+				'FluidLow',
+				'FluidEmpty',
+				'TemperatureLow',
+				'PowerLow',
+				'BatteryFault',
+				'ACFault'
+			);
+			
 			foreach($device_status['parameters'] as $device){
 				// Criticality defines status
 				// 1 = active
@@ -123,9 +162,50 @@ class Device
 					$status = $device['value'];
 				}
 				
+				if(in_array($device['name'], $name_arr))
+				{
+					// If criticality is not ok show excluded status name
+					if($device['criticality'] != 1 )
+					{
+						$status = $status;
+					}
+					else 
+					{
+						continue;						
+					}
+
+				}
+				
+				if($device['name'] == 'Temperature')
+				{
+					$status = $status.' &#8451;';
+				}
+				
+				if($device['name'] == 'Fluidlevel')
+				{
+					$percent = round($device['value'] / 10);
+					if($percent <= 25)
+					{
+						$color = 'bg-danger';
+					} 
+					elseif($percent > 25 && $percent <= 50)
+					{
+						$color = 'bg-warning';
+					}
+					else
+					{
+						$color = '';
+					}
+					// NOTE: Max fluid lvl can be 500 or 1000 depending on config
+					$status = ' <div class="progress password-progress" style="margin-bottom: 0; background-color:#333;">
+									<div class="progress-bar '.$color.'" role="progressbar" style="width: '. $percent .'%;" aria-valuenow="'.$device['value'].'" aria-valuemin="0" aria-valuemax="1000">'. $status .'ml</div>
+								</div>';
+				}
+				
 				$data['status'][] = array(
 					$device['name'],
-					$status
+					$status,
+					$device['criticality']
 				);			
 			}
 				

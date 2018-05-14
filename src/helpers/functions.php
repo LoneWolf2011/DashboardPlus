@@ -23,6 +23,24 @@
 		appVersionCode
 		logToFile
 ========================================================================================================== */
+	function in_array_any($needles, $haystack) {
+		return !!array_intersect($needles, $haystack);
+	}	
+	
+    function checkUserIsAdmin()
+    {
+        $user_db = new SafeMySQL();
+
+        $user_id = htmlentities($_SESSION[SES_NAME]['user_id'], ENT_QUOTES, 'UTF-8');
+
+        if($user_db->getRow("SELECT user_id FROM app_users WHERE user_status = 'Active' AND user_id =  ?s",$user_id)){
+            return true;
+        } else {
+            return false;
+        }
+
+    }
+
 	function convertTimeZone($datetime){
 		
 		$timestamp = substr($datetime,6,10);

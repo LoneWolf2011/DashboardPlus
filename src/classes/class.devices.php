@@ -161,7 +161,7 @@ class Devices
 					$active = '<i class="fa fa-circle text-danger"></i>';
 				}
 				
-				$link = '<a href="'.URL_ROOT.'/view/device/?'.$device['id'].'" class="link"># '.$device['id'].'</a>';
+				$link = '<a href="'.URL_ROOT.'/device/?'.$device['id'].'" class="link"># '.$device['id'].'</a>';
 				
 				$get_location_name = $this->db_conn->getOne("SELECT `location_name` FROM site_location WHERE `location_id` IN (SELECT `location_id` FROM site_location_device WHERE `device_id` = ?i)", $device['id']);
 				$location = ($get_location_name != false) ? '<span class="badge badge-success">' . $get_location_name . '</span>' : '';

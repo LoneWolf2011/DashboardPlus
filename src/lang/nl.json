@@ -27,7 +27,7 @@
 	"connection":{
 		"conn": "Verbonden",
 		"diss": "Niet verbonden",
-		"back": "Verbonden met backup",
+		"back": "Verbonden maar er zijn problemen",
 		"nopath": "Geen pathstatus",
 		"oos": "In onderhoud tot",
 		"main_err": "Mainboard uitval",
@@ -212,7 +212,7 @@
 				}				
 			},
 			"problem": {
-				"label":"Locaties met problemen",
+				"label":"Inactieve locaties",
 				"table": {
 					"th1": "Device ID",
 					"th2": "Device naam",

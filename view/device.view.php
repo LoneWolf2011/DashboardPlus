@@ -81,6 +81,7 @@
 									<tr>
 										<th data-i18n="[html]device.values.table.th1">Name</th>
 										<th data-i18n="[html]device.values.table.th2">Value</th>
+										<th data-i18n="[html]device.values.table.th2">Value</th>
 									</tr>
 									</thead>
 									<tbody id="table_rows"></tbody>
@@ -179,15 +180,16 @@
 			},
 			iDisplayLength: 10,
 			deferRender: true,
-			order: [[ 4, "desc"]],
 			lengthMenu: [ 10, 20, 25 ],
 			responsive: true
 			
 		} );		
-	
+		
+
 		
 		table_active = $(".datatable").DataTable({	
 			ajax: url_str+"?get=table&id="+device_id,
+			order: [[ 4, "desc"]],
 			fnInitComplete: function(oSettings, json) {
 				$('#ibox1').children('.ibox-content').toggleClass('sk-loading');
 				clearInterval(interval);
@@ -307,7 +309,17 @@
 			success: function(data) {
 				$('#table_rows').empty();
 				$.each(data.status, function(value, val) {
-					$('#table_rows').append($('<tr><td>' + val[0] + '</td><td>' + val[1] +  '</td></tr>'));
+					$('#table_rows').append($('<tr><td>' + val[0] + '</td><td>' + val[1] +  '</td><td>' + val[2] +  '</td></tr>'));
+				});	
+				$(".datatable_values").DataTable({
+					order: [[ 2, "desc"]],
+					columnDefs: [
+						{
+							"targets": [ 2 ],
+							"visible": false,
+							"searchable": true
+						}
+					]					
 				});				
 			}
 		});			

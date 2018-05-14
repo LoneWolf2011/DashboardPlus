@@ -21,7 +21,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel='shortcut icon' type='image/x-icon' href='<?= URL_ROOT_IMG; ?>/<?= FAVICON_NAME; ?>' />
 	
-    <title><?= APP_TITLE; ?> | <?= PAGE_TITLE;?></title>
+    <title><?= APP_TITLE; ?> | <?= $requestedController;?></title>
 
 	<!-- Mainly CSS -->
 	<?php
@@ -142,7 +142,7 @@
 			max: 10,
 			onSelect: function (suggestion) {
 				//alert('You selected: ' + suggestion.value + ', ' + suggestion.data);
-				location.href = <?= json_encode(URL_ROOT);?>+'/view/device/?'+suggestion.data.replace(/[^0-9\.]+/g, "");
+				location.href = <?= json_encode(URL_ROOT);?>+'/device/?'+suggestion.data.replace(/[^0-9\.]+/g, "");
 				$('#url_site').val(suggestion.data);
 				$('.site-nr').html(suggestion.data);
 			}			

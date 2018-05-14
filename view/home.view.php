@@ -29,7 +29,7 @@
 							<div class="col-xs-6 col-sm-6 col-md-6">
 								<div class="ibox float-e-margins">
 									<div class="ibox-title">
-										<span class="label label-warning pull-right" data-i18n="[html]home.events.week.label">Problems</span>
+										<span class="label label-danger pull-right" data-i18n="[html]home.events.week.label">Problems</span>
 										<h5 data-i18n="[html]home.events.h5">Locations</h5>
 									</div>
 									<div class="ibox-content">
@@ -55,7 +55,7 @@
 						<div class="tabs-container">
 							<ul class="nav nav-tabs">
 								<li class="active"><a data-toggle="tab" href="#tab-1" ><span data-i18n="[html]home.locations.active.label"> Active locations</span> <span id="count_active"></span></a></li>
-								<li class=""><a data-toggle="tab" href="#tab-2" ><span data-i18n="[html]home.locations.problem.label">Problem locations</span> <span  id="count_problem"></span></a></li>
+								<li class=""><a data-toggle="tab" href="#tab-2" ><span data-i18n="[html]home.locations.problem.label">Inactive locations</span> <span  id="count_problem"></span></a></li>
 							
 							</ul>
 							<div class="tab-content">
@@ -109,7 +109,6 @@
 										<div class="col-sm-4 col-md-4">
 											<span data-i18n="[html]home.actions.mapzoom">Set map zoom level:</span>
 												<select class="form-control m-b" id="zoom_level" >
-													<option value="">All</option>
 													<option value="7">Default</option>
 													<option value="8">8</option>
 													<option value="9">9</option>
@@ -124,9 +123,9 @@
 											<span >Filter status:</span>
 												<select class="select2 form-control m-b" id="type" onchange="filterStatus(this.value);">
 													<option value="">All</option>
-													<option value="0">Disconnected</option>
 													<option value="1">Connected</option>
-													<option value="2">Connected with backup</option>
+													<option value="2">Connected with problems</option>
+													<option value="0">Disconnected</option>													
 													<option value="3">No path status</option>
 												</select>
 										</div >
@@ -134,10 +133,8 @@
 											<span >Filter location:</span>
 												<select class="select2 form-control m-b" id="type" onchange="filterLocation(this.value);">
 													<option value="">All</option>
-													<option value="DIGI">Digialarm</option>
-													<option value="Brand">Brand</option>
-													<option value="ING">ING</option>
-													<option value="RAC">RAC</option>
+													<option value="Sentinel">Sentinel</option>
+													<option value="Titanium">Titanium</option>
 												</select>
 										</div >										
 									</div >
@@ -358,7 +355,13 @@
 	
 	// Set map zoom level
     $("#zoom_level").change(function(){
-		var zoom_lvl = parseInt($(this).val(), 10);
+		var zoom_lvl;
+		if($(this).val() == ''){
+			zoom_lvl = parseInt(7, 10)
+		} else {
+			zoom_lvl = parseInt($(this).val(), 10);
+		}
+
 		map.setZoom(zoom_lvl);
     });	
 	
