@@ -66,7 +66,7 @@
         // Check if controller exists. NB:
         // You have to do that for the model and the view too
         $ctrlPath = ROOT_PATH . '/view/' . $requestedController . '.view.php';
-
+	
         if(checkUserIsAdmin() && in_array($requestedController, $admin_only)) {
 
             http_response_code(403);
@@ -81,7 +81,7 @@
         } else {
 
             http_response_code(404);
-            include ROOT_PATH . '/view/errors/page_404.php';
+            //include ROOT_PATH . '/view/errors/page_404.php';
             die();
             //require the 404 controller and initiate it
             //Display its view

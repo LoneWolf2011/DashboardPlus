@@ -146,7 +146,7 @@ class Home
 
                 $is_letter = (ctype_alpha(substr(getCategory($row['SCS_Account_Nmbr']) , 0, 1)) == true) ? strtoupper(substr(getCategory($row['SCS_Account_Nmbr']) , 0, 1)) : strtoupper('A');
                 $locs[$row['SCS_Account_Nmbr']] = array(
-                    'info' => '<div><b>' . $row['SCS_Account_Address_Name'] . '</b><br>' . $row['SCS_Account_Address_Address'] . '<br><a class="text-info ' . $err_class . '" onclick="popupWindow(\'' . URL_ROOT . '/view/location/?' . $row['SCS_Account_Nmbr'] . '\', \'location\', 1980, 1080 ); return false;">#' . $row['SCS_Account_Nmbr'] . '</a><br><b>' . $conn_status . '</b>' . $device_status . '</div>',
+                    'info' => '<div><b>' . $row['SCS_Account_Address_Name'] . '</b><br>' . $row['SCS_Account_Address_Address'] . '<br><a class="text-info ' . $err_class . '" onclick="popupWindow(\'' . URL_ROOT . '/location/?' . $row['SCS_Account_Nmbr'] . '\', \'location\', 1980, 1080 ); return false;">#' . $row['SCS_Account_Nmbr'] . '</a><br><b>' . $conn_status . '</b>' . $device_status . '</div>',
                     'path_status' => $path_status,
                     'first_char' => $is_letter,
                     'lat' => $row['Latitude'],
@@ -253,8 +253,7 @@ class Home
                         $conn_class = 'text-navy';
                     }
 
-                    //return '<a class="text-info '.$conn_class.'" data-markerid="' .$d. '" href="/mdb/view/location/?'.$d.$problem_link.'">'.$d.'</a>';
-                    return '<a class="text-info ' . $conn_class . '" data-markerid="' . $d . '" onclick="popupWindow(\'' . URL_ROOT . '/view/location/?' . $d . $problem_link . '\', \'location\', 1980, 1080 ); return false;">' . $d . '</a>';
+                    return '<a class="text-info ' . $conn_class . '" data-markerid="' . $d . '" onclick="popupWindow(\'' . URL_ROOT . '/location/?' . $d . $problem_link . '\', \'location\', 1980, 1080 ); return false;">' . $d . '</a>';
                 }
             ) ,
             array(
@@ -384,7 +383,7 @@ class Home
                     $conn = new SafeMySQL(SCS_DB_CONN);
                     $account_code = $conn->getOne("SELECT SCS_Account_Nmbr FROM scs_account_info WHERE scs_account_info.SCS_Account_CallerID_1 LIKE ?s", '%'.$d.'%');
                     //return $location_name
-                    return '<a class="text-info text-warning" data-markerid="' . $account_code . '" onclick="popupWindow(\'' . URL_ROOT . 'view/location/?' . $account_code . '&err\', \'location\', 1980, 1080, ); return false;">' . $account_code . '</a>';
+                    return '<a class="text-info text-warning" data-markerid="' . $account_code . '" onclick="popupWindow(\'' . URL_ROOT . '/location/?' . $account_code . '&err\', \'location\', 1980, 1080, ); return false;">' . $account_code . '</a>';
                 }
             ) ,
             array(
