@@ -601,7 +601,7 @@ class Ticket
     {
         $conn = $this->db_conn;
 
-        $status_text =  $conn->getOne("SELECT ticket_status_name FROM app_customer_tickets_status WHERE ticket_status_id = ?i", $$status_id);
+        $status_text =  $conn->getOne("SELECT ticket_status_name FROM app_customer_tickets_status WHERE ticket_status_id = ?i", $status_id);
 
         return $status_text;
     }

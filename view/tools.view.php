@@ -8,6 +8,7 @@
 					<div class="ibox-content">
 						<button class="btn btn-primary" onclick="popupWindow('graphs', 'graphs', 1980, 1080 ); return false;" >Open responds tijden</button>
 						<button class="btn btn-primary" onclick="popupWindow('port', 'port', 1980, 1080 ); return false;" >Open port monitor</button>
+						<button class="btn btn-primary" onclick="popupWindow('tel_queue', 'tel_queue', 1980, 1080 ); return false;" >Open tel queue</button>
 						<button class="btn btn-primary" onclick="popupWindow('http://172.16.8.12/beheer/tools/plodash/', 'port', 1980, 1080 ); return false;" >PLO dashboard</button>								
 					</div>
 				</div>

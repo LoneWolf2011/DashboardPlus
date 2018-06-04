@@ -78,6 +78,12 @@
 	define('PORT_MONITOR_USER', $env['PORT_MONITOR']['USER']);
 	define('PORT_MONITOR_PASS', $env['PORT_MONITOR']['PASS']);
 	define('PORT_MONITOR_NAME', $env['PORT_MONITOR']['NAME']);
+
+	// Define Phone queue DB conn
+	define('QUEUE_HOST', $env['QUEUE_DB']['HOST']);
+	define('QUEUE_USER', $env['QUEUE_DB']['USER']);
+	define('QUEUE_PASS', $env['QUEUE_DB']['PASS']);
+	define('QUEUE_NAME', $env['QUEUE_DB']['NAME']);
 	
 	// Define SCS conn
 	define('SCS_DB_HOST', $env['SCS_DB']['HOST']);

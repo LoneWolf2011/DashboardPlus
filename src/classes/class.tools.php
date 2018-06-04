@@ -24,6 +24,12 @@
 */
 class Tools
 {
+	private $queue_array = array();
+	private $queue_total_in_count = 0;
+	private $queue_total_out_count = 0;
+	private $queue_missed_count = 0;
+	private $queue_agent_status;
+	
 	/*
 	 *	Constants values defined in env.ini
 	 */
@@ -43,7 +49,294 @@ class Tools
     {
         $this->db_conn = $db_conn;
     }
-    /**
+	
+	private function connectSqlSrv()
+	{
+		$serverName = QUEUE_HOST;
+		$connectionInfo = array( "Database"=>QUEUE_NAME, "UID"=>QUEUE_USER, "PWD"=>QUEUE_PASS);
+		$conn = sqlsrv_connect( $serverName, $connectionInfo );
+		if( $conn === false ) {
+			die( print_r( sqlsrv_errors(), true));
+		}
+		return $conn;
+	}
+	
+	public function getQueueRow()
+	{
+		$conn = $this->connectSqlSrv();
+		
+		$stmt = sqlsrv_query( $conn, "SELECT Queue, Name, SLA1, SLA2 FROM autodeliver" );
+		if( $stmt === false) {
+			die( print_r( sqlsrv_errors(), true) );
+		}
+		$row_count = sqlsrv_num_rows( $stmt );
+		
+		$rows ='<div class="row">';
+				
+		$i = 1;
+		while( $row = sqlsrv_fetch_array( $stmt, SQLSRV_FETCH_ASSOC ) ) {
+			
+			$queue = $this->checkQueueCount($row['Queue'], $row['SLA2']);
+			
+			$this->queue_array[] = $row['Queue'];
+			$this->queue_total_in_count += $queue['q_calls_total_in'];
+			$this->queue_total_out_count = $queue['q_calls_total_out'];
+			$this->queue_missed_count += $queue['q_calls_missed'];
+			$total_calls = $queue['q_calls_total_in'] + $queue['q_calls_missed'];
+			
+			$percent_class = '';
+			if($total_calls > 0){
+				$percent = round((100 / $total_calls) * $queue['q_sla_count']);
+				
+				if($percent == 0 || $percent < 50)
+				{
+					$percent_class = 'danger';
+				}
+				elseif($percent >= 50 && $percent <= 90)
+				{
+					$percent_class = 'warning';
+				}
+				else
+				{
+					$percent_class = 'navy';
+				}
+				$percent = $percent.'%';
+				$avg_wait = ($queue['q_avg_wait_time'] / $total_calls > 1) ? gmdate("H:i:s", $queue['q_avg_wait_time'] / $total_calls) : '';
+			} else {
+				$percent = '';
+				$avg_wait = '';
+			}
+				
+			if($queue['q_calls_count'] > 2)
+			{
+				$class='red';
+				$span_class='';
+			}
+			elseif($queue['q_calls_count'] > 0)
+			{
+				$class='yellow';
+				$span_class='';
+			}
+			else
+			{
+				$class='dark-gray';
+				$span_class='c-gray';
+			}
+			
+			$count = ($queue['q_calls_count'] > 0) ? '<div class="col-xs-3"><i class="fa fa-phone fa-4x"></i></div><div class="col-xs-9 text-right"><h2 class="font-bold">'. $queue['q_calls_count'].'</h2></div>' : '';
+			$count_total = ($queue['q_calls_total_in'] > 0) ? $queue['q_calls_total_in'] : '';
+			$count_total_missed = ($queue['q_calls_missed'] > 0) ? $queue['q_calls_missed'] : '';
+			$total_wait = ($queue['q_avg_wait_time'] > 1) ? gmdate("H:i:s",$queue['q_avg_wait_time']) : '';
+			
+			$rows .= '<div class="col-lg-2">
+						<div class="widget style1 '.$class.'-bg">
+							<div class="row vertical-align">
+								'.$count.'
+							</div>
+							<h3 class="font-bold no-margins">
+								'.$row['Name'].'
+							</h3>
+							<div class="row vertical-align">
+								<div class="col-xs-5">
+									<table width="100%">
+										<tr><td colspan="2" >Calls</td></tr>
+										<tr><td><span class="'. $span_class . '">Totaal </span></td><td><b>'.$count_total.'</b></td></tr>
+										<tr><td><span class="'. $span_class . '">Gemist </span></td><td><b>'.$count_total_missed.'</b></td></tr>
+									</table>
+								</div>
+								<div class="col-xs-7 text-right">
+									<table width="100%">
+										<tr><td colspan="2" >Wachttijd</td></tr>
+										<tr><td><span class="'. $span_class . '">Gem</i></span></td><td><b>'.$avg_wait.'</b></td></tr>
+										<tr><td><span class="'. $span_class . '">Totaal</i></span></td><td><b>'.$total_wait.'</b></td></tr>
+										<tr><td><span class="'. $span_class . '">SLA</span></td><td><b class="text-'.$percent_class.'">'.$percent.'</b></td></tr>
+									</table>
+								</div>
+							</div>
+						</div>	
+                    </div>';
+			if($i % 6 == 0)
+			{
+				$rows .= '</div><div class="row">';
+			}
+			if($i == $row_count)
+			{
+				$rows .= '</div>';
+			}
+						
+			$i++;
+		}
+			
+		$res = array(
+			'status' => 1,
+			'row' => $rows,
+			'total_in' => $this->queue_total_in_count,
+			'total_out' => $this->queue_total_out_count,
+			'total_missed' => $this->queue_missed_count
+		);		
+		jsonArr($res);
+	}
+	
+	public function getQueueAgents()
+	{
+		$conn = $this->connectSqlSrv();
+		
+		$stmt = sqlsrv_query( $conn, "SELECT * FROM AvailableAgents WHERE CONVERT (date, LastCall) = CONVERT (date, GETDATE()) ORDER BY Name ASC" ); // AND SortedLines like '%2%'
+		if( $stmt === false) {
+			die( print_r( sqlsrv_errors(), true) );
+		}		
+		
+		$rows = '';
+		
+		$class_out = '';
+		$class_missed = '';
+		$highest_in = 0;
+		$highest_out = 0;
+		$highest_missed = 0;
+		$firstLoop = true;
+		while( $row = sqlsrv_fetch_array( $stmt, SQLSRV_FETCH_ASSOC) ) {
+			$this->getQueueAgentsStatus($row['StateDiscription']);
+			$agent_stat = $this->getQueueAgentsCallStats($row['Extension']);
+			
+			$count_in = ($agent_stat['q_agent_call_count_in'] > 0) ? $agent_stat['q_agent_call_count_in'] : ''; 
+			$count_out = ($agent_stat['q_agent_call_count_out'] > 0) ? $agent_stat['q_agent_call_count_out'] : ''; 
+			$count_missed = ($agent_stat['q_agent_call_missed_count'] > 0) ? $agent_stat['q_agent_call_missed_count'] : ''; 
+			$count_wait_time = ($agent_stat['q_agent_call_wait_time'] > 0) ? gmdate('H:i:s',$agent_stat['q_agent_call_wait_time'] / $count_in) : ''; 
+			
+			if ($firstLoop) {
+				$firstLoop = false;
+				$highest_in = $count_in;
+				$maxPrice = $count_out;
+			}
+			else {
+				$highest_in = max($highest_in, $count_in);
+				$maxPrice = max($maxPrice, $count_out);
+			}
+			
+			if ($count_in === $highest_in){
+				$class_in= 'class="text-navy"';
+			}
+			if ($count_missed > $highest_missed){
+				$highest_missed = $count_missed;
+				$class_missed= 'class="text-navy"';
+			}			
+			$rows .= '<tr>
+				<td>'.$row['Extension'].'</td>
+				<td>'.$row['Name'].'</td>
+				<td>'.$this->queue_agent_status.'</td>
+				<td class="count_in">'. $count_in .'</td>
+				<td '.$class_out.'>'. $count_out .'</td>
+				<td '.$class_missed.'>'. $count_missed .'</td>
+				<td>'. $count_wait_time .'</td>
+			</tr>';
+		}
+		
+		$res = array(
+			'status' => 1,
+			'rows' => $rows,
+			'maxId' => $highest_in
+		);		
+		jsonArr($res);		
+	}
+	
+	private function getQueueAgentsCallStats($agent_id)
+	{
+		// Total calls
+		// Calls in
+		// Calls out
+		// Missed calls
+		// Total Wait time
+		// Total Speak time
+		$conn = $this->connectSqlSrv();
+		
+		$params = array( $agent_id);
+		
+		$q_array = array(
+			"q_agent_call_count_in" => "SELECT count(distinct CallID) FROM AgentADR WHERE CONVERT (date, ChangeDate) = CONVERT (date, GETDATE()) And StateTime != 0 AND  Discription = 'Busy-In' and Extension = ?",
+			"q_agent_call_count_out" => "SELECT count(distinct CallID) FROM AgentADR WHERE CONVERT (date, ChangeDate) = CONVERT (date, GETDATE()) And StateTime != 0 AND  Discription = 'Busy-Out' and Extension = ?",
+			"q_agent_call_missed_count" => "SELECT count(distinct CallID) FROM MissedCalls WHERE CONVERT (date, MissedTime) = CONVERT (date, GETDATE()) AND Extension = ?",
+			"q_agent_call_wait_time" => "SELECT sum(WaitTime) FROM Distrihistri WHERE CONVERT (date, Startcall) = CONVERT (date, GETDATE()) and DeliveredTo = ?",			
+		);
+		
+		$res = array();
+				
+		foreach($q_array as $key => $val)
+		{
+			$stmt = sqlsrv_prepare( $conn, $val, $params); 
+			sqlsrv_execute( $stmt);
+			if( $stmt === false) {
+				die( print_r( sqlsrv_errors(), true) );
+			}
+	
+			while( $row = sqlsrv_fetch_array( $stmt, SQLSRV_FETCH_NUMERIC) ) {
+				$res[$key] = $row[0];
+			}			
+			
+		}
+		
+		return $res;			
+	}
+	
+	private function getQueueAgentsStatus($status)
+	{
+		switch($status)
+		{
+			case 'Busy-Out':
+				$this->queue_agent_status  = '<span class="text-danger"><i class="fa fa-phone"></i> <i class="fa fa-arrow-right"></i></span>';
+				break;
+			case 'Busy-In':
+				$this->queue_agent_status  = '<span class="text-warning"><i class="fa fa-phone"></i> <i class="fa fa-arrow-left"></i></span>';
+				break;
+			case 'Dialing':
+				$this->queue_agent_status  = '<i class="fa fa-phone"></i> dialing...';
+				break;				
+			case 'Offline':
+				$this->queue_agent_status  = '<span class="text-danger">Offline</span>';
+				break;	
+			case 'Idle':
+				$this->queue_agent_status  = '<span class="text-naxy">Idle...</span>';
+				break;				
+			default:
+				$this->queue_agent_status  = $status .'...';
+		}
+	}
+	
+	private function checkQueueCount($queue_id, $sla = '')
+	{
+		$conn = $this->connectSqlSrv();
+		
+		$params = array( $queue_id);
+		
+		$q_array = array(
+			"q_calls_count" => "SELECT COUNT(QueueID) FROM queue WHERE QueueID = ?",
+			"q_queue_active" => "SELECT Active FROM UserTrack WHERE QueueID = ?",
+			"q_calls_total_in" => "SELECT count(CallID) FROM Distrihistri WHERE CONVERT (date, Startcall) = CONVERT (date, GETDATE()) AND QueueID = ? ",
+			"q_calls_total_out" => "SELECT count(distinct CallID) FROM AgentADR WHERE CONVERT (date, ChangeDate) = CONVERT (date, GETDATE()) And StateTime != 0 AND  Discription = 'Busy-Out'",
+			"q_calls_missed" => "SELECT count(distinct CallID) FROM MissedCalls WHERE CONVERT (date, MissedTime) = CONVERT (date, GETDATE()) AND QueueID = ?",
+			"q_avg_wait_time" => "SELECT sum(WaitTime) FROM Distrihistri WHERE CONVERT (date, Startcall) = CONVERT (date, GETDATE()) AND QueueID = ?",
+			"q_sla_count" => "SELECT count(CallID) FROM Distrihistri WHERE CONVERT (date, Startcall) = CONVERT (date, GETDATE()) AND QueueID = ? AND WaitTime <= ". $sla,
+		);
+		
+		$res = array();
+				
+		foreach($q_array as $key => $val)
+		{
+			$stmt = sqlsrv_prepare( $conn, $val, $params); 
+			sqlsrv_execute( $stmt);
+			if( $stmt === false) {
+				die( print_r( sqlsrv_errors(), true) );
+			}
+	
+			while( $row = sqlsrv_fetch_array( $stmt, SQLSRV_FETCH_NUMERIC) ) {
+				$res[$key] = $row[0];
+			}			
+			
+		}
+		
+		return $res;	
+	}
+   
+	/**
      * Get operator treshold as pie graph.
      *
      * @param resource $post_val - $_POST values
@@ -1388,7 +1681,7 @@ class Tools
         );
     }
     /**
-     * Get signal load weekly avarage
+     * Get signal load trend analyse
      *
      * @param integer $x - specify x axis value
      * @param integer $y - specify y axis value

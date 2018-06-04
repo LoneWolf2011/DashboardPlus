@@ -67,7 +67,7 @@
         // You have to do that for the model and the view too
         $ctrlPath = ROOT_PATH . '/view/' . $requestedController . '.view.php';
 	
-        if(checkUserIsAdmin() && in_array($requestedController, $admin_only)) {
+        if(!checkUserIsAdmin() && in_array($requestedController, $admin_only)) {
 
             http_response_code(403);
             include ROOT_PATH . '/view/errors/page_403.php';

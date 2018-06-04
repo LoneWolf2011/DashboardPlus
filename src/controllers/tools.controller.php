@@ -44,6 +44,15 @@
 			if(isset($_GET['aoip'])){
 				$obj->getPortMonitorAoip('AOIP gateway');
 			}
-		}		
+		}	
+
+		if($_GET['get'] == 'queue'){
+			if(isset($_GET['row'])){
+				$obj->getQueueRow();
+			}
+			if(isset($_GET['agents'])){
+				$obj->getQueueAgents();
+			}			
+		}	
 	}
 	
