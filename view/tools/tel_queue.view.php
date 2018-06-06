@@ -1,9 +1,8 @@
     <div class="wrapper animated fadeInRight">
         <div class="row">
 			<div class="col-lg-12">
-				<h2>Telefoon queues <small><?= date('Y-m-d');?> </small></h2>
+				<h2>Totaal statistiek <small><?= date('d-m-Y');?></small></h2>
 			</div>
-			
 			<div class="col-lg-2">
                 <div class="widget style1 dark-gray-bg">
                     <div class="row vertical-align">
@@ -13,6 +12,9 @@
                         <div class="col-xs-7 text-right">
                             <h2 class="font-bold" id="total_in"></h2>
                         </div>
+						<div class="col-xs-12">
+							<span>Totaal inkomende calls</span>
+						</div>
                     </div>
                 </div>
             </div>
@@ -25,6 +27,9 @@
                         <div class="col-xs-7 text-right">
                             <h2 class="font-bold" id="total_out"></h2>
                         </div>
+						<div class="col-xs-12">
+							<span>Totaal uitgaande calls</span>
+						</div>
                     </div>
                 </div>
             </div>			
@@ -33,13 +38,52 @@
                     <div class="row vertical-align">
                         <div class="col-xs-5" >
                             <h2 class="c-gray"><i class="fa fa-phone"></i> <small class="text-danger"><i class="fa fa-remove"></i></small></h2>
+							
                         </div>
                         <div class="col-xs-7 text-right">
                             <h2 class="font-bold" id="missed"></h2>
                         </div>
+						<div class="col-xs-12">
+							<span>Totaal gemiste calls</span>
+						</div>
+                    </div>
+                </div>
+            </div>	
+			<div class="col-lg-2">
+                <div class="widget style1 dark-gray-bg">
+                    <div class="row vertical-align">
+                        <div class="col-xs-5" >
+                            <h2 class="c-gray">SLA <small class="text-navy"><i class="fa fa-pie-chart"></i></small></h2>
+                        </div>
+                        <div class="col-xs-7 text-right">
+                            <h2 class="font-bold"><span id="total_in_sla"></span><small>%</small></h2>
+                        </div>
+						<div class="col-xs-12">
+							<span>Percentage inkomende calls binnen SLA </span>
+						</div>
+                    </div>
+                </div>
+            </div>
+			<div class="col-lg-2">
+                <div class="widget style1 dark-gray-bg">
+                    <div class="row vertical-align">
+                        <div class="col-xs-5" >
+                            <h2 class="c-gray">SLA <small class="text-danger"><i class="fa fa-pie-chart"></i></small></h2>
+                        </div>
+                        <div class="col-xs-7 text-right">
+                            <h2 class="font-bold"><span id="total_out_sla"></span><small>%</small></h2>
+                        </div>
+						<div class="col-xs-12">
+							<span>Percentage inkomende calls buiten SLA </span>
+						</div>
                     </div>
                 </div>
             </div>			
+        </div>		
+        <div class="row">
+			<div class="col-lg-12">
+				<h2>Telefoon queues <small> </small></h2>
+			</div>		
         </div>		
 		
 		<div id="queue"></div>
@@ -58,6 +102,7 @@
 								<th><span class="text-navy"><i class="fa fa-phone"></i> <i class="fa fa-arrow-right"></i></span></th>
 								<th><span class="text-danger"><i class="fa fa-phone"></i> <i class="fa fa-remove"></span></th>
 								<th>Gem wachttijd</th>
+								<th>Gem spreektijd</th>
 							</tr>
 						</thead>
 						<tbody id="q_agents">
@@ -126,11 +171,15 @@
 					$('#total_in').html(data.total_in);
 					$('#total_out').html(data.total_out);
 					$('#missed').html(data.total_missed);
+					$('#total_in_sla').html(data.total_in_sla);
+					$('#total_out_sla').html(data.total_out_sla);
 				} else {
 					$('#queue').html('');
 					$('#total_in').html('');
 					$('#total_out').html('');
 					$('#missed').html('');
+					$('#total_in_sla').html('');
+					$('#total_out_sla').html('');
 				}						
 			}
 		});		

@@ -28,6 +28,8 @@ class Tools
 	private $queue_total_in_count = 0;
 	private $queue_total_out_count = 0;
 	private $queue_missed_count = 0;
+	private $queue_in_sla_count = 0;
+	private $queue_out_sla_count = 0;
 	private $queue_agent_status;
 	
 	/*
@@ -82,6 +84,7 @@ class Tools
 			$this->queue_total_in_count += $queue['q_calls_total_in'];
 			$this->queue_total_out_count = $queue['q_calls_total_out'];
 			$this->queue_missed_count += $queue['q_calls_missed'];
+			$this->queue_in_sla_count += $queue['q_sla_count'];
 			$total_calls = $queue['q_calls_total_in'] + $queue['q_calls_missed'];
 			
 			$percent_class = '';
@@ -101,7 +104,7 @@ class Tools
 					$percent_class = 'navy';
 				}
 				$percent = $percent.'%';
-				$avg_wait = ($queue['q_avg_wait_time'] / $total_calls > 1) ? gmdate("H:i:s", $queue['q_avg_wait_time'] / $total_calls) : '';
+				$avg_wait = (($queue['q_avg_wait_time'] / $total_calls) > 1) ? gmdate("H:i:s", $queue['q_avg_wait_time'] / $total_calls) : '';
 			} else {
 				$percent = '';
 				$avg_wait = '';
@@ -123,7 +126,7 @@ class Tools
 				$span_class='c-gray';
 			}
 			
-			$count = ($queue['q_calls_count'] > 0) ? '<div class="col-xs-3"><i class="fa fa-phone fa-4x"></i></div><div class="col-xs-9 text-right"><h2 class="font-bold">'. $queue['q_calls_count'].'</h2></div>' : '';
+			$count = ($queue['q_calls_count'] > 0) ? '<div class="col-xs-3"><i class="fa fa-phone fa-3x"></i></div><div class="col-xs-9 text-right"><h2 class="font-bold">'. $queue['q_calls_count'].'</h2></div>' : '';
 			$count_total = ($queue['q_calls_total_in'] > 0) ? $queue['q_calls_total_in'] : '';
 			$count_total_missed = ($queue['q_calls_missed'] > 0) ? $queue['q_calls_missed'] : '';
 			$total_wait = ($queue['q_avg_wait_time'] > 1) ? gmdate("H:i:s",$queue['q_avg_wait_time']) : '';
@@ -172,7 +175,9 @@ class Tools
 			'row' => $rows,
 			'total_in' => $this->queue_total_in_count,
 			'total_out' => $this->queue_total_out_count,
-			'total_missed' => $this->queue_missed_count
+			'total_missed' => $this->queue_missed_count,
+			'total_in_sla' => round((100 / $this->queue_total_in_count) * $this->queue_in_sla_count),
+			'total_out_sla' => round((100 / $this->queue_total_in_count) * ($this->queue_total_in_count - $this->queue_in_sla_count)),
 		);		
 		jsonArr($res);
 	}
@@ -181,7 +186,7 @@ class Tools
 	{
 		$conn = $this->connectSqlSrv();
 		
-		$stmt = sqlsrv_query( $conn, "SELECT * FROM AvailableAgents WHERE CONVERT (date, LastCall) = CONVERT (date, GETDATE()) ORDER BY Name ASC" ); // AND SortedLines like '%2%'
+		$stmt = sqlsrv_query( $conn, "SELECT * FROM AvailableAgents WHERE Hosts != '' OR CONVERT (date, LastCall) = CONVERT (date, GETDATE()) ORDER BY Name ASC" ); // AND SortedLines like '%2%'
 		if( $stmt === false) {
 			die( print_r( sqlsrv_errors(), true) );
 		}		
@@ -202,6 +207,7 @@ class Tools
 			$count_out = ($agent_stat['q_agent_call_count_out'] > 0) ? $agent_stat['q_agent_call_count_out'] : ''; 
 			$count_missed = ($agent_stat['q_agent_call_missed_count'] > 0) ? $agent_stat['q_agent_call_missed_count'] : ''; 
 			$count_wait_time = ($agent_stat['q_agent_call_wait_time'] > 0) ? gmdate('H:i:s',$agent_stat['q_agent_call_wait_time'] / $count_in) : ''; 
+			$count_speak_time = ($agent_stat['q_agent_call_speak_time'] > 0) ? gmdate('H:i:s',$agent_stat['q_agent_call_speak_time'] / $count_in) : ''; 
 			
 			if ($firstLoop) {
 				$firstLoop = false;
@@ -228,6 +234,7 @@ class Tools
 				<td '.$class_out.'>'. $count_out .'</td>
 				<td '.$class_missed.'>'. $count_missed .'</td>
 				<td>'. $count_wait_time .'</td>
+				<td>'. $count_speak_time .'</td>
 			</tr>';
 		}
 		
@@ -254,8 +261,9 @@ class Tools
 		$q_array = array(
 			"q_agent_call_count_in" => "SELECT count(distinct CallID) FROM AgentADR WHERE CONVERT (date, ChangeDate) = CONVERT (date, GETDATE()) And StateTime != 0 AND  Discription = 'Busy-In' and Extension = ?",
 			"q_agent_call_count_out" => "SELECT count(distinct CallID) FROM AgentADR WHERE CONVERT (date, ChangeDate) = CONVERT (date, GETDATE()) And StateTime != 0 AND  Discription = 'Busy-Out' and Extension = ?",
-			"q_agent_call_missed_count" => "SELECT count(distinct CallID) FROM MissedCalls WHERE CONVERT (date, MissedTime) = CONVERT (date, GETDATE()) AND Extension = ?",
+			"q_agent_call_missed_count" => "SELECT count( distinct CallID) FROM MissedCalls WHERE CONVERT (date, MissedTime) = CONVERT (date, GETDATE()) AND Extension = ?",
 			"q_agent_call_wait_time" => "SELECT sum(WaitTime) FROM Distrihistri WHERE CONVERT (date, Startcall) = CONVERT (date, GETDATE()) and DeliveredTo = ?",			
+			"q_agent_call_speak_time" => "SELECT sum(Speaktime) FROM Distrihistri WHERE CONVERT (date, Startcall) = CONVERT (date, GETDATE()) and DeliveredTo = ?",			
 		);
 		
 		$res = array();
