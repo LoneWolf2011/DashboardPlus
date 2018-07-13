@@ -200,7 +200,7 @@ var google_styles = [
 		"color": "#282828"
 	},
 	{
-		"saturation": -80
+		"saturation": -100
 	}
 	]
 },
