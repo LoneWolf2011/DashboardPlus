@@ -169,10 +169,12 @@
 											<span >Filter status:</span>
 												<select class="select2 form-control m-b" id="type" onchange="filterStatus(this.value);">
 													<option value="">All</option>
+													<option value="Trouble">Trouble</option>
 													<option value="0">Disconnected</option>
 													<option value="1">Connected</option>
-													<option value="2">Connected with backup</option>
-													<option value="3">No path status</option>
+													<option value="2">Backup disconnected</option>
+													<option value="3">IP disconnected</option>
+													<option value="4">No path status</option>
 												</select>
 										</div >
 										<div class="col-sm-4 col-md-4">				
@@ -623,13 +625,26 @@
 
 	function filterStatus(status) {
 		
-		for (var i = 0, marker; marker = markers_arr[i]; i++) {
-			if (marker.path == status || status.length === 0) {
-				marker.setVisible(true);
-			} else {
-				marker.setVisible(false);
-			}
+		if(status == 'Trouble'){
+			for (var i = 0, marker; marker = markers_arr[i]; i++) {
+	
+				if (marker.path == 2 || marker.path == 3 || marker.path == 0 || status.length === 0) {
+					marker.setVisible(true);
+				} else {
+					marker.setVisible(false);
+				}
+			}			
+		} else {
+			for (var i = 0, marker; marker = markers_arr[i]; i++) {
+	
+				if (marker.path == status || status.length === 0) {
+					marker.setVisible(true);
+				} else {
+					marker.setVisible(false);
+				}
+			}			
 		}
+
 	}	
 	
 	function filterLocation(category) {
