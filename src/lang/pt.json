@@ -1,0 +1,523 @@
+{
+	"placeholders":{
+		"select":"Selecione...",
+		"input":"Preencher..."
+	},
+	"layout":{
+		"topnav":{
+			"placeholder":"Procurar por localização",
+			"logout":"Sair"
+		},
+		"sidebar":{
+			"title":{
+				"1":"Casa",
+				"2":"Bilhetes",
+				"3":"Ferramentas",
+				"4":"Usuário",
+				"5":"De usuário",
+				"6":"Logging",
+				"7":"Configurações"
+			}
+		}		
+	},
+	"swal":{
+		"confirm":{
+			"title":"Você tem certeza?",
+			"confirmbutton":"Sim eu tenho certeza",
+			"cancelbutton":"Cancelar"
+		}
+	},	
+	"connection":{
+		"conn": "Conectado",
+		"diss": "Não conectado",
+		"back": "Conectado ao backup",
+		"nopath": "Geen pathstatus",		
+		"oos": "Fora de serviço até",
+		"main_err": "Falha na placa-mãe",
+		"batt_err": "Falha da bateria",
+		"230_err": "Falha de 230v",
+		"multi_err": "Questões múltiplas"
+	},
+	"error_page":{
+		"return_btn":"Volte",
+		"403":{
+			"label":"Acesso negado",
+			"msg":"Direitos de administrador são obrigatórios para acesso. Entre em contato com os administradores!"			
+		},
+		"404":{
+			"label":"Página não encontrada",
+			"msg":"Desculpe, mas a página que você está procurando não pode ser encontrada. Verifique o URL para erros, atualize a página "			
+		},
+		"500":{
+			"label":"Erro do Servidor Interno",
+			"msg":"O servidor encontrou algo inesperado que não pôde concluir a solicitação. Pedimos desculpas, você pode voltar para a página principal"	
+		},
+		"denied":{
+			"label":"Access denied",
+			"msg":"Admin rights are mandatory for access. Contact the admins"
+		},
+		"maintenance":{
+			"label":"Manutenção ocupada",
+			"msg":"Aguarde ou confira o status com os administradores"		
+		}		
+	},	
+	"error_msg":{			
+		"die":{
+			"label":"Algo definitivamente deu errado",
+			"msg":"Verifique os arquivos de log!"
+		},
+		"csrf":{
+			"label":"O token de CSRF não é válido",
+			"msg":"Verifique o URL do navegador e atualize a página!"
+		}		
+	},
+	"installscreen":{
+		"welcome": "Bem-vindo ao DB +",
+		"text": "Esta é a sua primeira vez.",
+		"subtext": "Aproveite o tempo para preencher os detalhes abaixo.",
+		"login": "Instalar",
+		"phpversion": {
+			"err":"Versão PHP muito baixa",
+			"msg":"A versão 7.0.0 é um requisito mínimo."
+		},		
+		"admin":{
+			"txt": "Configuração de administrador",
+			"email": "Digite o email do administrador",
+			"pass": "Digite a senha do administrador",
+			"local": "Insira a localização",
+			"lang": "Selecione o idioma padrão"
+			"msg":{
+				"user": "Admin username",
+				"pass": "Senha única",
+				"store": "Anote a senha acima em um lugar seguro"
+			}
+		},
+		"app":{
+			"txt": "Configuração de aplicativo",
+			"root": "URL root",
+			"docu": "Root folder",
+			"api": "Google API key"
+		},		
+		"scs":{
+			"txt": "Conexão SCS",	
+			"user": "Nome de usuário",	
+			"pass": "Senha"
+		},
+		"rms":{
+			"txt": "Conexão RMS"
+		},
+		"msg":{
+			"fail": "Installation unsuccessful",
+			"try": "Try again",
+			"suc": "Installation successful"
+		}
+	},
+	"loginscreen":{
+		"welcome": "Bem-vindo ao DB +",
+		"text": "Uma experiência aprimorada para gerenciamento de RMS e SCS.",
+		"subtext": "Faça o login. Para vê-lo em ação.",		
+		"login": "Entrar",
+		"placeholder": {
+			"email":"email",
+			"password":"senha"
+		},		
+		"request": "Pedido",
+		"forget": "Esqueceu a senha?"	
+	},
+	"tokenmsg":{
+		"welcome": "Recuperar senha",
+		"text": "Clique no botão recuperar",
+		"button": "Recuperar"
+	},	
+	"loginmsg":{
+		"lck":{
+			"label":"Autenticação falhou",
+			"msg":"Conta bloqueada por 2 horas."
+		},
+		"id":{
+			"label":"Autenticação falhou",
+			"msg":"Verifique suas iniciais ou senha."
+		},
+		"dev":{
+			"label":"Erro",
+			"msg":"Nenhuma conta DEV."
+		},
+		"blc":{
+			"label":"Erro",
+			"msg":"Conta de usuário está bloqueada. Entre em contato com o administrador."
+		},
+		"uknw":{
+			"label":"Erro",
+			"msg":"Usuário não existe."
+		},
+		"tok":{
+			"suc":{
+				"label":"Bem sucedido",
+				"msg":"Redefinir token solicitado."
+			},
+			"mul":{
+				"label":"Falha na solicitação de token",
+				"msg":"Não é possível solicitar vários tokens. Por favor, espere até que o token atual tenha expirado"
+			},			
+			"err":{
+				"label":"A solicitação de token de redefinição falhou",
+				"msg":"Atualize a página e tente novamente"
+			},
+			"inv":{
+				"label":"O token é inválido",
+				"msg":"Atualize a página e solicite um novo token"
+			},
+			"uknw":{
+				"label":"Token não encontrado",
+				"msg":"Atualize a página e solicite um novo token"
+			},
+			"exp":{
+				"label":"Token expirado",
+				"msg":"Isso não é mais utilizável. Atualize a página e solicite um novo token"
+			}
+		},
+		"res":{
+			"suc": "Verifique suas iniciais ou senha.",
+			"err": "Verifique suas iniciais ou senha."
+		}		
+	},
+	"home":{
+		"events":{
+			"h5":"Localizações",
+			"day":{
+				"label":"Conectados",
+				"small_label":"Desde um dia"
+			},
+			"week":{
+				"label":"Desligada",
+				"small_label":"Desde uma semana"
+			},
+			"month":{
+				"label":"Por mês",
+				"small_label":"Desde um mes"
+			}					
+		},
+		"filters": "Filters",
+		"actions": {
+			"selectdefault": "Padrão",
+			"text": "Ações",
+			"map_zoom": "Definir o nível de zoom do mapa:",
+			"filter_status": "Status do filtro:",
+			"filter_location": "Localização do filtro:",
+			"clusterzoom": "Nível de zoom do cluster:",
+			"clustersize": "Tamanho do zoom de cluster:",
+			"map_controls": "Controles de mapa",
+			"cluster_controls": "Controles de cluster",
+			"buttons": {
+				"cluster": "Agrupar",
+				"clear": "Clusters claros",
+				"refresh": "Atualizar",
+				"center": "Centro"
+			}	
+		"locations": {
+			"active": {
+				"label":"Locais on-line",
+				"table": {
+					"th1": "ID de dispositivo",
+					"th2": "Nome do dispositivo",
+					"th3": "endereço MAC",
+					"th4": "Status",
+					"th5": "Nome da localização"
+				}				
+			},
+			"problem": {
+				"label":"Localizações off-line",
+				"table": {
+					"th1": "ID de dispositivo",
+					"th2": "Nome do dispositivo",
+					"th3": "endereço MAC",
+					"th4": "Status"
+				}				
+			},
+			"notactive": {
+				"label":"Nenhum status de caminho",
+				"table": {
+					"th1": "Conexão",
+					"th2": "ID",
+					"th3": "Localização",
+					"th4": "Último sinal"
+				}				
+			},
+			"device": {
+				"label":"230v / Falha da bateria",
+				"table": {
+					"th1": "Conexão",
+					"th2": "ID",
+					"th3": "Localização",
+					"th4": "Último sinal"
+				}				
+			}			
+	},
+	"location":{
+		"connection": "Conexão",
+		"status": "Status",
+		"address": "Endereço",
+		"zipcode": "Código postal",
+		"city": "Cidade",
+		"first": "Primeiro sinal",
+		"last": "Último sinal",
+		"path": "Estado do caminho",
+		"mac": "Endereço MAC",
+		"udid": "UDID não",
+		"serie": "Série não",
+		"sim": "Sim cartão não",
+		"serviceid": "ID do serviço não",
+		"lijn": "Denominação de linha",
+		"components":{
+			"txt":"Componentes de localização",
+			"values":"Valores de localização"
+		},
+		"values":{
+			"table": {
+				"txt":"Valores de localização",
+				"th1": "Nome",
+				"th2": "Valor"
+			}				
+		},
+		"components":{
+			"table": {
+				"txt":"Componentes de localização",
+				"th1": "Componente",
+				"th2": "Quantidade",
+				"th3": "Serial#",
+				"th4": "Data de instalação",
+				"th5": "Data de validade"
+			}				
+		},		
+		"events":{
+			"week":"Semana",
+			"label":"Eventos desta semana",
+			"count":"Total de eventos"
+		},
+		"tab":{
+			"location":"Localização",
+			"update":"Atualizado em",
+			"tab1":{
+				"text":"Status da conexão",
+				"h3":"Estado do caminho",
+				"path_conn":"Conexão",
+				"path_name":"Trajeto",
+				"power":"230 volt",
+				"battery":"Bateria"
+			},
+			"tab2":{
+				"text":"Atraso de enquete",
+				"h3":"Contagem de atraso de pesquisa"
+			},
+			"tab3":{
+				"text":"Nível de atraso da pesquisa",
+				"h3":"Status do componente"
+			}			
+		}	
+	},
+	"admin":{
+		"h1":"Bem-vindo administrador",
+		"small":"Por favor espere"
+	},
+	"user":{
+		"title":"Usuário",
+		"edit":{
+			"title":"Editar usuário",
+			"button":"Atualizar",
+			"input":{
+				"1":"Nome de usuário",
+				"2":"Sobrenome do usuário",
+				"3":"E-mail do usuário"
+			}
+		},		
+		"acc_update":{
+			"msg":{
+				"update":{
+					"label": "Sucesso",
+					"text": "atualizado com sucesso"
+				},			
+				"err_email":{
+					"label": "Algo deu errado",
+					"msg": "Este não é um endereço de email correto"
+				},
+				"err_email_in_use":{
+					"label": "Algo deu errado",
+					"msg": "Este endereço de e-mail já está em uso"
+				},				
+				"suc":{
+					"label": "Sucesso",
+					"msg": "Conta de usuário foi atualizada"
+				},
+				"err":{
+					"label": "Algo deu errado",
+					"msg": "Atualize a página e tente novamente"
+				}			
+			}		
+		}
+	},
+	"users":{
+		"title":"De usuário",
+		"edit":{
+			"title":"Editar usuários",
+			"button":"Atualizar",
+			"input":{
+				"1":"Nome dos usuários",
+				"2":"Sobrenome do usuário",
+				"3":"E-mail do usuário",
+				"4":"Papel dos usuários",
+				"5":"Status dos usuários"
+			},
+			"msg":{	
+				"del":{
+					"label": "Sucesso",
+					"text": "Removido com sucesso"
+				},			
+				"suc":{
+					"label": "Sucesso",
+					"text": "Conta de usuário foi atualizada"
+				},
+				"err":{
+					"label": "Algo deu errado",
+					"text": "Tente novamente ou entre em contato com o administrador"
+				}				
+			}			
+		},
+		"new":{
+			"title":"Novo usuário",
+			"button":"Crio",
+			"msg":{	
+				"login_email":{
+					"label": "Sucesso",
+					"text": "E-mail de login enviado para",
+					"err": "E-mail de login não enviado"
+				},			
+				"suc":{
+					"label": "Sucesso",
+					"text": "Conta de usuário foi criada"
+				},
+				"err":{
+					"label": "Algo deu errado",
+					"text": "Tente novamente ou entre em contato com o administrador"
+				}				
+			}			
+		},
+		"status":{
+			"active":"Ativo",
+			"inactive":"Inativo"
+		},
+		"actions":{
+			"edit":"Editar",
+			"delete":"Excluir"
+		},
+		"table":{
+			"th1":"ID do usuário",
+			"th2":"Nome de usuário",
+			"th3":"Último nome",
+			"th4":"Endereço de e-mail",
+			"th5":"Papel do usuário",
+			"th6":"Status",
+		},
+		"swal":{
+			"confirm":{
+				"text":"O usuário: __placeholder__ será excluído permanentemente!"
+			}
+		}	
+	},		
+	"tickets":{
+		"label":"Bilhete",
+		"select":{
+			"label":{
+				"current":"Status atual",
+				"on_hold":"Em espera paral",
+				"sent_to":"Enviado também",
+				"external":"Terceiros",
+				"canceled":"Razão cancelada",
+				"options":"Opções de ingressos",
+				"actions":"Ações de ticket"
+			}
+		},
+		"status":{
+			"aangevraagd":"Requeridos",
+			"open":"Aberto",
+			"on_hold":"Em espera",
+			"totaal_uitval":"Falha total ",
+			"gesloten":"Fechadas",
+			"geannuleerd":"Cancelado",
+			"opnieuw_geopend":"Reaberto",
+			"opnieuw_verzenden":"Reenviado",
+			"doorzetten":"Forçe até o fim",
+			"storing_hersteld":"Falha restaurada",
+			"ticket_onnodig":"Bilhete desnecessário",
+			"ticket_foutief":"Bilhete incorreto"
+		},
+		"create":{
+			"label":"Crie um ticket",
+			"txt":{
+				"scs":"Número SCS",
+				"service":"Serviço",
+				"location":"Localização",
+				"address":"Endereço",
+				"zipcode":"Código postal",
+				"city":"Cidade",
+				"for":"Para",
+				"storing":"Defeituoso",
+				"action":"Açao",
+				"cp":"Entre em contato",
+				"cptel":"Número de telefone do contato",
+				"comment":"Comentário extra"			
+			},
+			"malfunction":{
+				"anders":"Diferente",
+				"1":"Sem linesync",
+				"2":"Falha GPRS",
+				"3":"Falha RAM",
+				"4":"Falha da bateria",
+				"5":"Falha de 230v",
+				"6":"Falha do roteador",
+				"7":"Falha de comunicação NVR",
+				"8":"Falha total"
+			}
+		},
+		"update":{	
+			"submitted_by":"Enviado por",		
+			"checked_by":"Verificado por",	
+			"status":"Estado",	
+			"updates":"Atualizações",	
+			"ticket_for":"Bilhete para",
+			"create":{
+				"label":"Atualizar bilhete",
+				"external":"Número do bilhete externo",
+				"up_comm":"Atualizar comentário",
+				"up_status":"Atualizar o status"
+			}			
+		},
+		"filters":{
+			"service":"Serviço (TODOS)",
+			"external":"Externo (TODOS)",
+			"status":"Status (TODOS)"
+		},		
+		"table": {
+			"th1": "Bilhete#",
+			"th2": "ID de localização",
+			"th3": "Nome da localização",
+			"th4": "Última atualização",
+			"th5": "Serviço",
+			"th6": "Festa externa",
+			"th7": "Defeituoso",
+			"th8": "Número do bilhete",
+			"th9": "Criado em",
+			"th10": "Status"
+		},
+		"buttons":{
+			"new":"Novo",
+			"send":"Enviar",
+			"re_send":"Reenviar",
+			"send_fast":"Send immediately",
+			"send_too":"Send too",
+			"update":"Update"
+		}
+	},
+	"footer":{
+		"copyright": "Direito autoral"
+	} 
+}

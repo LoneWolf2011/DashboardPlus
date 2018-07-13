@@ -30,7 +30,8 @@
 	"connection":{
 		"conn": "Verbonden",
 		"diss": "Niet verbonden",
-		"back": "Verbonden met backup",
+		"prim": "IP uitval",
+		"back": "Backup uitval",
 		"nopath": "Geen pathstatus",
 		"oos": "In onderhoud tot",
 		"main_err": "Mainboard uitval",

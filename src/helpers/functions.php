@@ -96,10 +96,10 @@
 			$dienst = "ING";		
 		} elseif($oms == "010278"){
 			$regio = "";
-			$dienst = "IPC_ADT";
+			$dienst = "AOIP_ADT";
 		} elseif($oms == "010276"){
 			$regio = "";
-			$dienst = "IPC_SMC";
+			$dienst = "AOIP_SMC";
 		} elseif($oms == "010274"){
 			$regio = "";
 			$dienst = "MusDoNet";				
@@ -114,10 +114,10 @@
 			$dienst = "S&E";
 		} elseif($oms == "010100"){
 			$regio = "";					
-			$dienst = "SMOKE";
+			$dienst = "FOG";
 		} elseif($oms == "010300"){
 			$regio = "";					
-			$dienst = "BNOT";				
+			$dienst = "N-BNOT";				
 		} else {
 			$regio = "";
 			$dienst = "";					
@@ -159,10 +159,19 @@
 		
 		if(@$path_arr[0] =='?' && @$path_arr[2] == '?' && @$path_arr[1] == '?' && @$path_arr[3] == '?'){
 			// No path status 
-			$path_conn = 3;
-		} elseif(!in_array( '1', $primair ) && in_array( '1', $secundair )){
+			$path_conn = 4;
+		} elseif(!in_array( '1', $primair ) && in_array( '1', $secundair ) && !in_array( '?', $secundair )){
 			// Backup conn
+			$path_conn = 3;		
+		} elseif(!in_array( '1', $primair ) && in_array( '1', $secundair ) && in_array( '?', $secundair )){
+			// Backup conn
+			$path_conn = 3;			
+		} elseif(in_array( '1', $primair ) && !in_array( '1', $secundair ) && !in_array( '?', $secundair )){
+			// Primair conn
 			$path_conn = 2;
+		} elseif(in_array( '1', $primair ) && !in_array( '1', $secundair ) && in_array( '0', $secundair )){
+			// Primair conn
+			$path_conn = 2;			
 		} elseif(!in_array( '1', $primair ) && !in_array( '1', $secundair )){
 			// Disconnected
 			$path_conn = 0;

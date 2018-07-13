@@ -296,6 +296,7 @@
 			
 		// On tab switch 2
 		$('a[href="#tab-2"]').on('shown.bs.tab', function (e) {
+
 			// If datatable not initialized 
 			if ( ! $.fn.DataTable.isDataTable( '.datatable_problem' ) ) {
 				// Show loading
@@ -504,7 +505,9 @@
 				} else if(loc.path_status == 2){
 					err_icon = url+'yellow_Marker'+loc.first_char+'.png';
 				} else if(loc.path_status == 3){
-					err_icon = url+'blue_Marker'+loc.first_char+'.png';					
+					err_icon = url+'orange_Marker'+loc.first_char+'.png';	
+				} else if(loc.path_status == 4){
+					err_icon = url+'blue_Marker'+loc.first_char+'.png';						
 				} else {
 					err_icon = url+'darkgreen_Marker'+loc.first_char+'.png';
 				}				
@@ -558,6 +561,10 @@
 						err_icon = url+'red_Marker'+loc.first_char+'.png';
 					} else if(loc.path_status == 2){
 						err_icon = url+'yellow_Marker'+loc.first_char+'.png';
+					} else if(loc.path_status == 3){
+						err_icon = url+'orange_Marker'+loc.first_char+'.png';	
+					} else if(loc.path_status == 4){
+						err_icon = url+'blue_Marker'+loc.first_char+'.png';	
 					} else {
 						err_icon = url+'darkgreen_Marker'+loc.first_char+'.png';
 					}					

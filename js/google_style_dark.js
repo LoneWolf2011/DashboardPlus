@@ -196,7 +196,8 @@ var google_styles = [
 	"elementType": "geometry.fill",
 	"stylers": [
 	{
-		"color": "#539a4b"
+		// #539a4b
+		"color": "#282828"
 	},
 	{
 		"saturation": -100
