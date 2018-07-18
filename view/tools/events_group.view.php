@@ -42,7 +42,7 @@
 	});	
 
 	function getPendingEventsTasks(url){
-		$.ajax({
+		$.ajaxq("pendingeventsgroups",{
 			type: 'GET',
 			url: url+"?get=events&tasks",
 			async: false,
@@ -57,7 +57,7 @@
 	}
 	
 	function getGoupedEvents(url){
-		$.ajax({
+		$.ajaxq("pendingeventsgroups",{
 			type: 'GET',
 			url: url+"?get=events&grouped",
 			async: false,

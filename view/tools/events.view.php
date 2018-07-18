@@ -38,7 +38,7 @@
 	});	
 	
 	function getPendingEvents(url){
-		$.ajax({
+		$.ajaxq("pendingevents",{
 			type: 'GET',
 			url: url+"?get=events&pending",
 			async: false,

@@ -106,10 +106,9 @@
 	};
 				
 	function getPortMonitoring(url){
-		$.ajax({
+		$.ajaxq("monitoring",{
 			type: 'GET',
 			url: url+"?get=port&feps",
-			async: false,
 			success: function(data) {
 				if(data.status != 0){
 					$('#p_monitor_asb').html(data.block_asb);
@@ -127,7 +126,7 @@
 
 
 	function getSignalLoad(url){
-		$.ajax({
+		$.ajaxq("signalload",{
 			type: 'GET',
 			url: url+"?get=signalload",
 			success: function(data) {

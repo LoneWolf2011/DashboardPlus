@@ -75,4 +75,5 @@ define('ROOT_JS', array(
 	'/js/plugins/datepicker/bootstrap-datepicker.js',
 	'/js/plugins/datepicker/locales/bootstrap-datepicker.nl.js',
 	'/js/plugins/select2/dist/js/select2.js',	
+	'/js/plugins/ajaxqueue/jquery.ajaxq-0.0.1.js',	
 ));
