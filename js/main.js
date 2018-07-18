@@ -5,12 +5,7 @@
  */
 
 $(document).ready(function () {
-	
-    $(".select2").select2({
-        placeholder: 'Select...',
-        allowClear: true
-    });
-		
+
 	var url = window.location;
 	// Will only work if string in href matches with location
 	$('ul.nav a[href="'+ url +'"]').parent().addClass('active');
@@ -30,9 +25,15 @@ $(document).ready(function () {
 		lng: lang_code
 	}, function (t){
 		$('#i18container').i18n();
-		$('[data-toggle="tooltip"]').tooltip(); 		
+		$('[data-toggle="tooltip"]').tooltip();
+
+        // Init select2 dropdown with autocomplete and i18n support
+        $(".select2").select2({
+            placeholder: i18n.t('placeholders.select'),
+            allowClear: true
+        });
 	});
-			
+
     // Add body-small class if window less than 768px
     if ($(this).width() < 769) {
         $('body').addClass('body-small'),

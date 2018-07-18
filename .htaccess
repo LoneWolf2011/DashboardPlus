@@ -12,6 +12,13 @@ ErrorDocument 403 /mdb/View/Errors/page_403.php
 ErrorDocument 404 /mdb/View/Errors/page_404.php
 ErrorDocument 500 /mdb/View/Errors/page_500.php
 
+RewriteEngine On
+
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME} !-f
+
+RewriteRule ^(.+)$ view/index.php/$1 [L]
+
 ## 
 <Files .htaccess>
 	order allow,deny
@@ -33,5 +40,5 @@ DirectoryIndex index.php /mdb/View/
     Order allow,deny
     Deny from all
  </Files>
- 
+
 RedirectMatch 403 ^/src/.*$

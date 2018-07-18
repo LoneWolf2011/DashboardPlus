@@ -4044,6 +4044,21 @@ table.table-mail tr td {
   right: 0;
 }
 /* BACKGROUNDS */
+.c-gray {
+	color: #949ba2;
+}
+.light-bg,
+.bg-muted {
+  background-color: #f3f3f4;
+}
+.dark-gray-bg,
+.bg-muted{
+  background-color: #404040;
+  color: #ffffff;
+}
+.dark-gray-bg > span {
+	color: #949ba2;
+}
 .gray-bg,
 .bg-muted {
   background-color: #f3f3f4;
@@ -4078,6 +4093,7 @@ table.table-mail tr td {
 }
 .black-bg {
   background-color: #262626;
+  color: #ffffff;
 }
 .panel-primary {
   border-color: #1ab394;

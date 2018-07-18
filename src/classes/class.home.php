@@ -22,10 +22,11 @@ class Home
      *	$path_arr possible values used to show locations and grouped locations
      *	0 = disconnected
      *	1 = connected
-     *	2 = connected by backup
-     *	3 = no path defined
+     *	2 = backup disconnected
+     *	3 = primair disconnected
+     *	4 = no path defined
     */
-    protected $path_arr = array(0,2);
+    protected $path_arr = array(0,2,3);
     /*
      *	Constants values defined in env.ini
     */
@@ -38,7 +39,8 @@ class Home
     {
         $this->db_conn = $db_conn;
     }
-    /**
+    
+	/**
      * Get marker set based on locations in SCS who got latitude and longitude defined
      *
      * @param boolean $getall - get complete dataset of get changed dataset since $updatetime
@@ -112,7 +114,7 @@ class Home
                 if ($path_status == 3)
                 {
                     $conn_status = $this->getPathStatusTranslation(3);
-                    $err_class = 'text-default';
+                    $err_class = 'text-warning';
                 }
                 elseif ($path_status == 0)
                 {
@@ -123,6 +125,11 @@ class Home
                 {
                     $conn_status = $this->getPathStatusTranslation(2);
                     $err_class = 'text-warning';
+                }
+				elseif ($path_status == 4)
+                {
+                    $conn_status = $this->getPathStatusTranslation(4);
+                    $err_class = 'text-default';
                 }
                 else
                 {
@@ -146,7 +153,7 @@ class Home
 
                 $is_letter = (ctype_alpha(substr(getCategory($row['SCS_Account_Nmbr']) , 0, 1)) == true) ? strtoupper(substr(getCategory($row['SCS_Account_Nmbr']) , 0, 1)) : strtoupper('A');
                 $locs[$row['SCS_Account_Nmbr']] = array(
-                    'info' => '<div><b>' . $row['SCS_Account_Address_Name'] . '</b><br>' . $row['SCS_Account_Address_Address'] . '<br><a class="text-info ' . $err_class . '" onclick="popupWindow(\'' . URL_ROOT . '/view/location/?' . $row['SCS_Account_Nmbr'] . '\', \'location\', 1980, 1080 ); return false;">#' . $row['SCS_Account_Nmbr'] . '</a><br><b>' . $conn_status . '</b>' . $device_status . '</div>',
+                    'info' => '<div><b>' . $row['SCS_Account_Address_Name'] . '</b><br>' . $row['SCS_Account_Address_Address'] . '<br><a class="text-info ' . $err_class . '" onclick="popupWindow(\'' . URL_ROOT . '/location/?' . $row['SCS_Account_Nmbr'] . '\', \'location\', 1980, 1080 ); return false;">#' . $row['SCS_Account_Nmbr'] . '</a><br><b>' . $conn_status . '</b>' . $device_status . '</div>',
                     'path_status' => $path_status,
                     'first_char' => $is_letter,
                     'lat' => $row['Latitude'],
@@ -161,6 +168,7 @@ class Home
 
         jsonArr($locs);
     }
+	
     /**
      * Get server side list of SCS location status to be used in client side DataTable
      *
@@ -210,7 +218,7 @@ class Home
                     $path_status = getPathStatus($d);
                     if ($path_status == 3)
                     {
-                        $conn_status = '<i class="fa fa-circle text-default"></i> ' . LANG['connection']['nopath'];
+                        $conn_status = '<i class="fa fa-circle text-warning"></i> ' . LANG['connection']['prim'];
                     }
                     elseif ($path_status == 0)
                     {
@@ -219,6 +227,10 @@ class Home
                     elseif ($path_status == 2)
                     {
                         $conn_status = '<i class="fa fa-circle text-warning"></i> ' . LANG['connection']['back'];
+                    }
+					elseif ($path_status == 4)
+                    {
+                        $conn_status = '<i class="fa fa-circle text-default"></i> ' . LANG['connection']['nopath'];
                     }
                     else
                     {
@@ -240,6 +252,10 @@ class Home
                     {
                         $conn_class = 'text-default';
                     }
+					elseif ($path_status == 4)
+                    {
+                        $conn_class = 'text-warning';
+                    }
                     elseif ($path_status == 0)
                     {
                         $conn_class = 'text-danger';
@@ -253,8 +269,7 @@ class Home
                         $conn_class = 'text-navy';
                     }
 
-                    //return '<a class="text-info '.$conn_class.'" data-markerid="' .$d. '" href="/mdb/view/location/?'.$d.$problem_link.'">'.$d.'</a>';
-                    return '<a class="text-info ' . $conn_class . '" data-markerid="' . $d . '" onclick="popupWindow(\'' . URL_ROOT . '/view/location/?' . $d . $problem_link . '\', \'location\', 1980, 1080 ); return false;">' . $d . '</a>';
+                    return '<a class="text-info ' . $conn_class . '" data-markerid="' . $d . '" onclick="popupWindow(\'' . URL_ROOT . '/location/?' . $d . $problem_link . '\', \'location\', 1980, 1080 ); return false;">' . $d . '</a>';
                 }
             ) ,
             array(
@@ -315,6 +330,7 @@ class Home
         jsonArr(SSP::complex($_GET, $db, 'scs_account_status', 'scs_account_nmbr', $columns, $whereResult = null, $whereAll = $where));
 
     }
+	
     /**
      * Get server side list of RMS devices from local database to be used in client side DataTable
      *
@@ -384,7 +400,7 @@ class Home
                     $conn = new SafeMySQL(SCS_DB_CONN);
                     $account_code = $conn->getOne("SELECT SCS_Account_Nmbr FROM scs_account_info WHERE scs_account_info.SCS_Account_CallerID_1 LIKE ?s", '%'.$d.'%');
                     //return $location_name
-                    return '<a class="text-info text-warning" data-markerid="' . $account_code . '" onclick="popupWindow(\'' . URL_ROOT . 'view/location/?' . $account_code . '&err\', \'location\', 1980, 1080, ); return false;">' . $account_code . '</a>';
+                    return '<a class="text-info text-warning" data-markerid="' . $account_code . '" onclick="popupWindow(\'' . URL_ROOT . '/location/?' . $account_code . '&err\', \'location\', 1980, 1080, ); return false;">' . $account_code . '</a>';
                 }
             ) ,
             array(
@@ -433,7 +449,8 @@ class Home
         jsonArr(SSP::complex($_GET, $db, 'rms_status_db', 'Diag_scan_id', $columns, $whereResult = null, $whereAll = $where));
 
     }
-    /**
+    
+	/**
      * Get SCS events counts from current week for 24h and current week
      *
      * @return array|JSON
@@ -510,7 +527,8 @@ class Home
 
         jsonArr($response_array);
     }
-    /**
+    
+	/**
      * Get all divs used to display in maps tools dashboard. Makes calls to multiple set methods
      *
      * @param boolean $getall - get complete dataset of get changed dataset since $updatetime
@@ -533,6 +551,7 @@ class Home
             $locs['count'] = array(
                 'conn' => ' <b>' . $location_count['connected'] . '</b>',
                 'diss' => ' <b>' . $location_count['disconnected'] . '</b>',
+                'prim' => ' <b>' . $location_count['primair'] . '</b>',
                 'back' => ' <b>' . $location_count['backup'] . '</b>',
                 'nopath' => ' <b>' . $location_count['nopath'] . '</b>'
             );
@@ -549,7 +568,8 @@ class Home
 
         jsonArr($locs);
     }
-    /**
+    
+	/**
      * Get multidimensional array containing all locations from sql result with path status, group name and SCS nr
      *
      * @return multidimensional array|locations=>array|path,group,id
@@ -595,7 +615,7 @@ class Home
 
                 if ($path_status == 3)
                 {
-                    // No path defined
+                    // IP disconnected
                     $locs['locations'][] = array(
                         'path' => 3,
                         'group' => $row['SCS_Account_Group'],
@@ -611,9 +631,18 @@ class Home
                         'id' => $row['SCS_Account_Nmbr']
                     );
                 }
+				elseif ($path_status == 4)
+                {
+                    // No path status
+                    $locs['locations'][] = array(
+                        'path' => 4,
+                        'group' => $row['SCS_Account_Group'],
+                        'id' => $row['SCS_Account_Nmbr']
+                    );
+                }
                 elseif ($path_status == 2)
                 {
-                    // Backup
+                    // Backup disconnected
                     $locs['locations'][] = array(
                         'path' => 2,
                         'group' => $row['SCS_Account_Group'],
@@ -638,7 +667,8 @@ class Home
 
         return $locs;
     }
-    /**
+    
+	/**
      * Get multidimensional array containing all locations where path is defined in $path_arr
      * and the group name does not appear in the array from method setMarkersGrouped()
      *
@@ -671,7 +701,10 @@ class Home
                         $conn_status = '<i class="fa fa-circle text-warning"></i> ' . $this->getPathStatusTranslation(2);
                     break;
                     case 3:
-                        $conn_status = '<i class="fa fa-circle text-default"></i> ' . $this->getPathStatusTranslation(3);
+                        $conn_status = '<i class="fa fa-circle text-warning"></i> ' . $this->getPathStatusTranslation(3);
+                    break;
+					case 4:
+                        $conn_status = '<i class="fa fa-circle text-default"></i> ' . $this->getPathStatusTranslation(4);
                     break;
                     default:
                         $conn_status = '';
@@ -690,6 +723,7 @@ class Home
 
         return $locs;
     }
+   
     /**
      * Get multidimensional array containing all locations grouped
      * based on the defined $path_arr and if the belong to the same group
@@ -783,7 +817,8 @@ class Home
         );
 
     }
-    /**
+    
+	/**
      * Get total count value based on locations in setMarkersStatusArray() method
      *
      * @return array=>connected, disconnected, backup, nopath
@@ -795,6 +830,7 @@ class Home
 
         $stat_nopath = 0;
         $stat_diss = 0;
+        $stat_prim = 0;
         $stat_back = 0;
         $stat_conn = 0;
 
@@ -816,6 +852,10 @@ class Home
                 break;
                 case 3:
                     $conn_status = $this->getPathStatusTranslation(3);
+                    $stat_prim += 1;
+                break;
+				case 4:
+                    $conn_status = $this->getPathStatusTranslation(4);
                     $stat_nopath += 1;
                 break;
                 default:
@@ -827,19 +867,22 @@ class Home
         return array(
             'connected' => $stat_conn,
             'disconnected' => $stat_diss,
+            'primair' => $stat_prim,
             'backup' => $stat_back,
             'nopath' => $stat_nopath
         );
     }
-    /**
+    
+	/**
      * Get path connection translation
      *
      * @param integer $path_nr - path status integer.
      * Possible values:
      * 		0 = disconnected,
      * 		1 = connected,
-     * 		2 = connected by backup,
-     * 		3 = no path defined,
+     * 		2 = backup disconnected,
+     * 		3 = IP disconnected,
+     * 		4 = no path defined,
      * @return string
      */
     protected function getPathStatusTranslation($path_nr)
@@ -856,12 +899,16 @@ class Home
                 return LANG['connection']['back'];
             break;
             case 3:
-                return LANG['connection']['nopath'];
+                return LANG['connection']['prim'];
             break;
+            case 4:
+                return LANG['connection']['nopath'];
+            break;			
             default:
                 return '';
             break;
         }
     }
+
 }
 

@@ -33,10 +33,10 @@
     { 
         die("Failed to connect to the database: " . $ex->getMessage());
     } 
-     
+
     $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION); 
-    $db->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC); 
-	
+    $db->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
+
 	define('LOGO_NAME', $env['APP']['LOGO_NAME']);
 	define('FAVICON_NAME', $env['APP']['FAVICON_NAME']);
 	define('URL_ROOT', $env['APP']['URL_ROOT']);
@@ -78,6 +78,12 @@
 	define('PORT_MONITOR_USER', $env['PORT_MONITOR']['USER']);
 	define('PORT_MONITOR_PASS', $env['PORT_MONITOR']['PASS']);
 	define('PORT_MONITOR_NAME', $env['PORT_MONITOR']['NAME']);
+
+	// Define Phone queue DB conn
+	define('QUEUE_HOST', $env['QUEUE_DB']['HOST']);
+	define('QUEUE_USER', $env['QUEUE_DB']['USER']);
+	define('QUEUE_PASS', $env['QUEUE_DB']['PASS']);
+	define('QUEUE_NAME', $env['QUEUE_DB']['NAME']);
 	
 	// Define SCS conn
 	define('SCS_DB_HOST', $env['SCS_DB']['HOST']);
@@ -94,10 +100,10 @@
 	// Make language file available as variable
 	$lang = json_decode(file_get_contents(URL_ROOT.'/Src/lang/'.APP_LANG.'.json'), true);
 	define('LANG',$lang);
-	
+
 	// Include file router
-	require ROOT_PATH.'/Src/file_package.php';
-	
+	require ROOT_PATH.'/Src/config/file_package.php';
+
 	// Function files
 	foreach(ROOT_FILE['FUNC'] as $func){
 		require ROOT_PATH.$func;
@@ -112,8 +118,9 @@
 	foreach(ROOT_FILE['CLASS'] as $class){
 		require ROOT_PATH.$class;
 	}
-	
-	// Define function to get settings
+
+
+	// Define function to get settings from settings table
 	function getSetting($db_conn, $setting_name){
 		$stmt 	= $db_conn->prepare("SELECT * FROM app_settings LIMIT 1");
 		$stmt->execute();	
@@ -122,7 +129,7 @@
 
 		return $row[strtolower($setting_name)];
 	}
-	
+	// Function to allow dynamic include of class files
 	function getClasses($path)
 	{
 		$class_arr = array();
@@ -166,40 +173,21 @@
 	
     // Set header content
     header('Content-Type: text/html; charset=UTF-8');
-	
+
     // Start session
-	session_start(); 
+	session_start();
 	
-	// DB connection with wrapper
+	// DB connection with SQL wrapper
 	$db_conn = new SafeMySQL();	
 	
-	// Set package const as variable
+	// Set CSS an JS package const as variable
 	$arr_css 	= ROOT_CSS;
 	$arr_js 	= ROOT_JS;
 
+    // Define router
+    require ROOT_PATH.'/Src/config/router.php';
 	//$user_db 		= new SafeMySQL();
 	//$user_ini		= @htmlentities($_SESSION[SES_NAME]['user_id'], ENT_QUOTES, 'UTF-8');	
 	//$user_cols  	= $user_db->getRow("SELECT * FROM app_users WHERE user_status = 'Active' AND user_id =  ?i",$user_ini);	
-	
-	// Get url and set view relative to view folder
-	$url_arr 		= parse_url($_SERVER['REQUEST_URI']);
-	
-	// Prevent access to errors and layout folders
-	if($url_arr['path'] == '/view/errors/' || $url_arr['path'] == '/view/layout/'){
-		http_response_code(404);
-		include ROOT_PATH.'/view/errors/page_404.php';
-		die();
-	} else {
-		$urlarr = explode('/',$url_arr['path']);
-		if(count($urlarr) > 2){
-			//array_shift($urlarr);
-			unset($urlarr[1]);
-			$view_url = implode('/',$urlarr);
-			//var_dump($view_url);				
-		}
 
-		$view_content = preg_replace('{/$}', '.view.php', $view_url);	
-		$view_basename = basename($view_url, '.view.php');		
-	}
-	
-	
+

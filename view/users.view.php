@@ -43,19 +43,19 @@
 								<div class="col-md-6">
 									<div class="form-group">
 										<label class="control-label" for="first-name"><span data-i18n="[html]users.edit.input.1">User name</span><font color="red">*</font></label> 
-										<input class="form-control" data-i18n="[placeholder]tickets.create.placeholder" name="user_name" type="text" value="<?= @$row['user_name'];?>">
+										<input class="form-control" data-i18n="[placeholder]placeholders.input" name="user_name" type="text" value="<?= @$row['user_name'];?>">
 									</div>
 								</div>
 								<div class="col-md-6">
 									<div class="form-group">
 										<label class="control-label" for="first-name"><span data-i18n="[html]users.edit.input.2">User last name</span><font color="red">*</font></label> 
-										<input class="form-control" data-i18n="[placeholder]tickets.create.placeholder" name="user_last_name" type="text" value="<?= @$row['user_last_name'];?>">
+										<input class="form-control" data-i18n="[placeholder]placeholders.input" name="user_last_name" type="text" value="<?= @$row['user_last_name'];?>">
 									</div>
 								</div>
 								<div class="col-md-6">
 									<div class="form-group">
 										<label class="control-label" for="first-name"><span data-i18n="[html]users.edit.input.3">User email</span><font color="red">*</font></label> 
-										<input class="form-control" data-i18n="[placeholder]tickets.create.placeholder" name="user_email" type="text" value="<?= @$row['user_email']; ?>">
+										<input class="form-control" data-i18n="[placeholder]placeholders.input" name="user_email" type="text" value="<?= @$row['user_email']; ?>">
 									</div>
 								</div>
 								<div class="col-md-6">
@@ -117,19 +117,19 @@
 								<div class="col-md-6">
 									<div class="form-group">
 										<label class="control-label" for="first-name"><span data-i18n="[html]users.edit.input.1">User name</span><font color="red">*</font></label> 
-										<input class="form-control" data-i18n="[placeholder]tickets.create.placeholder" name="user_name" type="text">
+										<input class="form-control" data-i18n="[placeholder]placeholders.input" name="user_name" type="text">
 									</div>
 								</div>
 								<div class="col-md-6">
 									<div class="form-group">
 										<label class="control-label" for="first-name"><span data-i18n="[html]users.edit.input.2">User last name</span><font color="red">*</font></label> 
-										<input class="form-control" data-i18n="[placeholder]tickets.create.placeholder" name="user_last_name" type="text">
+										<input class="form-control" data-i18n="[placeholder]placeholders.input" name="user_last_name" type="text">
 									</div>
 								</div>
 								<div class="col-md-6">
 									<div class="form-group">
 										<label class="control-label" for="first-name"><span data-i18n="[html]users.edit.input.3">User email</span><font color="red">*</font></label> 
-										<input class="form-control" data-i18n="[placeholder]tickets.create.placeholder" name="user_email" type="text" >
+										<input class="form-control" data-i18n="[placeholder]placeholders.input" name="user_email" type="text" >
 									</div>
 								</div>
 								<div class="col-md-6">
@@ -147,7 +147,8 @@
 												?>
 										</select>
 									</div>
-								</div><input name="csrf" type="hidden" value="<?= htmlspecialchars($_SESSION['db_token'], ENT_QUOTES, 'UTF-8');?>">
+								</div>
+                                <input name="csrf" type="hidden" value="<?= htmlspecialchars($_SESSION['db_token'], ENT_QUOTES, 'UTF-8');?>">
 								<div class="col-md-12">
 									<div class="form-group">
 										<button class="btn btn-primary" name="save_button"><i class='fa fa-save fa-fw'></i> <span data-i18n="[html]users.new.button">Create</span></button>

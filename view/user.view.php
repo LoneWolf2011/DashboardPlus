@@ -19,20 +19,20 @@
 									<div class="col-md-6">
 										<div class="form-group">
 											<label class="control-label" for="first-name"><span data-i18n="[html]user.edit.input.1">User name</span><font color="red">*</font></label>
-											<input type="text" class="form-control" name="user_name" value="<?= @$row['user_name'];?>" data-i18n="[placeholder]tickets.create.placeholder" >
+											<input type="text" class="form-control" name="user_name" value="<?= @$row['user_name'];?>" data-i18n="[placeholder]placeholders.input" >
 										</div>									
 									</div>									
 									<div class="col-md-6">
 										<div class="form-group">
 											<label class="control-label" for="first-name"><span data-i18n="[html]user.edit.input.2">User last name</span><font color="red">*</font></label>
-											<input type="text" class="form-control" name="user_last_name" value="<?= @$row['user_last_name'];?>" data-i18n="[placeholder]tickets.create.placeholder"   >
+											<input type="text" class="form-control" name="user_last_name" value="<?= @$row['user_last_name'];?>" data-i18n="[placeholder]placeholders.input"   >
 										</div>								
 									</div>								
 			
 									<div class="col-md-6">
 										<div class="form-group">
 											<label class="control-label" for="first-name"><span data-i18n="[html]user.edit.input.3">User email</span><font color="red">*</font></label>
-											<input type="text" class="form-control" name="user_email" value="<?= @$row['user_email'];?>" data-i18n="[placeholder]tickets.create.placeholder" value="<?= @$row['SCS_Account_Address_Name']; ?>">
+											<input type="text" class="form-control" name="user_email" value="<?= @$row['user_email'];?>" data-i18n="[placeholder]placeholders.input" value="<?= @$row['SCS_Account_Address_Name']; ?>">
 										</div>									
 									</div>									
 
@@ -142,7 +142,6 @@
 						text: data.body,
 						type: data.type
 					});
-					table_active.ajax.reload( null, false ); 
 				},
 				error: function(xhr, status, error){
 					var json = $.parseJSON(xhr.responseText);

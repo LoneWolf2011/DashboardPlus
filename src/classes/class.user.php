@@ -421,7 +421,7 @@ class User
                 'dt' => 5,
                 'formatter' => function ($d, $row)
                 {
-                    $edit = "<a class='label label-success' href='" . URL_ROOT . "/view/users/?id=" . $row[0] . "' >" . LANG['users']['actions']['edit'] . "</a>";
+                    $edit = "<a class='label label-success' href='" . URL_ROOT . "/users/?id=" . $row[0] . "' >" . LANG['users']['actions']['edit'] . "</a>";
                     $dele = "<a class='label label-danger' id='delete' value='" . $row[0] . "' rel='" . $row[2] . "' >" . LANG['users']['actions']['delete'] . "</a>";
                     return $edit . ' ' . $dele;
                 }

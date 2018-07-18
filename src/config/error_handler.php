@@ -2,23 +2,22 @@
 /* 
 ==========================================================================================================
 
-	Name: Paperless Office custom error handler
-	Functie: 
-			- Schrijft errors weg naar error.log indien debug in config.php uit staat.	
-			- Geeft een user friendly Fatal error weer.
-			- Logged Fatal error in error.log file.
+	Functie:
+			- Writes errors too error.log if debug is FALSE in env.ini
+			- Shows user friendly error message if debug is TRUE in env.ini
+			- Log Fatal error too error.log file.
 			
-	Version: 1.1.1
+	Version: 1.2.0
 	Author:	Roelof Jan van Golen - <r.vangolen@asb.nl>
 
 ==========================================================================================================
 */
 	error_reporting(E_ALL);
 	
-	// Modify parse errors uit php.ini dmv APP_DEBUG
-	// indien APP_DEBUG = TRUE worden de errors in de applicatie weergegeven
+	// Modify parse errors from php.ini through APP_DEBUG
+	// if APP_DEBUG = TRUE errors are shown in application
 	ini_set("display_errors", (APP_DEBUG === 1) ? 'on' : 'off');
-	define('ERROR_LOG_FILE', ROOT_PATH.'/Src/Logs/Errors/'.date("Y-m-d").'_error.log');
+	define('ERROR_LOG_FILE', ROOT_PATH.'/Src/Logs/'.date("Y").'/Errors/'.date("Y-m-d").'_error.log');
 	
 	/**
 	* Custom error handler
@@ -151,8 +150,8 @@
 			} 
 		} 
 	
-		if ($isError && APP_DEBUG !== 1){ 
-			// Indien er een ajax call wordt uitgevoerd
+		if ($isError && APP_DEBUG !== 1){
+            // If an ajax call is being proccesed
 			if(isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest') { 
 				$return = array(); 
 				$return['title'] = "Fatal error"; 

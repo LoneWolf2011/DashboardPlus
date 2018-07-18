@@ -2,11 +2,11 @@
             <nav class="navbar navbar-static-top white-bg" role="navigation" style="margin-bottom: 0">
                 <div class="navbar-header">
                     <a class="navbar-minimalize minimalize-styl-2 btn btn-primary hidden" href="#" id="menu_bar"><i class="fa fa-bars"></i> </a>
-                    <!--<form role="search" class="navbar-form-custom" method="post" action="#">
+                    <div class="navbar-form-custom" >
                         <div class="form-group">
-                            <input type="text" placeholder="Search for something..." class="form-control" name="top-search" id="top-search">
+                            <input type="text" class="form-control autocomplete-append site-nr"  id="top_search" data-i18n="[placeholder]layout.topnav.placeholder" ></input>
                         </div>
-                    </form>-->
+                    </div>
                 </div>
                 <ul class="nav navbar-top-links navbar-right">
 					<li>

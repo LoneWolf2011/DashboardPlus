@@ -1,6 +1,8 @@
-    <div id="map"></div>	
+
+    <div id="map"></div>
 	
 	<div id="div_table" class="map-div-table">
+	
 		<div class="map-div">
 				<h3>Realtime disconnects</h3>
 			<table width="100%">	
@@ -10,17 +12,25 @@
 
 		<div class="map-div">
 			<table width="100%">
-				<tr>
-					<td><img src="<?= URL_ROOT_IMG;?>/GoogleMapsMarkers/darkgreen_MarkerR.png"/><span id="div_alert_active"  ></span></td>
-					<td><img src="<?= URL_ROOT_IMG;?>/GoogleMapsMarkers/yellow_MarkerG.png"/><span id="div_alert_backup"  ></span></td>
-					<td><img src="<?= URL_ROOT_IMG;?>/GoogleMapsMarkers/red_MarkerO.png"/><span id="div_alert_diss"  ></span></td>	
-					<td><img src="<?= URL_ROOT_IMG;?>/GoogleMapsMarkers/blue_MarkerZ.png"/><span id="div_alert_nopath"  ></span></td>	
-				</tr>
+				<td><img src="<?= URL_ROOT_IMG;?>/GoogleMapsMarkers/darkgreen_MarkerX.png"/></td><td><span id="div_alert_active"  ></span></td><td>Verbonden</td></tr>
+				<td><img src="<?= URL_ROOT_IMG;?>/GoogleMapsMarkers/yellow_MarkerX.png"/></td><td><span id="div_alert_backup"  ></span></td><td>Backup uitval</td></tr>
+				<td><img src="<?= URL_ROOT_IMG;?>/GoogleMapsMarkers/orange_MarkerX.png"/></td><td><span id="div_alert_primair"  ></span></td><td>Primair uitval</td></tr>
+				<td><img src="<?= URL_ROOT_IMG;?>/GoogleMapsMarkers/red_MarkerX.png"/></td><td><span id="div_alert_diss"  ></span></td>	<td>Niet verbonden</td></tr>
+				<td><img src="<?= URL_ROOT_IMG;?>/GoogleMapsMarkers/blue_MarkerX.png"/></td><td><span id="div_alert_nopath"  ></span></td><td>Geen pathstatus</td></tr>	
+			</table>
+			<br>
+			<table width="100%">
+				<td><img src="<?= URL_ROOT_IMG;?>/GoogleMapsMarkers/darkgreen_MarkerA.png"/></td><td>AOIP</td></tr>
+				<td><img src="<?= URL_ROOT_IMG;?>/GoogleMapsMarkers/darkgreen_MarkerB.png"/></td><td>BRAND</td></tr>
+				<td><img src="<?= URL_ROOT_IMG;?>/GoogleMapsMarkers/darkgreen_MarkerD.png"/></td><td>DIGIALARM</td></tr>
+				<td><img src="<?= URL_ROOT_IMG;?>/GoogleMapsMarkers/darkgreen_MarkerI.png"/></td><td>ING</td></tr>
+				<td><img src="<?= URL_ROOT_IMG;?>/GoogleMapsMarkers/darkgreen_MarkerN.png"/></td><td>B-NOTIFIED</td></tr>
+				<td><img src="<?= URL_ROOT_IMG;?>/GoogleMapsMarkers/darkgreen_MarkerM.png"/></td><td>MUSDONET</td></tr>
+				<td><img src="<?= URL_ROOT_IMG;?>/GoogleMapsMarkers/darkgreen_MarkerS.png"/></td><td>S&E</td></tr>
+				<td><img src="<?= URL_ROOT_IMG;?>/GoogleMapsMarkers/darkgreen_MarkerF.png"/></td><td>MISTMACHINE</tr>
 			</table>
 		</div>
-		
-
-	
+			
 	</div>
 
 	<div id="div_grouped" class="map-div-grouped">
@@ -141,12 +151,16 @@
 
 				if(loc.path_status == 0){
 					err_icon = url+'red_Marker'+loc.first_char+'.png';
+				} else if(loc.path_status == 1){
+					err_icon = url+'darkgreen_Marker'+loc.first_char+'.png';	
 				} else if(loc.path_status == 2){
 					err_icon = url+'yellow_Marker'+loc.first_char+'.png';
 				} else if(loc.path_status == 3){
+					err_icon = url+'orange_Marker'+loc.first_char+'.png';	
+				} else if(loc.path_status == 4){
 					err_icon = url+'blue_Marker'+loc.first_char+'.png';					
 				} else {
-					err_icon = url+'darkgreen_Marker'+loc.first_char+'.png';
+					err_icon = url+'brown_Marker'+loc.first_char+'.png';
 				}				
 				
 				//Create marker
@@ -196,10 +210,16 @@
 				if(loc.path_status!==undefined ) {
 					if(loc.path_status == 0){
 						err_icon = url+'red_Marker'+loc.first_char+'.png';
+					} else if(loc.path_status == 1){
+						err_icon = url+'darkgreen_Marker'+loc.first_char+'.png';	
 					} else if(loc.path_status == 2){
 						err_icon = url+'yellow_Marker'+loc.first_char+'.png';
+					} else if(loc.path_status == 3){
+						err_icon = url+'orange_Marker'+loc.first_char+'.png';	
+					} else if(loc.path_status == 4){
+						err_icon = url+'blue_Marker'+loc.first_char+'.png';					
 					} else {
-						err_icon = url+'darkgreen_Marker'+loc.first_char+'.png';
+						err_icon = url+'brown_Marker'+loc.first_char+'.png';
 					}					
 					locations[key].marker.setIcon(err_icon)
 				}
@@ -244,15 +264,13 @@
 	function getMarkerData() {
 		ajaxObj.options.url = url_str+'?get=markers&time='+ajaxObj.updatetime;
 		$.ajax(ajaxObj.options)
-			//fires when ajax returns successfully
+			// fires when ajax returns successfully
 			.done(function(data){
 				setMarkers(data);
 				ajaxObj.updatetime = data.updatetime;
-				
-				//console.log(ajaxObj.updatetime);
 			}) 
-			.fail(ajaxObj.fail) //fires when an ajax error occurs
-			.always(ajaxObj.get(getMarkerData, 10000)); //fires after ajax success or ajax error		  
+			.fail(ajaxObj.fail) // fires when an ajax error occurs
+			.always(ajaxObj.get(getMarkerData, 10000)); // fires after ajax success or ajax error		  
 	}
 
 	function getMarkerTable() {
@@ -262,6 +280,7 @@
 				if(data.status == 1){
 					$('#div_alert_active').html(data.count.conn);
 					$('#div_alert_diss').html(data.count.diss);
+					$('#div_alert_primair').html(data.count.prim);
 					$('#div_alert_backup').html(data.count.back);
 					$('#div_alert_nopath').html(data.count.nopath);
 																	

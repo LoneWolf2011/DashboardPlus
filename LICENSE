@@ -1,21 +1,123 @@
-MIT License
+ 
+** END USER LICENSE AGREEMENT
+------------------------------------------------------------
 
-Copyright (c) 2018 Roelof
+This End-User License Agreement (the “EULA”) is a LEGAL AGREEMENT between the individual or legal entity that intents to download and/or actually downloads and uses the Software and ASB Monitoring BV (the “Company”), the author 
+of the software (the “Software”), which may include associated media, printed materials, and “online” or electronic documentation.
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
+By installing, accessing, copying or (otherwise) using the Software, Licensee is BOUND BY THE TERMS AND CONDITIONS SET FORTH IN THIS EULA. If Licensee does not agree to and/or comply with the terms and conditions set forth in 
+this EULA, then Licensee must not download, install, or (continue to) use the Software.
 
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
+This EULA expresses and describes Dutch legal concepts in English and not in their original Dutch terms. Consequently, this EULA is made on the express condition that all words, terms and expressions used herein shall be 
+construed and interpreted in accordance with the laws of the Netherlands.
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+The Company is allowed to change the terms and conditions of this EULA at any time.
+
+1. DEFINITIONS.
+
+* “Company” shall refer to the licensor, the private company with limited liability ASB Security BV, located at Boschdijk 720, 5624CL, Eindhoven, The Netherlands, registered at the Dutch Chamber of Commerce under number 
+17042775.
+* "End User" shall mean an employee, contractor or agent of Licensee and its affiliates authorized by Licensee to use the Software as per the terms of this EULA.
+* “Licensee” shall mean the individual or legal entity that intents to download and/or actually downloads and uses the Software.
+* “Software” shall mean the deliverables provided pursuant to this EULA, namely: titanium remote service portal.
+
+2. GRANT OF LICENSE.
+
+* SOFTWARE PRODUCT LICENSE. The Software is licensed, not sold. Subject to the terms of this EULA, Company hereby grants to Licensee a royalty-free, non-exclusive, non-sublicensable and non-transferable license to possess 
+and to use a copy of the Software only for Licensee's own internal use and limited to the number of End Users for which Licensee has paid the applicable license fee. Licensee shall maintain accurate records necessary to 
+verify the number of End Users. Upon Company's written request, Licensee shall provide Company with such records within ten (10) days. If Licensee has more End Users than Licensee has paid for, Licensee shall immediately pay 
+Company an additional license fee in addition to any costs incurred by Company associated with reviewing such records.
+* LICENSEE'S RESPONSIBILITY FOR END USERS. Licensee shall be responsible for any act or omission of all End Users and for their compliance with all of the terms of this EULA. Any action or breach by any of Licensee's 
+employees, contractors, agents or affiliates shall be deemed an action or breach by Licensee of this EULA and Licensee hereby indemnifies and holds Company harmless from any and all such breaches of this EULA. Licensee 
+waives all of those defenses that Licensee may have in law or otherwise which may be raised to avoid liability should Licensee not be liable for its employees', contractors’, agents’ or affiliates’ acts, omissions and 
+non-compliance with the terms of this EULA.
+* INSTALLATION AND USE. Licensee shall install the Software on its premises. The Software may be installed on one computer or device ("Licensed Hardware System") for use by one person at a time only. Licensee may not allow 
+multiple users, computers or devices to access or use the Software (indirectly) through the Licensed Hardware System. If Licensee wishes to use the Software on more than hardware system, it must obtain separate copies and 
+separate licenses to go with each copy.
+* REPRODUCTION AND COPIES. Licensee is allowed to reproduce the Software and this reproduction may serve as a back-up copy, insofar as this is necessary for the intended use of the Software only. The back-up copy may not be 
+distributed and may only be used to reinstall the Software.
+
+3. DESCRIPTION OF LIMITATIONS.
+
+* LIMITATIONS. Licensee may not - irrespective of whether for commercial purposes or not - reverse engineer, decompile, disassemble, publish, copy, rent, lease, rend or encumber the Software or attempt to circumvent 
+technical protection measures, except and only to the extent that such activity is expressly permitted in this EULA or by applicable law.
+* SEPARATION OF COMPONENTS. Software is licensed as a single product. Its components may not be separated or virtualized for use on more than one computer.
+* SOFTWARE TRANSFER. Licensee cannot transfer any rights under the EULA. This limitation affects both the law of obligations and property rights.
+
+4. INTELLECTUAL PROPERTY.
+
+All intellectual property rights, including titles, interests and copyrights in and to the Software, including but not limited to all images, photographs, animations, video, audio, music, text, data, computer code, algorithms, 
+and information, are owned by and shall (regardless of Licensee's involvement in its (further) development) continue to be property of Company and/or its licensors. To the extent that with regard to the Software intellectual 
+property rights would arise on the part of Licensee, Licensee hereby declares it shall (without charge) fully cooperate to assigning these rights to the Company. The Software is protected by all applicable copyright laws and 
+international treaties. Therefore, Licensee is required to treat Software like any other copyrighted material, except as otherwise provided for in this EULA.
+
+5. NON-SUPPORT.
+
+Company is under no obligation to support the Software, or to continue providing or updating any of the Software.
+
+6. DURATION AND TERMINATION.
+
+* This EULA is effective for an indefinite period.
+* If Licensee fails to comply with any of the terms and conditions set forth in this EULA, it shall automatically be in default and the Company shall be entitled to terminate (in Dutch: "ontbinden") it.
+* Notwithstanding the foregoing, this EULA may be terminated (in Dutch: "opzeggen" or "ontbinden") by Company in accordance with its (other) rights following from this EULA and/or applicable law and/or case law. “Opzegging” 
+means any termination which under the applicable law leads, to the extent permitted, desired and communicated, to the end of the obligations of the parties beyond the date of such termination, without prejudice to the 
+obligations accrued prior to the date of such termination. “Ontbinding” means any termination which under the applicable law creates the obligation for the parties to undo, to the extent permitted, desired and communicated, 
+any performance rendered prior to the date of such termination.
+* Company may terminate (in Dutch: "opzeggen") this EULA upon written notice, including e-mail, to Licensee, with or without cause, provided that it takes into account a notice period of one month. Licensee affirms that this 
+is a reasonable notice period.
+* If the EULA is ended by the Company in accordance with this article, it shall not be liability for any compensation.
+
+7. INTEGRATION.
+
+Both parties agree that this EULA is the complete and exclusive statement of the mutual understanding of the parties and supersedes and cancels all previous written and oral agreements and communications relating to the subject 
+matter of this EULA.
+
+8. JURISDICTION.
+
+This EULA shall be deemed to have been made in, and shall be construed pursuant to and governed exclusively by the laws of the Netherlands, without regard to conflicts of laws provisions thereof. Any legal action or proceeding 
+resulting from or relating to this EULA shall - insofar as Dutch imperative law allows it - be brought exclusively to the competent judge of the judicial district of Oost-Brabant, the Netherlands, and each party consents to the 
+jurisdiction thereof. If the Company is the prevailing party in any action to enforce this EULA it shall be entitled to recover all accompanying costs and expenses including, without limitation, attorneys’ fees.
+
+9. NON-TRANSFERABLE.
+
+This EULA is not assignable or transferable (neither under civil law nor property law) by Licensee without the prior written consent of Company; any attempt to do so shall be void.
+
+10. NOTICES.
+
+Any notice, report, approval or consent required or permitted hereunder shall be in writing and will be deemed to have been duly given if delivered personally or mailed by first-class, registered or certified mail, postage 
+prepaid to the respective addresses of the parties and/or the email address a party has indicated and/or proven in the past to be accessible on.
+
+11. SEVERABILITY.
+
+ SEVERABILITY. No failure to exercise, and no delay in exercising, on the part of Company, any privilege, any power or any rights hereunder will operate as a waiver thereof, nor will any single or partial exercise of any right 
+or power hereunder preclude further exercise of any other right hereunder. If any provision of this EULA shall be adjudged by any court of competent jurisdiction to be unenforceable or invalid, that provision shall be limited 
+or eliminated to the minimum extent necessary so that this EULA shall otherwise remain in full force and effect and enforceable.
+
+12. WARRANTY DISCLAIMER.
+
+ WARRANTY DISCLAIMER. Company hereby expressly disclaims any representation and/or warranty for the Software. Software and any related documentation is provided “as is” without representation and/or warranty of any kind, either 
+express or implied, including, without limitation, the implied warranties of merchantability, fitness for a particular purpose, or non-infringement. Licensee accepts any and all risk arising out of or in connection with use or 
+performance of the Software.
+
+13. LIMITED LIABILITY.
+
+With the exception of deliberate intent (in Dutch: "opzet") or deliberate recklessness (in Dutch: "bewuste roekeloosheid") of Company and/or its managerial subordinates, Company excludes its entire liability towards Licensee 
+and/or third parties for damages arising out of or in connection with this EULA and/or the use or performance of the Software, all in the broadest sense (breach of contract, tort or any other legal basis).
+
+In the event that the above exemption from liability does not uphold, the Company’s aggregate liability to Licensee and/or any third party (claiming through Licensee) shall never exceed the financial amount actually paid by 
+Licensee to Company for the Software. Furthermore, Company shall in no event be liable towards Licensee and/or any third party (claiming through Licensee) for any indirect damages, including but not limited to loss of profits, 
+income, savings, or any other consequential, incidental, special, punitive damage, whether arising in contract, tort, warranty, or otherwise.
+
+14. INFRINGEMENT.
+
+During any term of this EULA, if any portion of the Software is held by a court of competent jurisdiction to infringe any third party intellectual property rights and Licensee incurs a liability or expense as a result of such 
+holding, then the Licensee's sole remedy shall be, and Company will, at its option: (i) obtain the right for Licensee to continue to use the Software consistent with this EULA; (ii) modify the Software so that it is 
+non-infringing; or (iii) replace the infringing component with a non-infringing component, or (iv) refund all money paid in the then-current calendar quarter under this EULA and all of Licensee's rights and licenses under this 
+EULA shall automatically terminate.
+
+15. ENTIRE AGREEMENT.
+
+This EULA constitutes the entire agreement between Company and Licensee and supersedes all prior understandings of Company and Licensee, including any prior representation, statement, condition, or warranty, unless to the extent 
+that such prior understanding supports interpretation of this EULA.
+
+Version 2017103EN

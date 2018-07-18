@@ -6,8 +6,9 @@
 						<h5 >Tools</h5>
 					</div>
 					<div class="ibox-content">
-						<button class="btn btn-primary" onclick="popupWindow('graphs/', 'graphs', 1980, 1080 ); return false;" >Open responds tijden</button>								
-						<button class="btn btn-primary" onclick="popupWindow('port/', 'port', 1980, 1080 ); return false;" >Open port monitor</button>								
+						<button class="btn btn-primary" onclick="popupWindow('graphs', 'graphs', 1980, 1080 ); return false;" >Open responds tijden</button>
+						<button class="btn btn-primary" onclick="popupWindow('port', 'port', 1980, 1080 ); return false;" >Open port monitor</button>
+						<button class="btn btn-primary" onclick="popupWindow('tel_queue', 'tel_queue', 1980, 1080 ); return false;" >Open tel queue</button>
 						<button class="btn btn-primary" onclick="popupWindow('http://172.16.8.12/beheer/tools/plodash/', 'port', 1980, 1080 ); return false;" >PLO dashboard</button>								
 					</div>
 				</div>
@@ -18,8 +19,8 @@
 						<h5 >Events</h5>
 					</div>
 					<div class="ibox-content">
-						<button class="btn btn-primary" onclick="popupWindow('events/', 'events', 1980, 1080 ); return false;" >Open pending events</button>
-						<button class="btn btn-primary" onclick="popupWindow('events_group/', 'events_group', 1980, 1080 ); return false;" >Open grouped events</button>
+						<button class="btn btn-primary" onclick="popupWindow('events', 'events', 1980, 1080 ); return false;" >Open pending events</button>
+						<button class="btn btn-primary" onclick="popupWindow('events_group', 'events_group', 1980, 1080 ); return false;" >Open grouped events</button>
 					</div>
 				</div>
             </div>			
@@ -31,7 +32,7 @@
 						<h5 >Maps</h5>
 					</div>
 					<div class="ibox-content">
-						<button class="btn btn-primary" onclick="popupWindow('maps/', 'maps', 1980, 1080 ); return false;" >Open map</button>														
+						<button class="btn btn-primary" onclick="popupWindow('maps', 'maps', 1980, 1080 ); return false;" >Open map</button>
 					</div>
 				</div>
             </div>		

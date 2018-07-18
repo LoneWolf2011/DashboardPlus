@@ -1,0 +1,516 @@
+{
+	"placeholders":{
+		"select":"Select...",
+		"input":"Fill..."
+	},
+	"layout":{
+		"topnav":{
+			"placeholder":"Search for location",
+			"logout":"Log out"
+		},
+		"sidebar":{
+			"title":{
+				"1":"Home",
+				"2":"Tickets",
+				"3":"Tools",
+				"4":"User",
+				"5":"Users",
+				"6":"Logging",
+				"7":"Settings"
+			}
+		}		
+	},
+	"swal":{
+		"confirm":{
+			"title":"Are you sure?",
+			"confirmbutton":"Yes, i am sure",
+			"cancelbutton":"Cancel"
+		}
+	},	
+	"connection":{
+		"conn": "Connected",
+		"diss": "Disconnected",
+		"back": "Backup connected",
+		"nopath": "No pathstatus",
+		"oos": "In service till",
+		"main_err": "Mainboard failure",
+		"batt_err": "Battery failure",
+		"230_err": "230v failure",
+		"multi_err": "Multiple failures"
+	},
+	"error_page":{
+		"return_btn":"Go back",
+		"403":{
+			"label":"Access denied",
+			"msg":"Admin rights are mandatory for access. Contact the admins"
+		},
+		"404":{
+			"label":"Page not found",
+			"msg":"Sorry, but the page you are looking for can not be found. Check the URL for errors, refresh the page"
+		},
+		"500":{
+			"label":"Internal server error",
+			"msg":"The server encountered something unexpected that prevented the request from being completed. We apologise. You can return to the main page:"
+		},
+		"denied":{
+			"label":"Access denied",
+			"msg":"Admin rights are mandatory for access. Contact the admins"
+		},
+		"maintenance":{
+			"label":"Maintenance busy",
+			"msg":"Please have patience or ask for a status update with the admins"
+		}		
+	},	
+	"error_msg":{			
+		"die":{
+			"label":"Something definitely went wrong",
+			"msg":"Check the log files!"
+		},
+		"csrf":{
+			"label":"CSRF token is not valid",
+			"msg":"Check the browser URL and refresh the page!"
+		}		
+	},
+	"installscreen":{
+		"welcome": "Welcome to",
+		"text": "This is your first time.",
+		"subtext": "Take the time to fill in the information below.",
+		"login": "Install",
+		"phpversion":{
+			"err":"PHP version too low",
+			"msg":"Version 7.0.0 is a minimum requirement."
+		},		
+		"admin":{
+			"txt": "Administrator setting",
+			"email": "Enter admin email address",
+			"pass": "Enter admin password",
+			"local": "Select location",
+			"lang": "Select the default language",
+			"msg":{
+				"user": "Admin username",
+				"pass": "One-time password",
+				"store": "Write down the above password in a safe place"
+			}
+		},
+		"app":{
+			"txt": "Application setting",
+			"root": "URL root",
+			"docu": "Root folder",
+			"api": "Google API key"
+		},		
+		"scs":{
+			"txt": "SCS connection",	
+			"user": "Username",	
+			"pass": "Password"
+		},
+		"rms":{
+			"txt": "RMS connection"
+		},
+		"msg":{
+			"fail": "Installation unsuccessful",
+			"try": "Try again",
+			"suc": "Installation successful"
+		}
+	},
+	"loginscreen":{
+		"welcome": "Welcome to",
+		"text": "An improved experience for the management of RMS and SCS.",
+		"subtext": "Please login to see it in action.",
+		"login": "Log in",
+		"placeholder": {
+			"email":"email",
+			"password":"password"
+		},		
+		"request": "Request",
+		"forget": "Forgot password"	
+	},
+	"tokenmsg":{
+		"welcome": "Recover password",
+		"text": "Click the recover button",
+		"button": "Recover"
+	},	
+	"loginmsg":{
+		"lck":{
+			"label":"Account blocked",
+			"msg":"For 2 hours."
+		},
+		"id":{
+			"label":"Verification failed",
+			"msg":"Check your initials or password."
+		},
+		"dev":{
+			"label":"Error",
+			"msg":"No DEV account."
+		},
+		"blc":{
+			"label":"Error",
+			"msg":"User account is blocked. Contact the administrator."
+		},
+		"uknw":{
+			"label":"Error",
+			"msg":"User does not exist."
+		},
+		"tok":{
+			"suc":{
+				"label":"Succesvol",
+				"msg":"Reset token requested."
+			},
+			"err":{
+				"label":"Reset token request failed",
+				"msg":"Mail not sent correctly <br> Request a new token or report this to an admin."
+			},
+			"inv":{
+				"label":"Token is invalid",
+				"msg":"Request a new one or report it to an admin."
+			},
+			"uknw":{
+				"label":"Token not found",
+				"msg":"Request a new one or report it to an admin."
+			},
+			"exp":{
+				"label":"Token expired",
+				"msg":"This is no longer usable. Request a new token."
+			}
+		},
+		"res":{
+			"suc": "Check your initials or password.",
+			"err": "Check your initials or password."
+		}		
+	},
+	"home":{
+		"events":{
+			"h5":"Events",
+			"day":{
+				"label":"24h",
+				"small_label":"Since a day"
+			},
+			"week":{
+				"label":"Weekly",
+				"small_label":"Since a week"
+			},
+			"month":{
+				"label":"Monthly",
+				"small_label":"Since a month"
+			}				
+		},
+		"filters": "Filters",
+		"actions": {
+			"selectdefault": "Default",
+			"text": "Actions",
+			"mapzoom": "Set zoom level of map:",
+			"clusterzoom": "Cluster zoom level:",
+			"clustersize": "Cluster zoom size:",
+			"mapcontrols": "Map controls",
+			"buttons": {
+				"clear": "Clear clusters",
+				"refresh": "Refresh",
+				"center": "Center"
+			}	
+		},
+		"locations": {
+			"active": {
+				"label":"Active locations",
+				"table": {
+					"th1": "Connection",
+					"th2": "ID",
+					"th3": "Location",
+					"th4": "Last signal"
+				}				
+			},
+			"problem": {
+				"label":"Problem locations",
+				"table": {
+					"th1": "Connection",
+					"th2": "ID",
+					"th3": "Location",
+					"th4": "Last signal"
+				}				
+			},
+			"notactive": {
+				"label":"No pathstatus",
+				"table": {
+					"th1": "Connection",
+					"th2": "ID",
+					"th3": "Location",
+					"th4": "Last signal"
+				}				
+			},
+			"device": {
+				"label":"230v / ACCU storing",
+				"table": {
+					"th1": "Connection",
+					"th2": "ID",
+					"th3": "Location",
+					"th4": "Last signal"
+				}				
+			}			
+		}
+	},
+	"location":{
+		"connection": "Connection",
+		"status": "Status",
+		"address": "Address",
+		"zipcode": "Zipcode",
+		"city": "City",
+		"first": "First signal",
+		"last": "Last recieved signal",
+		"path": "Path status",
+		"mac": "MAC address",
+		"udid": "UDID nr",
+		"serie": "Serial nr",
+		"sim": "Simcard nr",
+		"serviceid": "ServiceID nr",
+		"lijn": "Line denomination",
+		"components":{
+			"txt":"Location components",
+			"values":"Location values"
+		},
+		"values":{
+			"table": {
+				"txt":"Location values",
+				"th1": "Name",
+				"th2": "Values"
+			}				
+		},
+		"components":{
+			"table": {
+				"txt":"Location components",
+				"th1": "Component",
+				"th2": "Count",
+				"th3": "Serial#",
+				"th4": "Installation date",
+				"th5": "Expiration date"
+			}				
+		},		
+		"events":{
+			"week":"Week",
+			"label":"Events this week",
+			"count":"Total events count"
+		},
+		"tab":{
+			"location":"Location",
+			"update":"Last updated",
+			"tab1":{
+				"text":"Connection status",
+				"h3":"Path status",
+				"path_conn":"Connection",
+				"path_name":"Path",
+				"power":"230 volt",
+				"battery":"Battery"
+			},
+			"tab2":{
+				"text":"Poll delay",
+				"h3":"Poll delay count"
+			},
+			"tab3":{
+				"text":"Component status",
+				"h3":"Component status"
+			}			
+		}	
+	},
+	"admin":{
+		"h1":"Welcome admin",
+		"small":"Please wait"
+	},
+	"user":{
+		"title":"User",
+		"edit":{
+			"title":"Edit user",
+			"button":"Update",
+			"input":{
+				"1":"User name",
+				"2":"User last name",
+				"3":"User email"
+			}
+		},		
+		"acc_update":{
+			"msg":{
+				"update":{
+					"label": "Success",
+					"text": "successfully updated"
+				},			
+				"err_email":{
+					"label": "Something went wrong",
+					"text": "This is not a correct email address"
+				},
+				"err_email_in_use":{
+					"label": "Something went wrong",
+					"text": "This email address is already in use"
+				},				
+				"suc":{
+					"label": "Success",
+					"text": "User account has been updated"
+				},
+				"err":{
+					"label": "Something went wrong",
+					"text": "Try again or contact the administrator"
+				}				
+			}		
+		}
+	},
+	"users":{
+		"title":"Users",
+		"edit":{
+			"title":"Edit users",
+			"button":"Update",
+			"input":{
+				"1":"Users name",
+				"2":"User lastname",
+				"3":"User email",
+				"4":"Users role",
+				"5":"Users status"
+			},
+			"msg":{	
+				"del":{
+					"label": "Success",
+					"text": "Successfully removed"
+				},			
+				"suc":{
+					"label": "Success",
+					"text": "User account has been updated"
+				},
+				"err":{
+					"label": "Something went wrong",
+					"text": "Try again or contact the administrator"
+				}				
+			}			
+		},
+		"new":{
+			"title":"New user",
+			"button":"Create",
+			"msg":{	
+				"login_email":{
+					"label": "Success",
+					"text": "Login email sent to",
+					"err": "Login email not sent"
+				},			
+				"suc":{
+					"label": "Success",
+					"text": "User account has been updated"
+				},
+				"err":{
+					"label": "Something went wrong",
+					"text": "Try again or contact the administrator"
+				}				
+			}			
+		},
+		"status":{
+			"active":"Active",
+			"inactive":"Inactive"
+		},
+		"actions":{
+			"edit":"Edit",
+			"delete":"Delete"
+		},
+		"table":{
+			"th1":"Username",
+			"th2":"Email address",
+			"th3":"Last seen",
+			"th4":"User role",
+			"th5":"Status",
+			"th6":"ACtion"
+		},
+		"swal":{
+			"confirm":{
+				"text":"The user: __placeholder__ will be permanently deleted!"
+			}
+		}	
+	},		
+	"tickets":{
+		"label":"Ticket",
+		"select":{
+			"label":{
+				"current":"Current status",
+				"on_hold":"On hold till",
+				"sent_to":"Sent too",
+				"external":"External parties",
+				"canceled":"Reason canceled",
+				"options":"Ticket options",
+				"actions":"Ticket actions"
+			}
+		},
+		"status":{
+			"aangevraagd":"Requested",
+			"open":"Open",
+			"on_hold":"On hold",
+			"totaal_uitval":"Totaal failure",
+			"gesloten":"Closed",
+			"geannuleerd":"Canceled",
+			"opnieuw_geopend":"Re-opened",
+			"opnieuw_verzenden":"Re-sent",
+			"doorzetten":"Push through",
+			"storing_hersteld":"Fault restored",
+			"ticket_onnodig":"Ticket unnecessary",
+			"ticket_foutief":"Incorrect ticket"
+		},
+		"create":{
+			"label":"Create a ticket",
+			"txt":{
+				"scs":"SCS number",
+				"service":"Service",
+				"location":"Location",
+				"address":"Address",
+				"zipcode":"Zipcode",
+				"city":"City",
+				"for":"For",
+				"storing":"Malfunction",
+				"action":"Action",
+				"cp":"Contact",
+				"cptel":"Contact phone number",
+				"comment":"Extra comment"			
+			},
+			"malfunction":{
+				"anders":"Different",
+				"1":"No linesync",
+				"2":"GPRS failure",
+				"3":"RAM failure",
+				"4":"Battery failure",
+				"5":"230v failure",
+				"6":"Router failure",
+				"7":"NVR comm failure",
+				"8":"Total failure"
+			}
+		},
+		"update":{	
+			"submitted_by":"Created by",		
+			"checked_by":"Checked by",	
+			"status":"Status",	
+			"updates":"Updates",	
+			"ticket_for":"Ticket for",
+			"create":{
+				"label":"Update ticket",
+				"external":"External ticket number",
+				"up_comm":"Update comment",
+				"up_status":"Update status"
+			}			
+		},
+		"filters":{
+			"service":"Service (ALL)",
+			"external":"External (ALL)",
+			"status":"Status (ALL)"
+		},		
+		"table": {
+			"th1": "Ticket#",
+			"th2": "Location ID",
+			"th3": "Location name",
+			"th4": "Last update",
+			"th5": "Service",
+			"th6": "External party",
+			"th7": "Malfunction",
+			"th8": "Ticket number",
+			"th9": "Created on",
+			"th10": "Status"
+		},
+		"buttons":{
+			"new":"New",
+			"send":"Send",
+			"re_send":"Re-send",
+			"send_fast":"Send immediately",
+			"send_too":"Send too",
+			"update":"Update"
+		}
+	},
+	"footer":{
+		"copyright": "Copyright"
+	} 
+}

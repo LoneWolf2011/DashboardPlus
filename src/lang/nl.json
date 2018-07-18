@@ -1,6 +1,11 @@
 {
+	"placeholders":{
+		"select":"Selecteer...",
+		"input":"Vul in..."
+	},
 	"layout":{
 		"topnav":{
+			"placeholder":"Zoek naar locatie",		
 			"logout":"Uitloggen"
 		},
 		"sidebar":{
@@ -25,7 +30,8 @@
 	"connection":{
 		"conn": "Verbonden",
 		"diss": "Niet verbonden",
-		"back": "Verbonden met backup",
+		"prim": "IP uitval",
+		"back": "Backup uitval",
 		"nopath": "Geen pathstatus",
 		"oos": "In onderhoud tot",
 		"main_err": "Mainboard uitval",
@@ -37,7 +43,7 @@
 		"return_btn":"Ga terug",
 		"403":{
 			"label":"Toegang geweigerd",
-			"msg":"Admin rechten zijn verplicht voor toegang. Neem contact op met de admins. Doeidoei!"			
+			"msg":"Admin rechten zijn verplicht voor toegang. Neem contact op met de admins"
 		},
 		"404":{
 			"label":"Pagina niet gevonden",
@@ -49,7 +55,7 @@
 		},
 		"denied":{
 			"label":"Toegang geweigerd",
-			"msg":"Admin rechten zijn verplicht voor toegang. Neem contact op met de admins. Doeidoei!"			
+			"msg":"Admin rechten zijn verplicht voor toegang. Neem contact op met de admins"
 		},
 		"maintenance":{
 			"label":"Maintenance bezig",
@@ -413,31 +419,62 @@
 	},		
 	"tickets":{
 		"label":"Ticket",
-		"state":{
-			"pending":"In afwachting",
-			"closed":"Gesloten"
+		"select":{
+			"label":{
+				"current":"Huidige status",
+				"on_hold":"On hold tot",
+				"sent_to":"Doorsturen naar",
+				"external":"Externe partij",
+				"canceled":"Reden geannuleerd",
+				"options":"Ticket opties",
+				"actions":"Ticket acties"
+			}
+		},
+		"status":{
+			"aangevraagd":"Aangevraagd",
+			"open":"Open",
+			"on_hold":"On hold",
+			"totaal_uitval":"Totaal uitval",
+			"gesloten":"Gesloten",
+			"geannuleerd":"Geannuleerd",
+			"opnieuw_geopend":"Opnieuw openen",
+			"opnieuw_verzenden":"Opnieuw verzenden",
+			"doorzetten":"Doorzetten",
+			"storing_hersteld":"Storing hersteld",
+			"ticket_onnodig":"Ticket onnodig",
+			"ticket_foutief":"Foutief ticket"
 		},
 		"create":{
-			"label":"Maak een ticket",
-			"placeholder":"Vul in...",
-			"dropdown":"Selecteer...",
-			"txt_scs":"SCS nummer",
-			"txt_service":"Service",
-			"txt_location":"Locatie",
-			"txt_address":"Adres",
-			"txt_zipcode":"Postcode",
-			"txt_city":"Stad",
-			"txt_for":"Voor",
-			"txt_storing":"Storing",
-			"txt_action":"Actie",
-			"txt_cp":"Contactpersoon",
-			"txt_cptel":"Contactpersoon tel nummer",
-			"txt_comment":"Extra commentaar"
+			"label":"Nieuw ticket",
+			"txt":{
+				"scs":"SCS nummer",
+				"service":"Service",
+				"location":"Locatie",
+				"address":"Adres",
+				"zipcode":"Postcode",
+				"city":"Stad",
+				"for":"Voor",
+				"storing":"Storing",
+				"action":"ACtie",
+				"cp":"Contact",
+				"cptel":"Contact telefoon nummer",
+				"comment":"Extra commentaar"			
+			},
+			"malfunction":{
+				"anders":"Anders",
+				"1":"Geen lijnsync",
+				"2":"GPRS uitval",
+				"3":"RAM uitval",
+				"4":"ACCU uitval",
+				"5":"230v uitval",
+				"6":"Router uitval",
+				"7":"NVR comm uitval",
+				"8":"Totaal uitval"
+			}
 		},
-		"update":{
-			"placeholder":"Vul in...",		
+		"update":{	
 			"submitted_by":"Aangemaakt door",		
-			"checked_by":"Gecontroleerd door",	
+			"checked_by":"Gecontrolleerd door",	
 			"status":"Status",	
 			"updates":"Updates",	
 			"ticket_for":"Ticket voor",
@@ -446,19 +483,32 @@
 				"external":"Extern ticket nummer",
 				"up_comm":"Update commentaar",
 				"up_status":"Update status"
-			}
+			}			
 		},
+		"filters":{
+			"service":"Service (ALL)",
+			"external":"Extern (ALL)",
+			"status":"Status (ALL)"
+		},		
 		"table": {
 			"th1": "Ticket#",
 			"th2": "Locatie ID",
-			"th3": "Service",
-			"th4": "Laatste update",
-			"th5": "SLA",
-			"th6": "Status"
+			"th3": "Locatie naam",
+			"th4": "Laatst geupdatet",
+			"th5": "Dienst",
+			"th6": "Externe partij",
+			"th7": "Storing",
+			"th8": "Ticket nummer",
+			"th9": "Aangemaakt op",
+			"th10": "Status"
 		},
 		"buttons":{
+			"new":"Nieuw",
 			"send":"Verzenden",
-			"update":"Updaten"
+			"re_send":"Opnieuw verzenden",
+			"send_fast":"Onmiddelijk verzenden",
+			"send_too":"Doorzetten naar",
+			"update":"Update"
 		}
 	},
 	"footer":{

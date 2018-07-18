@@ -169,10 +169,12 @@
 											<span >Filter status:</span>
 												<select class="select2 form-control m-b" id="type" onchange="filterStatus(this.value);">
 													<option value="">All</option>
+													<option value="Trouble">Trouble</option>
 													<option value="0">Disconnected</option>
 													<option value="1">Connected</option>
-													<option value="2">Connected with backup</option>
-													<option value="3">No path status</option>
+													<option value="2">Backup disconnected</option>
+													<option value="3">IP disconnected</option>
+													<option value="4">No path status</option>
 												</select>
 										</div >
 										<div class="col-sm-4 col-md-4">				
@@ -296,6 +298,7 @@
 			
 		// On tab switch 2
 		$('a[href="#tab-2"]').on('shown.bs.tab', function (e) {
+
 			// If datatable not initialized 
 			if ( ! $.fn.DataTable.isDataTable( '.datatable_problem' ) ) {
 				// Show loading
@@ -504,7 +507,9 @@
 				} else if(loc.path_status == 2){
 					err_icon = url+'yellow_Marker'+loc.first_char+'.png';
 				} else if(loc.path_status == 3){
-					err_icon = url+'blue_Marker'+loc.first_char+'.png';					
+					err_icon = url+'orange_Marker'+loc.first_char+'.png';	
+				} else if(loc.path_status == 4){
+					err_icon = url+'blue_Marker'+loc.first_char+'.png';						
 				} else {
 					err_icon = url+'darkgreen_Marker'+loc.first_char+'.png';
 				}				
@@ -558,6 +563,10 @@
 						err_icon = url+'red_Marker'+loc.first_char+'.png';
 					} else if(loc.path_status == 2){
 						err_icon = url+'yellow_Marker'+loc.first_char+'.png';
+					} else if(loc.path_status == 3){
+						err_icon = url+'orange_Marker'+loc.first_char+'.png';	
+					} else if(loc.path_status == 4){
+						err_icon = url+'blue_Marker'+loc.first_char+'.png';	
 					} else {
 						err_icon = url+'darkgreen_Marker'+loc.first_char+'.png';
 					}					
@@ -616,13 +625,26 @@
 
 	function filterStatus(status) {
 		
-		for (var i = 0, marker; marker = markers_arr[i]; i++) {
-			if (marker.path == status || status.length === 0) {
-				marker.setVisible(true);
-			} else {
-				marker.setVisible(false);
-			}
+		if(status == 'Trouble'){
+			for (var i = 0, marker; marker = markers_arr[i]; i++) {
+	
+				if (marker.path == 2 || marker.path == 3 || marker.path == 0 || status.length === 0) {
+					marker.setVisible(true);
+				} else {
+					marker.setVisible(false);
+				}
+			}			
+		} else {
+			for (var i = 0, marker; marker = markers_arr[i]; i++) {
+	
+				if (marker.path == status || status.length === 0) {
+					marker.setVisible(true);
+				} else {
+					marker.setVisible(false);
+				}
+			}			
 		}
+
 	}	
 	
 	function filterLocation(category) {

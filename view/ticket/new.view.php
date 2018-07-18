@@ -16,40 +16,40 @@
 							
 							<div class="col-md-6">
 								<div class="form-group">
-									<label class="control-label" for="first-name"><span data-i18n="[html]tickets.create.txt_scs">SCS nr</span><font color="red">*</font></label>
-									<input type="text" class="form-control" name="OMS" id="autocomplete-custom-append" value="<?= preg_replace("/[^0-9]/","", $_SERVER['QUERY_STRING']); ?>"  data-inputmask="'mask': '99-99-999999'" maxlength="12" data-i18n="[placeholder]tickets.create.placeholder" >
+									<label class="control-label" for="first-name"><span data-i18n="[html]tickets.create.txt.scs">SCS nr</span><font color="red">*</font></label>
+									<input type="text" class="form-control" name="OMS" id="autocomplete-custom-append" value="<?= preg_replace("/[^0-9]/","", $_SERVER['QUERY_STRING']); ?>"  data-inputmask="'mask': '99-99-999999'" maxlength="12" data-i18n="[placeholder]placeholders.input" >
 								</div>									
 							</div>									
 							<div class="col-md-6">
 								<div class="form-group">
-									<label class="control-label" for="first-name"><span data-i18n="[html]tickets.create.txt_service">Dienst</span><font color="red">*</font></label>
-									<input type="text" class="form-control" name="dienst" id="DIENST"  data-i18n="[placeholder]tickets.create.placeholder"   >
+									<label class="control-label" for="first-name"><span data-i18n="[html]tickets.create.txt.service">Dienst</span><font color="red">*</font></label>
+									<input type="text" class="form-control" name="dienst" id="DIENST"  data-i18n="[placeholder]placeholders.input"   >
 								</div>								
 							</div>								
 	
 							<div class="col-md-6">
 								<div class="form-group">
-									<label class="control-label" for="first-name"><span data-i18n="[html]tickets.create.txt_location">Locatie</span><font color="red">*</font></label>
-									<input type="text" class="form-control" name="locatie" id="LOCATIE"  data-i18n="[placeholder]tickets.create.placeholder" value="<?= @$row['SCS_Account_Address_Name']; ?>">
+									<label class="control-label" for="first-name"><span data-i18n="[html]tickets.create.txt.location">Locatie</span><font color="red">*</font></label>
+									<input type="text" class="form-control" name="locatie" id="LOCATIE"  data-i18n="[placeholder]placeholders.input" value="<?= @$row['SCS_Account_Address_Name']; ?>">
 								</div>									
 							</div>									
 							<div class="col-md-6">
 								<div class="form-group">
-									<label class="control-label" for="first-name"><span data-i18n="[html]tickets.create.txt_address">Adres</span><font color="red">*</font></label>
-									<input type="text" class="form-control" name="adres"  id="ADRES" data-i18n="[placeholder]tickets.create.placeholder"  value="<?= @$row['SCS_Account_Address_Address']; ?>">
+									<label class="control-label" for="first-name"><span data-i18n="[html]tickets.create.txt.address">Adres</span><font color="red">*</font></label>
+									<input type="text" class="form-control" name="adres"  id="ADRES" data-i18n="[placeholder]placeholders.input"  value="<?= @$row['SCS_Account_Address_Address']; ?>">
 								</div>								
 							</div>							
 	
 							<div class="col-md-6">
 								<div class="form-group">
-									<label class="control-label" ><span data-i18n="[html]tickets.create.txt_zipcode">Postcode</span><font color="red">*</font></label>
-									<input type="text" class="form-control" name="postcode" id="POSTCODE"  data-i18n="[placeholder]tickets.create.placeholder" value="<?= @$row['SCS_Account_Address_Zip']; ?>">
+									<label class="control-label" ><span data-i18n="[html]tickets.create.txt.zipcode">Postcode</span><font color="red">*</font></label>
+									<input type="text" class="form-control" name="postcode" id="POSTCODE"  data-i18n="[placeholder]placeholders.input" value="<?= @$row['SCS_Account_Address_Zip']; ?>">
 								</div>									
 							</div>									
 							<div class="col-md-6">
 								<div class="form-group">
-									<label class="control-label"><span data-i18n="[html]tickets.create.txt_city">Plaats</span><font color="red">*</font></label>
-									<input type="text" class="form-control" name="plaats" id="PLAATS" data-i18n="[placeholder]tickets.create.placeholder" value="<?= @$row['SCS_Account_Address_City']; ?>">
+									<label class="control-label"><span data-i18n="[html]tickets.create.txt.city">Plaats</span><font color="red">*</font></label>
+									<input type="text" class="form-control" name="plaats" id="PLAATS" data-i18n="[placeholder]placeholders.input" value="<?= @$row['SCS_Account_Address_City']; ?>">
 								</div>								
 							</div>							
 							<div class="col-md-12">
@@ -58,13 +58,15 @@
 							<div id="txt"></div>
 							<div class="col-md-6">
 								<div class="form-group">
-									<label class="control-label" ><span data-i18n="[html]tickets.create.txt_for">Werkbon voor</span><font color="red">*</font></label>
-									<select id="voor" name="extern" class="form-control"  onchange="STATUS(this.value)">
+									<label class="control-label" ><span data-i18n="[html]tickets.create.txt.for">Werkbon voor</span><font color="red">*</font></label>
+									<select id="voor" name="extern" class="select2 form-control"  >
 										<option value="" data-i18n="[html]tickets.create.dropdown">Selecteer...</option>
-										<option value="KPN">KPN</option>
-										<option value="ASB">ASB</option>
-										<option value="STRUKTON">STRUKTON</option>
-										<option value="ACCI">ACCI</option>
+                                        <?php
+                                        $externals = $db_conn->getAll("SELECT external_id, external_name FROM app_customer_tickets_external");
+                                        foreach($externals as $external){
+                                            echo '<option value="'.$external['external_id'].'"  >'.$external['external_name'].'</option>';
+                                        }
+                                        ?>
 									</select>
 								</div>									
 							</div>									
@@ -72,47 +74,45 @@
 							<div class="clearfix"></div>
 							<div class="col-md-6">
 								<div class="form-group">
-									<label class="control-label" ><span data-i18n="[html]tickets.create.txt_storing">Storing</span><font color="red">*</font></label>
+									<label class="control-label" ><span data-i18n="[html]tickets.create.txt.storing">Storing</span><font color="red">*</font></label>
 									<div id="storing_wijzigen" > 				
-										<select name="storing" class="form-control" onchange="Storing(this.value)" >
-											<option value="" data-i18n="[html]tickets.create.dropdown">Selecteer...</option>	
-											<option value="Geen lijnsync">Geen lijnsync</option>	
-											<option value="GPRS uitval">GPRS uitval</option>	
-											<option value="RAM uitval">RAM uitval</option>	
-											<option value="ACCU uitval">ACCU uitval</option>	
-											<option value="Voeding uitval">Voeding uitval</option>	
-											<option value="Router uitval">Router uitval</option>	
-											<option value="NVR comm uitval">NVR comm uitval</option>	
-											<option value="Totale uitval">Totale uitval</option>	
-											<option value="anders">Anders</option>	
+										<select name="storing" class="select2 form-control" onchange="Storing(this.value)"  id="storing_select">
+                                            <option value="" data-i18n="[html]tickets.create.dropdown">Selecteer...</option>
+                                            <?php
+                                            $ticket_mals = $db_conn->getAll("SELECT malfunctions_id, malfunctions_name FROM app_customer_tickets_malfunctions");
+                                            foreach($ticket_mals as $ticket_mal){
+                                                echo '<option data-i18n="[value]tickets.create.malfunction.'.$ticket_mal['malfunctions_id'].';[html]tickets.create.malfunction.'.$ticket_mal['malfunctions_id'].'"  ></option>';
+                                            }
+                                            ?>
+											<option data-i18n="[html]tickets.create.malfunction.anders" value="anders">Anders</option>
 										</select>
 									</div><span id="searchclear" style="display:none;" class="fa fa-remove"></span>
 								</div>									
 							</div>									
 							<div class="col-md-6">
 								<div class="form-group">
-									<label class="control-label" ><span data-i18n="[html]tickets.create.txt_action">Actie</span><font color="red">*</font></label>
-									<input type="text" class="form-control"	name="actie" data-i18n="[placeholder]tickets.create.placeholder">
+									<label class="control-label" ><span data-i18n="[html]tickets.create.txt.action">Actie</span><font color="red">*</font></label>
+									<input type="text" class="form-control"	name="actie" data-i18n="[placeholder]placeholders.input">
 								</div>								
-							</div>	
-	
+							</div>
+                            <div class="clearfix"></div>
 							<div class="col-md-6" id="CP" style="display:block">
 								<div class="form-group">
-									<label class="control-label"><span data-i18n="[html]tickets.create.txt_cp">Contactpersoon</span><font color="red">*</font></label>
-									<input type="text" class="form-control" name="cp" id="CP_input" data-i18n="[placeholder]tickets.create.placeholder">
+									<label class="control-label"><span data-i18n="[html]tickets.create.txt.cp">Contactpersoon</span><font color="red">*</font></label>
+									<input type="text" class="form-control" name="cp" id="CP_input" data-i18n="[placeholder]placeholders.input">
 								</div>									
 							</div>									
 							<div class="col-md-6" id="CPTEL" style="display:block">
 								<div class="form-group">
-									<label class="control-label" ><span data-i18n="[html]tickets.create.txt_cptel">Contactpersoon telnr</span><font color="red">*</font></label>
-									<input type="text" class="form-control" name="cptel" id="CPTEL_input" data-i18n="[placeholder]tickets.create.placeholder" >
+									<label class="control-label" ><span data-i18n="[html]tickets.create.txt.cptel">Contactpersoon telnr</span><font color="red">*</font></label>
+									<input type="text" class="form-control" name="cptel" id="CPTEL_input" data-i18n="[placeholder]placeholders.input" >
 								</div>								
-							</div>							
-							
+							</div>
+                            <div class="clearfix"></div>
 							<div class="col-md-12">
 								<div class="form-group">
-									<label class="control-label"> <span data-i18n="[html]tickets.create.txt_comment">Extra commentaar</span></label>
-									<textarea name="comment" class="resizable_textarea form-control"  data-i18n="[placeholder]tickets.create.placeholder"></textarea>
+									<label class="control-label"> <span data-i18n="[html]tickets.create.txt.comment">Extra commentaar</span></label>
+									<textarea name="comment" class="resizable_textarea form-control"  data-i18n="[placeholder]placeholders.input"></textarea>
 								</div>								
 							</div>
 							
@@ -148,40 +148,17 @@
 	?>	
 	
     <script>
-	function Storing(val){
-		var div_send_totaaluitval 	= document.getElementById('div_send_totaaluitval'),
-			div_send_button			= document.getElementById('div_send_button'),
-			searchclear	 			= document.getElementById('searchclear');
-		
-		if(val=='Totale uitval')
-			$('#totaal_uitval').val(1),
-			div_send_totaaluitval.style.display='block',
-			div_send_button.style.display='none',
-			$('#header').removeClass('modal-header-info'),
-			$('#header').addClass('modal-header-warning');
-		else if (val=='anders')
-			document.getElementById('storing_wijzigen').innerHTML = '<input id="searchinput" type="type" name="storing" class="form-control" placeholder="Vul in...">',
-			searchclear.style.display='block',	
-			div_send_totaaluitval.style.display='none',	
-			div_send_button.style.display='block',			
-			$('#header').removeClass('modal-header-warning'),
-			$('#header').addClass('modal-header-info');
-		else 
-			div_send_totaaluitval.style.display='none',	
-			div_send_button.style.display='block',
-			$('#header').removeClass('modal-header-warning'),
-			$('#header').addClass('modal-header-info');
-	} 
 	$(document).ready(function() {
 	
 		$("#searchclear").click(function(){ 
 			var clear	= document.getElementById('searchclear');
 		
-			document.getElementById('storing_wijzigen').innerHTML = '<select name="storing" class="form-control" onchange="Storing(this.value)" ><option value="">Selecteer...</option>	<option value="Geen lijnsync">Geen lijnsync</option><option value="GPRS uitval">GPRS uitval</option>	<option value="RAM uitval">RAM uitval</option>	<option value="ACCU uitval">ACCU uitval</option>	<option value="Voeding uitval">Voeding uitval</option>	<option value="Router uitval">Router uitval</option>	<option value="NVR comm uitval">NVR comm uitval</option>	<option value="Totale uitval">Totale uitval</option><option value="anders">Anders</option>	</select></div>',
-			clear.style.display='none';
+			document.getElementById('storing_wijzigen').innerHTML = '<select name="storing" class="select2 form-control" onchange="Storing(this.value)" ><option value="">Selecteer...</option>	<option value="Geen lijnsync">Geen lijnsync</option><option value="GPRS uitval">GPRS uitval</option>	<option value="RAM uitval">RAM uitval</option>	<option value="ACCU uitval">ACCU uitval</option>	<option value="Voeding uitval">Voeding uitval</option>	<option value="Router uitval">Router uitval</option>	<option value="NVR comm uitval">NVR comm uitval</option>	<option value="Totale uitval">Totale uitval</option><option value="anders">Anders</option>	</select></div>',
+            clear.style.display='none';
 		});
 		var url_str = $('#url_string').val();
 		var lang_code = $('html').attr('lang').toLowerCase()+'_'+$('html').attr('lang').toUpperCase();
+		var lang_tel_code = $('html').attr('lang').toUpperCase();
 		var button;
 		$('button[name="save_button"]').click(function() {
 			button = $(this).attr('value');
@@ -200,63 +177,63 @@
 				OMS: {
 					validators: {
 						notEmpty: {
-							message: 'Het SCS-nr in'
+
 						}
 					}
 				},		
 				dienst: {
 					validators: {
 						notEmpty: {
-							message: 'Vul de dienst in'
+
 						}
 					}
 				},
 				locatie: {
 					validators: {
 						notEmpty: {
-							message: 'Vul locatie naam in'
+
 						}
 					}
 				},								
 				adres: {
 					validators: {
 						notEmpty: {
-							message: 'Vul locatie adres in'
+
 						}
 					}
 				},	
 				postcode: {
 					validators: {
 						notEmpty: {
-							message: 'Vul locatie postcode in'
+
 						}
 					}
 				},
 				plaats: {
 					validators: {
 						notEmpty: {
-							message: 'Vul locatie plaats'
+
 						}
 					}
 				},
 				extern: {
 					validators: {
 						notEmpty: {
-							message: 'Vul in voor wie de werkbon is'
+
 						}
 					}
 				},
 				storing: {
 					validators: {
 						notEmpty: {
-							message: 'Vul de verstoring in'
+
 						}
 					}
 				},				
 				actie: {
 					validators: {
 						notEmpty: {
-							message: 'Vul de uit te voeren actie in'
+
 						}
 					}
 				},	
@@ -264,7 +241,7 @@
 					enabled: false,
 					validators: {
 						notEmpty: {
-							message: 'Vul de contactpersoon in'
+
 						}
 					}
 				},
@@ -273,7 +250,7 @@
 					validators: {
 						phone: {
 							country: 'NL',
-							message: 'Vul een fatsoenlijk nederlands telefoonnr in'						
+                            message: 'The value is not valid %s phone number'
 						}
 					}
 				},
@@ -281,7 +258,7 @@
 					enabled: true,
 					validators: {
 						notEmpty: {
-							message: 'Vul het ticketnr'
+
 						}
 					}
 				}				
@@ -356,7 +333,7 @@
 // ==========================================================================================================	
 	$(document).ready(function() {
 		$('#autocomplete-custom-append').autocomplete({
-			serviceUrl: <?= json_encode(URL_ROOT);?>+'/src/scs_naw_hint.json.php',
+			serviceUrl: <?= json_encode(URL_ROOT);?>+'/src/helpers/scs_naw_hint.json.php',
 			max: 10,
 			onSearchComplete: function (query, suggestions) {
 				if(!suggestions.length) {
@@ -379,7 +356,7 @@
 			$.ajax({
 				type: 'POST',
 				data: ({p : inpval}),
-				url: <?= json_encode(URL_ROOT);?>+'/src/scs_naw_get.json.php',
+				url: <?= json_encode(URL_ROOT);?>+'/src/helpers/scs_naw_get.json.php',
 				success: function(data) {
 				
 				var object = $.parseJSON(data);
@@ -409,4 +386,29 @@
 	}); 
 	
 	});
-	</script>	
+
+    function Storing(val){
+        var div_send_totaaluitval 	= document.getElementById('div_send_totaaluitval'),
+            div_send_button			= document.getElementById('div_send_button'),
+            searchclear	 			= document.getElementById('searchclear');
+
+        if(val=='Totale uitval')
+            $('#totaal_uitval').val(1),
+                div_send_totaaluitval.style.display='block',
+                div_send_button.style.display='none',
+                $('#header').removeClass('modal-header-info'),
+                $('#header').addClass('modal-header-warning');
+        else if (val=='anders')
+            document.getElementById('storing_wijzigen').innerHTML = '<input id="searchinput" type="type" name="storing" class="form-control" data-i18n="[placeholder]placeholders.input">',
+                searchclear.style.display='block',
+                div_send_totaaluitval.style.display='none',
+                div_send_button.style.display='block',
+                $('#header').removeClass('modal-header-warning'),
+                $('#header').addClass('modal-header-info');
+        else
+            div_send_totaaluitval.style.display='none',
+                div_send_button.style.display='block',
+                $('#header').removeClass('modal-header-warning'),
+                $('#header').addClass('modal-header-info');
+    }
+    </script>

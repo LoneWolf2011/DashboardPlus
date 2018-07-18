@@ -11,7 +11,7 @@ Allow from 127.0.0.1
 ## RewriteRule ^(.+)$ index.php
 
 ## Only allow controller files and language files
-<FilesMatch "\.(controller.php|json)$">
+<FilesMatch "\.(controller.php|json|json.php)$">
 	Order Deny,Allow
     Allow from all
 </FilesMatch>

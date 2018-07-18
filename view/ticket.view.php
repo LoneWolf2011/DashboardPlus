@@ -12,7 +12,7 @@
 						<div class="row">
 							<div class="col-md-2 col-sm-12 col-xs-12 form-group">				  
 								<select id="filter_dienst" class="select2 form-control" data-hide-disabled="true" data-live-search="true" data-size="10" data-width="100%" title="Maak een keuze">
-									<option value="">Dienst (All)</option>
+									<option data-i18n="[html]tickets.filters.service" value="">Dienst (All)</option>
 									<option value="Brand">Brand</option>
 									<option value="ING">ING</option>
 									<option value="DIGI">DIGI</option>
@@ -21,16 +21,18 @@
 							</div>
 							<div class="col-md-2 col-sm-12 col-xs-12 form-group">	
 								<select id="filter_extern" class="select2 form-control" data-hide-disabled="true" data-live-search="true" data-size="10" data-width="100%" title="Maak een keuze">
-									<option value="">Bon voor (All)</option>
-									<option value="ASB">ASB</option>
-									<option value="ACCI">ACCI</option>
-									<option value="KPN">KPN</option>
-									<option value="STRUKTON">STRUKTON</option>
+									<option data-i18n="[html]tickets.filters.external" value="">Bon voor (All)</option>
+                                    <?php
+                                    $externals = $db_conn->getAll("SELECT external_id, external_name FROM app_customer_tickets_external");
+                                    foreach($externals as $external){
+                                        echo '<option value="'.$external['external_id'].'"  >'.$external['external_name'].'</option>';
+                                    }
+                                    ?>
 								</select>
 							</div>
 							<div class="col-md-2 col-sm-12 col-xs-12 form-group">	
 								<select id="filter_status" class="select2 form-control" data-hide-disabled="true" data-live-search="true" data-size="10" data-width="100%" title="Maak een keuze">
-									<option value="">Status (All)</option>
+									<option data-i18n="[html]tickets.filters.status" value="">Status (All)</option>
 									<option value="Aangevraagd">Aangevraagd</option>
 									<option value="Open">Open</option>
 									<option value="On hold">On hold</option>
@@ -40,7 +42,7 @@
 								</select>		
 							</div>
 							<div class="col-md-2 col-sm-12 col-xs-12 pull-right">
-								<a class="btn btn-success pull-right" href="ticket_new/"><i class="fa fa-plus"></i> Nieuw</a>
+								<a class="btn btn-success pull-right" href="<?= URL_ROOT.'/ticket/new/';?>"><i class="fa fa-plus"></i> <span data-i18n="[html]tickets.buttons.new">New</span> </a>
 							</div>							
 						</div>						
 						<table id='datatable-all' class='table table-hover jambo_table bulk_action' style="width:100%">

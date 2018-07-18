@@ -31,7 +31,7 @@ define('ROOT_FILE', array(
 	// Helper functions
 	'FUNC'			=> array (
 		'error_handler' 	=> '/Src/Config/error_handler.php',
-		'functions' 		=> '/Src/functions.php',
+		'functions' 		=> '/Src/helpers/functions.php',
 	),
 	 
 	// Classes
