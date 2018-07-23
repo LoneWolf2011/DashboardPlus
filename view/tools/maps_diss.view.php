@@ -53,6 +53,9 @@
 	<script async defer src="https://maps.googleapis.com/maps/api/js?&key=<?= GOOGLE_API;?>&callback=initMap"></script>	
 	
 	<script>
+	$(document).ready(function() {
+		filterStatus('Trouble');
+	});
 	// Global vars for maps
 	var url_str = $('#url_string').val();
 	var err_class;
@@ -298,4 +301,28 @@
 			.always(ajaxObj.get(getMarkerTable, 10000));	  
 	}
 
+	function filterStatus(status) {
+		
+		if(status == 'Trouble'){
+			for (var i = 0, marker; marker = markers_arr[i]; i++) {
+	
+				if (marker.path == 2 || marker.path == 3 || marker.path == 0 || status.length === 0) {
+					marker.setVisible(true);
+				} else {
+					marker.setVisible(false);
+				}
+			}			
+		} else {
+			for (var i = 0, marker; marker = markers_arr[i]; i++) {
+	
+				if (marker.path == status || status.length === 0) {
+					marker.setVisible(true);
+				} else {
+					marker.setVisible(false);
+				}
+			}			
+		}
+
+	}		
+	
 	</script>

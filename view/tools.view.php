@@ -32,7 +32,9 @@
 						<h5 >Maps</h5>
 					</div>
 					<div class="ibox-content">
-						<button class="btn btn-primary" onclick="popupWindow('maps', 'maps', 1980, 1080 ); return false;" >Open map</button>
+						<!--<button class="btn btn-primary" onclick="popupWindow('maps', 'maps', 1980, 1080 ); return false;" >Open map</button>-->
+						<a class="btn btn-primary" href="/mdb/tools/maps" target="_blank">Open map</a>
+						<a class="btn btn-primary" href="/mdb/tools/maps_diss" target="_blank">Open filtered map</a>
 					</div>
 				</div>
             </div>		

@@ -29,19 +29,23 @@
 		var interval;
 		
 		getPendingEvents(url_str);
-		
-		interval = setInterval( function () {
-			getPendingEvents(url_str);
-		}, refresh );	
-		
+	
+		pollPending(url_str);
 
 	});	
+
+	function pollPending(url){
+		setTimeout(function(){
+			getPendingEvents(url)
+			//Setup the next poll recursively
+			pollPending(url);
+		}, 1000);
+	}	
 	
 	function getPendingEvents(url){
 		$.ajaxq("pendingevents",{
 			type: 'GET',
 			url: url+"?get=events&pending",
-			async: false,
 			success: function(data) {
 				if(data.status != 0){
 					$('#p_events').html(data.rows);		

@@ -115,7 +115,7 @@
 	});	
 
 	function getLocationSignalCount(url){
-		$.ajax({
+		$.ajaxq('graph',{
 			type: 'GET',
 			url: url+"?get=locationsignalcount",
 			success: function(data) {
@@ -129,7 +129,7 @@
 	}
 	
 	function getSignalLoadEvents(url){
-		$.ajax({
+		$.ajaxq('graph',{
 			type: 'GET',
 			url: url+"?get=signalload&events",
 			success: function(data) {
@@ -149,7 +149,7 @@
 	}	
 	
 	function getOperatorThresholds(url, prio){
-		$.ajax({
+		$.ajaxq('graph',{
 			type: 'POST',
 			url: url+"?get=threshold",
 			data: {prio: prio},

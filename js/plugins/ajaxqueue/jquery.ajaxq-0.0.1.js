@@ -1,63 +1,161 @@
-/*
- * jQuery AjaxQ - AJAX request queueing for jQuery
- *
- * Version: 0.0.1
- * Date: July 22, 2008
- *
- * Copyright (c) 2008 Oleg Podolsky (oleg.podolsky@gmail.com)
- * Licensed under the MIT (MIT-LICENSE.txt) license.
- *
- * http://plugins.jquery.com/project/ajaxq
- * http://code.google.com/p/jquery-ajaxq/
- */
+// AjaxQ jQuery Plugin
+// Copyright (c) 2012 Foliotek Inc.
+// MIT License
+// https://github.com/Foliotek/ajaxq
+// Uses CommonJS, AMD or browser globals to create a jQuery plugin.
 
-jQuery.ajaxq = function (queue, options)
-{
-	// Initialize storage for request queues if it's not initialized yet
-	if (typeof document.ajaxq == "undefined") document.ajaxq = {q:{}, r:null};
+(function (factory) {
+    if (typeof define === 'function' && define.amd) {
+        // AMD. Register as an anonymous module.
+        define(['jquery'], factory);
+    } else if (typeof module === 'object' && module.exports) {
+        // Node/CommonJS
+        module.exports = factory(require('jquery'));
+    } else {
+        // Browser globals
+        factory(jQuery);
+    }
+}(function ($) {
+    var queues = {};
+    var activeReqs = {};
 
-	// Initialize current queue if it's not initialized yet
-	if (typeof document.ajaxq.q[queue] == "undefined") document.ajaxq.q[queue] = [];
-	
-	if (typeof options != "undefined") // Request settings are given, enqueue the new request
-	{
-		// Copy the original options, because options.complete is going to be overridden
+    // Register an $.ajaxq function, which follows the $.ajax interface, but allows a queue name which will force only one request per queue to fire.
+    // opts can be the regular $.ajax settings plainObject, or a callback returning the settings object, to be evaluated just prior to the actual call to $.ajax.
+    $.ajaxq = function(qname, opts) {
 
-		var optionsCopy = {};
-		for (var o in options) optionsCopy[o] = options[o];
-		options = optionsCopy;
-		
-		// Override the original callback
+        if (typeof opts === "undefined") {
+            throw ("AjaxQ: queue name is not provided");
+        }
 
-		var originalCompleteCallback = options.complete;
+        // Will return a Deferred promise object extended with success/error/callback, so that this function matches the interface of $.ajax
+        var deferred = $.Deferred(),
+            promise = deferred.promise();
 
-		options.complete = function (request, status)
-		{
-			// Dequeue the current request
-			document.ajaxq.q[queue].shift ();
-			document.ajaxq.r = null;
-			
-			// Run the original callback
-			if (originalCompleteCallback) originalCompleteCallback (request, status);
+        promise.success = promise.done;
+        promise.error = promise.fail;
+        promise.complete = promise.always;
 
-			// Run the next request from the queue
-			if (document.ajaxq.q[queue].length > 0) document.ajaxq.r = jQuery.ajax (document.ajaxq.q[queue][0]);
-		};
+        // Check whether options are to be evaluated at call time or not.
+        var deferredOpts = typeof opts === 'function';
+        // Create a deep copy of the arguments, and enqueue this request.
+        var clonedOptions = !deferredOpts ? $.extend(true, {}, opts) : null;
+        enqueue(function() {
+            // Send off the ajax request now that the item has been removed from the queue
+            var jqXHR = $.ajax.apply(window, [deferredOpts ? opts() : clonedOptions]);
 
-		// Enqueue the request
-		document.ajaxq.q[queue].push (options);
+            // Notify the returned deferred object with the correct context when the jqXHR is done or fails
+            // Note that 'always' will automatically be fired once one of these are called: http://api.jquery.com/category/deferred-object/.
+            jqXHR.done(function() {
+                deferred.resolve.apply(this, arguments);
+            });
+            jqXHR.fail(function() {
+                deferred.reject.apply(this, arguments);
+            });
 
-		// Also, if no request is currently running, start it
-		if (document.ajaxq.q[queue].length == 1) document.ajaxq.r = jQuery.ajax (options);
-	}
-	else // No request settings are given, stop current request and clear the queue
-	{
-		if (document.ajaxq.r)
-		{
-			document.ajaxq.r.abort ();
-			document.ajaxq.r = null;
-		}
+            jqXHR.always(dequeue); // make sure to dequeue the next request AFTER the done and fail callbacks are fired
 
-		document.ajaxq.q[queue] = [];
-	}
-}
+            return jqXHR;
+        });
+
+        return promise;
+
+
+        // If there is no queue, create an empty one and instantly process this item.
+        // Otherwise, just add this item onto it for later processing.
+        function enqueue(cb) {
+            if (!queues[qname]) {
+                queues[qname] = [];
+                var xhr = cb();
+                activeReqs[qname] = xhr;
+            }
+            else {
+                queues[qname].push(cb);
+            }
+        }
+
+        // Remove the next callback from the queue and fire it off.
+        // If the queue was empty (this was the last item), delete it from memory so the next one can be instantly processed.
+        function dequeue() {
+            if (!queues[qname]) {
+                return;
+            }
+            var nextCallback = queues[qname].shift();
+            if (nextCallback) {
+                var xhr = nextCallback();
+                activeReqs[qname] = xhr;
+            }
+            else {
+                delete queues[qname];
+                delete activeReqs[qname];
+            }
+        }
+    };
+
+    // Register a $.postq and $.getq method to provide shortcuts for $.get and $.post
+    // Copied from jQuery source to make sure the functions share the same defaults as $.get and $.post.
+    $.each( [ "getq", "postq" ], function( i, method ) {
+        $[ method ] = function( qname, url, data, callback, type ) {
+
+            if ( $.isFunction( data ) ) {
+                type = type || callback;
+                callback = data;
+                data = undefined;
+            }
+
+            return $.ajaxq(qname, {
+                type: method === "postq" ? "post" : "get",
+                url: url,
+                data: data,
+                success: callback,
+                dataType: type
+            });
+        };
+    });
+
+    var isQueueRunning = function(qname) {
+        return (queues.hasOwnProperty(qname) && queues[qname].length > 0) || activeReqs.hasOwnProperty(qname);
+    };
+
+    var isAnyQueueRunning = function() {
+        for (var i in queues) {
+            if (isQueueRunning(i)) return true;
+        }
+        return false;
+    };
+
+    $.ajaxq.isRunning = function(qname) {
+        if (qname) return isQueueRunning(qname);
+        else return isAnyQueueRunning();
+    };
+
+    $.ajaxq.getActiveRequest = function(qname) {
+        if (!qname) throw ("AjaxQ: queue name is required");
+
+        return activeReqs[qname];
+    };
+
+    $.ajaxq.abort = function(qname) {
+        if (!qname) throw ("AjaxQ: queue name is required");
+        
+        var current = $.ajaxq.getActiveRequest(qname);
+        delete queues[qname];
+        delete activeReqs[qname];
+        if (current) current.abort();
+    };
+
+    $.ajaxq.clear = function(qname) {
+        if (!qname) {
+            for (var i in queues) {
+                if (queues.hasOwnProperty(i)) {
+                    queues[i] = [];
+                }
+            }
+        }
+        else {
+            if (queues[qname]) {
+                queues[qname] = [];
+            }
+        }
+    };
+
+}));

@@ -34,13 +34,19 @@
 		getGoupedEvents(url_str);
 		getPendingEventsTasks(url_str);
 		
-		interval = setInterval( function () {
-			getGoupedEvents(url_str);
-			getPendingEventsTasks(url_str);
-		}, refresh );	
+		pollPending(url_str);	
 		
 	});	
 
+
+	function pollPending(url){
+		setTimeout(function(){
+			getGoupedEvents(url);
+			getPendingEventsTasks(url);
+			pollPending(url);
+		}, 1000);
+	}		
+	
 	function getPendingEventsTasks(url){
 		$.ajaxq("pendingeventsgroups",{
 			type: 'GET',

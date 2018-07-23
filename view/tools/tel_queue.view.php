@@ -114,7 +114,7 @@
     </div>
 						
 	<input type="text" hidden id="url_query" value="<?= $_SERVER['QUERY_STRING']; ?>" />	
-	<input type="text" hidden id="mac_adres"  />	
+	<input type="text" hidden id="mac_adres" />	
 	<input type="text" hidden id="url_string" value="<?= URL_ROOT.'/Src/controllers/tools.controller.php';?>" />	
 	
 	
@@ -133,14 +133,19 @@
 		getQueueAgents();
 		highLightTableValues();
 		
-		interval = setInterval( function () {
+		pollPending();
+				
+	});	
+
+	function pollPending(){
+		setTimeout(function(){
 			getQueues(),
 			getQueueAgents(),
 			highLightTableValues()
-		}, refresh );	
-		
-	});	
-
+			pollPending();
+		}, 1500);
+	}	
+	
 	function highLightTableValues(){
 		var cols = []
 		var trs = $('#agents_table tr')
@@ -161,10 +166,9 @@
 	};
 	
 	function getQueues(){
-		$.ajax({
+		$.ajaxq('telqueue', {
 			type: 'GET',
 			url: $('#url_string').val() + "?get=queue&row",
-			async: false,
 			success: function(data) {
 				if(data.status != 0){
 					$('#queue').html(data.row);		
@@ -185,14 +189,12 @@
 		});		
 	}
 	function getQueueAgents(){
-		$.ajax({
+		$.ajaxq('telqueue',{
 			type: 'GET',
 			url: $('#url_string').val() + "?get=queue&agents",
-			async: false,
 			success: function(data) {
 				if(data.status != 0){
-					$('#q_agents').html(data.rows);		
-	
+					$('#q_agents').html(data.rows);	
 				} else {
 					$('#q_agents').html('');
 				}						

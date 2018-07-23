@@ -45,14 +45,18 @@
 		//getLocationSignalCount(url_str);
 		getSignalLoad(url_str);
 				
-		interval = setInterval( function () {
-			//getLocationSignalCount(url_str);
-			getSignalLoad(url_str);
-			getPortMonitoring(url_str);
-		}, refresh );	
+		pollPending(url);	
 		
 	});	
 
+	function pollPending(url){
+		setTimeout(function(){
+			getSignalLoad(url);
+			getPortMonitoring(url);
+			pollPending(url);
+		}, 40000);
+	}			
+	
 	var compchart = c3.generate({
 		bindto: '#sign_chart',
 		data: {
@@ -126,7 +130,7 @@
 
 
 	function getSignalLoad(url){
-		$.ajaxq("signalload",{
+		$.ajaxq("monitoring",{
 			type: 'GET',
 			url: url+"?get=signalload",
 			success: function(data) {
