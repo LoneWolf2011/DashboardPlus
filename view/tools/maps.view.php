@@ -55,140 +55,56 @@
 	<script>
 	// Global vars for maps
 	var url_str = $('#url_string').val();
-	var err_class;
-	var err_icon;
-	var err_conn;
-	var err_txt;
-	var url = <?= json_encode(URL_ROOT_IMG);?>+'/GoogleMapsMarkers/';
-	var markers_arr = [];	
 	var map;
-	var markerCluster = null;
-	var infoWindow = null;
-			
+	
 	// A repository for markers (and the data from which they were constructed).
-	var locations = {};
-	var locs;
-	var timestamp;
+	var locations = {};	
+		
 	// initial dataset for markers
-	$.getJSON( url_str+'?get=markers&all', callbackData);
+	$.getJSON( url_str+'?get=markers&info=no&all', callbackData);
 	
 	function callbackData(data){
-		locs = data;
-		timestamp = data.updatetime;
 		
-			setMarkers(locs);  //Create markers from the initial dataset served with the document.
-			
-			ajaxObj.options.url = url_str+'?get=markers&time='+timestamp;
-			ajaxObj.updatetime = timestamp;
-			ajaxObj.get(getMarkerData,0); //Start the get cycle.	
-			ajaxObj.get(getMarkerTable,5000); 	
+		setMarkers(data);  //Create markers from the initial dataset served with the document.
+		
+		ajaxObj.options.url = url_str+'?get=markers&info=no&time='+data.updatetime;
+		ajaxObj.updatetime = data.updatetime;
+		ajaxObj.get(getMarkerData,0); //Start the get cycle.	
+		ajaxObj.get(getMarkerTable,0); 	
 	}
-
-	// Set map zoom level
-    $("#zoom_level").change(function(){
-		var zoom_lvl = parseInt($(this).val(), 10);
-		map.setZoom(zoom_lvl);
-    });	
 	
 	// Init google maps
 	function initMap(){	
-		// OPEN STREET MAP
-		var mapTypeIds = [];
-		for(var type in google.maps.MapTypeId) {
-			mapTypeIds.push(google.maps.MapTypeId[type]);
-		}
-		mapTypeIds.push("OSM");	
-		
+
 		var center = {lat: <?= json_encode((int)APP_LAT) ;?>, lng: <?= json_encode((int)APP_LNG) ;?>};
 		map = new google.maps.Map(document.getElementById('map'), {
 			disableDefaultUI:true,
 			center: center,
 			zoom: 8, 
-			styles: google_styles,
-			mapTypeControlOptions: {
-				mapTypeIds: mapTypeIds
-			}		
+			styles: google_styles
         });
-
-        map.mapTypes.set("OSM", new google.maps.ImageMapType({
-            getTileUrl: function(coord, zoom) {
-                // See above example if you need smooth wrapping at 180th meridian
-                return "http://tile.openstreetmap.org/" + zoom + "/" + coord.x + "/" + coord.y + ".png";
-            },
-            tileSize: new google.maps.Size(256, 256),
-            name: "OpenStreetMap",
-            maxZoom: 18
-        }));
-		
-		infowindow = new google.maps.InfoWindow();
 		
         map.controls[google.maps.ControlPosition.TOP_LEFT].push(document.getElementById('div_table'));	
         map.controls[google.maps.ControlPosition.TOP_RIGHT].push(document.getElementById('div_grouped'));	
 		
 	}
-	
-	//When true, markers for all unreported locs will be removed. 
-	// if false; removal must be specified in json data: scsnr: { remove: true }
-	var auto_remove = false;
-
-	function setMarkers(locObj) {
-		if(auto_remove) {
-			//Remove markers for all unreported locs, and the corrsponding locations entry.
-			$.each(locations, function(key) {
-				if(!locObj[key]) {
-					if(locations[key].marker) {
-						locations[key].marker.setMap(null);
-					}
-					delete locations[key];
-				}
-			});
-		}
+		
+	function setMarkers(locObj) {		
 
 		$.each(locObj, function(key, loc) {
 			
 			if(!locations[key] && loc.lat!==undefined && loc.lng!==undefined) {
-				//Marker has not yet been made (and there's enough data to create one).
-
-				if(loc.path_status == 0){
-					err_icon = url+'red_Marker'+loc.first_char+'.png';
-				} else if(loc.path_status == 1){
-					err_icon = url+'darkgreen_Marker'+loc.first_char+'.png';	
-				} else if(loc.path_status == 2){
-					err_icon = url+'yellow_Marker'+loc.first_char+'.png';
-				} else if(loc.path_status == 3){
-					err_icon = url+'orange_Marker'+loc.first_char+'.png';	
-				} else if(loc.path_status == 4){
-					err_icon = url+'blue_Marker'+loc.first_char+'.png';					
-				} else {
-					err_icon = url+'brown_Marker'+loc.first_char+'.png';
-				}				
-				
+				//Marker has not yet been made (and there's enough data to create one).				
 				//Create marker
 				loc.marker = new google.maps.Marker({
 					position: new google.maps.LatLng(loc.lat, loc.lng),
-					category: loc.category,
 					path: loc.path_status,
-					id: loc.id,
 					map: map,
-					icon: err_icon
+					icon: loc.icon
 				});
 				
-				//Attach click listener to marker
-				google.maps.event.addListener(loc.marker, 'click', (function(key) {
-					return function() {
-						if(locations[key]) {
-							infowindow.setContent(locations[key].info);
-							infowindow.open(map, locations[key].marker);
-						}
-					}
-				})(key));
-
 				//Remember loc in the `locations` so its info can be displayed and so its marker can be deleted.
-				locations[key] = loc;
-				
-				// Fill array for clusters
-				markers_arr.push(locations[key].marker);
-				
+				locations[key] = loc;				
 				
 			} else if(locations[key] && loc.remove) {
 				//Remove marker from map
@@ -207,23 +123,9 @@
 					);
 					
 				}
-				if(loc.path_status!==undefined ) {
-					if(loc.path_status == 0){
-						err_icon = url+'red_Marker'+loc.first_char+'.png';
-					} else if(loc.path_status == 1){
-						err_icon = url+'darkgreen_Marker'+loc.first_char+'.png';	
-					} else if(loc.path_status == 2){
-						err_icon = url+'yellow_Marker'+loc.first_char+'.png';
-					} else if(loc.path_status == 3){
-						err_icon = url+'orange_Marker'+loc.first_char+'.png';	
-					} else if(loc.path_status == 4){
-						err_icon = url+'blue_Marker'+loc.first_char+'.png';					
-					} else {
-						err_icon = url+'brown_Marker'+loc.first_char+'.png';
-					}					
-					locations[key].marker.setIcon(err_icon)
+				if(loc.path_status!==undefined ) {				
+					locations[key].marker.setIcon(loc.icon);
 				}
-				//locations[key].info looks after itself.
 			}
 		});
 	
@@ -262,15 +164,15 @@
 	
 	//Ajax master routine
 	function getMarkerData() {
-		ajaxObj.options.url = url_str+'?get=markers&time='+ajaxObj.updatetime;
+		ajaxObj.options.url = url_str+'?get=markers&info=no&time='+ajaxObj.updatetime;
 		$.ajaxq('markers',ajaxObj.options)
 			// fires when ajax returns successfully
 			.done(function(data){
 				setMarkers(data);
 				ajaxObj.updatetime = data.updatetime;
 			}) 
-			.fail(ajaxObj.fail) // fires when an ajax error occurs
-			.always(ajaxObj.get(getMarkerData, 10000)); // fires after ajax success or ajax error		  
+			.fail(ajaxObj.fail)
+			.always(ajaxObj.get(getMarkerData, 10000)); 		  
 	}
 
 	function getMarkerTable() {
@@ -282,14 +184,11 @@
 					$('#div_alert_diss').html(data.count.diss);
 					$('#div_alert_primair').html(data.count.prim);
 					$('#div_alert_backup').html(data.count.back);
-					$('#div_alert_nopath').html(data.count.nopath);
-																	
+					$('#div_alert_nopath').html(data.count.nopath);								
 					$('#div_table').css('display', 'block');
 					$('#div_grouped').html(data.grouped);
-				
 					$('#table_rows').empty();
 					$.each(data.locations, function(value, val) {
-						console.log(value);
 						$('#table_rows').append($('<tr><td>' + val['loc_conn'] + '</td><td>' + val['loc_group'] + '</td><td>' + val['loc_id'] + '</td></tr>'));
 					});	
 				}				

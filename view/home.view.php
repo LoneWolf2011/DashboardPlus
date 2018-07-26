@@ -412,11 +412,8 @@
 	}
 	
 	// Global vars for maps
-	var err_class;
-	var err_icon;
-	var err_conn;
-	var err_txt;
 	var url = <?= json_encode(URL_ROOT_IMG);?>+'/GoogleMapsMarkers/';
+	var center = {lat: <?= json_encode((int)APP_LAT) ;?>, lng: <?= json_encode((int)APP_LNG) ;?>};
 	var markers_arr = [];	
 	var map;
 	var markerCluster = null;
@@ -430,16 +427,12 @@
 	$.getJSON( url_str+'?get=markers&all', callbackData);
 	
 	function callbackData(data){
-		locs = data;
-		timestamp = data.updatetime;
 		
-		setTimeout(function() {
-			setMarkers(locs);  //Create markers from the initial dataset served with the document.
-			//console.log(timestamp);
-			
-			ajaxObj.options.url = url_str+'?get=markers&time='+timestamp;
-			ajaxObj.get(); //Start the get cycle.
-		}, 1000);		
+		setMarkers(data);  //Create markers from the initial dataset served with the document.
+		
+		ajaxObj.options.url = url_str+'?get=markers&time='+data.updatetime;
+		ajaxObj.updatetime = data.updatetime;
+		ajaxObj.get(getMarkerData,5000); //Start the get cycle.	
 	}
 
 	// Set map zoom level
@@ -457,7 +450,6 @@
 		}
 		mapTypeIds.push("OSM");	
 		
-		var center = {lat: <?= json_encode((int)APP_LAT) ;?>, lng: <?= json_encode((int)APP_LNG) ;?>};
 		map = new google.maps.Map(document.getElementById('map'), {
 			center: center,
 			zoom: 8, 
@@ -479,51 +471,21 @@
 		
 		infowindow = new google.maps.InfoWindow();
 	}
-	
-	//When true, markers for all unreported locs will be removed. 
-	// if false; removal must be specified in json data: scsnr: { remove: true }
-	var auto_remove = false;
-
-	function setMarkers(locObj) {
-		if(auto_remove) {
-			//Remove markers for all unreported locs, and the corrsponding locations entry.
-			$.each(locations, function(key) {
-				if(!locObj[key]) {
-					if(locations[key].marker) {
-						locations[key].marker.setMap(null);
-					}
-					delete locations[key];
-				}
-			});
-		}
+		
+	function setMarkers(locObj) {		
 
 		$.each(locObj, function(key, loc) {
 			
 			if(!locations[key] && loc.lat!==undefined && loc.lng!==undefined) {
-				//Marker has not yet been made (and there's enough data to create one).
-
-				if(loc.path_status == 0){
-					err_icon = url+'red_Marker'+loc.first_char+'.png';
-				} else if(loc.path_status == 2){
-					err_icon = url+'yellow_Marker'+loc.first_char+'.png';
-				} else if(loc.path_status == 3){
-					err_icon = url+'orange_Marker'+loc.first_char+'.png';	
-				} else if(loc.path_status == 4){
-					err_icon = url+'blue_Marker'+loc.first_char+'.png';						
-				} else {
-					err_icon = url+'darkgreen_Marker'+loc.first_char+'.png';
-				}				
-				
+				//Marker has not yet been made (and there's enough data to create one).				
 				//Create marker
 				loc.marker = new google.maps.Marker({
 					position: new google.maps.LatLng(loc.lat, loc.lng),
 					category: loc.category,
 					path: loc.path_status,
-					id: loc.id,
 					map: map,
-					icon: err_icon
+					icon: loc.icon
 				});
-				
 				//Attach click listener to marker
 				google.maps.event.addListener(loc.marker, 'click', (function(key) {
 					return function() {
@@ -532,15 +494,11 @@
 							infowindow.open(map, locations[key].marker);
 						}
 					}
-				})(key));
-
+				})(key));				
 				//Remember loc in the `locations` so its info can be displayed and so its marker can be deleted.
-				locations[key] = loc;
-				
+				locations[key] = loc;				
 				// Fill array for clusters
 				markers_arr.push(locations[key].marker);
-				
-				
 			} else if(locations[key] && loc.remove) {
 				//Remove marker from map
 				if(locations[key].marker) {
@@ -558,68 +516,60 @@
 					);
 					
 				}
-				if(loc.path_status!==undefined ) {
-					if(loc.path_status == 0){
-						err_icon = url+'red_Marker'+loc.first_char+'.png';
-					} else if(loc.path_status == 2){
-						err_icon = url+'yellow_Marker'+loc.first_char+'.png';
-					} else if(loc.path_status == 3){
-						err_icon = url+'orange_Marker'+loc.first_char+'.png';	
-					} else if(loc.path_status == 4){
-						err_icon = url+'blue_Marker'+loc.first_char+'.png';	
-					} else {
-						err_icon = url+'darkgreen_Marker'+loc.first_char+'.png';
-					}					
-					locations[key].marker.setIcon(err_icon)
+				if(loc.path_status!==undefined ) {				
+					locations[key].marker.setIcon(loc.icon);
 				}
-				//locations[key].info looks after itself.
 			}
 		});
 	
 	}
-				
-	var ajaxObj = {//Object to save cluttering the namespace.
+	
+	var ajaxObj = {
 		options: {
-			url: url_str+'?get=markers',//The resource that delivers loc data.
-			dataType: "json" //The type of data tp be returned by the server.
+			url: null,
+			dataType: 'json'
 		},
-		delay: 10000,//(milliseconds) the interval between successive gets.
-		errorCount: 0,//running total of ajax errors.
-		errorThreshold: 5,//the number of ajax errors beyond which the get cycle should cease.
-		ticker: null,//setTimeout reference - allows the get cycle to be cancelled with clearTimeout(ajaxObj.ticker);
+		delay: function(refresh_time) {
+			return refresh_time;
+		},
+		errorCount: 0,
+		errorThreshold: 5,
+		ticker: null,
 		updatetime: null,
-		get: function() { //a function which initiates 
-			if(ajaxObj.errorCount < ajaxObj.errorThreshold) {
-				ajaxObj.ticker = setTimeout(getMarkerData, ajaxObj.delay);
-				// Succesful set delay to be sure
-				ajaxObj.delay = 10000;
-				//console.log(ajaxObj.delay);
+		get: function(function_name, refresh_time) {
+			if (ajaxObj.errorCount < ajaxObj.errorThreshold) { // Gets triggered for all objects!?
+				ajaxObj.ticker = setTimeout(function_name, ajaxObj.delay(refresh_time));
+				swal.close();
 			}
 		},
 		fail: function(jqXHR, textStatus, errorThrown) {
 			console.log(errorThrown);
+			
+			swal({
+				html: true,
+				title: textStatus,
+				text: errorThrown,
+				type: "error"
+			});
 			ajaxObj.errorCount++;
 		}
 	};
 	
 	//Ajax master routine
 	function getMarkerData() {
-		$.ajax(ajaxObj.options)
-			//fires when ajax returns successfully
+		ajaxObj.options.url = url_str+'?get=markers&time='+ajaxObj.updatetime;
+		$.ajaxq('markers',ajaxObj.options)
+			// fires when ajax returns successfully
 			.done(function(data){
 				setMarkers(data);
 				ajaxObj.updatetime = data.updatetime;
-				ajaxObj.options.url = url_str+'?get=markers&time='+ajaxObj.updatetime;
-				//console.log(ajaxObj.updatetime);
 			}) 
-			.fail(ajaxObj.fail) //fires when an ajax error occurs
-			.always(ajaxObj.get); //fires after ajax success or ajax error		  
+			.fail(ajaxObj.fail)
+			.always(ajaxObj.get(getMarkerData, 10000)); 		  
 	}
 
 	function refreshNow(){
-		// Set delay to now
-		ajaxObj.delay = 0;
-		ajaxObj.get();
+		ajaxObj.get(getMarkerData,0);
 		//map.setZoom(7);
 	}	
 

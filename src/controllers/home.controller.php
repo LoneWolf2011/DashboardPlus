@@ -5,16 +5,23 @@
 		
 	if(isset($_GET['get'])){
 		if($_GET['get'] == 'markers'){
+			
+			$setinfo = true;
+			if(isset($_GET['info']) && $_GET['info'] == 'no')
+			{
+				$setinfo = false;
+			}
+			
 			if(isset($_GET['all'])){
 				// Get all = true
-				$obj->getMarkers(true);
+				$obj->getMarkers(true,'',$setinfo);
 			};
 			
 			if(isset($_GET['div'])){
 				$obj->getMarkersDiv($_GET['time']);
 			}
 			// Only get changed locations since $_GET['time']
-			$obj->getMarkers(false,$_GET['time']);
+			$obj->getMarkers(false,$_GET['time'],$setinfo);
 		}
 		
 		if($_GET['get'] == 'list'){

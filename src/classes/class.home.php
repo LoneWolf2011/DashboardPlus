@@ -47,7 +47,7 @@ class Home
      * @param string $updatetime - datetime string used to query locations changed since last update time
      * @return array|JSON
      */
-    public function getMarkers($getall = false, $updatetime = '')
+    public function getMarkers($getall = false, $updatetime = '', $setinfo = true)
     {
         $conn = $this->db_conn;
 
@@ -71,8 +71,8 @@ class Home
 				LEFT JOIN scs_account_info ON scs_account_status.SCS_Account_Nmbr = scs_account_info.SCS_Account_Nmbr
 				WHERE scs_account_address.SCS_Account_Address_Type = 2
 				AND scs_account_status.SCS_Account_Stat_Active = 1
-				AND scs_account_info.Latitude != '-1'
-				AND scs_account_info.Longitude != '-1' ?p";
+				AND scs_account_info.Latitude NOT IN ('-1', 0)
+				AND scs_account_info.Longitude NOT IN ('-1', 0) ?p";
 
         // Select all the rows in the app_location_data table or last updated locations
         if ($getall)
@@ -96,7 +96,7 @@ class Home
         {
             while ($row = $conn->fetch($result))
             {
-
+				/*
                 $query = "SELECT
 							Diag_Scan_ID,
 							Diag_date,
@@ -107,7 +107,7 @@ class Home
 							FROM rms_status_db WHERE Diag_Scan_ID = (SELECT MAX(Diag_Scan_ID) FROM rms_status_db 
 							WHERE I_MAC_ETH0 = ?s)";
 
-                $rms_status = $conn_local->getRow($query, $row['SCS_Account_CallerID_1']);
+                $rms_status = $conn_local->getRow($query, $row['SCS_Account_CallerID_1']);*/
 
                 $path_status = getPathStatus($row['SCS_Account_Stat_Connection_Path']);
 
@@ -138,6 +138,7 @@ class Home
                 }
 
                 $device_status = '';
+				/*
                 if ($rms_status['S_DEVICE_no_1_STATUS_BATTERY'] == 'false' || $rms_status['S_DEVICE_no_1_STATUS_230V'] == 'false')
                 {
                     if ($rms_status['S_DEVICE_no_1_STATUS_BATTERY'] == 'false')
@@ -149,18 +150,20 @@ class Home
                         $device_status .= '<br><b>' . LANG['connection']['230_err'] . '</b>';
                     }
                     $path_status = 2;
-                }
+                }*/
 
                 $is_letter = (ctype_alpha(substr(getCategory($row['SCS_Account_Nmbr']) , 0, 1)) == true) ? strtoupper(substr(getCategory($row['SCS_Account_Nmbr']) , 0, 1)) : strtoupper('A');
                 $locs[$row['SCS_Account_Nmbr']] = array(
-                    'info' => '<div><b>' . $row['SCS_Account_Address_Name'] . '</b><br>' . $row['SCS_Account_Address_Address'] . '<br><a class="text-info ' . $err_class . '" onclick="popupWindow(\'' . URL_ROOT . '/location/?' . $row['SCS_Account_Nmbr'] . '\', \'location\', 1980, 1080 ); return false;">#' . $row['SCS_Account_Nmbr'] . '</a><br><b>' . $conn_status . '</b>' . $device_status . '</div>',
                     'path_status' => $path_status,
-                    'first_char' => $is_letter,
+                    'icon' => URL_ROOT_IMG . '/GoogleMapsMarkers/' . $this->setMarker($path_status, $is_letter),
                     'lat' => $row['Latitude'],
                     'lng' => $row['Longitude'],
-                    'category' => getCategory($row['SCS_Account_Nmbr']) ,
-                    'id' => $row['SCS_Account_Nmbr']
+                    'category' => getCategory($row['SCS_Account_Nmbr']) 
                 );
+				if($setinfo)
+				{
+					$locs[$row['SCS_Account_Nmbr']]['info'] =  '<div><b>' . $row['SCS_Account_Address_Name'] . '</b><br>' . $row['SCS_Account_Address_Address'] . '<br><a class="text-info ' . $err_class . '" onclick="popupWindow(\'' . URL_ROOT . '/location/?' . $row['SCS_Account_Nmbr'] . '\', \'location\', 1980, 1080 ); return false;">#' . $row['SCS_Account_Nmbr'] . '</a><br><b>' . $conn_status . '</b>' . $device_status . '</div>';
+				}
 
             }
             $locs['updatetime'] = date('YmdHis');
@@ -599,8 +602,8 @@ class Home
 				LEFT JOIN scs_account_info ON scs_account_status.SCS_Account_Nmbr = scs_account_info.SCS_Account_Nmbr
 				WHERE scs_account_address.SCS_Account_Address_Type = 2
 				AND scs_account_status.SCS_Account_Stat_Active = 1
-				AND scs_account_info.Latitude != '-1'
-				AND scs_account_info.Longitude != '-1'";
+				AND scs_account_info.Latitude NOT IN ('-1', 0)
+				AND scs_account_info.Longitude NOT IN ('-1', 0)";
 
         $result = $conn->query($sql);
 
@@ -910,5 +913,24 @@ class Home
         }
     }
 
+	protected function setMarker($path, $first_char)
+	{
+		$err_icon = '';
+		if($path == 0){
+			$err_icon = 'red_Marker'.$first_char.'.png';
+		} else if($path == 1){
+			$err_icon = 'darkgreen_Marker'.$first_char.'.png';	
+		} else if($path == 2){
+			$err_icon = 'yellow_Marker'.$first_char.'.png';
+		} else if($path == 3){
+			$err_icon = 'orange_Marker'.$first_char.'.png';	
+		} else if($path == 4){
+			$err_icon = 'blue_Marker'.$first_char.'.png';					
+		} else {
+			$err_icon = 'brown_Marker'.$first_char.'.png';
+		}
+		return $err_icon;
+	}
+	
 }
 
